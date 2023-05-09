@@ -1,0 +1,32 @@
+{
+    "name": "ratulhasan/wp-payroll",
+    "description": "WP-Payroll is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes.",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Ratulhasan\\WpPayroll\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ratulhasan",
+            "email": "ratuljh@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "automattic/vipwpcs": "^2.3",
+        "phpunit/phpunit": "^9.0",
+        "phpcompatibility/php-compatibility": "*",
+        "phpcompatibility/phpcompatibility-wp": "*"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
