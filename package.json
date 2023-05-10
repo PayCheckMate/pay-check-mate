@@ -1,0 +1,28 @@
+{
+  "name": "wp-payroll",
+  "version": "1.0.0",
+  "description": "WP-Payroll is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors.",
+  "homepage": "https://wedevs.com/",
+  "main": "index.js",
+  "scripts": {
+    "clean": "node bin/clean",
+    "make-pot": "wp i18n make-pot . languages/freescout-support-plugin.pot",
+    "release:dev": "composer install --no-scripts --no-dev && composer dumpautoload -o && npm run clean && npm run make-pot && node bin/copy && node bin/minify && node bin/zip",
+    "version:replace": "node bin/version-replace",
+    "release:prod": "npm run version:replace && npm run release:dev",
+    "test:e2e": "npx playwright test",
+    "test:e2e:debug": "npx playwright test --debug",
+    "test:e2e:headed": "npx playwright test --headed"
+  },
+  "keywords": [],
+  "author": "Ratul Hasan",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@playwright/test": "^1.33.0",
+    "@wordpress/i18n": "^4.32.0",
+    "archiver": "^5.3.1",
+    "clean-css": "^5.3.2",
+    "replace-in-file": "^6.3.5",
+    "uglify-js": "^3.17.4"
+  }
+}

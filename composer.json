@@ -5,7 +5,7 @@
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
-            "Ratulhasan\\WpPayroll\\": "includes/"
+            "WpPayroll\\": "includes/"
         }
     },
     "authors": [
@@ -19,10 +19,11 @@
         "php": ">=7.4"
     },
     "require-dev": {
-        "automattic/vipwpcs": "^2.3",
         "phpunit/phpunit": "^9.0",
-        "phpcompatibility/php-compatibility": "*",
-        "phpcompatibility/phpcompatibility-wp": "*"
+        "wp-coding-standards/wpcs": "dev-develop",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "tareq1988/wp-php-cs-fixer": "dev-master",
+        "phpcompatibility/phpcompatibility-wp": "dev-master"
     },
     "config": {
         "allow-plugins": {
