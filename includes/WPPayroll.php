@@ -6,14 +6,16 @@ use WpPayroll\Contracts\HookAbleInterface;
 
 final class WPPayroll {
 
-	protected static WPPayroll $instance;
+	protected static $instance;
 
 	/**
 	 * All the controller classes.
 	 *
 	 * @var array|string[]
 	 */
-	protected array $classes = [];
+	protected array $classes = [
+		'WpPayroll\Controllers\AdminMenu',
+	];
 
 	/**
 	 * Get the single instance of the class
@@ -72,7 +74,7 @@ final class WPPayroll {
 	 * @return void
 	 */
 	public function load_plugin_hooks(): void {
-		if ( empty( $this->classesr ) ) {
+		if ( empty( $this->classes ) ) {
 			return;
         }
 
