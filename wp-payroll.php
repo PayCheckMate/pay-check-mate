@@ -29,8 +29,8 @@ if ( ! defined( 'WP_PMS_PLUGIN_VERSION' ) ) {
 	define( 'WP_PMS_PLUGIN_VERSION', '1.0.0' );
 }
 
-if ( ! defined( 'WP_PMS_PLUGIN_ASSET' ) ) {
-	define( 'WP_PMS_PLUGIN_ASSET', plugins_url( 'assets', __FILE__ ) );
+if ( ! defined( 'WP_PMS_ASSET' ) ) {
+	define( 'WP_PMS_ASSET', plugins_url( 'assets', __FILE__ ) );
 }
 
 if ( ! defined( 'WP_PMS_FILE' ) ) {
@@ -47,6 +47,10 @@ if ( ! defined( 'WP_PMS_VERSION' ) ) {
 
 if ( ! defined( 'WP_PMS_BASE_NAME' ) ) {
 	define( 'WP_PMS_BASE_NAME', plugin_basename( __FILE__ ) );
+}
+
+if ( ! defined( 'WP_PMS_URL' ) ) {
+	define( 'WP_PMS_URL', plugins_url( '', __FILE__ ) );
 }
 
 /**

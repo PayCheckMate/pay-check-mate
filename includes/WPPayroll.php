@@ -15,6 +15,7 @@ final class WPPayroll {
 	 */
 	protected array $classes = [
 		'WpPayroll\Controllers\AdminMenu',
+		'WpPayroll\Controllers\Assets',
 	];
 
 	/**

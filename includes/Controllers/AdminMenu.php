@@ -43,6 +43,6 @@ class AdminMenu implements HookAbleInterface {
 	 * @return void
 	 */
 	public function menu_page(): void {
-		echo '<h1>WP Payroll</h1>';
+		echo '<div id="root"></div>';
 	}
 }

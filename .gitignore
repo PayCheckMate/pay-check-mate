@@ -49,3 +49,4 @@ wp-config.php
 /vendor/
 phpcs.xml
 .idea
+build/
