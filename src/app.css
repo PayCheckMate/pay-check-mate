@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#wpcontent {
+    padding-top: 20px;
+}
