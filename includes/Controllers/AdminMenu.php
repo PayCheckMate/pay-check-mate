@@ -43,6 +43,6 @@ class AdminMenu implements HookAbleInterface {
 	 * @return void
 	 */
 	public function menu_page(): void {
-		echo '<div id="root"></div>';
+		echo '<div id="root" class="h-full"></div>';
 	}
 }

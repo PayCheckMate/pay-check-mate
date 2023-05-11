@@ -24,6 +24,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@playwright/test": "^1.33.0",
+    "@tailwindcss/forms": "^0.5.3",
     "@wordpress/i18n": "^4.32.0",
     "@wordpress/scripts": "^26.4.0",
     "archiver": "^5.3.1",
@@ -36,5 +37,9 @@
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4",
     "uglify-js": "^3.17.4"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.18"
   }
 }
