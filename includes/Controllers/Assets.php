@@ -62,30 +62,6 @@ class Assets implements HookAbleInterface {
 			'wp-payroll-js', 'wpPayroll', [
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wp-payroll-nonce' ),
-				'menus'   => apply_filters(
-                    'wp_payroll_menus', [
-						[
-							'title' => __( 'Dashboard', 'wp-payroll' ),
-							'path'  => '/dashboard',
-							'icon'  => 'dashicons dashicons-dashboard',
-						],
-						[
-							'title' => __( 'Employees', 'wp-payroll' ),
-							'path'  => '/employees',
-							'icon'  => 'dashicons dashicons-groups',
-						],
-						[
-							'title' => __( 'Payroll', 'wp-payroll' ),
-							'path'  => '/payroll',
-							'icon'  => 'dashicons dashicons-money-alt',
-						],
-						[
-							'title' => __( 'Settings', 'wp-payroll' ),
-							'path'  => '/settings',
-							'icon'  => 'dashicons dashicons-admin-settings',
-						],
-					],
-                ),
 			],
 		);
 	}

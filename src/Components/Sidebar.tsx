@@ -1,20 +1,20 @@
 import { Fragment, useState } from 'react'
-import {Bars3Icon, CalendarIcon, ChartPieIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import { createHooks } from '@wordpress/hooks';
+import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {Navigation} from "../Types/Navigation";
 import {Link} from "react-router-dom";
 
-// @ts-ignore
-const navigation = wpPayroll.menus as Navigation[];
-navigation.map((item) => {
-    console.log(item.title)
-})
-const teams = [
-    { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-    { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-    { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+const Hooks = createHooks();
+const navigation: Navigation[] = [
+    { title: 'Dashboard', href: 'dashboard', icon: HomeIcon, current: true },
+    { title: 'Employees', href: 'employees', icon: UsersIcon, current: false },
+    { title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false },
+    { title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false },
+    { title: 'Settings', href: 'settings', icon: CogIcon, current: false },
 ]
 
+Hooks.applyFilters( 'wp_payroll_navigations', navigation );
 // @ts-ignore
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -77,7 +77,7 @@ export const Sidebar = () => {
                                                     {navigation.map((item) => (
                                                         <li key={item.title}>
                                                             <Link
-                                                                to={item.path}
+                                                                to={item.href}
                                                                 className={classNames(
                                                                     item.current
                                                                         ? 'bg-gray-800 text-white'
@@ -85,7 +85,7 @@ export const Sidebar = () => {
                                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                                 )}
                                                             >
-                                                                <span className={item.icon} aria-hidden="true"></span>
+                                                                <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                                                 {item.title}
                                                             </Link>
                                                         </li>
@@ -115,7 +115,7 @@ export const Sidebar = () => {
                                     {navigation.map((item) => (
                                         <li key={item.title}>
                                             <Link
-                                                to={item.path}
+                                                to={item.href}
                                                 className={classNames(
                                                     item.current
                                                         ? 'bg-gray-800 text-white'
@@ -123,7 +123,7 @@ export const Sidebar = () => {
                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                 )}
                                             >
-                                                <span className={item.icon} aria-hidden="true"></span>
+                                                <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                                 {item.title}
                                             </Link>
                                         </li>

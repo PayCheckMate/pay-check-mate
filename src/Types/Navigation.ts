@@ -1,7 +1,7 @@
 export interface Navigation {
     title: string;
-    path: string;
-    icon: string;
-    current?: boolean;
+    href: string;
+    icon: any;
+    current: boolean;
     children?: Navigation[];
 }
