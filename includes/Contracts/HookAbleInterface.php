@@ -7,7 +7,7 @@ interface HookAbleInterface {
 	/**
 	 * Call the necessary hooks.
 	 *
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 * @return void
 	 */
 	public function hooks(): void;

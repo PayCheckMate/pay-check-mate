@@ -15,14 +15,14 @@ class Assets implements HookAbleInterface {
 	 * Register scripts.
 	 *
 	 * @return void
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 */
 	public function register_scripts(): void {
-		$asset_file = require_once WP_PMS_DIR . '/build/index.asset.php';
+		$asset_file = require_once WP_PAYROLL_DIR . '/build/index.asset.php';
 
 		wp_register_script(
 			'wp-payroll-js',
-			WP_PMS_URL . '/build/index.js',
+			WP_PAYROLL_URL . '/build/index.js',
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,
@@ -30,7 +30,7 @@ class Assets implements HookAbleInterface {
 
 		wp_register_style(
 			'wp-payroll-css',
-			WP_PMS_URL . '/build/index.css',
+			WP_PAYROLL_URL . '/build/index.css',
 			[],
 			$asset_file['version'],
 		);
@@ -55,7 +55,7 @@ class Assets implements HookAbleInterface {
 	 * Register translations.
 	 *
 	 * @return void
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 */
 	public function register_translations(): void {
 		wp_localize_script(

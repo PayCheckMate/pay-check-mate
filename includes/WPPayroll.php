@@ -3,6 +3,7 @@
 namespace WpPayroll;
 
 use WpPayroll\Contracts\HookAbleInterface;
+use WpPayroll\Controllers\Installer;
 
 final class WPPayroll {
 
@@ -22,7 +23,7 @@ final class WPPayroll {
 	 * Get the single instance of the class
 	 *
 	 * @return WPPayroll
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 */
 	public static function get_instance(): WPPayroll {
 		if ( ! self::$instance ) {
@@ -37,7 +38,7 @@ final class WPPayroll {
 	 */
 	private function __construct() {
 		add_action( 'init', [ $this, 'set_translation' ] );
-		register_activation_hook( __FILE__, [ $this, 'activate_this_plugin' ] );
+		register_activation_hook( WP_PAYROLL_FILE, [ $this, 'activate_this_plugin' ] );
 		add_action( 'plugins_loaded', [ $this, 'load_plugin_hooks' ] );
 	}
 
@@ -45,10 +46,10 @@ final class WPPayroll {
 	 * Set Transaction Text Domain
 	 *
 	 * @return void
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 */
 	public function set_translation(): void {
-		load_plugin_textdomain( 'wp-payroll', false, dirname( plugin_basename( WP_PMS_FILE ) ) . '/languages' );
+		load_plugin_textdomain( 'wp-payroll', false, dirname( plugin_basename( WP_PAYROLL_FILE ) ) . '/languages' );
 	}
 
 	/**
@@ -58,11 +59,13 @@ final class WPPayroll {
 	 * @since 1.0.0
 	 */
 	public function activate_this_plugin(): void {
-		if ( ! get_option( 'wp_pms_installed' ) ) {
-			update_option( 'wp_pms_installed', time() );
+		if ( ! get_option( 'wp_payroll_installed' ) ) {
+			update_option( 'wp_payroll_installed', time() );
 		}
 
-		update_option( 'wp_pms_version', WP_PMS_PLUGIN_VERSION );
+		update_option( 'wp_payroll_version', WP_PAYROLL_PLUGIN_VERSION );
+
+		new Installer();
 
 		flush_rewrite_rules();
 	}
@@ -70,7 +73,7 @@ final class WPPayroll {
 	/**
 	 * Main point of loading the plugin.
 	 *
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 *
 	 * @return void
 	 */
@@ -90,7 +93,7 @@ final class WPPayroll {
 	/**
 	 * Load necessary hooks.
 	 *
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 *
 	 * @param  HookAbleInterface $hook_able  HookAble Interface.
 	 *
