@@ -13,7 +13,7 @@ class AdminMenu implements HookAbleInterface {
 	 * @since WP_PAYROLL_SINCE
 	 */
 	public function hooks(): void {
-		if ( ! current_user_can( 'manage_wp_payroll_menu' ) ) {
+		if ( ! current_user_can( 'wp_payroll_manage_menu' ) ) {
 			return;
         }
 
@@ -31,7 +31,7 @@ class AdminMenu implements HookAbleInterface {
 		add_menu_page(
             __( 'WP Payroll', 'wp-payroll' ),
             __( 'WP Payroll', 'wp-payroll' ),
-            'manage_wp_payroll_menu',
+            'wp_payroll_manage_menu',
             'wp-payroll',
             [ $this, 'menu_page' ],
             'dashicons-money-alt',

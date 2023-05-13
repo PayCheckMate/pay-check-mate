@@ -21,7 +21,7 @@ class PayrollUserRoles {
 		$admin = get_role( 'administrator' );
 		if ( $admin ) {
 			$admin->add_cap( 'wp_payroll_accountant' );
-			$admin->add_cap( 'manage_wp_payroll_menu' );
+			$admin->add_cap( 'wp_payroll_manage_menu' );
 		}
 	}
 
@@ -35,7 +35,7 @@ class PayrollUserRoles {
 		return [
 			'read'                   => true,
 			'wp_payroll_accountant'  => true,
-			'manage_wp_payroll_menu' => true,
+			'wp_payroll_manage_menu' => true,
 		];
 	}
 
@@ -49,7 +49,7 @@ class PayrollUserRoles {
 		return [
 			'read'                   => true,
 			'wp_payroll_employee'    => true,
-			'manage_wp_payroll_menu' => true,
+			'wp_payroll_manage_menu' => true,
 		];
 	}
 }
