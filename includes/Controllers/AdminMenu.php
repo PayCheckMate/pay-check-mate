@@ -10,16 +10,20 @@ class AdminMenu implements HookAbleInterface {
 	 * All the necessary hooks.
 	 *
 	 * @return void
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 */
 	public function hooks(): void {
+		if ( ! current_user_can( 'wp_payroll_manage_menu' ) ) {
+			return;
+        }
+
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 	}
 
 	/**
 	 * Add menu page.
 	 *
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 *
 	 * @return void
 	 */
@@ -27,7 +31,7 @@ class AdminMenu implements HookAbleInterface {
 		add_menu_page(
             __( 'WP Payroll', 'wp-payroll' ),
             __( 'WP Payroll', 'wp-payroll' ),
-            'manage_options',
+            'wp_payroll_manage_menu',
             'wp-payroll',
             [ $this, 'menu_page' ],
             'dashicons-money-alt',
@@ -38,7 +42,7 @@ class AdminMenu implements HookAbleInterface {
 	/**
 	 * Menu page callback.
 	 *
-	 * @since WP_PMS_SINCE
+	 * @since WP_PAYROLL_SINCE
 	 *
 	 * @return void
 	 */

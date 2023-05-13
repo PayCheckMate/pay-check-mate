@@ -25,38 +25,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require 'vendor/autoload.php';
 
-if ( ! defined( 'WP_PMS_PLUGIN_VERSION' ) ) {
-	define( 'WP_PMS_PLUGIN_VERSION', '1.0.0' );
+if ( ! defined( 'WP_PAYROLL_PLUGIN_VERSION' ) ) {
+	define( 'WP_PAYROLL_PLUGIN_VERSION', '1.0.0' );
 }
 
-if ( ! defined( 'WP_PMS_ASSET' ) ) {
-	define( 'WP_PMS_ASSET', plugins_url( 'assets', __FILE__ ) );
+if ( ! defined( 'WP_PAYROLL_ASSET' ) ) {
+	define( 'WP_PAYROLL_ASSET', plugins_url( 'assets', __FILE__ ) );
 }
 
-if ( ! defined( 'WP_PMS_FILE' ) ) {
-	define( 'WP_PMS_FILE', __FILE__ );
+if ( ! defined( 'WP_PAYROLL_FILE' ) ) {
+	define( 'WP_PAYROLL_FILE', __FILE__ );
 }
 
-if ( ! defined( 'WP_PMS_DIR' ) ) {
-	define( 'WP_PMS_DIR', __DIR__ );
+if ( ! defined( 'WP_PAYROLL_DIR' ) ) {
+	define( 'WP_PAYROLL_DIR', __DIR__ );
 }
 
-if ( ! defined( 'WP_PMS_VERSION' ) ) {
-	define( 'WP_PMS_VERSION', '1.0.0' );
+if ( ! defined( 'WP_PAYROLL_VERSION' ) ) {
+	define( 'WP_PAYROLL_VERSION', '1.0.0' );
 }
 
-if ( ! defined( 'WP_PMS_BASE_NAME' ) ) {
-	define( 'WP_PMS_BASE_NAME', plugin_basename( __FILE__ ) );
+if ( ! defined( 'WP_PAYROLL_BASE_NAME' ) ) {
+	define( 'WP_PAYROLL_BASE_NAME', plugin_basename( __FILE__ ) );
 }
 
-if ( ! defined( 'WP_PMS_URL' ) ) {
-	define( 'WP_PMS_URL', plugins_url( '', __FILE__ ) );
+if ( ! defined( 'WP_PAYROLL_URL' ) ) {
+	define( 'WP_PAYROLL_URL', plugins_url( '', __FILE__ ) );
 }
 
 /**
  * Main function to initialize the plugin.
  *
- * @since WP_PMS_SINCE
+ * @since WP_PAYROLL_SINCE
  */
 function wp_pms_init() {
 	WPPayroll::get_instance();
@@ -65,6 +65,6 @@ function wp_pms_init() {
 /**
  * Run the plugin.
  *
- * @since WP_PMS_SINCE
+ * @since WP_PAYROLL_SINCE
  */
 wp_pms_init();

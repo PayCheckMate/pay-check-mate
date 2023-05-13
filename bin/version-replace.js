@@ -11,7 +11,7 @@ const { version } = JSON.parse( fs.readFileSync( 'package.json' ) );
 replace(
 	{
 		files: pluginFiles,
-		from: /WP_PMS_SINCE/g,
+		from: /WP_PAYROLL_SINCE/g,
 		to: version,
 	}
 );
