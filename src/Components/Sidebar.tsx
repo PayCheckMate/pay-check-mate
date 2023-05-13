@@ -1,20 +1,20 @@
-import { Fragment, useState } from 'react'
-import { createHooks } from '@wordpress/hooks';
+import {Fragment, useState} from 'react'
+import {createHooks} from '@wordpress/hooks';
 import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
-import {Navigation} from "../Types/Navigation";
+import {NavigationType} from "../Types/NavigationType";
 import {Link} from "react-router-dom";
+import {userIs} from "../Helpers/User";
 
 const Hooks = createHooks();
-const navigation: Navigation[] = [
-    { title: 'Dashboard', href: 'dashboard', icon: HomeIcon, current: true },
-    { title: 'Employees', href: 'employees', icon: UsersIcon, current: false },
-    { title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false },
-    { title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false },
-    { title: 'Settings', href: 'settings', icon: CogIcon, current: false },
-]
+let navigation: NavigationType[] = Hooks.applyFilters('wp_payroll_navigations', [
+    {title: 'Dashboard', href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: 'Employees', href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']},
+    {title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: 'Settings', href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+]) as NavigationType[];
 
-Hooks.applyFilters( 'wp_payroll_navigations', navigation );
 // @ts-ignore
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -35,7 +35,7 @@ export const Sidebar = () => {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-gray-900/80" />
+                        <div className="fixed inset-0 bg-gray-900/80"/>
                     </Transition.Child>
 
                     <div className="fixed inset-0 flex">
@@ -61,7 +61,7 @@ export const Sidebar = () => {
                                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                                         <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                                             <span className="sr-only">Close sidebar</span>
-                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true"/>
                                         </button>
                                     </div>
                                 </Transition.Child>
@@ -75,20 +75,24 @@ export const Sidebar = () => {
                                             <li>
                                                 <ul role="list" className="-mx-2 space-y-1">
                                                     {navigation.map((item) => (
-                                                        <li key={item.title}>
-                                                            <Link
-                                                                to={item.href}
-                                                                className={classNames(
-                                                                    item.current
-                                                                        ? 'bg-gray-800 text-white'
-                                                                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                                )}
-                                                            >
-                                                                <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                                                {item.title}
-                                                            </Link>
-                                                        </li>
+                                                        <>
+                                                            {userIs(item.roles) && (
+                                                                <li key={item.title}>
+                                                                    <Link
+                                                                        to={item.href}
+                                                                        className={classNames(
+                                                                            item.current
+                                                                                ? 'bg-gray-800 text-white'
+                                                                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                                        )}
+                                                                    >
+                                                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true"/>
+                                                                        {item.title}
+                                                                    </Link>
+                                                                </li>
+                                                            )}
+                                                        </>
                                                     ))}
                                                 </ul>
                                             </li>
@@ -112,21 +116,25 @@ export const Sidebar = () => {
                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" className="-mx-2 space-y-1 mt-2.5">
-                                    {navigation.map((item) => (
-                                        <li key={item.title}>
-                                            <Link
-                                                to={item.href}
-                                                className={classNames(
-                                                    item.current
-                                                        ? 'bg-gray-800 text-white'
-                                                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                )}
-                                            >
-                                                <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                                                {item.title}
-                                            </Link>
-                                        </li>
+                                    {navigation.map((item, index) => (
+                                        <>
+                                            {userIs(item.roles) && (
+                                                <li key={item.title}>
+                                                    <Link
+                                                        to={item.href}
+                                                        className={classNames(
+                                                            item.current
+                                                                ? 'bg-gray-800 text-white'
+                                                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                        )}
+                                                    >
+                                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true"/>
+                                                        {item.title}
+                                                    </Link>
+                                                </li>
+                                            )}
+                                        </>
                                     ))}
                                 </ul>
                             </li>
@@ -138,7 +146,7 @@ export const Sidebar = () => {
             <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 lg:hidden" onClick={() => setSidebarOpen(true)}>
                     <span className="sr-only">Open sidebar</span>
-                    <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
                 </button>
                 <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
                 <a href="#">

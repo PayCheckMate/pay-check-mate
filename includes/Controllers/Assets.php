@@ -62,6 +62,7 @@ class Assets implements HookAbleInterface {
 			'wp-payroll-js', 'wpPayroll', [
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wp-payroll-nonce' ),
+				'currentUser' => wp_get_current_user(),
 			],
 		);
 	}
