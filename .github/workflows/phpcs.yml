@@ -14,7 +14,7 @@ jobs:
               with:
                   php-version: '7.4'
                   coverage: none
-                  tools: cs2pr, composer:v2
+                  tools: cs2pr, composer:v1
 
             - name: Get composer cache directory
               id: composercache
