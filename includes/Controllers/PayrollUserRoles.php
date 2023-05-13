@@ -18,7 +18,7 @@ class PayrollUserRoles {
 		}
 
 		// Add capabilities to admin.
-		$admin = get_role( 'administrator' );
+		$admin = get_role( 'administrator');
 		if ( $admin ) {
 			$admin->add_cap( 'wp_payroll_accountant' );
 			$admin->add_cap( 'wp_payroll_manage_menu' );
