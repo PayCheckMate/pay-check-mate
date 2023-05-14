@@ -1,16 +1,17 @@
+import {createRoot, render} from '@wordpress/element';
 import './app.css';
-import {render} from "react-dom";
 
-import { HashRouter } from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 import Main from "./Pages/Main";
 
 export default function App() {
     return (
         <HashRouter>
-            <Main />
+            <Main/>
         </HashRouter>
     )
 }
 
 // Render the app
-render( <App />, document.getElementById('root') );
+// @ts-ignore
+createRoot(document.getElementById('root')).render(<App/>);

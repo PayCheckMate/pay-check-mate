@@ -6,3 +6,7 @@ export interface NavigationType {
     current?: boolean;
     children?: NavigationType[];
 }
+
+export interface NavbarLinkProps {
+    navigation: NavigationType[];
+}

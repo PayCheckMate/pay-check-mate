@@ -1,10 +1,9 @@
-import {Fragment, useState} from 'react'
+import {Fragment, useState} from '@wordpress/element'
 import {createHooks} from '@wordpress/hooks';
 import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
-import {Link} from "react-router-dom";
-import {userIs} from "../Helpers/User";
+import {NavbarLink} from "./NavbarLink";
 
 const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('wp_payroll_navigations', [
@@ -12,7 +11,14 @@ let navigation: NavigationType[] = Hooks.applyFilters('wp_payroll_navigations', 
     {title: 'Employees', href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']},
     {title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
     {title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Settings', href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: 'Settings', href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant'],
+        children: [
+            {title: 'General', href: 'settings/general', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: 'Payroll', href: 'settings/payroll', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: 'Employees', href: 'settings/employees', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: 'Reports', href: 'settings/reports', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+        ]
+    },
 ]) as NavigationType[];
 
 // @ts-ignore
@@ -74,26 +80,9 @@ export const Sidebar = () => {
                                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                             <li>
                                                 <ul role="list" className="-mx-2 space-y-1">
-                                                    {navigation.map((item) => (
-                                                        <>
-                                                            {userIs(item.roles) && (
-                                                                <li key={item.title}>
-                                                                    <Link
-                                                                        to={item.href}
-                                                                        className={classNames(
-                                                                            item.current
-                                                                                ? 'bg-gray-800 text-white'
-                                                                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                                        )}
-                                                                    >
-                                                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true"/>
-                                                                        {item.title}
-                                                                    </Link>
-                                                                </li>
-                                                            )}
-                                                        </>
-                                                    ))}
+                                                    <NavbarLink
+                                                        navigation={navigation}
+                                                    />
                                                 </ul>
                                             </li>
                                         </ul>
@@ -116,26 +105,9 @@ export const Sidebar = () => {
                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" className="-mx-2 space-y-1 mt-2.5">
-                                    {navigation.map((item, index) => (
-                                        <>
-                                            {userIs(item.roles) && (
-                                                <li key={item.title}>
-                                                    <Link
-                                                        to={item.href}
-                                                        className={classNames(
-                                                            item.current
-                                                                ? 'bg-gray-800 text-white'
-                                                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                        )}
-                                                    >
-                                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true"/>
-                                                        {item.title}
-                                                    </Link>
-                                                </li>
-                                            )}
-                                        </>
-                                    ))}
+                                    <NavbarLink
+                                        navigation={navigation}
+                                    />
                                 </ul>
                             </li>
                         </ul>

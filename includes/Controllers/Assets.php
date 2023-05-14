@@ -18,11 +18,11 @@ class Assets implements HookAbleInterface {
 	 * @since WP_PAYROLL_SINCE
 	 */
 	public function register_scripts(): void {
-		$asset_file = require_once WP_PAYROLL_DIR . '/build/index.asset.php';
+		$asset_file = require_once WP_PAYROLL_DIR . '/dist/index.asset.php';
 
 		wp_register_script(
 			'wp-payroll-js',
-			WP_PAYROLL_URL . '/build/index.js',
+			WP_PAYROLL_URL . '/dist/index.js',
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,
@@ -30,7 +30,7 @@ class Assets implements HookAbleInterface {
 
 		wp_register_style(
 			'wp-payroll-css',
-			WP_PAYROLL_URL . '/build/index.css',
+			WP_PAYROLL_URL . '/dist/index.css',
 			[],
 			$asset_file['version'],
 		);
@@ -46,6 +46,7 @@ class Assets implements HookAbleInterface {
 		if ( 'toplevel_page_wp-payroll' !== get_current_screen()->id ) {
 			return;
 		}
+
 		$this->register_translations();
 		wp_enqueue_script( 'wp-payroll-js' );
 		wp_enqueue_style( 'wp-payroll-css' );
