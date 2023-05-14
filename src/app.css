@@ -12,4 +12,9 @@
     .page-title {
         @apply text-2xl font-light text-gray-900
     }
+    .custom-font {
+        @apply font-sans;
+        font-style: normal;
+    }
+
 }
