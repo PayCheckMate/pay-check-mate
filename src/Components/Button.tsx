@@ -4,11 +4,12 @@ interface ButtonProps {
     path?: string;
     className?: string;
     children: React.ReactNode;
+    onClick?: () => void;
 }
 
-export const Button = ({ path, className, children }: ButtonProps) => {
+export const Button = ({ path, className, children, onClick }: ButtonProps) => {
     const buttonClass = className
-        ? `${className}`
+        ? `btn-primary ${className}`
         : 'btn-primary';
 
     return (
@@ -18,7 +19,7 @@ export const Button = ({ path, className, children }: ButtonProps) => {
                     {children}
                 </Link>
             ) : (
-                <button type="button" className={buttonClass}>
+                <button type="button" className={buttonClass} onClick={onClick}>
                     {children}
                 </button>
             )}
