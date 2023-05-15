@@ -2,8 +2,10 @@
 
 namespace WpPayroll;
 
+use WpPayroll\Contracts\HookAbleApiInterface;
 use WpPayroll\Contracts\HookAbleInterface;
 use WpPayroll\Controllers\Installer;
+use WpPayroll\Controllers\REST\DepartmentAPI;
 
 final class WPPayroll {
 
@@ -17,6 +19,15 @@ final class WPPayroll {
 	protected array $classes = [
 		'WpPayroll\Controllers\AdminMenu',
 		'WpPayroll\Controllers\Assets',
+	];
+
+	/**
+	 * All the API classes.
+	 *
+	 * @var array|string[]
+	 */
+	protected array $api_classes = [
+		'WpPayroll\Controllers\REST\DepartmentAPI',
 	];
 
 	/**
@@ -40,6 +51,9 @@ final class WPPayroll {
 		add_action( 'init', [ $this, 'set_translation' ] );
 		register_activation_hook( WP_PAYROLL_FILE, [ $this, 'activate_this_plugin' ] );
 		add_action( 'plugins_loaded', [ $this, 'load_plugin_hooks' ] );
+
+		// Register REST API routes.
+		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 	}
 
 	/**
@@ -86,6 +100,25 @@ final class WPPayroll {
 			$item = new $item();
 			if ( $item instanceof HookAbleInterface ) {
 				$this->load_hooks( $item );
+			}
+		}
+	}
+
+	/**
+	 * Register REST API routes.
+	 *
+	 * @return void
+	 * @since WP_PAYROLL_SINCE
+	 */
+	public function register_rest_routes(): void {
+		if ( empty( $this->api_classes ) ) {
+			return;
+		}
+
+		foreach ( $this->api_classes as $item ) {
+			$item = new $item();
+			if ( $item instanceof HookAbleApiInterface ) {
+				$item->register_api_routes();
 			}
 		}
 	}
