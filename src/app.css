@@ -4,7 +4,7 @@
 
 @layer components {
     .btn-primary {
-        @apply p-2 pl-5 pr-5 text-sm transition-colors duration-300 transform border border-indigo-500 bg-indigo-500 hover:bg-indigo-700 text-white rounded focus:border-4;
+        @apply inline-flex items-center gap-x-1.5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
     }
     .btn-cancel {
         @apply p-2 pl-5 pr-5 text-sm border border-white hover:border-gray-300 text-gray-600 rounded focus:border-4 mr-2;
@@ -12,4 +12,8 @@
     .page-title {
         @apply text-2xl font-light text-gray-900
     }
+    .custom-font {
+        @apply font-sans;
+    }
+
 }
