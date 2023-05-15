@@ -14,7 +14,6 @@
     }
     .custom-font {
         @apply font-sans;
-        font-style: normal;
     }
 
 }
