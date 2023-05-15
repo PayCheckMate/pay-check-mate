@@ -6,6 +6,7 @@ import {userCan, userIs} from "../Helpers/User";
 import {store as coreData} from '@wordpress/core-data'
 import {useSelect} from '@wordpress/data'
 import {AddEmployee} from "./AddEmployee";
+import {DepartmentList} from "./Department/DepartmentList";
 
 export default function Main() {
     useSelect((select) => {
@@ -23,6 +24,8 @@ export default function Main() {
                                 {userIs(['administrator', 'wp_payroll_accountant']) && (<Route path="/" element={<Dashboard/>}/>)}
                                 {userIs(['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']) && (<Route path="employees" element={<EmployeeList/>}/>)}
                                 {userIs(['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']) && (<Route path="add-user" element={<AddEmployee/>}/>)}
+                                <Route path='departments' element={<DepartmentList />}/>
+                                <Route path="*" element={<h1>Not Found</h1>}/>
                             </Routes>
                         </div>
                     </main>

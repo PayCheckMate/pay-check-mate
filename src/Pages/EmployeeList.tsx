@@ -63,13 +63,13 @@ export const EmployeeList = () => {
     return (
         <>
             {showViewModal && <Modal setShowModal={setShowViewModal}/>}
-            <div className="">
+            <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">Employee list</h1>
                         <p className="mt-2 text-sm text-gray-700">
                             A list of all the users in your account including their name, title, email and role.
-                            <Button onClick={() => setShowModal(true)}>Open Modal</Button>
+                            {/*<Button onClick={() => setShowModal(true)}>Open Modal</Button>*/}
                         </p>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">

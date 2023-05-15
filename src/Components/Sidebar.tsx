@@ -4,19 +4,21 @@ import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMa
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "./NavbarLink";
+import {__} from "@wordpress/i18n";
 
 const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('wp_payroll_navigations', [
-    {title: 'Dashboard', href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Employees', href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']},
-    {title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Settings', href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant'],
+    {title: __('Dashboard', 'wp-payroll'), href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: __('Employees', 'wp-payroll'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']},
+    {title: __('Departments', 'wp-payroll'), href: 'departments', icon: Bars3Icon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: __('Payroll', 'wp-payroll'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: __('Reports', 'wp-payroll'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
+    {title: __('Settings', 'wp-payroll'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant'],
         children: [
-            {title: 'General', href: 'settings/general', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Payroll', href: 'settings/payroll', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Employees', href: 'settings/employees', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Reports', href: 'settings/reports', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: __('General', 'wp-payroll'), href: 'settings/general', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: __('Payroll', 'wp-payroll'), href: 'settings/payroll', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: __('Employees', 'wp-payroll'), href: 'settings/employees', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: __('Reports', 'wp-payroll'), href: 'settings/reports', current: false, roles: ['administrator', 'wp_payroll_accountant']},
         ]
     },
 ]) as NavigationType[];

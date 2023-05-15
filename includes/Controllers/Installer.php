@@ -11,6 +11,7 @@ class Installer {
 
 	public function __construct() {
 		new PayrollUserRoles();
+		new Databases();
 	}
 
 }
