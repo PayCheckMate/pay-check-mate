@@ -2,7 +2,11 @@
 
 namespace WpPayroll\Controllers\REST;
 
-class DepartmentAPI extends \WP_REST_Controller implements \WpPayroll\Contracts\HookAbleApiInterface {
+use WP_REST_Controller;
+use WpPayroll\Contracts\HookAbleApiInterface;
+use WpPayroll\Models\Department;
+
+class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 
 	public function __construct() {
 		$this->namespace = 'wp-payroll/v1';
@@ -11,99 +15,72 @@ class DepartmentAPI extends \WP_REST_Controller implements \WpPayroll\Contracts\
 
 	public function register_api_routes(): void {
 		register_rest_route(
-            $this->namespace, '/' . $this->rest_base, [
+			$this->namespace, '/' . $this->rest_base, [
 				[
-					'methods' => \WP_REST_Server::READABLE,
-					'callback' => [ $this, 'get_items' ],
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_items' ],
+					'args'                => $this->get_collection_params(),
 					'permission_callback' => [ $this, 'get_items_permissions_check' ],
 				],
 				[
-					'methods' => \WP_REST_Server::CREATABLE,
-					'callback' => [ $this, 'create_item' ],
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'create_item' ],
 					'permission_callback' => [ $this, 'create_item_permissions_check' ],
-					'args' => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
+					'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
 				],
-			]
-        );
+			],
+		);
 
 		register_rest_route(
 			$this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
 				'args' => [
 					'id' => [
 						'description' => __( 'Unique identifier for the object', 'wp-payroll' ),
-						'type' => 'integer',
-						'required' => true,
+						'type'        => 'integer',
+						'required'    => true,
 					],
 				],
 				[
-					'methods' => \WP_REST_Server::READABLE,
-					'callback' => [ $this, 'get_item' ],
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_item' ],
 					'permission_callback' => [ $this, 'get_item_permissions_check' ],
-					'args' => $this->get_collection_params(),
+					'args'                => $this->get_collection_params(),
 				],
 				[
-					'methods' => \WP_REST_Server::EDITABLE,
-					'callback' => [ $this, 'update_item' ],
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'update_item' ],
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
-					'args' => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::EDITABLE ),
+					'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::EDITABLE ),
 				],
 				[
-					'methods' => \WP_REST_Server::DELETABLE,
-					'callback' => [ $this, 'delete_item' ],
+					'methods'             => \WP_REST_Server::DELETABLE,
+					'callback'            => [ $this, 'delete_item' ],
 					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
-					'args' => $this->get_collection_params(),
+					'args'                => $this->get_collection_params(),
 				],
-			]
+			],
 		);
 	}
 
 	public function get_items_permissions_check( $request ): bool {
 		return true;
 	}
+
 	public function get_item_permissions_check( $request ): bool {
 		return true;
 	}
+
 	public function update_item_permissions_check( $request ): bool {
 		return true;
 	}
+
 	public function delete_item_permissions_check( $request ): bool {
 		return true;
 	}
 
 	public function get_items( $request ) {
-		$departments = [
-			[
-				'id' => 1,
-				'department_name' => 'Department 1',
-				'status' => 1,
-				'created_on' => '2020-01-01 00:00:00',
-			],
-			[
-				'id' => 2,
-				'department_name' => 'Department 2',
-				'status' => 1,
-				'created_on' => '2020-01-01 00:00:00',
-			],
-			[
-				'id' => 3,
-				'department_name' => 'Department 3',
-				'status' => 1,
-				'created_on' => '2020-01-01 00:00:00',
-			],
-			[
-				'id' => 4,
-				'department_name' => 'Department 4',
-				'status' => 1,
-				'created_on' => '2020-01-01 00:00:00',
-			],
-			[
-				'id' => 5,
-				'department_name' => 'Department 5',
-				'status' => 1,
-				'created_on' => '2020-01-01 00:00:00',
-			],
-		];
-
+		$departments = new Department();
+		$departments = $departments->get_departments();
 		$data = [];
 
 		foreach ( $departments as $department ) {
@@ -159,10 +136,10 @@ class DepartmentAPI extends \WP_REST_Controller implements \WpPayroll\Contracts\
 
 	public function prepare_item_for_response( $item, $request ) {
 		$data = [
-			'id' => $item['id'],
+			'id'              => $item['id'],
 			'department_name' => $item['department_name'],
-			'status' => $item['status'],
-			'created_on' => $item['created_on'],
+			'status'          => $item['status'],
+			'created_on'      => $item['created_on'],
 		];
 
 		return $data;
@@ -170,49 +147,46 @@ class DepartmentAPI extends \WP_REST_Controller implements \WpPayroll\Contracts\
 
 	public function get_collection_params() {
 		return [
-			'department_name' => [
-				'description' => __( 'Department name', 'wp-payroll' ),
-				'type' => 'string',
-				'required' => true,
-			],
+			'context'  => $this->get_context_param(),
 		];
 	}
 
 	public function get_item_schema() {
 		return [
-			'$schema' => 'http://json-schema.org/draft-04/schema#',
-			'title' => 'department',
-			'type' => 'object',
+			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'title'      => 'department',
+			'type'       => 'object',
 			'properties' => [
-				'id' => [
+				'id'              => [
 					'description' => __( 'Unique identifier for the object', 'wp-payroll' ),
-					'type' => 'integer',
-					'context' => [ 'view', 'edit', 'embed' ],
-					'readonly' => true,
+					'type'        => 'integer',
+					'context'     => [ 'view', 'edit', 'embed' ],
+					'readonly'    => true,
 				],
 				'department_name' => [
 					'description' => __( 'Department name', 'wp-payroll' ),
-					'type' => 'string',
-					'context' => [ 'view', 'edit', 'embed' ],
-					'readonly' => false,
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit', 'embed' ],
+					'readonly'    => false,
+					'required'    => true,
 				],
-				'status' => [
+				'status'          => [
 					'description' => __( 'Status', 'wp-payroll' ),
-					'type' => 'integer',
-					'context' => [ 'view', 'edit', 'embed' ],
-					'readonly' => false,
+					'type'        => 'integer',
+					'context'     => [ 'view', 'edit', 'embed' ],
+					'readonly'    => false,
 				],
-				'created_on' => [
+				'created_on'      => [
 					'description' => __( 'Created on', 'wp-payroll' ),
-					'type' => 'string',
-					'context' => [ 'view', 'edit', 'embed' ],
-					'readonly' => true,
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit', 'embed' ],
+					'readonly'    => true,
 				],
-				'updated_at' => [
+				'updated_at'      => [
 					'description' => __( 'Updated on', 'wp-payroll' ),
-					'type' => 'string',
-					'context' => [ 'view', 'edit', 'embed' ],
-					'readonly' => true,
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit', 'embed' ],
+					'readonly'    => true,
 				],
 			],
 		];

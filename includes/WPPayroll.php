@@ -5,7 +5,7 @@ namespace WpPayroll;
 use WpPayroll\Contracts\HookAbleApiInterface;
 use WpPayroll\Contracts\HookAbleInterface;
 use WpPayroll\Controllers\Installer;
-use WpPayroll\Controllers\REST\DepartmentAPI;
+use WpPayroll\Controllers\REST\DepartmentApi;
 
 final class WPPayroll {
 
@@ -27,7 +27,7 @@ final class WPPayroll {
 	 * @var array|string[]
 	 */
 	protected array $api_classes = [
-		'WpPayroll\Controllers\REST\DepartmentAPI',
+		'WpPayroll\Controllers\REST\DepartmentApi',
 	];
 
 	/**

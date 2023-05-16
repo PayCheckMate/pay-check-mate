@@ -16,6 +16,7 @@ class Databases {
 	 * @var string
 	 */
 	protected $prefix;
+	protected string $table_prefix;
 
 	/**
 	 * Constructor.
@@ -25,6 +26,7 @@ class Databases {
 
 		$this->charset_collate = $wpdb->get_charset_collate();
 		$this->prefix          = $wpdb->prefix;
+		$this->table_prefix    = $wpdb->prefix . 'wp_payroll_';
 
 		$this->create_tables();
 	}
@@ -47,10 +49,9 @@ class Databases {
 	 * @return void
 	 */
 	public function create_table_departments() {
-		global $wpdb;
 		$this->include_db_delta();
 
-		$sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wp_payroll_departments` (
+		$sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
 			`id` bigint(20) unsigned NOT NULL,
     		`department_name` varchar(255) NOT NULL,
     		`status` tinyint(1) NOT NULL DEFAULT '1',

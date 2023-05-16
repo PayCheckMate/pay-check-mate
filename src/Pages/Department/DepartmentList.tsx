@@ -2,25 +2,28 @@ import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
-import React from "@wordpress/element";
+import {useEffect, useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
+import apiFetch from "@wordpress/api-fetch";
 
 export const DepartmentList = () => {
-    const departments: DepartmentType[] = [
-        {id: 1, department_name: __('Human Resource', 'wp-payroll'), status: DepartmentStatus.Active, created_on: '2021-09-01 12:00:00', updated_at: ''},
-        {id: 2, department_name: __('Accounts', 'wp-payroll'), status: DepartmentStatus.Active, created_on: '2021-09-01 12:00:00', updated_at: ''},
-        {id: 3, department_name: __('Marketing', 'wp-payroll'), status: DepartmentStatus.Inactive, created_on: '2021-09-01 12:00:00', updated_at: ''},
-        {id: 4, department_name: __('Content', 'wp-payroll'), status: DepartmentStatus.Active, created_on: '2021-09-01 12:00:00', updated_at: ''},
-        {id: 5, department_name: __('Design', 'wp-payroll'), status: DepartmentStatus.Active, created_on: '2021-09-01 12:00:00', updated_at: ''},
-        {id: 6, department_name: __('Engineering', 'wp-payroll'), status: DepartmentStatus.Active, created_on: '2021-09-01 12:00:00', updated_at: ''},
-    ]
+    const [loading, setLoading] = useState<boolean>(false)
+    const [departments, setDepartments] = useState<DepartmentType[]>([])
+    useEffect(() => {
+        apiFetch({ path: '/wp-payroll/v1/departments' }).then((data: unknown) => {
+            setLoading(true)
+            setDepartments(data as DepartmentType[])
+            setLoading(false)
+        });
+    }, []);
     const columns = [
         {title: 'Department name', dataIndex: 'department_name'},
         {title: 'Status', dataIndex: 'status',
             render: (text: string, record: DepartmentType) => {
+            const status = parseInt(String(record.status))
                 return (
-                    <span className={`${record.status === DepartmentStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {record.status === DepartmentStatus.Active ? __('Active', 'wp-payroll') : __('Inactive', 'wp-payroll')}
+                    <span className={`${status === DepartmentStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
+                        {status === DepartmentStatus.Active ? __('Active', 'wp-payroll') : __('Inactive', 'wp-payroll')}
                     </span>
                 )
             }
@@ -68,7 +71,7 @@ export const DepartmentList = () => {
                         </Button>
                     </div>
                 </div>
-                <Table columns={columns} data={departments}/>
+                <Table columns={columns} data={departments} isLoading={loading}/>
             </div>
         </>
     )
