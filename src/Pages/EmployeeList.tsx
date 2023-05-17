@@ -82,7 +82,7 @@ export const EmployeeList = () => {
                         )}
                     </div>
                 </div>
-                <Table columns={columns} data={people}/>
+                <Table columns={columns} data={people} isLoading={false}/>
             </div>
         </>
     )

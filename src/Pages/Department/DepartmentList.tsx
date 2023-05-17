@@ -4,18 +4,18 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {useEffect, useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
-import apiFetch from "@wordpress/api-fetch";
+import useFetchApi from "../../Helpers/useFetchApi";
 
 export const DepartmentList = () => {
-    const [loading, setLoading] = useState<boolean>(false)
     const [departments, setDepartments] = useState<DepartmentType[]>([])
+    // @ts-ignore
+    const {models, loading, makeDeleteRequest} = useFetchApi('/wp-payroll/v1/departments');
     useEffect(() => {
-        apiFetch({ path: '/wp-payroll/v1/departments' }).then((data: unknown) => {
-            setLoading(true)
-            setDepartments(data as DepartmentType[])
-            setLoading(false)
-        });
-    }, []);
+        if (models) {
+            setDepartments(models as DepartmentType[]);
+        }
+    }, [models]);
+
     const columns = [
         {title: 'Department name', dataIndex: 'department_name'},
         {title: 'Status', dataIndex: 'status',
@@ -50,13 +50,27 @@ export const DepartmentList = () => {
                         {__('Edit', 'wp-payroll')}
                     </button>
                     <span className="mx-2 text-gray-300">|</span>
-                    <button className="text-red-600 hover:text-red-900">
+                    <button onClick={()=>deleteDepartment(record.id)} className="text-red-600 hover:text-red-900">
                         {__('Delete', 'wp-payroll')}
                     </button>
                 </div>
             )
         }
     ]
+
+    const deleteDepartment = (id: number) => {
+        console.log(id)
+        try {
+            makeDeleteRequest(`/wp-payroll/v1/departments/${id}`, false).then((data: unknown) => {
+                setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
+            });
+        } catch (error) {
+            console.log(error); // Handle the error accordingly
+        }
+        // apiFetch({path: `/wp-payroll/v1/departments/${id}`, method: 'DELETE'}).then((data: unknown) => {
+        //     setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
+        // });
+    }
     return (
         <>
             <div>

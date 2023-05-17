@@ -115,7 +115,9 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	}
 
 	public function delete_item( $request ) {
-		$department = wp_delete_term( $request['id'], 'department' );
+		$department = new Department();
+		return $request['id'];
+		$department = $department->delete_department( $request['id'] );
 
 		if ( is_wp_error( $department ) ) {
 			return new \WP_REST_Response( $department, 500 );

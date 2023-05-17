@@ -119,7 +119,7 @@ class Department {
 	public function delete_department( int $id ): int {
 		global $wpdb;
 
-		$wpdb->delete(
+		return $wpdb->delete(
 			$this->table,
 			[
 				'id' => $id,
@@ -128,7 +128,5 @@ class Department {
 				'%d',
 			]
 		);
-
-		return $wpdb->insert_id;
 	}
 }
