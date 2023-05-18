@@ -4,7 +4,7 @@ namespace PayCheckMate;
 
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Contracts\HookAbleInterface;
-use PayCheckMate\Controllers\Installer;
+use PayCheckMate\Core\Installer;
 
 final class WPPayroll {
 
@@ -16,8 +16,8 @@ final class WPPayroll {
 	 * @var array|string[]
 	 */
 	protected array $classes = [
-		'PayCheckMate\Hooks\AdminMenu',
-		'PayCheckMate\Hooks\Assets',
+		'PayCheckMate\Controllers\AdminMenu',
+		'PayCheckMate\Controllers\Assets',
 	];
 
 	/**
@@ -26,7 +26,7 @@ final class WPPayroll {
 	 * @var array|string[]
 	 */
 	protected array $api_classes = [
-		'PayCheckMate\Hooks\REST\DepartmentApi',
+		'PayCheckMate\Controllers\REST\DepartmentApi',
 	];
 
 	/**

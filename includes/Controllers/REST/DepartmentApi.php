@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Hooks\REST;
+namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\Department;
@@ -79,8 +79,8 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 * @return WP_REST_Response
 	 */
 	public function get_items( $request ): WP_REST_Response {
-		$departments = new Department();
-		$departments = $departments->get_departments();
+		$departments = new \PayCheckMate\Core\Department( new Department() );
+		$departments = $departments->all();
 		$data        = [];
 
 		foreach ( $departments as $department ) {

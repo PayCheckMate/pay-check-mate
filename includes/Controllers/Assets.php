@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Hooks;
+namespace PayCheckMate\Controllers;
 
 use PayCheckMate\Contracts\HookAbleInterface;
 

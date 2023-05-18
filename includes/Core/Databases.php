@@ -1,5 +1,5 @@
 <?php
-namespace PayCheckMate\Controllers;
+namespace PayCheckMate\Core;
 
 class Databases {
 
