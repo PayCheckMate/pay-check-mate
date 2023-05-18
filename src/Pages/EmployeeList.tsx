@@ -44,15 +44,15 @@ export const EmployeeList = () => {
                 return (
                     <div className="flex">
                         <button onClick={() => viewEmployee(record.id)} className="text-green-600 hover:text-green-900">
-                            {__('View', 'wp-payroll')}
+                            {__('View', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-indigo-600 hover:text-indigo-900">
-                            {__('Edit', 'wp-payroll')}
+                            {__('Edit', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-red-600 hover:text-red-900">
-                            {__('Delete', 'wp-payroll')}
+                            {__('Delete', 'pcm')}
                         </button>
                     </div>
                 );
@@ -63,13 +63,13 @@ export const EmployeeList = () => {
     return (
         <>
             {showViewModal && <Modal setShowModal={setShowViewModal}/>}
-            <div className="">
+            <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">Employee list</h1>
                         <p className="mt-2 text-sm text-gray-700">
                             A list of all the users in your account including their name, title, email and role.
-                            <Button onClick={() => setShowModal(true)}>Open Modal</Button>
+                            {/*<Button onClick={() => setShowModal(true)}>Open Modal</Button>*/}
                         </p>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -82,7 +82,7 @@ export const EmployeeList = () => {
                         )}
                     </div>
                 </div>
-                <Table columns={columns} data={people}/>
+                <Table columns={columns} data={people} isLoading={false}/>
             </div>
         </>
     )

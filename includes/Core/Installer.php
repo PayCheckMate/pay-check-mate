@@ -1,16 +1,17 @@
 <?php
 
-namespace WpPayroll\Controllers;
+namespace PayCheckMate\Core;
 
 /**
  * Installer class
  *
- * @since WP_PAYROLL_SINCE
+ * @since PAY_CHECK_MATE_SINCE
  */
 class Installer {
 
 	public function __construct() {
 		new PayrollUserRoles();
+		new Databases();
 	}
 
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace WpPayroll\Controllers;
+namespace PayCheckMate\Controllers;
 
-use WpPayroll\Contracts\HookAbleInterface;
+use PayCheckMate\Contracts\HookAbleInterface;
 
 class Assets implements HookAbleInterface {
 
@@ -15,22 +15,22 @@ class Assets implements HookAbleInterface {
 	 * Register scripts.
 	 *
 	 * @return void
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 */
 	public function register_scripts(): void {
-		$asset_file = require_once WP_PAYROLL_DIR . '/dist/index.asset.php';
+		$asset_file = require_once PAY_CHECK_MATE_DIR . '/dist/index.asset.php';
 
 		wp_register_script(
-			'wp-payroll-js',
-			WP_PAYROLL_URL . '/dist/index.js',
+			'pay-check-mate-js',
+			PAY_CHECK_MATE_URL . '/dist/index.js',
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,
 		);
 
 		wp_register_style(
-			'wp-payroll-css',
-			WP_PAYROLL_URL . '/dist/index.css',
+			'pay-check-mate-css',
+			PAY_CHECK_MATE_URL . '/dist/index.css',
 			[],
 			$asset_file['version'],
 		);
@@ -43,26 +43,26 @@ class Assets implements HookAbleInterface {
 	 * @since DOKAN_PRO_SINCE
 	 */
 	public function enqueue_scripts(): void {
-		if ( 'toplevel_page_wp-payroll' !== get_current_screen()->id ) {
+		if ( 'toplevel_page_pay-check-mate' !== get_current_screen()->id ) {
 			return;
 		}
 
 		$this->register_translations();
-		wp_enqueue_script( 'wp-payroll-js' );
-		wp_enqueue_style( 'wp-payroll-css' );
+		wp_enqueue_script( 'pay-check-mate-js' );
+		wp_enqueue_style( 'pay-check-mate-css' );
 	}
 
 	/**
 	 * Register translations.
 	 *
 	 * @return void
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 */
 	public function register_translations(): void {
 		wp_localize_script(
-			'wp-payroll-js', 'wpPayroll', [
+			'pay-check-mate-js', 'wpPayroll', [
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wp-payroll-nonce' ),
+				'nonce'   => wp_create_nonce( 'pay-check-mate-nonce' ),
 				'currentUser' => wp_get_current_user(),
 			],
 		);

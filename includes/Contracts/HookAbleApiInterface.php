@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Contracts;
 
-interface HookAbleInterface {
+interface HookAbleApiInterface {
 
 	/**
 	 * Call the necessary hooks.
@@ -10,5 +10,5 @@ interface HookAbleInterface {
 	 * @since PAY_CHECK_MATE_SINCE
 	 * @return void
 	 */
-	public function hooks(): void;
+	public function register_api_routes(): void;
 }

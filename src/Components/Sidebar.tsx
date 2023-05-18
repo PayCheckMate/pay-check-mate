@@ -4,19 +4,21 @@ import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMa
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "./NavbarLink";
+import {__} from "@wordpress/i18n";
 
 const Hooks = createHooks();
-let navigation: NavigationType[] = Hooks.applyFilters('wp_payroll_navigations', [
-    {title: 'Dashboard', href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Employees', href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'wp_payroll_accountant', 'wp_payroll_employee']},
-    {title: 'Payroll', href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Reports', href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'wp_payroll_accountant']},
-    {title: 'Settings', href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'wp_payroll_accountant'],
+let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
+    {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
+    {title: __('Departments', 'pcm'), href: 'departments', icon: Bars3Icon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
-            {title: 'General', href: 'settings/general', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Payroll', href: 'settings/payroll', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Employees', href: 'settings/employees', current: false, roles: ['administrator', 'wp_payroll_accountant']},
-            {title: 'Reports', href: 'settings/reports', current: false, roles: ['administrator', 'wp_payroll_accountant']},
+            {title: __('General', 'pcm'), href: 'settings/general', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Payroll', 'pcm'), href: 'settings/payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Employees', 'pcm'), href: 'settings/employees', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Reports', 'pcm'), href: 'settings/reports', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
         ]
     },
 ]) as NavigationType[];
@@ -74,7 +76,7 @@ export const Sidebar = () => {
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
-                                        <h1 className="text-white">Wp Payroll</h1>
+                                        <h1 className="text-white">PayCheckMate</h1>
                                     </div>
                                     <nav className="flex flex-1 flex-col">
                                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -99,7 +101,7 @@ export const Sidebar = () => {
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 mt-10">
                     <div className="flex h-16 shrink-0 items-center">
-                        <h1 className="text-white">Wp Payroll</h1>
+                        <h1 className="text-white">PayCheckMate</h1>
                     </div>
                     <nav className="flex flex-1 flex-col">
                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -123,7 +125,7 @@ export const Sidebar = () => {
                 <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
                 <a href="#">
                     <span className="sr-only">Your profile</span>
-                    <h1 className="text-white">Wp Payroll</h1>
+                    <h1 className="text-white">PayCheckMate</h1>
                 </a>
             </div>
         </>
