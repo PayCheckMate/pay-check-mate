@@ -16,8 +16,8 @@ final class WPPayroll {
 	 * @var array|string[]
 	 */
 	protected array $classes = [
-		'PayCheckMate\Controllers\AdminMenu',
-		'PayCheckMate\Controllers\Assets',
+		'PayCheckMate\Hooks\AdminMenu',
+		'PayCheckMate\Hooks\Assets',
 	];
 
 	/**
@@ -26,7 +26,7 @@ final class WPPayroll {
 	 * @var array|string[]
 	 */
 	protected array $api_classes = [
-		'PayCheckMate\Controllers\REST\DepartmentApi',
+		'PayCheckMate\Hooks\REST\DepartmentApi',
 	];
 
 	/**
@@ -72,11 +72,11 @@ final class WPPayroll {
 	 * @since 1.0.0
 	 */
 	public function activate_this_plugin(): void {
-		if ( ! get_option( 'wp_payroll_installed' ) ) {
-			update_option( 'wp_payroll_installed', time() );
+		if ( ! get_option( 'pay_check_mate_installed' ) ) {
+			update_option( 'pay_check_mate_installed', time() );
 		}
 
-		update_option( 'wp_payroll_version', PAY_CHECK_MATE_PLUGIN_VERSION );
+		update_option( 'pay_check_mate_version', PAY_CHECK_MATE_PLUGIN_VERSION );
 
 		new Installer();
 

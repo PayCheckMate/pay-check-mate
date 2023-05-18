@@ -26,7 +26,7 @@ class Databases {
 
 		$this->charset_collate = $wpdb->get_charset_collate();
 		$this->prefix          = $wpdb->prefix;
-		$this->table_prefix    = $wpdb->prefix . 'wp_payroll_';
+		$this->table_prefix    = $wpdb->prefix . 'pay_check_mate_';
 
 		$this->create_tables();
 	}

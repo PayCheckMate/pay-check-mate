@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards for Dokan">
+<ruleset name="WordPress Coding Standards for PayCheckMate">
     <description>Generally-applicable sniffs for WordPress plugins.</description>
 
     <!-- What to scan -->
@@ -48,10 +48,20 @@
     <rule ref="WordPress">
         <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
     </rule>
+<!--    Ignore custom capability check-->
+    <rule ref="WordPress.Security">
+        <properties>
+            <property name="custom_capabilities" type="array">
+                <element>pay_check_mate_accountant</element>
+                <element>pay_check_mate_manage_menu</element>
+                <!-- Add other custom capabilities if needed -->
+            </property>
+        </properties>
+    </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
             <!-- Value: replace the text domain used. -->
-            <property name="text_domain" type="array" value="pay-check-mate"/>
+            <property name="text_domain" type="array" value="pcm"/>
         </properties>
     </rule>
     <rule ref="WordPress.WhiteSpace.ControlStructureSpacing">

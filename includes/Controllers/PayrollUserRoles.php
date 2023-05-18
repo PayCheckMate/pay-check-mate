@@ -8,20 +8,20 @@ class PayrollUserRoles {
 	 */
 	public function __construct() {
 		// Add an accountant role if it doesn't exist.
-		if ( ! get_role( 'wp_payroll_accountant' ) ) {
-			add_role( 'wp_payroll_accountant', __( 'Payroll Accountant', 'pcm' ), $this->get_accountant_capabilities() );
+		if ( ! get_role( 'pay_check_mate_accountant' ) ) {
+			add_role( 'pay_check_mate_accountant', __( 'Payroll Accountant', 'pcm' ), $this->get_accountant_capabilities() );
 		}
 
 		// Add an employee role if it doesn't exist.
-		if ( ! get_role( 'wp_payroll_employee' ) ) {
-			add_role( 'wp_payroll_employee', __( 'Payroll Employee', 'pcm' ), $this->get_employee_capabilities() );
+		if ( ! get_role( 'pay_check_mate_employee' ) ) {
+			add_role( 'pay_check_mate_employee', __( 'Payroll Employee', 'pcm' ), $this->get_employee_capabilities() );
 		}
 
 		// Add capabilities to admin.
 		$admin = get_role( 'administrator' );
 		if ( $admin ) {
-			$admin->add_cap( 'wp_payroll_accountant' );
-			$admin->add_cap( 'wp_payroll_manage_menu' );
+			$admin->add_cap( 'pay_check_mate_accountant' );
+			$admin->add_cap( 'pay_check_mate_manage_menu' );
 		}
 	}
 
@@ -34,8 +34,8 @@ class PayrollUserRoles {
 	protected function get_accountant_capabilities(): array {
 		return [
 			'read'                   => true,
-			'wp_payroll_accountant'  => true,
-			'wp_payroll_manage_menu' => true,
+			'pay_check_mate_accountant'  => true,
+			'pay_check_mate_manage_menu' => true,
 		];
 	}
 
@@ -48,8 +48,8 @@ class PayrollUserRoles {
 	protected function get_employee_capabilities(): array {
 		return [
 			'read'                   => true,
-			'wp_payroll_employee'    => true,
-			'wp_payroll_manage_menu' => true,
+			'pay_check_mate_employee'    => true,
+			'pay_check_mate_manage_menu' => true,
 		];
 	}
 }

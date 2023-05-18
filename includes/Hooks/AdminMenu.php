@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Controllers;
+namespace PayCheckMate\Hooks;
 
 use PayCheckMate\Contracts\HookAbleInterface;
 
@@ -13,7 +13,8 @@ class AdminMenu implements HookAbleInterface {
 	 * @since PAY_CHECK_MATE_SINCE
 	 */
 	public function hooks(): void {
-		if ( ! current_user_can( 'wp_payroll_manage_menu' ) ) {
+		// phpcs:ignore
+		if ( ! current_user_can( 'pay_check_mate_manage_menu' ) ) {
 			return;
         }
 
@@ -31,7 +32,7 @@ class AdminMenu implements HookAbleInterface {
 		add_menu_page(
             __( 'PayCheckMate', 'pcm' ),
             __( 'PayCheckMate', 'pcm' ),
-            'wp_payroll_manage_menu',
+            'pay_check_mate_manage_menu',
             'pay-check-mate',
             [ $this, 'menu_page' ],
             'dashicons-money-alt',

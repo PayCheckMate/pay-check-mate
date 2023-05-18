@@ -46,6 +46,6 @@
     "@wordpress/data": "^9.3.0",
     "@wordpress/element": "^5.10.0",
     "@wordpress/hooks": "^3.33.0",
-    "react-router-dom": "^6.11.1"
+    "react-router-dom": "^6.11.2"
   }
 }

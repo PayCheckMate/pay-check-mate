@@ -13,7 +13,7 @@ class Department {
 	public function __construct() {
 		global $wpdb;
 
-		$this->table = $wpdb->prefix . 'wp_payroll_' . $this->table;
+		$this->table = $wpdb->prefix . 'pay_check_mate_' . $this->table;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Department {
 
 		$query = "SELECT * FROM {$this->table}";
 
-		return $wpdb->get_results( $query, ARRAY_A );
+		return $wpdb->get_results( $query );
 	}
 
 	/**
