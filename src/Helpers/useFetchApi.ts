@@ -121,6 +121,7 @@ const useFetchApi = <Model>(
             });
     }, [filterObject, run]);
 
+    // TODO: Handle error
     return {
         models,
         loading,

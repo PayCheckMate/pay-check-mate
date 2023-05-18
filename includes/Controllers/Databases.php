@@ -1,5 +1,5 @@
 <?php
-namespace WpPayroll\Controllers;
+namespace PayCheckMate\Controllers;
 
 class Databases {
 
@@ -44,7 +44,7 @@ class Databases {
 	/**
 	 * Create table departments.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @return void
 	 */

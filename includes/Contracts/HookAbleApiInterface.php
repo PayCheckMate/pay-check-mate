@@ -1,13 +1,13 @@
 <?php
 
-namespace WpPayroll\Contracts;
+namespace PayCheckMate\Contracts;
 
 interface HookAbleApiInterface {
 
 	/**
 	 * Call the necessary hooks.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 * @return void
 	 */
 	public function register_api_routes(): void;

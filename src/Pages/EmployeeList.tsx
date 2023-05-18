@@ -44,15 +44,15 @@ export const EmployeeList = () => {
                 return (
                     <div className="flex">
                         <button onClick={() => viewEmployee(record.id)} className="text-green-600 hover:text-green-900">
-                            {__('View', 'wp-payroll')}
+                            {__('View', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-indigo-600 hover:text-indigo-900">
-                            {__('Edit', 'wp-payroll')}
+                            {__('Edit', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-red-600 hover:text-red-900">
-                            {__('Delete', 'wp-payroll')}
+                            {__('Delete', 'pcm')}
                         </button>
                     </div>
                 );

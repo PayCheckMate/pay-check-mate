@@ -1,11 +1,11 @@
 <?php
 
-namespace WpPayroll\Controllers;
+namespace PayCheckMate\Controllers;
 
 /**
  * Installer class
  *
- * @since WP_PAYROLL_SINCE
+ * @since PAY_CHECK_MATE_SINCE
  */
 class Installer {
 

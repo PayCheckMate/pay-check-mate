@@ -1,11 +1,11 @@
 {
-    "name": "ratulhasan/wp-payroll",
-    "description": "WP-Payroll is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes.",
+    "name": "ratulhasan/pay-check-mate",
+    "description": "Pay Check Mate is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes.",
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
-            "WpPayroll\\": "includes/"
+            "PayCheckMate\\": "includes/"
         }
     },
     "authors": [

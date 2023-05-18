@@ -9,7 +9,7 @@ import useFetchApi from "../../Helpers/useFetchApi";
 export const DepartmentList = () => {
     const [departments, setDepartments] = useState<DepartmentType[]>([])
     // @ts-ignore
-    const {models, loading, makeDeleteRequest} = useFetchApi('/wp-payroll/v1/departments');
+    const {models, loading, makeDeleteRequest} = useFetchApi('/pay-check-mate/v1/departments');
     useEffect(() => {
         if (models) {
             setDepartments(models as DepartmentType[]);
@@ -23,7 +23,7 @@ export const DepartmentList = () => {
             const status = parseInt(String(record.status))
                 return (
                     <span className={`${status === DepartmentStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {status === DepartmentStatus.Active ? __('Active', 'wp-payroll') : __('Inactive', 'wp-payroll')}
+                        {status === DepartmentStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
                     </span>
                 )
             }
@@ -43,15 +43,15 @@ export const DepartmentList = () => {
             render: (text: string, record: DepartmentType) => (
                 <div className="flex">
                     <button className="text-green-600 hover:text-green-900">
-                        {__('View', 'wp-payroll')}
+                        {__('View', 'pcm')}
                     </button>
                     <span className="mx-2 text-gray-300">|</span>
                     <button className="text-indigo-600 hover:text-indigo-900">
-                        {__('Edit', 'wp-payroll')}
+                        {__('Edit', 'pcm')}
                     </button>
                     <span className="mx-2 text-gray-300">|</span>
                     <button onClick={()=>deleteDepartment(record.id)} className="text-red-600 hover:text-red-900">
-                        {__('Delete', 'wp-payroll')}
+                        {__('Delete', 'pcm')}
                     </button>
                 </div>
             )
@@ -60,7 +60,7 @@ export const DepartmentList = () => {
 
     const deleteDepartment = (id: number) => {
         try {
-            makeDeleteRequest(`/wp-payroll/v1/departments/${id}`, false).then((data: unknown) => {
+            makeDeleteRequest(`/pay-check-mate/v1/departments/${id}`, false).then((data: unknown) => {
                 setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
             }).catch((e: unknown) => {
                 console.log(e);
@@ -68,7 +68,7 @@ export const DepartmentList = () => {
         } catch (error) {
             console.log(error); // Handle the error accordingly
         }
-        // apiFetch({path: `/wp-payroll/v1/departments/${id}`, method: 'DELETE'}).then((data: unknown) => {
+        // apiFetch({path: `/pay-check-mate/v1/departments/${id}`, method: 'DELETE'}).then((data: unknown) => {
         //     setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
         // });
     }

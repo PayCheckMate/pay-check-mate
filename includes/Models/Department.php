@@ -1,6 +1,6 @@
 <?php
 
-namespace WpPayroll\Models;
+namespace PayCheckMate\Models;
 
 class Department {
 	/**
@@ -19,7 +19,7 @@ class Department {
 	/**
 	 * Get all the departments.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @return array
 	 */
@@ -34,7 +34,7 @@ class Department {
 	/**
 	 * Get a single department.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @param int $id department id.
 	 *
@@ -51,7 +51,7 @@ class Department {
 	/**
 	 * Create a new department.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @param array $data department data.
 	 *
@@ -77,7 +77,7 @@ class Department {
 	/**
 	 * Update a department.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @param int   $id   department id.
 	 * @param array $data department data.
@@ -110,7 +110,7 @@ class Department {
 	/**
 	 * Delete a department.
 	 *
-	 * @since WP_PAYROLL_SINCE
+	 * @since PAY_CHECK_MATE_SINCE
 	 *
 	 * @param int $id department id.
 	 *

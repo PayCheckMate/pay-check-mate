@@ -1,6 +1,6 @@
 <?php
 
-namespace WpPayroll\Controllers;
+namespace PayCheckMate\Controllers;
 
 class PayrollUserRoles {
 	/**
@@ -9,12 +9,12 @@ class PayrollUserRoles {
 	public function __construct() {
 		// Add an accountant role if it doesn't exist.
 		if ( ! get_role( 'wp_payroll_accountant' ) ) {
-			add_role( 'wp_payroll_accountant', __( 'Payroll Accountant', 'wp-payroll' ), $this->get_accountant_capabilities() );
+			add_role( 'wp_payroll_accountant', __( 'Payroll Accountant', 'pcm' ), $this->get_accountant_capabilities() );
 		}
 
 		// Add an employee role if it doesn't exist.
 		if ( ! get_role( 'wp_payroll_employee' ) ) {
-			add_role( 'wp_payroll_employee', __( 'Payroll Employee', 'wp-payroll' ), $this->get_employee_capabilities() );
+			add_role( 'wp_payroll_employee', __( 'Payroll Employee', 'pcm' ), $this->get_employee_capabilities() );
 		}
 
 		// Add capabilities to admin.
@@ -29,7 +29,7 @@ class PayrollUserRoles {
 	 * Get capabilities for the `accountant` role.
 	 *
 	 * @return array
-	 * @since  WP_PAYROLL_SINCE
+	 * @since  PAY_CHECK_MATE_SINCE
 	 */
 	protected function get_accountant_capabilities(): array {
 		return [
@@ -43,7 +43,7 @@ class PayrollUserRoles {
 	 * Get capabilities for the `employee` role.
 	 *
 	 * @return array
-	 * @since  WP_PAYROLL_SINCE
+	 * @since  PAY_CHECK_MATE_SINCE
 	 */
 	protected function get_employee_capabilities(): array {
 		return [

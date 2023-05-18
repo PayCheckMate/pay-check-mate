@@ -20,7 +20,7 @@ if ( ! isProduction ) {
             writeToDisk: true,
         },
         allowedHosts: 'all',
-        host: 'wp-payroll.test',
+        host: 'pay-check-mate.test',
         port: 8887,
         proxy: {
             '/build': {
