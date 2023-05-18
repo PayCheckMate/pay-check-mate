@@ -102,7 +102,8 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 * @return WP_REST_Response
 	 */
 	public function create_item( $request ): WP_REST_Response {
-		$department = wp_insert_term( $request['name'], 'department' );
+		$department = new \PayCheckMate\Core\Department( new Department() );
+		$department = $department->create( $request->get_params() );
 
 		if ( is_wp_error( $department ) ) {
 			return new \WP_REST_Response( $department, 500 );

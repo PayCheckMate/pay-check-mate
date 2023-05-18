@@ -1,16 +1,17 @@
 <?php
 
-namespace PayCheckMate\Abstracts;
+namespace PayCheckMate\Models;
 
 
 use Exception;
+use PayCheckMate\Abstracts\FormRequest;
 use PayCheckMate\Contracts\ModelInterface;
 use stdClass;
 
 /**
- * Model abstraction for all the models to extend with Late Static Binding
+ * Base Model for all the models to extend with Late Static Binding.
  */
-class Model implements ModelInterface {
+class BaseModel implements ModelInterface {
 
 	/**
 	 * The table associated with the model.
@@ -64,12 +65,12 @@ class Model implements ModelInterface {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
-	 * @param array $data
+	 * @param FormRequest $data
 	 *
 	 * @throws Exception
 	 * @return int
 	 */
-	public function create( array $data ): int {
+	public function create( FormRequest $data ): int {
 		global $wpdb;
 
 		$wpdb->insert(
@@ -97,7 +98,7 @@ class Model implements ModelInterface {
 	 * @throws Exception
 	 * @return bool
 	 */
-	public function update( int $id, array $data ): bool {
+	public function update( int $id, FormRequest $data ): bool {
 		global $wpdb;
 
 		$wpdb->update(

@@ -3,6 +3,7 @@
 namespace PayCheckMate\Core;
 
 use PayCheckMate\Contracts\ModelInterface;
+use PayCheckMate\Requests\DepartmentFormRequest;
 
 class Department {
 
@@ -45,6 +46,10 @@ class Department {
 	 * @return int
 	 */
 	public function create( array $data ): int {
+		$data = new DepartmentFormRequest();
+		echo '<pre>';
+		print_r( $data );
+		exit();
 		return $this->model->create( $data );
 	}
 

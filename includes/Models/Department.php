@@ -2,9 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-use PayCheckMate\Abstracts\Model;
-
-class Department extends Model {
+class Department extends BaseModel {
 
 	/**
 	 * The table associated with the model.
