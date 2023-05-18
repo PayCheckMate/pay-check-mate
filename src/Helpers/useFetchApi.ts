@@ -72,7 +72,10 @@ const useFetchApi = <Model>(
                     setTotalPage(parseInt(response.headers.get('X-WP-TotalPages') || '0'));
                     setTotal(parseInt(response.headers.get('X-WP-Total') || '0'));
                 }
-                setModels(Array.isArray(response.data) ? response.data : [response.data]); // Update setModels to handle both single Model values and arrays of Model
+                if (run) {
+                    setModels(Array.isArray(response.data) ? response.data : [response.data]); // Update setModels to handle both single Model values and arrays of Model.
+                }
+
                 setLoading(false);
                 return response.data;
             })

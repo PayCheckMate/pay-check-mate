@@ -59,11 +59,12 @@ export const DepartmentList = () => {
     ]
 
     const deleteDepartment = (id: number) => {
-        console.log(id)
         try {
             makeDeleteRequest(`/wp-payroll/v1/departments/${id}`, false).then((data: unknown) => {
                 setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
-            });
+            }).catch((e: unknown) => {
+                console.log(e);
+            })
         } catch (error) {
             console.log(error); // Handle the error accordingly
         }

@@ -116,11 +116,10 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 
 	public function delete_item( $request ) {
 		$department = new Department();
-		return $request['id'];
 		$department = $department->delete_department( $request['id'] );
 
-		if ( is_wp_error( $department ) ) {
-			return new \WP_REST_Response( $department, 500 );
+		if ( ! $department ) {
+			wp_send_json_error( __( 'Can\'t delete the department', 'wp-payroll' ), 500 );
 		}
 
 		return new \WP_REST_Response( $department, 200 );
