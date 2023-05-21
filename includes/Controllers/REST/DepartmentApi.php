@@ -39,6 +39,58 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 				'schema' => [ $this, 'get_public_item_schema' ],
 			],
 		);
+
+		register_rest_route(
+			$this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_item' ],
+					'permission_callback' => [ $this, 'get_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'update_item' ],
+					'permission_callback' => [ $this, 'update_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+						'name' => [
+							'description' => __( 'Department name.', 'pcm' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'status' => [
+							'description' => __( 'Department status.', 'pcm' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::DELETABLE,
+					'callback'            => [ $this, 'delete_item' ],
+					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				'schema' => [ $this, 'get_public_item_schema' ],
+			],
+		);
 	}
 
 	/**
@@ -65,6 +117,48 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 * @return bool
 	 */
 	public function create_item_permissions_check( $request ): bool {
+		// phpcs:ignore
+		return current_user_can( 'pay_check_mate_accountant' );
+	}
+
+	/**
+	 * Check if a given request has access to get a specific item.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param $request
+	 *
+	 * @return bool
+	 */
+	public function get_item_permissions_check( $request ): bool {
+		// phpcs:ignore
+		return current_user_can( 'pay_check_mate_accountant' );
+	}
+
+	/**
+	 * Check if a given request has access to update a specific item.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param $request
+	 *
+	 * @return bool
+	 */
+	public function update_item_permissions_check( $request ): bool {
+		// phpcs:ignore
+		return current_user_can( 'pay_check_mate_accountant' );
+	}
+
+	/**
+	 * Check if a given request has access to delete a specific item.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param $request
+	 *
+	 * @return bool
+	 */
+	public function delete_item_permissions_check( $request ): bool {
 		// phpcs:ignore
 		return current_user_can( 'pay_check_mate_accountant' );
 	}
@@ -127,24 +221,13 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 		$data   = [];
 		$fields = $this->get_fields_for_response( $request );
 
-		if ( in_array( 'id', $fields, true ) ) {
-			$data['id'] = (int) $item->id;
-		}
+		$schema = $this->get_item_schema();
+		foreach ( $schema['properties'] as $key => $value ) {
+			if ( ! in_array( $key, $fields, true ) ) {
+				continue;
+			}
 
-		if ( in_array( 'department_name', $fields, true ) ) {
-			$data['department_name'] = $item->department_name;
-		}
-
-		if ( in_array( 'status', $fields, true ) ) {
-			$data['status'] = $item->status;
-		}
-
-		if ( in_array( 'created_on', $fields, true ) ) {
-			$data['created_on'] = $item->created_on;
-		}
-
-		if ( in_array( 'updated_at', $fields, true ) ) {
-			$data['updated_at'] = $item->updated_at;
+			$data[ $key ] = $item->{$key};
 		}
 
 		$context = ! empty( $request['context'] ) ? $request['context'] : 'view';
