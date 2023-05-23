@@ -17,7 +17,7 @@
  */
 
 // To prevent direct access, if not define WordPress ABSOLUTE PATH then exit.
-use PayCheckMate\WPPayroll;
+use PayCheckMate\PayCheckMate;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit();
@@ -59,7 +59,7 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
  * @since PAY_CHECK_MATE_SINCE
  */
 function wp_pms_init() {
-	WPPayroll::get_instance();
+	PayCheckMate::get_instance();
 }
 
 /**

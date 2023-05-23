@@ -2,19 +2,19 @@
 
 namespace PayCheckMate\Core;
 
-class PayrollUserRoles {
+class PayCheckMateUserRoles {
 	/**
 	 * Constructor, Here we're adding AccountantRole with required capabilities.
 	 */
 	public function __construct() {
 		// Add an accountant role if it doesn't exist.
 		if ( ! get_role( 'pay_check_mate_accountant' ) ) {
-			add_role( 'pay_check_mate_accountant', __( 'Payroll Accountant', 'pcm' ), $this->get_accountant_capabilities() );
+			add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pcm' ), $this->get_accountant_capabilities() );
 		}
 
 		// Add an employee role if it doesn't exist.
 		if ( ! get_role( 'pay_check_mate_employee' ) ) {
-			add_role( 'pay_check_mate_employee', __( 'Payroll Employee', 'pcm' ), $this->get_employee_capabilities() );
+			add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pcm' ), $this->get_employee_capabilities() );
 		}
 
 		// Add capabilities to admin.

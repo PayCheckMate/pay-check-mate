@@ -52,13 +52,13 @@ class Databases {
 		$this->include_db_delta();
 
 		$sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
-			`id` bigint(20) unsigned NOT NULL,
-    		`department_name` varchar(255) NOT NULL,
-    		`status` tinyint(1) NOT NULL DEFAULT '1',
-			`created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			`updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-			PRIMARY KEY (`id`)
-		) {$this->charset_collate};";
+			    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			    `department_name` varchar(255) NOT NULL,
+			    `status` tinyint(1) NOT NULL DEFAULT '1',
+			    `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			    `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+			    PRIMARY KEY (`id`)
+			) {$this->charset_collate};";
 
 		dbDelta( $sql );
 	}

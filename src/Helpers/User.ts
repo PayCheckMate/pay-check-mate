@@ -1,6 +1,6 @@
 import {UserType} from "../Types/UserType";
 // @ts-ignore
-const currentUser = wpPayroll.currentUser as UserType;
+const currentUser = payCheckMate.currentUser as UserType;
 
 export const userCan = (permission: string): boolean => {
     return Object.keys(currentUser.allcaps).includes(permission);

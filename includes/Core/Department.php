@@ -2,6 +2,7 @@
 
 namespace PayCheckMate\Core;
 
+use PayCheckMate\Abstracts\FormRequest;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\DepartmentFormRequest;
 
@@ -41,15 +42,12 @@ class Department {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
-	 * @param array $data
+	 * @param FormRequest $data
 	 *
 	 * @return int
 	 */
-	public function create( array $data ): int {
-		$data = new DepartmentFormRequest();
-		echo '<pre>';
-		print_r( $data );
-		exit();
+	public function create( FormRequest $data ): int {
+		$data = $data->to_array();
 		return $this->model->create( $data );
 	}
 
@@ -58,12 +56,12 @@ class Department {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
-	 * @param array $data
+	 * @param FormRequest $data
 	 * @param int   $id
 	 *
 	 * @return bool
 	 */
-	public function update( int $id, array $data ): bool {
+	public function update( int $id, FormRequest $data ): bool {
 		return $this->model->update( $id, $data );
 	}
 

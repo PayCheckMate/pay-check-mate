@@ -42,8 +42,8 @@ interface ModelInterface {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
+	 * @param int         $id
 	 * @param FormRequest $data
-	 * @param int   $id
 	 *
 	 * @return bool
 	 */

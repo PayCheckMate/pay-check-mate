@@ -16,4 +16,13 @@ class Department extends BaseModel {
 	 */
 	protected static $table = 'pay_check_mate_departments';
 
+	protected static $fillable = [ 'department_name' ];
+
+	protected static $columns = [
+		'department_name' => '%s',
+		'status'          => '%d',
+		'created_at'      => '%s',
+		'updated_at'      => '%s',
+	];
+
 }

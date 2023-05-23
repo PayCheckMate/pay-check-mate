@@ -11,12 +11,12 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
     {title: __('Departments', 'pcm'), href: 'departments', icon: Bars3Icon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('PayCheckMate', 'pcm'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('General', 'pcm'), href: 'settings/general', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Payroll', 'pcm'), href: 'settings/payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('PayCheckMate', 'pcm'), href: 'settings/payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Employees', 'pcm'), href: 'settings/employees', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Reports', 'pcm'), href: 'settings/reports', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
         ]

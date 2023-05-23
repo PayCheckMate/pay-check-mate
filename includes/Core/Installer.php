@@ -10,7 +10,7 @@ namespace PayCheckMate\Core;
 class Installer {
 
 	public function __construct() {
-		new PayrollUserRoles();
+		new PayCheckMateUserRoles();
 		new Databases();
 	}
 

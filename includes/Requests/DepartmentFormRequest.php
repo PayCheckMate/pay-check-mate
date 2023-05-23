@@ -2,9 +2,10 @@
 
 namespace PayCheckMate\Requests;
 
-class DepartmentFormRequest {
+use PayCheckMate\Abstracts\FormRequest;
+
+class DepartmentFormRequest extends FormRequest {
 
 	protected string $nonce = 'pay-check-mate-nonce';
-	protected array $fillable = [ 'department_name' ];
 
 }

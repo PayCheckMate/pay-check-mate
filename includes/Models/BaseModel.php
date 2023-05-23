@@ -5,13 +5,14 @@ namespace PayCheckMate\Models;
 
 use Exception;
 use PayCheckMate\Abstracts\FormRequest;
+use PayCheckMate\Contracts\FillableInterface;
 use PayCheckMate\Contracts\ModelInterface;
 use stdClass;
 
 /**
  * Base Model for all the models to extend with Late Static Binding.
  */
-class BaseModel implements ModelInterface {
+class BaseModel implements ModelInterface, FillableInterface {
 
 	/**
 	 * The table associated with the model.
@@ -24,6 +25,10 @@ class BaseModel implements ModelInterface {
 	 * @abstract
 	 */
 	protected static $table;
+
+	protected static $columns;
+
+	protected static $fillable;
 
 	/**
 	 * Get all the items.
@@ -38,7 +43,7 @@ class BaseModel implements ModelInterface {
 
 		$query = $wpdb->prepare( "SELECT * FROM {$this->get_table()}" );
 
-		return (object)$wpdb->get_results( $query, OBJECT );
+		return (object) $wpdb->get_results( $query, OBJECT );
 	}
 
 
@@ -72,16 +77,12 @@ class BaseModel implements ModelInterface {
 	 */
 	public function create( FormRequest $data ): int {
 		global $wpdb;
+		$data = $data->to_array();
 
 		$wpdb->insert(
 			$this->get_table(),
 			$data,
-			[
-				'%s',
-				'%d',
-				'%s',
-				'%s',
-			],
+			$this->get_where_format( $data ),
 		);
 
 		return $wpdb->insert_id;
@@ -92,8 +93,8 @@ class BaseModel implements ModelInterface {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
-	 * @param int   $id
-	 * @param array $data
+	 * @param int         $id
+	 * @param FormRequest $data
 	 *
 	 * @throws Exception
 	 * @return bool
@@ -101,24 +102,20 @@ class BaseModel implements ModelInterface {
 	public function update( int $id, FormRequest $data ): bool {
 		global $wpdb;
 
-		$wpdb->update(
+		$data = $data->to_array();
+		unset( $data['id'], $data['_wpnonce'] );
+
+		return $wpdb->update(
 			$this->get_table(),
 			$data,
 			[
 				'id' => $id,
 			],
-			[
-				'%s',
-				'%d',
-				'%s',
-				'%s',
-			],
+			$this->get_where_format( $data ),
 			[
 				'%d',
 			],
 		);
-
-		return true;
 	}
 
 	/**
@@ -153,12 +150,63 @@ class BaseModel implements ModelInterface {
 	 * @throws Exception
 	 * @return string
 	 */
-	public function get_table(): string {
+	public static function get_table(): string {
 		global $wpdb;
-		if ( ! static::$table ) {
+		if ( empty( static::$table ) ) {
 			throw new Exception( 'Table name is not defined' );
 		}
 
 		return $wpdb->prefix . static::$table;
+	}
+
+	/**
+	 * Get the table column names.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @throws Exception
+	 * @return array
+	 */
+	public static function get_columns(): array {
+		if ( empty( static::$columns ) ) {
+			throw new Exception( 'Table columns are not defined' );
+		}
+
+		return static::$columns;
+	}
+
+	/**
+	 * Get the table's fillable column names.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @return array
+	 */
+	public function fillable(): array {
+		if ( ! static::$fillable ) {
+			return [];
+		}
+
+		return static::$fillable;
+	}
+
+	/**
+	 * Get the table's where format.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param $data
+	 *
+	 * @return array
+	 */
+	private function get_where_format( $data ): array {
+		$format = [];
+		foreach ( $data as $key => $value ) {
+			if ( isset( static::$columns[ $key ] ) ) {
+				$format[] = static::$columns[ $key ];
+			}
+		}
+
+		return $format;
 	}
 }

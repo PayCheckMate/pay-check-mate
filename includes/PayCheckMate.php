@@ -6,7 +6,7 @@ use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Contracts\HookAbleInterface;
 use PayCheckMate\Core\Installer;
 
-final class WPPayroll {
+final class PayCheckMate {
 
 	protected static $instance;
 
@@ -32,10 +32,10 @@ final class WPPayroll {
 	/**
 	 * Get the single instance of the class
 	 *
-	 * @return WPPayroll
+	 * @return PayCheckMate
 	 * @since PAY_CHECK_MATE_SINCE
 	 */
-	public static function get_instance(): WPPayroll {
+	public static function get_instance(): PayCheckMate {
 		if ( ! self::$instance ) {
 			self::$instance = new self();
 		}
@@ -44,7 +44,7 @@ final class WPPayroll {
 	}
 
 	/**
-	 * Construct method for WPPayroll class.
+	 * Construct method for PayCheckMate class.
 	 */
 	private function __construct() {
 		add_action( 'init', [ $this, 'set_translation' ] );

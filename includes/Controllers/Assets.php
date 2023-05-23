@@ -14,8 +14,8 @@ class Assets implements HookAbleInterface {
 	/**
 	 * Register scripts.
 	 *
-	 * @return void
 	 * @since PAY_CHECK_MATE_SINCE
+	 * @return void
 	 */
 	public function register_scripts(): void {
 		$asset_file = require_once PAY_CHECK_MATE_DIR . '/dist/index.asset.php';
@@ -39,8 +39,8 @@ class Assets implements HookAbleInterface {
 	/**
 	 * Enqueue scripts.
 	 *
-	 * @return void
 	 * @since DOKAN_PRO_SINCE
+	 * @return void
 	 */
 	public function enqueue_scripts(): void {
 		if ( 'toplevel_page_pay-check-mate' !== get_current_screen()->id ) {
@@ -55,15 +55,16 @@ class Assets implements HookAbleInterface {
 	/**
 	 * Register translations.
 	 *
-	 * @return void
 	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @return void
 	 */
 	public function register_translations(): void {
 		wp_localize_script(
-			'pay-check-mate-js', 'wpPayroll', [
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'pay-check-mate-nonce' ),
-				'currentUser' => wp_get_current_user(),
+			'pay-check-mate-js', 'payCheckMate', [
+				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),
+				'pay-check-mate-nonce' => wp_nonce_field( 'pay-check-mate-nonce' ),
+				'currentUser'          => wp_get_current_user(),
 			],
 		);
 	}
