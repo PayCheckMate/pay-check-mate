@@ -5,6 +5,8 @@ namespace PayCheckMate\Controllers\REST;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\Department;
 use PayCheckMate\Requests\DepartmentFormRequest;
+use WP_Error;
+use WP_HTTP_Response;
 use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -170,9 +172,9 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return WP_REST_Response
+	 * @return void
 	 */
-	public function get_items( $request ): WP_REST_Response {
+	public function get_items( $request ) {
 		$departments = new \PayCheckMate\Core\Department( new Department() );
 		$departments = $departments->all();
 		$data        = [];
@@ -182,7 +184,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 			$data[] = $this->prepare_response_for_collection( $item );
 		}
 
-		return new \WP_REST_Response( $data, 200 );
+		wp_send_json_success( $data, 200 );
 	}
 
 	/**
@@ -192,22 +194,22 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request
 	 *
-	 * @return WP_REST_Response
+	 * @return void
 	 */
-	public function create_item( $request ): WP_REST_Response {
+	public function create_item( $request ) {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$validated_data = new DepartmentFormRequest( $request->get_params() );
 		if ( ! empty( $validated_data->error ) ) {
-			return new \WP_REST_Response( $validated_data->error, 500 );
+			wp_send_json_error( $validated_data->error, 500 );
 		}
 
 		$department = $department->create( $validated_data );
 
 		if ( is_wp_error( $department ) ) {
-			return new \WP_REST_Response( $department, 500 );
+			wp_send_json_error( $department, 500 );
 		}
 
-		return new \WP_REST_Response( $department, 200 );
+		wp_send_json_success( $department, 200 );
 	}
 
 	/**
@@ -217,20 +219,20 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return WP_REST_Response
+	 * @return void
 	 */
-	public function get_item( $request ): WP_REST_Response {
+	public function get_item( $request ) {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$department = $department->get( $request->get_param( 'id' ) );
 
 		if ( is_wp_error( $department ) ) {
-			return new \WP_REST_Response( $department, 500 );
+			wp_send_json_error( $department, 500 );
 		}
 
 		$item   = $this->prepare_item_for_response( $department, $request );
 		$data = $this->prepare_response_for_collection( $item );
 
-		return new \WP_REST_Response( $data, 200 );
+		wp_send_json_success( $data, 200 );
 	}
 
 	/**
@@ -240,22 +242,22 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return WP_REST_Response
+	 * @return void
 	 */
-	public function update_item( $request ): WP_REST_Response {
+	public function update_item( $request ) {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$validated_data = new DepartmentFormRequest( $request->get_params() );
 		if ( ! empty( $validated_data->error ) ) {
-			return new \WP_REST_Response( $validated_data->error, 500 );
+			wp_send_json_error( $validated_data->error, 500 );
 		}
 
 		$department = $department->update( $request->get_param( 'id' ), $validated_data );
 
 		if ( is_wp_error( $department ) ) {
-			return new \WP_REST_Response( $department, 500 );
+			wp_send_json_error( $department, 500 );
 		}
 
-		return new \WP_REST_Response( $department, 200 );
+		wp_send_json_success( $department, 200 );
 	}
 
 	/**
@@ -265,17 +267,17 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return WP_REST_Response
+	 * @return void
 	 */
-	public function delete_item( $request ): WP_REST_Response {
+	public function delete_item( $request ) {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$department = $department->delete( $request->get_param( 'id' ) );
 
 		if ( is_wp_error( $department ) ) {
-			return new \WP_REST_Response( $department, 500 );
+			wp_send_json_error( $department, 500 );
 		}
 
-		return new \WP_REST_Response( $department, 200 );
+		wp_send_json_success( $department, 200 );
 	}
 
 	/**
@@ -287,7 +289,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $item
 	 *
-	 * @return \WP_Error|\WP_HTTP_Response|WP_REST_Response
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
 	 */
 	public function prepare_item_for_response( $item, $request ) {
 		$data   = [];

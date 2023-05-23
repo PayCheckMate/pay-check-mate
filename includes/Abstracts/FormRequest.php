@@ -33,24 +33,24 @@ class FormRequest implements FormRequestInterface {
 	/**
 	 * Any error.
 	 *
-	 * @var string|null
+	 * @var string[]|null
 	 */
-	public ?string $error;
+	public ?array $error = [];
 
 	/**
 	 * Construct method for SupportFormStoreRequest class.
-	 * This will get a Post Super Global as an argument.
+	 * This will get a $_POST Super Global as an argument.
 	 *
-	 * @param  array $data  Post Super Global.
+	 * @param array $data Post Super Global.
 	 */
 	public function __construct( array $data ) {
 		if ( empty( $this->nonce ) ) {
-			wp_die( __( 'Nonce is required for this form request.', 'pcm' ) );
+			$this->addError( __( 'Nonce verification failed', 'pcm' ) );
 		}
 
 		$this->data = $data;
-		if ( ! isset( $this->data['_wpnonce'] ) || wp_verify_nonce( $this->data['_wpnonce'], $this->nonce ) ) {
-			wp_die( __( 'Nonce verification failed', 'pcm' ) );
+		if ( ! isset( $this->data['_wpnonce'] ) || ! wp_verify_nonce( $this->data['_wpnonce'], $this->nonce ) ) {
+			$this->addError( __( 'Nonce verification failed', 'pcm' ) );
 		}
 
 		$this->fillable = $this->get_fillable_data();
@@ -63,7 +63,7 @@ class FormRequest implements FormRequestInterface {
 	 *
 	 * @since PAY_CHECK_MATE_SINCE
 	 *
-	 * @param  string $name  property name.
+	 * @param string $name property name.
 	 *
 	 * @return mixed|null
 	 */
@@ -83,7 +83,7 @@ class FormRequest implements FormRequestInterface {
 		if ( ! empty( $this->fillable ) ) {
 			foreach ( $this->fillable as $item ) {
 				if ( ! array_key_exists( $item, $this->data ) ) {
-					wp_die( $item . __( ' key is required for this form request.', 'pcm' ) );
+					$this->addError( $item . __( ' key is required for this form request.', 'pcm' ) );
 				}
 			}
 		}
@@ -97,12 +97,12 @@ class FormRequest implements FormRequestInterface {
 	 * @return array
 	 */
 	private function get_fillable_data(): array {
-		$class = get_called_class();
+		$class      = get_called_class();
 		$class_name = basename( str_replace( '\\', '/', $class ) );
-		$model = str_replace( 'FormRequest', '', $class_name );
-		$model = 'PayCheckMate\\Models\\' . $model;
+		$model      = str_replace( 'FormRequest', '', $class_name );
+		$model      = 'PayCheckMate\\Models\\' . $model;
 		if ( ! class_exists( $model ) ) {
-			wp_die( __( 'Model not found for this form request.', 'pcm' ) );
+			$this->addError( __( 'Model not found for this form request.', 'pcm' ) );
 		}
 
 		$model = new $model();
@@ -113,7 +113,27 @@ class FormRequest implements FormRequestInterface {
 		return $this->fillable;
 	}
 
+	/**
+	 * Convert to array.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @return array
+	 */
 	public function to_array(): array {
 		return $this->data;
+	}
+
+	/**
+	 * Add error.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param string $error Error message.
+	 *
+	 * @return void
+	 */
+	public function addError( string $error ) {
+		$this->error[] = $error;
 	}
 }
