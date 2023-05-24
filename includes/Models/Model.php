@@ -28,8 +28,6 @@ class Model implements ModelInterface, FillableInterface {
 
 	protected static $columns;
 
-	protected static $fillable;
-
 	/**
 	 * Get all the items.
 	 *
