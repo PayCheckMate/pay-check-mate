@@ -12,6 +12,11 @@ export const Button = ({ path, className, children, onClick }: ButtonProps) => {
         ? `btn-primary ${className}`
         : 'btn-primary';
 
+    const handleClick = () => {
+        if (onClick) {
+            onClick();
+        }
+    };
     return (
         <>
             {path ? (
@@ -19,7 +24,7 @@ export const Button = ({ path, className, children, onClick }: ButtonProps) => {
                     {children}
                 </Link>
             ) : (
-                <button type="button" className={buttonClass} onClick={onClick}>
+                <button type="button" className={buttonClass} onClick={handleClick}>
                     {children}
                 </button>
             )}

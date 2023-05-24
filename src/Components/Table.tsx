@@ -40,8 +40,8 @@ export const Table = ({columns = [], data = [], isLoading = true}: TableProps) =
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                    {data.map(item => (
-                        <tr key={item.email}>
+                    {data.map((item, index) => (
+                        <tr key={index}>
                             {columns.map((column, index) => (
                                 <td key={index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
                                     {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}

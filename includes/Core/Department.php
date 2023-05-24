@@ -47,7 +47,6 @@ class Department {
 	 * @return int
 	 */
 	public function create( FormRequest $data ): int {
-		$data = $data->to_array();
 		return $this->model->create( $data );
 	}
 

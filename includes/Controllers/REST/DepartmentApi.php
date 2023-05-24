@@ -2,6 +2,7 @@
 
 namespace PayCheckMate\Controllers\REST;
 
+use Exception;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\Department;
 use PayCheckMate\Requests\DepartmentFormRequest;
@@ -195,29 +196,31 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 		return new WP_HTTP_Response( $response, 200 );
 	}
 
-	/**
-	 * Create a new item.
-	 *
-	 * @since PAY_CHECK_MATE_SINCE
-	 *
-	 * @param $request
-	 *
-	 * @return void
-	 */
-	public function create_item( $request ) {
+    /**
+     * Create a new item.
+     *
+     * @param $request
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @throws Exception
+     *
+     * @return WP_HTTP_Response
+     */
+	public function create_item( $request ): WP_HTTP_Response {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$validated_data = new DepartmentFormRequest( $request->get_params() );
 		if ( ! empty( $validated_data->error ) ) {
-			wp_send_json_error( $validated_data->error, 500 );
+			return new WP_HTTP_Response( $validated_data->error, 500 );
 		}
 
 		$department = $department->create( $validated_data );
 
 		if ( is_wp_error( $department ) ) {
-			wp_send_json_error( $department, 500 );
+			return new WP_HTTP_Response( $department, 500 );
 		}
 
-		wp_send_json_success( $department, 200 );
+		return new WP_HTTP_Response( $department, 200 );
 	}
 
 	/**
@@ -243,15 +246,17 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 		return new WP_HTTP_Response( $data, 200 );
 	}
 
-	/**
-	 * Update one item from the collection.
-	 *
-	 * @since PAY_CHECK_MATE_SINCE
-	 *
-	 * @param $request WP_REST_Request
-	 *
-	 * @return void
-	 */
+    /**
+     * Update one item from the collection.
+     *
+     * @param $request WP_REST_Request
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @throws Exception
+     *
+     * @return void
+     */
 	public function update_item( $request ) {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$validated_data = new DepartmentFormRequest( $request->get_params() );
