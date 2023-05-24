@@ -26,31 +26,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 require 'vendor/autoload.php';
 
 if ( ! defined( 'PAY_CHECK_MATE_PLUGIN_VERSION' ) ) {
-	define( 'PAY_CHECK_MATE_PLUGIN_VERSION', '1.0.0' );
+    define( 'PAY_CHECK_MATE_PLUGIN_VERSION', '1.0.0' );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_ASSET' ) ) {
-	define( 'PAY_CHECK_MATE_ASSET', plugins_url( 'assets', __FILE__ ) );
+    define( 'PAY_CHECK_MATE_ASSET', plugins_url( 'assets', __FILE__ ) );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_FILE' ) ) {
-	define( 'PAY_CHECK_MATE_FILE', __FILE__ );
+    define( 'PAY_CHECK_MATE_FILE', __FILE__ );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_DIR' ) ) {
-	define( 'PAY_CHECK_MATE_DIR', __DIR__ );
+    define( 'PAY_CHECK_MATE_DIR', __DIR__ );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_VERSION' ) ) {
-	define( 'PAY_CHECK_MATE_VERSION', '1.0.0' );
+    define( 'PAY_CHECK_MATE_VERSION', '1.0.0' );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_BASE_NAME' ) ) {
-	define( 'PAY_CHECK_MATE_BASE_NAME', plugin_basename( __FILE__ ) );
+    define( 'PAY_CHECK_MATE_BASE_NAME', plugin_basename( __FILE__ ) );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
-	define( 'PAY_CHECK_MATE_URL', plugins_url( '', __FILE__ ) );
+    define( 'PAY_CHECK_MATE_URL', plugins_url( '', __FILE__ ) );
 }
 
 /**
@@ -59,7 +59,7 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
  * @since PAY_CHECK_MATE_SINCE
  */
 function wp_pms_init() {
-	PayCheckMate::get_instance();
+    PayCheckMate::get_instance();
 }
 
 /**

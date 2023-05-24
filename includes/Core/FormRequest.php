@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Abstracts;
+namespace PayCheckMate\Core;
 
 use Exception;
 use PayCheckMate\Contracts\FormRequestInterface;
@@ -52,7 +52,7 @@ class FormRequest implements FormRequestInterface {
      *
      * @throws Exception
      */
-    public function __construct(array $data) {
+    public function __construct( array $data ) {
         $this->data = $data;
         $this->validate();
     }
@@ -60,14 +60,14 @@ class FormRequest implements FormRequestInterface {
     /**
      * To get data like $request->title dynamically, we introduced this magic method.
      *
-     * @param string $name property name.
-     *
      * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $name property name.
      *
      * @return mixed|null
      */
-    public function __get(string $name) {
-        return $this->data[$name] ?? null;
+    public function __get( string $name ) {
+        return $this->data[ $name ] ?? null;
     }
 
 
@@ -81,10 +81,10 @@ class FormRequest implements FormRequestInterface {
      * @return void
      */
     public function validate() {
-        if (!isset($this->data['_wpnonce']) || !wp_verify_nonce($this->data['_wpnonce'], $this->get_nonce())) {
-            $this->addError(__('Nonce verification failed', 'pcm'));
+        if ( ! isset( $this->data['_wpnonce'] ) || ! wp_verify_nonce( $this->data['_wpnonce'], $this->get_nonce() ) ) {
+            $this->addError( __( 'Nonce verification failed', 'pcm' ) );
         }
-        
+
         $this->validate_fillable();
         $this->sanitize();
     }
@@ -98,10 +98,10 @@ class FormRequest implements FormRequestInterface {
      */
     public function validate_fillable() {
         $fillable = $this->get_fillable();
-        if (!empty($fillable)) {
-            foreach ($fillable as $item) {
-                if (!array_key_exists($item, $this->data)) {
-                    $this->addError($item . __(' key is required for this form request.', 'pcm'));
+        if ( ! empty( $fillable ) ) {
+            foreach ( $fillable as $item ) {
+                if ( ! array_key_exists( $item, $this->data ) ) {
+                    $this->addError( $item . __( ' key is required for this form request.', 'pcm' ) );
                 }
             }
         }
@@ -117,13 +117,17 @@ class FormRequest implements FormRequestInterface {
      */
     public function sanitize() {
         $rules = $this->get_rules();
-        array_map(function ($value, $key) use ($rules) {
-            if (isset($rules[$key])) {
-                return $this->data[$key] = call_user_func($rules[$key], $value);
-            }
+        array_map(
+            function ( $value, $key ) use ( $rules ) {
+                if ( isset( $rules[ $key ] ) ) {
+                    $this->data[ $key ] = call_user_func( $rules[ $key ], $value );
+                    return $this->data;
+                }
 
-            return $this->data[$key] = $value;
-        }, $this->data, array_keys($this->data));
+                $this->data[ $key ] = $value;
+                return $this->data;
+            }, $this->data, array_keys( $this->data )
+        );
     }
 
     /**
@@ -140,13 +144,13 @@ class FormRequest implements FormRequestInterface {
     /**
      * Add error.
      *
-     * @param string $error Error message.
-     *
      * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $error Error message.
      *
      * @return void
      */
-    public function addError(string $error) {
+    public function addError( string $error ) {
         $this->error[] = $error;
     }
 
@@ -160,8 +164,8 @@ class FormRequest implements FormRequestInterface {
      * @return string
      */
     public static function get_nonce(): string {
-        if (empty(static::$nonce)) {
-            throw new Exception(__('Nonce is not defined for this form request.', 'pcm'));
+        if ( empty( static::$nonce ) ) {
+            throw new Exception( __( 'Nonce is not defined for this form request.', 'pcm' ) );
         }
 
         return static::$nonce;
@@ -177,8 +181,8 @@ class FormRequest implements FormRequestInterface {
      * @return array
      */
     public static function get_rules(): array {
-        if (empty(static::$rules)) {
-            throw new Exception(__('Make sure you have defined rules for this form request.', 'pcm'));
+        if ( empty( static::$rules ) ) {
+            throw new Exception( __( 'Make sure you have defined rules for this form request.', 'pcm' ) );
         }
 
         return static::$rules;
@@ -194,10 +198,11 @@ class FormRequest implements FormRequestInterface {
      * @return array
      */
     public static function get_fillable(): array {
-        if (empty(static::$fillable)) {
-            throw new Exception(__('Fillable are not defined for this form request.', 'pcm'));
+        if ( empty( static::$fillable ) ) {
+            throw new Exception( __( 'Fillable are not defined for this form request.', 'pcm' ) );
         }
 
         return static::$fillable;
     }
+
 }
