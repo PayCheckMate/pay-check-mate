@@ -2,8 +2,11 @@ import apiFetch, { APIFetchOptions } from '@wordpress/api-fetch';
 import { useEffect, useState } from '@wordpress/element';
 
 interface UnparsedResponse<Model> {
-    headers: Headers;
-    data: Model;
+    data: {
+        headers: Headers;
+        data: Model;
+        status: number;
+    }
 }
 const apiFetchUnparsed = async <Model>(
     path: string,
@@ -68,16 +71,19 @@ const useFetchApi = <Model>(
 
         return apiFetchUnparsed<UnparsedResponse<Model>>(requestUrl, requestOptions)
             .then((response) => {
-                if (response.headers !== undefined) {
-                    setTotalPage(parseInt(response.headers.get('X-WP-TotalPages') || '0'));
-                    setTotal(parseInt(response.headers.get('X-WP-Total') || '0'));
+                if (response.data.headers !== undefined) {
+                    setTotalPage(parseInt(response.data.headers.get('X-WP-TotalPages') || '0'));
+                    setTotal(parseInt(response.data.headers.get('X-WP-Total') || '0'));
                 }
                 if (run) {
-                    setModels(Array.isArray(response.data) ? response.data : [response.data]); // Update setModels to handle both single Model values and arrays of Model.
+                    if (response.data.status === 200) {
+                        const responseData = response.data.data; // Access the 'data' property of the response
+                        setModels(Array.isArray(responseData) ? responseData : [responseData]);
+                    }
                 }
 
                 setLoading(false);
-                return response.data;
+                return response.data.data; // Return the 'data' property of the response
             })
             .catch((e) => {
                 setLoading(false);
@@ -90,7 +96,8 @@ const useFetchApi = <Model>(
     };
 
     const makePutRequest = async <DataType>(requestUrl: string, data: DataType, run = true): Promise<Model> => {
-        return makeRequest(url, 'PUT', run, data);
+        console.log('makePutRequest', requestUrl, data)
+        return makeRequest(requestUrl || url, 'PUT', run, data);
     };
 
     const makeGetRequest = async (requestUrl?: string, run = true): Promise<Model> => {
@@ -109,11 +116,10 @@ const useFetchApi = <Model>(
         const path = url + '?' + queryParam;
         apiFetchUnparsed<UnparsedResponse<Model>>(path, initialFilters)
             .then((response) => {
-                if (response.headers !== undefined) {
-                    setTotalPage(parseInt(response.headers.get('X-WP-TotalPages') || '0'));
-                    setTotal(parseInt(response.headers.get('X-WP-Total') || '0'));
+                if (response.data.status === 200) {
+                    const responseData = response.data.data; // Access the 'data' property of the response
+                    setModels(Array.isArray(responseData) ? responseData : [responseData]);
                 }
-                setModels(Array.isArray(response.data) ? response.data : [response.data]); // Update setModels to handle both single Model values and arrays of Model
                 setLoading(false);
             })
             .catch((e) => {

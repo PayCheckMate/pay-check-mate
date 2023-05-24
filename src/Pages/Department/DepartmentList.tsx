@@ -5,11 +5,12 @@ import {Table} from "../../Components/Table";
 import {useEffect, useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
 import useFetchApi from "../../Helpers/useFetchApi";
+import {data} from "autoprefixer";
 
 export const DepartmentList = () => {
     const [departments, setDepartments] = useState<DepartmentType[]>([])
     // @ts-ignore
-    const {models, loading, makeDeleteRequest} = useFetchApi('/pay-check-mate/v1/departments');
+    const {models, loading, makeDeleteRequest, makePutRequest} = useFetchApi('/pay-check-mate/v1/departments');
     useEffect(() => {
         if (models) {
             setDepartments(models as DepartmentType[]);
@@ -53,6 +54,10 @@ export const DepartmentList = () => {
                     <button onClick={()=>deleteDepartment(record.id)} className="text-red-600 hover:text-red-900">
                         {__('Delete', 'pcm')}
                     </button>
+                    <span className="mx-2 text-gray-300">|</span>
+                    <button onClick={()=>inactive(record.id)} className="text-red-600 hover:text-red-900">
+                        {__('Inactive', 'pcm')}
+                    </button>
                 </div>
             )
         }
@@ -71,6 +76,29 @@ export const DepartmentList = () => {
         // apiFetch({path: `/pay-check-mate/v1/departments/${id}`, method: 'DELETE'}).then((data: unknown) => {
         //     setDepartments(departments.filter((department: DepartmentType) => department.id !== id))
         // });
+    }
+
+    const inactive = (id: number) => {
+        const status = DepartmentStatus.Inactive;
+        const department_name = departments.find((department: DepartmentType) => department.id === id)?.department_name;
+        // @ts-ignore
+        const _wpnonce = payCheckMate.pay_check_mate_nonce;
+        console.log(_wpnonce)
+        const data = {id, department_name, status, _wpnonce};
+        try {
+            makePutRequest(`/pay-check-mate/v1/departments/${id}`, data, false).then((data: unknown) => {
+                setDepartments(departments.map((department: DepartmentType) => {
+                    // if (department.id === id) {
+                    //     department.status = status;
+                    // }
+                    return department;
+                }))
+            }).catch((e: unknown) => {
+                console.log(e);
+            })
+        }catch (error) {
+            console.log(error); // Handle the error accordingly
+        }
     }
     return (
         <>

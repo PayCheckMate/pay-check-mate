@@ -12,7 +12,7 @@ use stdClass;
 /**
  * Base Model for all the models to extend with Late Static Binding.
  */
-class BaseModel implements ModelInterface, FillableInterface {
+class Model implements ModelInterface, FillableInterface {
 
 	/**
 	 * The table associated with the model.
@@ -77,12 +77,13 @@ class BaseModel implements ModelInterface, FillableInterface {
 	 */
 	public function create( FormRequest $data ): int {
 		global $wpdb;
-		$data = $data->to_array();
 
+		$data = $data->to_array();
+		$filteredData = $this->filter_data( $data );
 		$wpdb->insert(
 			$this->get_table(),
-			$data,
-			$this->get_where_format( $data ),
+			$filteredData,
+			$this->get_where_format( $filteredData ),
 		);
 
 		return $wpdb->insert_id;
@@ -103,11 +104,11 @@ class BaseModel implements ModelInterface, FillableInterface {
 		global $wpdb;
 
 		$data = $data->to_array();
-		unset( $data['id'], $data['_wpnonce'] );
+		$filteredData = $this->filter_data( $data );
 
 		return $wpdb->update(
 			$this->get_table(),
-			$data,
+			$filteredData,
 			[
 				'id' => $id,
 			],
@@ -169,7 +170,7 @@ class BaseModel implements ModelInterface, FillableInterface {
 	 */
 	public static function get_columns(): array {
 		if ( empty( static::$columns ) ) {
-			throw new Exception( 'Table columns are not defined' );
+			return [];
 		}
 
 		return static::$columns;
@@ -208,5 +209,19 @@ class BaseModel implements ModelInterface, FillableInterface {
 		}
 
 		return $format;
+	}
+
+	/**
+	 * Filter the data to only include the available columns.
+	 *
+	 * @since PAY_CHECK_MATE_SINCE
+	 *
+	 * @param array $data
+	 *
+	 * @throws Exception
+	 * @return array
+	 */
+	private function filter_data( array $data ): array {
+		return array_intersect_key($data, $this->get_columns());
 	}
 }

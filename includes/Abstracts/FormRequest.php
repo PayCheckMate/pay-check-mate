@@ -17,6 +17,13 @@ class FormRequest implements FormRequestInterface {
 	protected string $nonce;
 
 	/**
+	 * Rules for request validation.
+	 *
+	 * @var array
+	 */
+	protected array $rules;
+
+	/**
 	 * Post property.
 	 *
 	 * @var array
@@ -102,7 +109,8 @@ class FormRequest implements FormRequestInterface {
 		$model      = str_replace( 'FormRequest', '', $class_name );
 		$model      = 'PayCheckMate\\Models\\' . $model;
 		if ( ! class_exists( $model ) ) {
-			$this->addError( __( 'Model not found for this form request.', 'pcm' ) );
+			// translators: %s is model class name.
+			$this->addError( sprintf( __( '%s not found for this form request.', 'pcm' ), $model ) );
 		}
 
 		$model = new $model();

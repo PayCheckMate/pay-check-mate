@@ -74,7 +74,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 						],
 						'status' => [
 							'description' => __( 'Department status.', 'pcm' ),
-							'type'        => 'string',
+							'type'        => 'number',
 						],
 					],
 				],
@@ -172,9 +172,9 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return void
+	 * @return WP_HTTP_Response
 	 */
-	public function get_items( $request ) {
+	public function get_items( $request ): WP_HTTP_Response {
 		$departments = new \PayCheckMate\Core\Department( new Department() );
 		$departments = $departments->all();
 		$data        = [];
@@ -184,7 +184,15 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 			$data[] = $this->prepare_response_for_collection( $item );
 		}
 
-		wp_send_json_success( $data, 200 );
+		$total     = count( $data );
+		$max_pages = ceil( $total / (int) 10 );
+
+		$response = new WP_HTTP_Response( $data );
+
+		$response->header( 'X-WP-Total', (int) $total );
+		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+
+		return new WP_HTTP_Response( $response, 200 );
 	}
 
 	/**
@@ -219,20 +227,20 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 	 *
 	 * @param $request WP_REST_Request
 	 *
-	 * @return void
+	 * @return WP_HTTP_Response
 	 */
-	public function get_item( $request ) {
+	public function get_item( $request ): WP_HTTP_Response {
 		$department = new \PayCheckMate\Core\Department( new Department() );
 		$department = $department->get( $request->get_param( 'id' ) );
 
 		if ( is_wp_error( $department ) ) {
-			wp_send_json_error( $department, 500 );
+			return new WP_HTTP_Response( $department, 500 );
 		}
 
 		$item   = $this->prepare_item_for_response( $department, $request );
 		$data = $this->prepare_response_for_collection( $item );
 
-		wp_send_json_success( $data, 200 );
+		return new WP_HTTP_Response( $data, 200 );
 	}
 
 	/**
