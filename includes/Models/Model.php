@@ -24,9 +24,9 @@ class Model implements ModelInterface, FillableInterface {
 	 * @access protected
 	 * @abstract
 	 */
-	protected static $table;
+	protected static string $table;
 
-	protected static $columns;
+	protected static array $columns;
 
 	/**
 	 * Get all the items.

@@ -178,7 +178,7 @@ class FormRequest implements FormRequestInterface {
      */
     public static function get_rules(): array {
         if (empty(static::$rules)) {
-            throw new Exception(__('Rules are not defined for this form request.', 'pcm'));
+            throw new Exception(__('Make sure you have defined rules for this form request.', 'pcm'));
         }
 
         return static::$rules;

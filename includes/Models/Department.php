@@ -14,11 +14,11 @@ class Department extends Model {
 	 * @access protected
 	 * @abstract
 	 */
-	protected static $table = 'pay_check_mate_departments';
+	protected static string $table = 'pay_check_mate_departments';
 
-	protected static $fillable = [ 'department_name' ];
+	protected static array $fillable = [ 'department_name' ];
 
-	protected static $columns = [
+	protected static array $columns = [
 		'department_name' => '%s',
 		'status'          => '%d',
 		'created_at'      => '%s',
