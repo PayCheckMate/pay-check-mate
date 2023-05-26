@@ -18,11 +18,13 @@ class PayCheckMateUserRoles {
             add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pcm' ), $this->get_employee_capabilities() );
         }
 
-        // Add capabilities to admin.
-        $admin = get_role( 'administrator' );
-        if ( $admin ) {
-            $admin->add_cap( 'pay_check_mate_accountant' );
-            $admin->add_cap( 'pay_check_mate_manage_menu' );
+        // Add capabilities to all admin users.
+        $admins = get_users( [ 'role' => 'administrator' ] );
+        if ( $admins ) {
+            foreach ( $admins as $admin ) {
+                $admin->add_role( 'pay_check_mate_accountant' );
+                $admin->add_role( 'pay_check_mate_employee' );
+            }
         }
     }
 

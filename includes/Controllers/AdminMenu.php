@@ -29,10 +29,11 @@ class AdminMenu implements HookAbleInterface {
      * @return void
      */
     public function admin_menu(): void {
+        $capabilities = 'pay_check_mate_manage_menu';
         add_menu_page(
             __( 'PayCheckMate', 'pcm' ),
             __( 'PayCheckMate', 'pcm' ),
-            'pay_check_mate_manage_menu',
+            $capabilities,
             'pay-check-mate',
             [ $this, 'menu_page' ],
             'dashicons-money-alt',
