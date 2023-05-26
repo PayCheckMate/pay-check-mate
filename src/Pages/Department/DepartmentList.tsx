@@ -27,7 +27,6 @@ export const DepartmentList = () => {
     }, [models]);
 
     const columns = [
-        {title: 'ID', dataIndex: 'id'},
         {title: 'Department name', dataIndex: 'department_name'},
         {
             title: 'Status', dataIndex: 'status',

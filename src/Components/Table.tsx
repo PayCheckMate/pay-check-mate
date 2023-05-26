@@ -1,6 +1,4 @@
 import {Loading} from "./Loading";
-import {__} from "@wordpress/i18n";
-import {XMarkIcon} from "@heroicons/react/24/outline";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
 
@@ -26,6 +24,22 @@ export const Table = ({columns = [], data = [], isLoading = true}: TableProps) =
             </>
         )
     }
+
+    const hasSLColumn = columns.some(column => column.dataIndex === "#");
+
+    let dataIndex = 0;
+
+    if (!hasSLColumn) {
+        columns = [
+            {
+                title: "#",
+                dataIndex: "#",
+                render: () => <span>{++dataIndex}</span>,
+            },
+            ...columns,
+        ];
+    }
+
     return (
         <>
             {isLoading ? (<Loading/>) :
@@ -40,10 +54,10 @@ export const Table = ({columns = [], data = [], isLoading = true}: TableProps) =
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                    {data.map((item, index) => (
-                        <tr key={index}>
-                            {columns.map((column, index) => (
-                                <td key={index} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
+                    {data.map((item, rowIndex) => (
+                        <tr key={rowIndex}>
+                            {columns.map((column, colIndex) => (
+                                <td key={colIndex} className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
                                     {column.render ? column.render(item[column.dataIndex], item) : item[column.dataIndex]}
                                 </td>
                             ))}
