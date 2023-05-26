@@ -46,7 +46,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         }
 
         return apiFetchUnparsed(requestUrl, requestOptions).then((response: any) => {
-            if (response.data) {
+            if (response.data && run) {
                 setModels(response.data);
             }
             setLoading(false);

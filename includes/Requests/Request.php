@@ -1,11 +1,11 @@
 <?php
 
-namespace PayCheckMate\Core;
+namespace PayCheckMate\Requests;
 
 use Exception;
 use PayCheckMate\Contracts\FormRequestInterface;
 
-class FormRequest implements FormRequestInterface {
+class Request implements FormRequestInterface {
 
     // Here we will check nonce, validate data and fill the model.
 

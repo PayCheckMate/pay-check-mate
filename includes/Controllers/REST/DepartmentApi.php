@@ -5,7 +5,7 @@ namespace PayCheckMate\Controllers\REST;
 use Exception;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\Department;
-use PayCheckMate\Requests\DepartmentFormRequest;
+use PayCheckMate\Requests\DepartmentRequest;
 use WP_Error;
 use WP_HTTP_Response;
 use WP_REST_Controller;
@@ -209,7 +209,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      */
     public function create_item( $request ): WP_HTTP_Response {
         $department     = new \PayCheckMate\Core\Department( new Department() );
-        $validated_data = new DepartmentFormRequest( $request->get_params() );
+        $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_HTTP_Response( $validated_data->error, 500 );
         }
@@ -259,7 +259,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      */
     public function update_item( $request ): WP_REST_Response {
         $department     = new \PayCheckMate\Core\Department( new Department() );
-        $validated_data = new DepartmentFormRequest( $request->get_params() );
+        $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_REST_Response( $validated_data->error, 500 );
         }

@@ -1,33 +1,33 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ButtonProps {
     path?: string;
     className?: string;
     children: React.ReactNode;
     onClick?: () => void;
+    type?: "button" | "submit" | "reset";
 }
 
-export const Button = ({ path, className, children, onClick }: ButtonProps) => {
-    const buttonClass = className
-        ? `btn-primary ${className}`
-        : 'btn-primary';
+export const Button = ({ className, children, onClick, path, type }: ButtonProps) => {
+    const buttonClass = className ? `btn-primary ${className}` : 'btn-primary';
 
     const handleClick = () => {
         if (onClick) {
             onClick();
         }
     };
+
+    if (path) {
+        return (
+            <Link to={path} className={buttonClass}>
+                {children}
+            </Link>
+        );
+    }
+
     return (
-        <>
-            {path ? (
-                <Link to={path} className={buttonClass}>
-                    {children}
-                </Link>
-            ) : (
-                <button type="button" className={buttonClass} onClick={handleClick}>
-                    {children}
-                </button>
-            )}
-        </>
+        <button type={type || 'button'} className={buttonClass} onClick={handleClick}>
+            {children}
+        </button>
     );
 };
