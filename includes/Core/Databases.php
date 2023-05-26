@@ -3,55 +3,55 @@ namespace PayCheckMate\Core;
 
 class Databases {
 
-	/**
-	 * Charset collate of DB.
-	 *
-	 * @var string
-	 */
-	protected $charset_collate;
+    /**
+     * Charset collate of DB.
+     *
+     * @var string
+     */
+    protected $charset_collate;
 
-	/**
-	 * Database prefix.
-	 *
-	 * @var string
-	 */
-	protected $prefix;
-	protected string $table_prefix;
+    /**
+     * Database prefix.
+     *
+     * @var string
+     */
+    protected $prefix;
+    protected string $table_prefix;
 
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		global $wpdb;
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        global $wpdb;
 
-		$this->charset_collate = $wpdb->get_charset_collate();
-		$this->prefix          = $wpdb->prefix;
-		$this->table_prefix    = $wpdb->prefix . 'pay_check_mate_';
+        $this->charset_collate = $wpdb->get_charset_collate();
+        $this->prefix          = $wpdb->prefix;
+        $this->table_prefix    = $wpdb->prefix . 'pay_check_mate_';
 
-		$this->create_tables();
-	}
+        $this->create_tables();
+    }
 
-	/**
-	 * Create tables.
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 */
-	public function create_tables() {
-		$this->create_table_departments();
-	}
+    /**
+     * Create tables.
+     *
+     * @since 1.0.0
+     * @return void
+     */
+    public function create_tables() {
+        $this->create_table_departments();
+    }
 
-	/**
-	 * Create table departments.
-	 *
-	 * @since PAY_CHECK_MATE_SINCE
-	 *
-	 * @return void
-	 */
-	public function create_table_departments() {
-		$this->include_db_delta();
+    /**
+     * Create table departments.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_departments() {
+        $this->include_db_delta();
 
-		$sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
 			    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			    `department_name` varchar(255) NOT NULL,
 			    `status` tinyint(1) NOT NULL DEFAULT '1',
@@ -60,17 +60,18 @@ class Databases {
 			    PRIMARY KEY (`id`)
 			) {$this->charset_collate};";
 
-		dbDelta( $sql );
-	}
+        dbDelta( $sql );
+    }
 
-	/**
-	 * Include the db delta file
-	 *
-	 * @return void
-	 */
-	protected function include_db_delta(): void {
-		if ( ! function_exists( 'dbDelta' ) ) {
-			require ABSPATH . 'wp-admin/includes/upgrade.php';
-		}
-	}
+    /**
+     * Include the db delta file
+     *
+     * @return void
+     */
+    protected function include_db_delta(): void {
+        if ( ! function_exists( 'dbDelta' ) ) {
+            require ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
+    }
+
 }

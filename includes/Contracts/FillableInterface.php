@@ -4,6 +4,6 @@ namespace PayCheckMate\Contracts;
 
 interface FillableInterface {
 
-	public function fillable(): array;
+    public function fillable(): array;
 
 }
