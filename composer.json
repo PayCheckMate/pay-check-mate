@@ -23,11 +23,15 @@
         "wp-coding-standards/wpcs": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
         "tareq1988/wp-php-cs-fixer": "dev-master",
-        "phpcompatibility/phpcompatibility-wp": "dev-master"
+        "phpcompatibility/phpcompatibility-wp": "dev-master",
+        "phpstan/phpstan": "1.11.x-dev",
+        "szepeviktor/phpstan-wordpress": "dev-master",
+        "phpstan/extension-installer": "^1.3"
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
         }
     }
 }

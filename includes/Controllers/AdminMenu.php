@@ -13,8 +13,8 @@ class AdminMenu implements HookAbleInterface {
      * @return void
      */
     public function hooks(): void {
-        // phpcs:ignore
-        if ( ! current_user_can( 'pay_check_mate_manage_menu' ) ) {
+        $capabilities = 'pay_check_mate_manage_menu';
+        if ( ! current_user_can( $capabilities ) ) {
             return;
         }
 
@@ -37,7 +37,7 @@ class AdminMenu implements HookAbleInterface {
             'pay-check-mate',
             [ $this, 'menu_page' ],
             'dashicons-money-alt',
-            '20'
+            20
         );
     }
 

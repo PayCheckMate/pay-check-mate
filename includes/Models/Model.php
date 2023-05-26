@@ -27,6 +27,7 @@ class Model implements ModelInterface, FillableInterface {
     protected static string $table;
 
     protected static array $columns;
+    protected static array $fillable;
 
     /**
      * Get all the items.
@@ -36,8 +37,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all()
-    : object {
+    public function all() : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()}" );
@@ -56,8 +56,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return object|array|stdClass|null
      */
-    public function get( int $id )
-    : object {
+    public function get( int $id ) : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
@@ -75,8 +74,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return int
      */
-    public function create( FormRequest $data )
-    : int {
+    public function create( FormRequest $data ) : int {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -101,8 +99,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return bool
      */
-    public function update( int $id, FormRequest $data )
-    : bool {
+    public function update( int $id, FormRequest $data ) : bool {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -131,8 +128,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return bool
      */
-    public function delete( int $id )
-    : bool {
+    public function delete( int $id ) : bool {
         global $wpdb;
 
         return $wpdb->delete(
@@ -154,8 +150,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return string
      */
-    public static function get_table()
-    : string {
+    public static function get_table() : string {
         global $wpdb;
         if ( empty( static::$table ) ) {
             throw new Exception( 'Table name is not defined' );
@@ -172,8 +167,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return array
      */
-    public static function get_columns()
-    : array {
+    public static function get_columns() : array {
         if ( empty( static::$columns ) ) {
             return [];
         }
@@ -188,8 +182,7 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @return array
      */
-    public function fillable()
-    : array {
+    public function fillable() : array {
         if ( ! static::$fillable ) {
             return [];
         }
@@ -206,8 +199,7 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @return array
      */
-    private function get_where_format( $data )
-    : array {
+    private function get_where_format( $data ) : array {
         $format = [];
         foreach ( $data as $key => $value ) {
             if ( isset( static::$columns[$key] ) ) {
@@ -228,8 +220,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return array
      */
-    private function filter_data( array $data )
-    : array {
+    private function filter_data( array $data ) : array {
         return array_intersect_key( $data, $this->get_columns() );
     }
 
