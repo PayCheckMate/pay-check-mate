@@ -32,13 +32,24 @@ class Department extends Model {
     ];
 
     /**
-     * Make crated at mutation
+     * Make crated on mutation
      *
      * @since PAY_CHECK_MATE_SINCE
      *
      * @return string
      */
     public function set_created_on() : string {
+        return current_time( 'mysql', true );
+    }
+
+    /**
+     * Make updated at mutation
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
+    public function set_updated_at() : string {
         return current_time( 'mysql', true );
     }
 

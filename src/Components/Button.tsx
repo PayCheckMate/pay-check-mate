@@ -5,9 +5,10 @@ interface ButtonProps {
     className?: string;
     children: React.ReactNode;
     onClick?: () => void;
+    type?: "button" | "submit" | "reset";
 }
 
-export const Button = ({ path, className, children, onClick }: ButtonProps) => {
+export const Button = ({ className, children, onClick, path, type }: ButtonProps) => {
     const buttonClass = className
         ? `btn-primary ${className}`
         : 'btn-primary';
@@ -24,7 +25,7 @@ export const Button = ({ path, className, children, onClick }: ButtonProps) => {
                     {children}
                 </Link>
             ) : (
-                <button type="button" className={buttonClass} onClick={handleClick}>
+                <button type={type || 'submit'} className={buttonClass} onClick={handleClick}>
                     {children}
                 </button>
             )}

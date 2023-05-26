@@ -227,6 +227,7 @@ class Model implements ModelInterface, FillableInterface {
      */
     private function filter_data( array $data ) : array {
         // Loop through columns and, check if the model has mutations.
+        // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
             if ( method_exists( $this, "set_$key" ) ) {
                 $data["$key"] = call_user_func( [ $this, "set_$key" ] );
@@ -266,13 +267,14 @@ class Model implements ModelInterface, FillableInterface {
      * @param object $item
      *
      * @throws \Exception
-     * @return mixed
+     * @return object
      */
-    private function process_item( object $item ) {
+    private function process_item( object $item ) : object {
         $columns = $this->get_columns();
         foreach ( $columns as $column => $type ) {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
+                // Check if the column has any mutation like, get_created_on, get_updated_at etc.
                 $item->$column = call_user_func( [ $this, $method ], $item->$column );
             }
         }

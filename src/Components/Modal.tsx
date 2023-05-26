@@ -12,9 +12,7 @@ export const Modal = ({ setShowModal, header, children }: ModalProps) => (
             <div className="relative w-auto my-6 mx-auto max-w-6xl">
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                        {header || (
-                            <h3 className="text-3xl font-semibold">I know, I can do it!</h3>
-                        )}
+                        <h3 className="text-3xl font-semibold">{header || "I know, I can do it!"}</h3>
                         <CloseButton onClick={() => setShowModal(false)} />
                     </div>
                     <div className="relative px-14 py-4 flex-auto">
