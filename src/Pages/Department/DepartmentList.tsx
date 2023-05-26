@@ -59,7 +59,7 @@ export const DepartmentList = () => {
                     {/*    {__('View', 'pcm')}*/}
                     {/*</button>*/}
                     {/*<span className="mx-2 text-gray-300">|</span>*/}
-                    <button className="text-indigo-600 hover:text-indigo-900">
+                    <button className="text-indigo-600 hover:text-indigo-900" onClick={()=>handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
                     {/*<span className="mx-2 text-gray-300">|</span>*/}
@@ -129,7 +129,10 @@ export const DepartmentList = () => {
         }
     }
 
-    const handleButtonClick = () => {
+    const handleModal = (data: DepartmentType) => {
+        if (data) {
+            setFormData(data)
+        }
         setShowModal(true)
     };
 
@@ -138,16 +141,33 @@ export const DepartmentList = () => {
         const data = formData
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
-        console.log(data)
-        try {
-            makePostRequest('/pay-check-mate/v1/departments', data, false).then((data: DepartmentType) => {
-                setDepartments([...models, formData])
-                setShowModal(false)
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
+        if (formData.id) {
+            try {
+                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data: DepartmentType) => {
+                    setDepartments(models.map((department: DepartmentType) => {
+                        if (department.id === formData.id) {
+                            department.department_name = formData.department_name;
+                        }
+                        return department;
+                    }))
+                    setShowModal(false)
+                }).catch((e: unknown) => {
+                    console.log(e);
+                })
+            } catch (error) {
+                console.log(error); // Handle the error accordingly
+            }
+        } else {
+            try {
+                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data: DepartmentType) => {
+                    setDepartments([...models, formData])
+                    setShowModal(false)
+                }).catch((e: unknown) => {
+                    console.log(e);
+                })
+            } catch (error) {
+                console.log(error); // Handle the error accordingly
+            }
         }
     }
     return (
@@ -158,7 +178,7 @@ export const DepartmentList = () => {
                         <h1 className="text-base font-semibold leading-6 text-gray-900">Department list</h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={handleButtonClick} className="hover:text-white active:text-white">
+                        <Button onClick={()=>handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
                             Add department
                         </Button>
@@ -168,7 +188,7 @@ export const DepartmentList = () => {
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <FormInput label={__('Department name', 'pcm')} name="department_name" id="department_name" value={formData.department_name} onChange={(e) => setFormData({...formData, department_name: e.target.value})} />
-                                        <Button className="mt-4">
+                                        <Button className="mt-4" onClick={()=>handleSubmit(event)}>
                                             {__('Add department', 'pcm')}
                                         </Button>
                                     </form>
