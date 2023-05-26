@@ -56,8 +56,8 @@ interface ModelInterface {
      *
      * @param int $id
      *
-     * @return bool
+     * @return int
      */
-    public function delete( int $id ): bool;
+    public function delete( int $id ): int;
 
 }

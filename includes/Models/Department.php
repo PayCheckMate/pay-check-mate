@@ -16,14 +16,19 @@ class Department extends Model {
      */
     protected static string $table = 'pay_check_mate_departments';
 
+    /**
+     * @var array|string[] $fillable
+     */
     protected static array $fillable = [ 'department_name' ];
 
-    protected static array $columns
-        = [
-            'department_name' => '%s',
-            'status'          => '%d',
-            'created_at'      => '%s',
-            'updated_at'      => '%s',
-        ];
+    /**
+     * @var array|string[] $columns
+     */
+    protected static array $columns = [
+        'department_name' => '%s',
+        'status'          => '%d',
+        'created_at'      => '%s',
+        'updated_at'      => '%s',
+    ];
 
 }

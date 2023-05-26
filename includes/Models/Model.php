@@ -26,7 +26,15 @@ class Model implements ModelInterface, FillableInterface {
      */
     protected static string $table;
 
+    /**
+     * @var array|string[] $columns
+     */
     protected static array $columns;
+
+    /**
+     * @var array|string[] $fillable
+     */
+    protected static array $fillable;
 
     /**
      * Get all the items.
@@ -36,8 +44,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all()
-    : object {
+    public function all() : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()}" );
@@ -47,17 +54,16 @@ class Model implements ModelInterface, FillableInterface {
 
 
     /**
-     * Get a single item.
+     * Get the fillable attributes.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int $id
      *
-     * @throws Exception
-     * @return object|array|stdClass|null
+     * @throws \Exception
+     * @return object
      */
-    public function get( int $id )
-    : object {
+    public function get( int $id ) : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
@@ -73,21 +79,18 @@ class Model implements ModelInterface, FillableInterface {
      * @param FormRequest $data
      *
      * @throws Exception
-     * @return int
+     * @return int The number of rows inserted, or false on error.
      */
-    public function create( FormRequest $data )
-    : int {
+    public function create( FormRequest $data ) : int {
         global $wpdb;
 
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
-        $wpdb->insert(
+        return $wpdb->insert(
             $this->get_table(),
             $filteredData,
             $this->get_where_format( $filteredData ),
         );
-
-        return $wpdb->insert_id;
     }
 
     /**
@@ -101,8 +104,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return bool
      */
-    public function update( int $id, FormRequest $data )
-    : bool {
+    public function update( int $id, FormRequest $data ) : bool {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -129,10 +131,9 @@ class Model implements ModelInterface, FillableInterface {
      * @param int $id
      *
      * @throws Exception
-     * @return bool
+     * @return int The number of rows deleted, or false on error.
      */
-    public function delete( int $id )
-    : bool {
+    public function delete( int $id ) : int {
         global $wpdb;
 
         return $wpdb->delete(
@@ -154,8 +155,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws Exception
      * @return string
      */
-    public static function get_table()
-    : string {
+    public static function get_table() : string {
         global $wpdb;
         if ( empty( static::$table ) ) {
             throw new Exception( 'Table name is not defined' );
@@ -170,10 +170,9 @@ class Model implements ModelInterface, FillableInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @throws Exception
-     * @return array
+     * @return array<string>
      */
-    public static function get_columns()
-    : array {
+    public static function get_columns() : array {
         if ( empty( static::$columns ) ) {
             return [];
         }
@@ -186,10 +185,9 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array
+     * @return array<string>
      */
-    public function fillable()
-    : array {
+    public function fillable() : array {
         if ( ! static::$fillable ) {
             return [];
         }
@@ -202,12 +200,11 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $data
+     * @param array<string> $data
      *
-     * @return array
+     * @return array<string>
      */
-    private function get_where_format( $data )
-    : array {
+    private function get_where_format( $data ) : array {
         $format = [];
         foreach ( $data as $key => $value ) {
             if ( isset( static::$columns[$key] ) ) {
@@ -223,13 +220,12 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param array $data
+     * @param array<string> $data
      *
      * @throws Exception
-     * @return array
+     * @return array<string>
      */
-    private function filter_data( array $data )
-    : array {
+    private function filter_data( array $data ) : array {
         return array_intersect_key( $data, $this->get_columns() );
     }
 

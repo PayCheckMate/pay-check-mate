@@ -19,21 +19,21 @@ class FormRequest implements FormRequestInterface {
     /**
      * Rules for request validation.
      *
-     * @var array
+     * @var array<string>
      */
     protected static array $rules;
 
     /**
      * All the fillable.
      *
-     * @var array
+     * @var array<string>
      */
     protected static array $fillable;
 
     /**
      * Post property.
      *
-     * @var array
+     * @var array<string>
      */
     protected array $data;
 
@@ -48,7 +48,7 @@ class FormRequest implements FormRequestInterface {
      * Construct method for SupportFormStoreRequest class.
      * This will get a $_POST Super Global as an argument.
      *
-     * @param array $data Post Super Global.
+     * @param array<string> $data Post Super Global.
      *
      * @throws Exception
      */
@@ -64,7 +64,7 @@ class FormRequest implements FormRequestInterface {
      *
      * @param string $name property name.
      *
-     * @return mixed|null
+     * @return string|null
      */
     public function __get( string $name ) {
         return $this->data[ $name ] ?? null;
@@ -135,7 +135,7 @@ class FormRequest implements FormRequestInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array
+     * @return array<string>
      */
     public function to_array(): array {
         return $this->data;
@@ -178,7 +178,7 @@ class FormRequest implements FormRequestInterface {
      *
      * @throws Exception
      *
-     * @return array
+     * @return array<string>
      */
     public static function get_rules(): array {
         if ( empty( static::$rules ) ) {
@@ -195,7 +195,7 @@ class FormRequest implements FormRequestInterface {
      *
      * @throws Exception
      *
-     * @return array
+     * @return array<string>
      */
     public static function get_fillable(): array {
         if ( empty( static::$fillable ) ) {

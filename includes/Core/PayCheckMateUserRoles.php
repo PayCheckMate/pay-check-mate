@@ -32,7 +32,7 @@ class PayCheckMateUserRoles {
      * Get capabilities for the `accountant` role.
      *
      * @since  PAY_CHECK_MATE_SINCE
-     * @return array
+     * @return array<string, bool>
      */
     protected function get_accountant_capabilities(): array {
         return [
@@ -46,7 +46,7 @@ class PayCheckMateUserRoles {
      * Get capabilities for the `employee` role.
      *
      * @since  PAY_CHECK_MATE_SINCE
-     * @return array
+     * @return array<string, bool>
      */
     protected function get_employee_capabilities(): array {
         return [

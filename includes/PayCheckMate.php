@@ -8,7 +8,10 @@ use PayCheckMate\Core\Installer;
 
 final class PayCheckMate {
 
-    protected static $instance;
+    /**
+     * @var PayCheckMate|null
+     */
+    protected static ?PayCheckMate $instance = null;
 
     /**
      * All the controller classes.
@@ -38,7 +41,7 @@ final class PayCheckMate {
      * @return PayCheckMate
      */
     public static function get_instance(): PayCheckMate {
-        if ( ! self::$instance ) {
+        if ( null === self::$instance ) {
             self::$instance = new self();
         }
 

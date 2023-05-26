@@ -101,7 +101,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @return bool
      */
@@ -115,7 +115,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @return bool
      */
@@ -129,7 +129,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @return bool
      */
@@ -143,7 +143,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @return bool
      */
@@ -157,7 +157,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @return bool
      */
@@ -171,7 +171,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request WP_REST_Request
+     * @param WP_REST_Request<array<string>> $request Request object.
      *
      * @return WP_HTTP_Response
      */
@@ -190,8 +190,8 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 
         $response = new WP_HTTP_Response( $data );
 
-        $response->header( 'X-WP-Total', (int) $total );
-        $response->header( 'X-WP-TotalPages', (int) $max_pages );
+        $response->header( 'X-WP-Total', (string) $total );
+        $response->header( 'X-WP-TotalPages', (string) $max_pages );
 
         return new WP_HTTP_Response( $response, 200 );
     }
@@ -201,7 +201,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param WP_REST_Request<array<string>> $request
      *
      * @throws Exception
      *
@@ -216,7 +216,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
 
         $department = $department->create( $validated_data );
 
-        if ( is_wp_error( $department ) ) {
+        if ( ! $department ) {
             return new WP_HTTP_Response( $department, 500 );
         }
 
@@ -228,7 +228,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request WP_REST_Request
+     * @param WP_REST_Request<array<string>> $request Request object.
      *
      * @return WP_HTTP_Response
      */
@@ -251,26 +251,26 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request WP_REST_Request
+     * @param WP_REST_Request<array<string>> $request Request object.
      *
      * @throws Exception
      *
-     * @return void
+     * @return \WP_REST_Response
      */
-    public function update_item( $request ) {
+    public function update_item( $request ): WP_REST_Response {
         $department     = new \PayCheckMate\Core\Department( new Department() );
         $validated_data = new DepartmentFormRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            wp_send_json_error( $validated_data->error, 500 );
+            return new WP_REST_Response( $validated_data->error, 500 );
         }
 
         $department = $department->update( $request->get_param( 'id' ), $validated_data );
 
-        if ( is_wp_error( $department ) ) {
-            wp_send_json_error( $department, 500 );
+        if ( ! $department ) {
+            return new WP_REST_Response( __( 'Department not found', 'pcm' ), 500 );
         }
 
-        wp_send_json_success( $department, 200 );
+        return new WP_REST_Response( $department, 200 );
     }
 
     /**
@@ -278,19 +278,19 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request WP_REST_Request
+     * @param WP_REST_Request<array<string>> $request Request object.
      *
-     * @return void
+     * @return \WP_HTTP_Response
      */
-    public function delete_item( $request ) {
+    public function delete_item( $request ): WP_HTTP_Response {
         $department = new \PayCheckMate\Core\Department( new Department() );
         $department = $department->delete( $request->get_param( 'id' ) );
 
-        if ( is_wp_error( $department ) ) {
-            wp_send_json_error( $department, 500 );
+        if ( ! $department ) {
+            return new WP_HTTP_Response( __( 'Department not found', 'pcm' ), 500 );
         }
 
-        wp_send_json_success( $department, 200 );
+        return new WP_HTTP_Response( __( 'Department deleted', 'pcm' ), 200 );
     }
 
     /**
@@ -298,11 +298,11 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param object $item Default item object.
      *
-     * @param $item
+     * @param WP_REST_Request<array<string>> $request Request object.
      *
-     * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+     * @return WP_Error|WP_REST_Response
      */
     public function prepare_item_for_response( $item, $request ) {
         $data   = [];
@@ -329,7 +329,16 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
         return $response;
     }
 
-    protected function prepare_links( $item ): array {
+    /**
+     * Prepare links for the request.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param object $item Item object.
+     *
+     * @return array<string,array<string,string>> Links for the given post.
+     */
+    protected function prepare_links( object $item ): array {
         $base = sprintf( '%s/%s', $this->namespace, $this->rest_base );
 
         return [
@@ -347,7 +356,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array
+     * @return array<string, array<string, array<string, array<int, string>|bool|string>>|string> Collection parameters.
      */
     public function get_item_schema(): array {
         return [
@@ -397,7 +406,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @param WP_REST_Response $response Response object.
      *
-     * @return array|WP_REST_Response Response data, ready for insertion into collection data.
+     * @return array<string,array<string,string>>|WP_REST_Response Response data, ready for insertion into collection data.
      */
     public function prepare_response_for_collection( $response ) {
         if ( ! ( $response instanceof WP_REST_Response ) ) {
