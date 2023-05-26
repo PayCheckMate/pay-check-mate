@@ -6,7 +6,7 @@ use PayCheckMate\Contracts\ModelInterface;
 
 class Department {
 
-    protected $model;
+    protected ModelInterface $model;
 
     public function __construct( ModelInterface $model ) {
         $this->model = $model;
@@ -70,9 +70,9 @@ class Department {
      *
      * @param int $id
      *
-     * @return bool
+     * @return int
      */
-    public function delete( int $id ): bool {
+    public function delete( int $id ): int {
         return $this->model->delete( $id );
     }
 
