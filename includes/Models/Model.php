@@ -6,8 +6,7 @@ namespace PayCheckMate\Models;
 use Exception;
 use PayCheckMate\Contracts\FillableInterface;
 use PayCheckMate\Contracts\ModelInterface;
-use PayCheckMate\Core\FormRequest;
-use stdClass;
+use PayCheckMate\Requests\Request;
 
 /**
  * Base Model for all the models to extend with Late Static Binding.
@@ -49,7 +48,7 @@ class Model implements ModelInterface, FillableInterface {
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()}" );
 
-        return (object) $wpdb->get_results( $query, OBJECT );
+        return $this->process_items( $wpdb->get_results( $query ) );
     }
 
 
@@ -68,7 +67,7 @@ class Model implements ModelInterface, FillableInterface {
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
 
-        return $wpdb->get_row( $query );
+        return $this->process_item( $wpdb->get_row( $query ) );
     }
 
     /**
@@ -76,16 +75,17 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param FormRequest $data
+     * @param Request $data
      *
      * @throws Exception
      * @return int The number of rows inserted, or false on error.
      */
-    public function create( FormRequest $data ) : int {
+    public function create( Request $data ) : int {
         global $wpdb;
 
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
+
         return $wpdb->insert(
             $this->get_table(),
             $filteredData,
@@ -98,13 +98,13 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int         $id
-     * @param FormRequest $data
+     * @param int     $id
+     * @param Request $data
      *
      * @throws Exception
      * @return bool
      */
-    public function update( int $id, FormRequest $data ) : bool {
+    public function update( int $id, Request $data ) : bool {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -226,7 +226,59 @@ class Model implements ModelInterface, FillableInterface {
      * @return array<string>
      */
     private function filter_data( array $data ) : array {
+        // Loop through columns and, check if the model has mutations.
+        foreach ( $this->get_columns() as $key => $value ) {
+            if ( method_exists( $this, "set_$key" ) ) {
+                $data["$key"] = call_user_func( [ $this, "set_$key" ] );
+            }
+        }
+
         return array_intersect_key( $data, $this->get_columns() );
     }
+
+    /**
+     * Process the data before returning it to the response.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<object> $data
+     *
+     * @throws \Exception
+     * @return object
+     */
+    public function process_items( array $data ) : object {
+        if ( empty( $data ) ) {
+            return (object) [];
+        }
+
+        foreach ( $data as &$item ) {
+            $item = $this->process_item( $item );
+        }
+
+        return (object) $data;
+    }
+
+    /**
+     * Process the item before returning it to the response.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param object $item
+     *
+     * @throws \Exception
+     * @return mixed
+     */
+    private function process_item( object $item ) {
+        $columns = $this->get_columns();
+        foreach ( $columns as $column => $type ) {
+            $method = "get_$column";
+            if ( method_exists( $this, $method ) ) {
+                $item->$column = call_user_func( [ $this, $method ], $item->$column );
+            }
+        }
+
+        return $item;
+    }
+
 
 }

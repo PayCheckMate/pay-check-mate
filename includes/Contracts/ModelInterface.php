@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Contracts;
 
-use PayCheckMate\Core\FormRequest;
+use PayCheckMate\Requests\Request;
 
 interface ModelInterface {
 
@@ -31,23 +31,23 @@ interface ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param FormRequest $data
+     * @param Request $data
      *
      * @return int
      */
-    public function create( FormRequest $data ): int;
+    public function create( Request $data ): int;
 
     /**
      * Update an item.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int         $id
-     * @param FormRequest $data
+     * @param int     $id
+     * @param Request $data
      *
      * @return bool
      */
-    public function update( int $id, FormRequest $data ): bool;
+    public function update( int $id, Request $data ): bool;
 
     /**
      * Delete an item.
