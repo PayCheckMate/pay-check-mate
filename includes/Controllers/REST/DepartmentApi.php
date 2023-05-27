@@ -3,23 +3,23 @@
 namespace PayCheckMate\Controllers\REST;
 
 use Exception;
+use PayCheckMate\Classes\Department;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department;
+use PayCheckMate\Models\Department as DepartmentModel;
 use PayCheckMate\Requests\DepartmentRequest;
 use WP_Error;
 use WP_HTTP_Response;
-use WP_REST_Controller;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
+class DepartmentApi extends RestController implements HookAbleApiInterface {
 
     protected $namespace = 'pay-check-mate/v1';
     protected $rest_base = 'departments';
 
 
     /**
-     * Register the necessary hooks.
+     * Register the necessary Routes.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
@@ -173,10 +173,10 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
-     * @return WP_HTTP_Response
+     * @return WP_REST_Response
      */
-    public function get_items( $request ): WP_HTTP_Response {
-        $departments = new \PayCheckMate\Core\Department( new Department() );
+    public function get_items( $request ): WP_REST_Response {
+        $departments = new Department( new DepartmentModel() );
         $departments = $departments->all();
         $data        = [];
 
@@ -188,12 +188,12 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
         $total     = count( $data );
         $max_pages = ceil( $total / (int) 10 );
 
-        $response = new WP_HTTP_Response( $data );
+        $response = new WP_REST_Response( $data );
 
         $response->header( 'X-WP-Total', (string) $total );
         $response->header( 'X-WP-TotalPages', (string) $max_pages );
 
-        return new WP_HTTP_Response( $response, 200 );
+        return new WP_REST_Response( $response, 200 );
     }
 
     /**
@@ -205,22 +205,22 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      *
      * @throws Exception
      *
-     * @return WP_HTTP_Response
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function create_item( $request ): WP_HTTP_Response {
-        $department     = new \PayCheckMate\Core\Department( new Department() );
+    public function create_item( $request ) {
+        $department     = new Department( new DepartmentModel() );
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_HTTP_Response( $validated_data->error, 500 );
+            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
         $department = $department->create( $validated_data );
 
         if ( ! $department ) {
-            return new WP_HTTP_Response( $department, 500 );
+            return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 
-        return new WP_HTTP_Response( $department, 200 );
+        return new WP_REST_Response( $department, 201 );
     }
 
     /**
@@ -233,7 +233,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      * @return WP_HTTP_Response
      */
     public function get_item( $request ): WP_HTTP_Response {
-        $department = new \PayCheckMate\Core\Department( new Department() );
+        $department = new Department( new DepartmentModel() );
         $department = $department->get( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
@@ -258,7 +258,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      * @return \WP_REST_Response
      */
     public function update_item( $request ): WP_REST_Response {
-        $department     = new \PayCheckMate\Core\Department( new Department() );
+        $department     = new Department( new DepartmentModel() );
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_REST_Response( $validated_data->error, 500 );
@@ -283,7 +283,7 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
      * @return \WP_HTTP_Response
      */
     public function delete_item( $request ): WP_HTTP_Response {
-        $department = new \PayCheckMate\Core\Department( new Department() );
+        $department = new Department( new DepartmentModel() );
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {
@@ -291,64 +291,6 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
         }
 
         return new WP_HTTP_Response( __( 'Department deleted', 'pcm' ), 200 );
-    }
-
-    /**
-     * Prepare the item for the REST response.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param object $item Default item object.
-     *
-     * @param WP_REST_Request<array<string>> $request Request object.
-     *
-     * @return WP_Error|WP_REST_Response
-     */
-    public function prepare_item_for_response( $item, $request ) {
-        $data   = [];
-        $fields = $this->get_fields_for_response( $request );
-
-        $schema = $this->get_item_schema();
-        foreach ( $schema['properties'] as $key => $value ) {
-            if ( ! in_array( $key, $fields, true ) ) {
-                continue;
-            }
-
-            $data[ $key ] = $item->{$key};
-        }
-
-        $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
-        $data    = $this->add_additional_fields_to_object( $data, $request );
-        $data    = $this->filter_response_by_context( $data, $context );
-
-        // Wrap the data in a response object.
-        $response = rest_ensure_response( $data );
-
-        $response->add_links( $this->prepare_links( $item ) );
-
-        return $response;
-    }
-
-    /**
-     * Prepare links for the request.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param object $item Item object.
-     *
-     * @return array<string,array<string,string>> Links for the given post.
-     */
-    protected function prepare_links( object $item ): array {
-        $base = sprintf( '%s/%s', $this->namespace, $this->rest_base );
-
-        return [
-            'self'       => [
-                'href' => rest_url( trailingslashit( $base ) . $item->id ),
-            ],
-            'collection' => [
-                'href' => rest_url( $base ),
-            ],
-        ];
     }
 
     /**
@@ -397,36 +339,6 @@ class DepartmentApi extends WP_REST_Controller implements HookAbleApiInterface {
                 ],
             ],
         ];
-    }
-
-    /**
-     * Prepare a response for inserting into a collection of responses.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param WP_REST_Response $response Response object.
-     *
-     * @return array<string,array<string,string>>|WP_REST_Response Response data, ready for insertion into collection data.
-     */
-    public function prepare_response_for_collection( $response ) {
-        if ( ! ( $response instanceof WP_REST_Response ) ) {
-            return $response;
-        }
-
-        $data   = (array) $response->get_data();
-        $server = rest_get_server();
-
-        if ( method_exists( $server, 'get_compact_response_links' ) ) {
-            $links = call_user_func( [ $server, 'get_compact_response_links' ], $response );
-        } else {
-            $links = call_user_func( [ $server, 'get_response_links' ], $response );
-        }
-
-        if ( ! empty( $links ) ) {
-            $data['_links'] = $links;
-        }
-
-        return $data;
     }
 
 }

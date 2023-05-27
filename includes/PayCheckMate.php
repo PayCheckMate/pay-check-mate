@@ -32,6 +32,7 @@ final class PayCheckMate {
     protected array $api_classes
         = [
             'PayCheckMate\Controllers\REST\DepartmentApi',
+            'PayCheckMate\Controllers\REST\DesignationApi',
         ];
 
     /**

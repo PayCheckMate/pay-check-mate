@@ -1,11 +1,11 @@
 <?php
 
-namespace PayCheckMate\Core;
+namespace PayCheckMate\Classes;
 
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
 
-class Department {
+class Designation {
 
     protected ModelInterface $model;
 
@@ -35,7 +35,7 @@ class Department {
      */
     public function get( int $id ): object {
         return $this->model->get( $id );
-    }
+	}
 
     /**
      * Create a new item.
@@ -60,7 +60,7 @@ class Department {
      *
      * @return bool
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( Request $data, int $id ): bool {
         return $this->model->update( $id, $data );
     }
 
@@ -76,5 +76,4 @@ class Department {
     public function delete( int $id ): int {
         return $this->model->delete( $id );
     }
-
 }
