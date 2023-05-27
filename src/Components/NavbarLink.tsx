@@ -25,13 +25,12 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
     const handleLinkClick = (index: number) => {
         const updatedNavigation = navigation.map((item, i) => ({
             ...item,
-            current: i === index,
+            current: i === index || (item.children && item.children.some((child) => child.current)),
         }));
         setCurrentLink(index);
         setExpandedLinks([]); // Reset expanded links when a link is clicked
         console.log(updatedNavigation); // You can use the updated navigation array as needed
     };
-
 
     return (
         <>
