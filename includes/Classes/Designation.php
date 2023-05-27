@@ -33,8 +33,8 @@ class Designation {
      *
      * @return object
      */
-    public function get( int $id ): object {
-        return $this->model->get( $id );
+    public function find( int $id ): object {
+        return $this->model->find( $id );
 	}
 
     /**

@@ -62,7 +62,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws \Exception
      * @return object
      */
-    public function get( int $id ) : object {
+    public function find( int $id ) : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );

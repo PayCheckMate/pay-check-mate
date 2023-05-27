@@ -230,20 +230,20 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
-     * @return WP_HTTP_Response
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function get_item( $request ): WP_HTTP_Response {
+    public function get_item( $request ) {
         $department = new Department( new DepartmentModel() );
         $department = $department->get( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
-            return new WP_HTTP_Response( $department, 500 );
+            return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );
         }
 
         $item = $this->prepare_item_for_response( $department, $request );
         $data = $this->prepare_response_for_collection( $item );
 
-        return new WP_HTTP_Response( $data, 200 );
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**
@@ -255,13 +255,13 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @throws Exception
      *
-     * @return \WP_REST_Response
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function update_item( $request ): WP_REST_Response {
+    public function update_item( $request ) {
         $department     = new Department( new DepartmentModel() );
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_REST_Response( $validated_data->error, 500 );
+            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
         $department = $department->update( $request->get_param( 'id' ), $validated_data );
@@ -280,17 +280,17 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
-     * @return \WP_HTTP_Response
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function delete_item( $request ): WP_HTTP_Response {
+    public function delete_item( $request ) {
         $department = new Department( new DepartmentModel() );
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {
-            return new WP_HTTP_Response( __( 'Department not found', 'pcm' ), 500 );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
         }
 
-        return new WP_HTTP_Response( __( 'Department deleted', 'pcm' ), 200 );
+        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
     }
 
     /**

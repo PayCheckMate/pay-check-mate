@@ -24,7 +24,7 @@ interface ModelInterface {
      *
      * @return object
      */
-    public function get( int $id ): object;
+    public function find( int $id ): object;
 
     /**
      * Create a new item.

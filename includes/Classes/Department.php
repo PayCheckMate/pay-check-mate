@@ -34,7 +34,7 @@ class Department {
      * @return object
      */
     public function get( int $id ): object {
-        return $this->model->get( $id );
+        return $this->model->find( $id );
     }
 
     /**

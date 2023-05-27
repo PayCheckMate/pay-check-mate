@@ -42,6 +42,57 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 				'schema' => [ $this, 'get_public_item_schema' ],
 			],
         );
+
+        register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_item' ],
+					'permission_callback' => [ $this, 'get_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'update_item' ],
+					'permission_callback' => [ $this, 'update_item_permissions_check' ],
+					'args'                => [
+						'id'               => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+						'designation_name' => [
+							'description' => __( 'Designation name.', 'pcm' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'status'           => [
+							'description' => __( 'Designation status.', 'pcm' ),
+							'type'        => 'number',
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::DELETABLE,
+					'callback'            => [ $this, 'delete_item' ],
+					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				'schema' => [ $this, 'get_public_item_schema' ],
+			],
+        );
     }
 
     /**
@@ -67,6 +118,45 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function create_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to read a designation.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function get_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to update a designation.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function update_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to delete a designation.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function delete_item_permissions_check( $request ): bool {
         return true;
     }
 
@@ -124,6 +214,74 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 
         return new WP_REST_Response( $designation, 201 );
     }
+
+    /**
+     * Retrieves one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function get_item( $request ) {
+        $designation = new Designation( new DesignationModel() );
+        $designation = $designation->find( $request['id'] );
+
+        if ( is_wp_error( $designation ) ) {
+            return new WP_Error( 404, $designation->get_error_message(), [ 'status' => 404 ] );
+        }
+
+        $item = $this->prepare_item_for_response( $designation, $request );
+        $data = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
+    }
+
+    /**
+     * Updates one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function update_item( $request ) {
+        $designation    = new Designation( new DesignationModel() );
+        $validated_data = new DesignationRequest( $request->get_params() );
+        if ( ! empty( $validated_data->error ) ) {
+            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+        }
+
+        $designation = $designation->update( $validated_data, $request['id'] );
+        if ( ! $designation ) {
+            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
+        }
+
+        return new WP_REST_Response( $designation, 200 );
+	}
+
+    /**
+     * Deletes one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function delete_item( $request ) {
+        $designation = new Designation( new DesignationModel() );
+        $designation = $designation->delete( $request['id'] );
+
+        if ( ! $designation ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
+
+        return new WP_REST_Response( $designation, 200 );
+	}
 
     /**
      * Retrieves the item's schema, conforming to JSON Schema.
