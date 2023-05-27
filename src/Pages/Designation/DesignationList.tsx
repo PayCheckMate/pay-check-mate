@@ -85,7 +85,7 @@ export const DesignationList = () => {
     const deleteDepartment = (id: number) => {
         try {
             makeDeleteRequest(`/pay-check-mate/v1/designations/${id}`, false).then((data: unknown) => {
-                setDesignations(models.filter((department: DesignationType) => department.id !== id))
+                setDesignations(models.filter((designation: DesignationType) => designation.id !== id))
             }).catch((e: unknown) => {
                 console.log(e);
             })
@@ -95,22 +95,22 @@ export const DesignationList = () => {
     }
 
     const getDesignations = (id: number) => {
-        return designations.find((department: DesignationType) => department.id === id);
+        return designations.find((designation: DesignationType) => designation.id === id);
     }
 
     const handleStatus = (id: number, status: number) => {
-        const department_name = getDesignations(id)?.designation_name;
+        const designation_name = getDesignations(id)?.designation_name;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, department_name, status, _wpnonce};
+        const data = {id, designation_name, status, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
                 if (data) {
-                    setDesignations(models.map((department: DesignationType) => {
-                        if (department.id === id) {
-                            department.status = status;
+                    setDesignations(models.map((designation: DesignationType) => {
+                        if (designation.id === id) {
+                            designation.status = status;
                         }
-                        return department;
+                        return designation;
                     }))
                 }
             }).catch((e: unknown) => {
@@ -142,11 +142,11 @@ export const DesignationList = () => {
         if (formData.id) {
             try {
                 makePutRequest(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data: DesignationType) => {
-                    setDesignations(models.map((department: DesignationType) => {
-                        if (department.id === formData.id) {
-                            department.designation_name = formData.designation_name;
+                    setDesignations(models.map((designation: DesignationType) => {
+                        if (designation.id === formData.id) {
+                            designation.designation_name = formData.designation_name;
                         }
-                        return department;
+                        return designation;
                     }))
                     setShowModal(false)
                 }).catch((e: unknown) => {
@@ -180,16 +180,16 @@ export const DesignationList = () => {
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <Button onClick={()=>handleModal({} as DesignationType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
-                            {__('Add department', 'pcm')}
+                            {__('Add designation', 'pcm')}
                         </Button>
                         {showModal && (
-                            <Modal setShowModal={setShowModal} header={__('Add department', 'pcm')}>
-                                {/*Create a form to save department*/}
+                            <Modal setShowModal={setShowModal} header={__('Add designation', 'pcm')}>
+                                {/*Create a form to save designation*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="department_name" id="department_name" value={formData.designation_name} onChange={(e) => setFormData({...formData, designation_name: e.target.value})} />
+                                        <FormInput label={__('Department name', 'pcm')} name="designation_name" id="designation_name" value={formData.designation_name} onChange={(e) => setFormData({...formData, designation_name: e.target.value})} />
                                         <Button className="mt-4" onClick={()=>handleSubmit(event)}>
-                                            {__('Add department', 'pcm')}
+                                            {__('Add designation', 'pcm')}
                                         </Button>
                                     </form>
                                 </div>

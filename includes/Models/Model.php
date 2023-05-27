@@ -53,15 +53,19 @@ class Model implements ModelInterface, FillableInterface {
                 'offset'  => 0,
                 'order'   => 'DESC',
                 'orderby' => 'id',
-                'status'  => '1',
+                'status'  => '',
             ]
         );
 
+        $where = '';
+        if ( ! empty( $args['status'] ) ) {
+            $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
+        }
+
         $query = $wpdb->prepare(
-            "SELECT * FROM {$this->get_table()} WHERE status = %d ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
-            $args['status'],
+            "SELECT * FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
             $args['limit'],
-            $args['offset']
+            $args['offset'],
         );
 
         return $this->process_items( $wpdb->get_results( $query ) );
@@ -80,7 +84,7 @@ class Model implements ModelInterface, FillableInterface {
             $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
         }
 
-        $query = "SELECT COUNT(*) FROM {$this->get_table()} {$where}";
+        $query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->get_table()} {$where}", );
 
         return $wpdb->get_var( $query );
     }

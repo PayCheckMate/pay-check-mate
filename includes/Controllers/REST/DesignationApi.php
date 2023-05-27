@@ -176,7 +176,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => 'DESC',
             'orderby' => 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
         $designations = $designation->all( $args );
@@ -262,7 +262,8 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $designation = $designation->update( $validated_data, $request['id'] );
+        $designation = $designation->update( $request->get_param( 'id' ), $validated_data );
+
         if ( ! $designation ) {
             return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }

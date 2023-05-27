@@ -29,7 +29,7 @@ trait CRUDTrait {
                 'offset'  => 0,
                 'order'   => 'DESC',
                 'orderby' => 'id',
-                'status'  => '1',
+                'status'  => '',
             ]
         );
 
