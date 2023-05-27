@@ -45,7 +45,7 @@ trait CRUDTrait {
      *
      * @return object
      */
-    public function get( int $id ): object {
+    public function find( int $id ): object {
         return $this->model->find( $id );
     }
 
@@ -89,7 +89,16 @@ trait CRUDTrait {
         return $this->model->delete( $id );
     }
 
-    public function count(): int {
-        return $this->model->count();
+    /**
+     * Count the number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @return int
+     */
+    public function count( array $args = [] ): int {
+        return $this->model->count( $args );
     }
 }

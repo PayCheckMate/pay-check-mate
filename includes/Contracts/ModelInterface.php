@@ -62,4 +62,15 @@ interface ModelInterface {
      */
     public function delete( int $id ): int;
 
+    /**
+     * Count the number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @return int
+     */
+    public function count( array $args = [] ): int;
+
 }

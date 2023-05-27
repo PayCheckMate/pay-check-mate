@@ -242,7 +242,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      */
     public function get_item( $request ) {
         $department = new Department( new DepartmentModel() );
-        $department = $department->get( $request->get_param( 'id' ) );
+        $department = $department->find( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
             return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );

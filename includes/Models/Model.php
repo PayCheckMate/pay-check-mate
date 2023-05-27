@@ -71,6 +71,16 @@ class Model implements ModelInterface, FillableInterface {
         return $this->process_items( $wpdb->get_results( $query ) );
     }
 
+    /**
+     * Get the total number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @throws Exception
+     * @return int
+     */
     public function count( array $args = [] ) : int {
         global $wpdb;
         $args = wp_parse_args(

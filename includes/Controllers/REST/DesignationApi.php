@@ -227,13 +227,13 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
         $designation = new Designation( new DesignationModel() );
-        $designation = $designation->find( $request['id'] );
+        $designation = $designation->find( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $designation ) ) {
             return new WP_Error( 404, $designation->get_error_message(), [ 'status' => 404 ] );
