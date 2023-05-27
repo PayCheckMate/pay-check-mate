@@ -40,15 +40,63 @@ class Model implements ModelInterface, FillableInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @throws Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all() : object {
+    public function all( array $args ) : object {
         global $wpdb;
+        $args = wp_parse_args(
+            $args, [
+                'limit'  => 20,
+                'offset'  => 0,
+                'order'   => 'DESC',
+                'orderby' => 'id',
+                'status'  => '',
+            ]
+        );
 
-        $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()}" );
+        $where = '';
+        if ( ! empty( $args['status'] ) ) {
+            $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
+        }
+
+        $query = $wpdb->prepare(
+            "SELECT * FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+            $args['limit'],
+            $args['offset'],
+        );
 
         return $this->process_items( $wpdb->get_results( $query ) );
+    }
+
+    /**
+     * Get the total number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @throws Exception
+     * @return int
+     */
+    public function count( array $args = [] ) : int {
+        global $wpdb;
+        $args = wp_parse_args(
+            $args, [
+                'status' => '',
+            ]
+        );
+
+        $where = '';
+        if ( ! empty( $args['status'] ) ) {
+            $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
+        }
+
+        $query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->get_table()} {$where}", );
+
+        return $wpdb->get_var( $query );
     }
 
 
@@ -62,7 +110,7 @@ class Model implements ModelInterface, FillableInterface {
      * @throws \Exception
      * @return object
      */
-    public function get( int $id ) : object {
+    public function find( int $id ) : object {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );

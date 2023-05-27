@@ -14,24 +14,28 @@ const apiFetchUnparsed = async <Model>(
 
     // @ts-ignore
     return apiFetch(requestOptions).then((response: Response) => {
-        return Promise.all([response.headers, response.json()]).then(([headers, jsonData]) => {
-            return {headers, data: jsonData};
+        return Promise.all([response.json()]).then(([jsonData]) => {
+            return {data: jsonData};
         });
     });
 };
 const useFetchApi = <Model extends object>(url: string, initialFilters?: object, run = true): {
     models: Model[];
+    total: number;
+    totalPage: number;
     filterObject: object;
     setFilterObject: <FilterType>(newFilterObj: FilterType) => void;
     loading: boolean;
     makePostRequest: <DataType>(requestUrl: string, data: DataType, run?: boolean) => Promise<Model>;
     makePutRequest: <DataType>(requestUrl: string, data: DataType, run?: boolean) => Promise<Model>;
-    makeGetRequest: (requestUrl?: string, run?: boolean) => Promise<Model>;
+    makeGetRequest: <DataType>(requestUrl?: string, data?: DataType, run?: boolean) => Promise<Model>;
     makeDeleteRequest: (requestUrl: string, run?: boolean) => Promise<Model>;
 } => {
     const [loading, setLoading] = useState<boolean>(true);
     const [models, setModels] = useState<Model[]>([]);
     const [filterObject, setFilter] = useState<object>(initialFilters || {});
+    const [total, setTotal] = useState<number>(0);
+    const [totalPage, setTotalPage] = useState<number>(0);
 
     const setFilterObject = <FilterType>(newFilterObj: FilterType): void => {
         setFilter((prevFilter) => ({...prevFilter, ...newFilterObj}));
@@ -48,6 +52,8 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         return apiFetchUnparsed(requestUrl, requestOptions).then((response: any) => {
             if (response.data && run) {
                 setModels(response.data);
+                setTotal(response.data.headers['X-WP-Total']);
+                setTotalPage(response.data.headers['X-WP-TotalPages']);
             }
             setLoading(false);
 
@@ -55,8 +61,10 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         });
     }
 
-    const makeGetRequest = async (requestUrl?: string, run = true): Promise<Model> => {
-        return makeRequest(requestUrl || url, 'GET', run);
+    const makeGetRequest = async (requestUrl?: string, data?: any, run = true): Promise<Model> => {
+        console.log(requestUrl, 'response')
+
+        return makeRequest(requestUrl || url, 'GET', run, data);
     };
     const makePostRequest = async (requestUrl: string, data: any, run = true): Promise<Model> => {
         return makeRequest(requestUrl || url, 'POST', run, data);
@@ -78,13 +86,18 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         apiFetchUnparsed(path, initialFilters).then((response: any) => {
             if (response.data.status === 200 && response.data) {
                 setModels(response.data.data);
+                setTotal(response.data.headers['X-WP-Total']);
+                setTotalPage(response.data.headers['X-WP-TotalPages']);
             }
+
             setLoading(false);
         });
-    }, [filterObject, run]);
+    }, [filterObject]);
 
     return {
         models,
+        total,
+        totalPage,
         loading,
         filterObject,
         setFilterObject,

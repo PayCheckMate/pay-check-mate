@@ -11,9 +11,11 @@ interface ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @return object
      */
-    public function all(): object;
+    public function all( array $args ): object;
 
     /**
      * Get a single item.
@@ -24,7 +26,7 @@ interface ModelInterface {
      *
      * @return object
      */
-    public function get( int $id ): object;
+    public function find( int $id ): object;
 
     /**
      * Create a new item.
@@ -59,5 +61,16 @@ interface ModelInterface {
      * @return int
      */
     public function delete( int $id ): int;
+
+    /**
+     * Count the number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @return int
+     */
+    public function count( array $args = [] ): int;
 
 }

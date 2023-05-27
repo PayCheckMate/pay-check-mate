@@ -29,17 +29,18 @@ jobs:
 
             - name: Update composer
               run: composer update --prefer-dist --no-suggest --no-progress
-              
+
             - name: Install dependencies
               run: composer install --prefer-dist --no-suggest --no-progress
 
             - id: changes
               run: |
                   URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
-                  FILES=$(curl --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -s -X GET -G $URL | jq -r '.[] | .filename' | xargs)
-                  echo "::set-output name=files::$FILES"
+                  FILES=$(curl --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G $URL | jq -r -c ".[] | .filename" | xargs)
+                  echo "files=$FILES" >> $GITHUB_ENV
+
             - name: Detect coding standard violations
-              run: vendor/bin/phpcs ${{ steps.changes.outputs.files }} -q --report=checkstyle | cs2pr --graceful-warnings
+              run: vendor/bin/phpcs ${{ env.files }} -q --report=checkstyle | cs2pr --graceful-warnings
 
             - name: Run PHPStan
               run: vendor/bin/phpstan analyze --configuration phpstan.neon --no-progress

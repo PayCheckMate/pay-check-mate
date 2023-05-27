@@ -66,7 +66,9 @@ export const EmployeeList = () => {
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
-                        <h1 className="text-base font-semibold leading-6 text-gray-900">Employee list</h1>
+                        <h1 className="text-base font-semibold leading-6 text-gray-900">
+                            {__('Employee List', 'pcm')}
+                        </h1>
                         <p className="mt-2 text-sm text-gray-700">
                             A list of all the users in your account including their name, title, email and role.
                             {/*<Button onClick={() => setShowModal(true)}>Open Modal</Button>*/}
@@ -75,7 +77,7 @@ export const EmployeeList = () => {
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <Button className="hover:text-white" path='/add-user'>
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true"/>
-                            Add user
+                            {__('Add user', 'pcm')}
                         </Button>
                         {showModal && (
                             <Modal setShowModal={setShowModal}/>

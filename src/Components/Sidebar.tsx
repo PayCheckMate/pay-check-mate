@@ -8,17 +8,23 @@ import {__} from "@wordpress/i18n";
 
 const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
-    {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: true, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('Departments', 'pcm'), href: 'departments', icon: Bars3Icon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('PayCheckMate', 'pcm'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-    {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
-            {title: __('General', 'pcm'), href: 'settings/general', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('PayCheckMate', 'pcm'), href: 'settings/payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Employees', 'pcm'), href: 'settings/employees', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Reports', 'pcm'), href: 'settings/reports', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Designations', 'pcm'), href: 'designations', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+        ]
+    },
+    {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
+        children: [
+            {title: __('Payroll', 'pcm'), href: 'payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('P.F report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Gratuity report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Loan report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Advance salary report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Arrear salary report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
         ]
     },
 ]) as NavigationType[];
@@ -43,7 +49,7 @@ export const Sidebar = () => {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-gray-900/80"/>
+                        <div className="fixed inset-0 bg-gray-900/80" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 flex">
@@ -69,7 +75,7 @@ export const Sidebar = () => {
                                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                                         <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                                             <span className="sr-only">Close sidebar</span>
-                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true"/>
+                                            <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                                         </button>
                                     </div>
                                 </Transition.Child>
@@ -120,7 +126,7 @@ export const Sidebar = () => {
             <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 lg:hidden" onClick={() => setSidebarOpen(true)}>
                     <span className="sr-only">Open sidebar</span>
-                    <Bars3Icon className="h-6 w-6" aria-hidden="true"/>
+                    <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </button>
                 <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
                 <a href="#">

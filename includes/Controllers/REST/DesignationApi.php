@@ -2,21 +2,20 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use Exception;
-use PayCheckMate\Classes\Department;
+use PayCheckMate\Classes\Designation;
+use PayCheckMate\Models\Designation as DesignationModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department as DepartmentModel;
-use PayCheckMate\Requests\DepartmentRequest;
+use PayCheckMate\Requests\DesignationRequest;
 use WP_Error;
-use WP_HTTP_Response;
 use WP_REST_Request;
 use WP_REST_Response;
 
-class DepartmentApi extends RestController implements HookAbleApiInterface {
+class DesignationApi extends RestController implements HookAbleApiInterface {
 
-    protected $namespace = 'pay-check-mate/v1';
-    protected $rest_base = 'departments';
-
+    public function __construct() {
+        $this->namespace = 'pay-check-mate/v1';
+        $this->rest_base = 'designations';
+    }
 
     /**
      * Register the necessary Routes.
@@ -63,18 +62,18 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 					'callback'            => [ $this, 'update_item' ],
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
-						'id'              => [
+						'id'               => [
 							'description' => __( 'Unique identifier for the object.', 'pcm' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'department_name' => [
-							'description' => __( 'Department name.', 'pcm' ),
+						'designation_name' => [
+							'description' => __( 'Designation name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
-						'status'          => [
-							'description' => __( 'Department status.', 'pcm' ),
+						'status'           => [
+							'description' => __( 'Designation status.', 'pcm' ),
 							'type'        => 'number',
 						],
 					],
@@ -97,103 +96,97 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
-     * Check if a given request has access to get items.
+     * Checks if a given request has access to read designations.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function get_items_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to create items.
+     * Checks if a given request has access to create a designation.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function create_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to get a specific item.
+     * Checks if a given request has access to read a designation.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function get_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to update a specific item.
+     * Checks if a given request has access to update a designation.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function update_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to delete a specific item.
+     * Checks if a given request has access to delete a designation.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function delete_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Get a collection of items.
+     * Retrieves a collection of designations.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request Request object.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @return WP_REST_Response
+     * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
-        $department = new Department( new DepartmentModel() );
+        $designation = new Designation( new DesignationModel() );
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => 'DESC',
             'orderby' => 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
-        $departments = $department->all( $args );
-        $data        = [];
-
-        foreach ( $departments as $item ) {
-            $item   = $this->prepare_item_for_response( $item, $request );
+        $designations = $designation->all( $args );
+        $data         = [];
+        foreach ( $designations as $value ) {
+            $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $department->count();
+        $total     = $designation->count();
         $max_pages = ceil( $total / (int) 10 );
 
         $response = new WP_REST_Response( $data );
@@ -205,145 +198,141 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
-     * Create a new item.
+     * Creates one item from the collection.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
-     * @throws Exception
-     *
+     * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
-        $validated_data = new DepartmentRequest( $request->get_params() );
+        $designation    = new Designation( new DesignationModel() );
+        $validated_data = new DesignationRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->create( $validated_data );
-
-        if ( ! $department ) {
+        $designation = $designation->create( $validated_data );
+        if ( ! $designation ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 201 );
+        return new WP_REST_Response( $designation, 201 );
     }
 
     /**
-     * Get one item from the collection.
+     * Retrieves one item from the collection.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request Request object.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
-        $department = new Department( new DepartmentModel() );
-        $department = $department->find( $request->get_param( 'id' ) );
+        $designation = new Designation( new DesignationModel() );
+        $designation = $designation->find( $request->get_param( 'id' ) );
 
-        if ( is_wp_error( $department ) ) {
-            return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );
+        if ( is_wp_error( $designation ) ) {
+            return new WP_Error( 404, $designation->get_error_message(), [ 'status' => 404 ] );
         }
 
-        $item = $this->prepare_item_for_response( $department, $request );
+        $item = $this->prepare_item_for_response( $designation, $request );
         $data = $this->prepare_response_for_collection( $item );
 
         return new WP_REST_Response( $data, 200 );
     }
 
     /**
-     * Update one item from the collection.
+     * Updates one item from the collection.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request Request object.
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
-     * @throws Exception
-     *
+     * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
-        $validated_data = new DepartmentRequest( $request->get_params() );
+        $designation    = new Designation( new DesignationModel() );
+        $validated_data = new DesignationRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->update( $request->get_param( 'id' ), $validated_data );
+        $designation = $designation->update( $request->get_param( 'id' ), $validated_data );
 
-        if ( ! $department ) {
-            return new WP_REST_Response( __( 'Department not found', 'pcm' ), 500 );
+        if ( ! $designation ) {
+            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 200 );
+        return new WP_REST_Response( $designation, 200 );
     }
 
     /**
-     * Delete one item from the collection.
+     * Deletes one item from the collection.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request Request object.
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function delete_item( $request ) {
-        $department = new Department( new DepartmentModel() );
-        $department = $department->delete( $request->get_param( 'id' ) );
+        $designation = new Designation( new DesignationModel() );
+        $designation = $designation->delete( $request['id'] );
 
-        if ( ! $department ) {
+        if ( ! $designation ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
+        return new WP_REST_Response( $designation, 200 );
     }
 
     /**
-     * Get the query params for collections. These are query params that are used for every collection request.
+     * Retrieves the item's schema, conforming to JSON Schema.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array<string, array<string, array<string, array<int, string>|bool|string>>|string> Collection parameters.
+     * @return array<string, mixed> Item schema data.
      */
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'department',
+            'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'              => [
-                    'description' => __( 'Unique identifier for the object', 'pcm' ),
+                'id'               => [
+                    'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'department_name' => [
-                    'description' => __( 'Department name', 'pcm' ),
+                'designation_name' => [
+                    'description' => __( 'The name for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => false,
                     'required'    => true,
                 ],
-                'status'          => [
-                    'description' => __( 'Status', 'pcm' ),
-                    'type'        => 'integer',
+                'status'           => [
+                    'description' => __( 'The status for the designation.', 'pcm' ),
+                    'type'        => 'string',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => false,
+                ],
+                'created_on'       => [
+                    'description' => __( 'The date the designation was created.', 'pcm' ),
+                    'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => false,
                 ],
-                'created_on'      => [
-                    'description' => __( 'Created on', 'pcm' ),
+                'updated_at'       => [
+                    'description' => __( 'The date the designation was last updated.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
-                ],
-                'updated_at'      => [
-                    'description' => __( 'Updated on', 'pcm' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
+                    'readonly'    => false,
                 ],
             ],
         ];

@@ -82,7 +82,7 @@ class Request implements FormRequestInterface {
      */
     public function validate() {
         if ( ! isset( $this->data['_wpnonce'] ) || ! wp_verify_nonce( $this->data['_wpnonce'], $this->get_nonce() ) ) {
-            $this->addError( __( 'Nonce verification failed', 'pcm' ) );
+            $this->addError( 'nonce', __( 'Nonce verification failed', 'pcm' ) );
         }
 
         $this->validate_fillable();
@@ -101,7 +101,7 @@ class Request implements FormRequestInterface {
         if ( ! empty( $fillable ) ) {
             foreach ( $fillable as $item ) {
                 if ( ! array_key_exists( $item, $this->data ) ) {
-                    $this->addError( $item . __( ' key is required for this form request.', 'pcm' ) );
+                    $this->addError( $item, $item . __( ' key is required for this form request.', 'pcm' ) );
                 }
             }
         }
@@ -121,10 +121,12 @@ class Request implements FormRequestInterface {
             function ( $value, $key ) use ( $rules ) {
                 if ( isset( $rules[ $key ] ) ) {
                     $this->data[ $key ] = call_user_func( $rules[ $key ], $value );
+
                     return $this->data;
                 }
 
                 $this->data[ $key ] = $value;
+
                 return $this->data;
             }, $this->data, array_keys( $this->data )
         );
@@ -150,8 +152,8 @@ class Request implements FormRequestInterface {
      *
      * @return void
      */
-    public function addError( string $error ) {
-        $this->error[] = $error;
+    public function addError( string $key, string $error ) {
+        $this->error[ $key ] = $error;
     }
 
     /**

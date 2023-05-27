@@ -1,11 +1,11 @@
 <?php
 
-namespace PayCheckMate\Core;
+namespace PayCheckMate\Traits;
 
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
 
-class Department {
+trait CRUDTrait {
 
     protected ModelInterface $model;
 
@@ -18,10 +18,22 @@ class Department {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @return object
      */
-    public function all(): object {
-        return $this->model->all();
+    public function all( array $args ): object {
+        $args = wp_parse_args(
+            $args, [
+                'limit'  => 20,
+                'offset'  => 0,
+                'order'   => 'DESC',
+                'orderby' => 'id',
+                'status'  => '',
+            ]
+        );
+
+        return $this->model->all( $args );
     }
 
     /**
@@ -33,8 +45,8 @@ class Department {
      *
      * @return object
      */
-    public function get( int $id ): object {
-        return $this->model->get( $id );
+    public function find( int $id ): object {
+        return $this->model->find( $id );
     }
 
     /**
@@ -77,4 +89,16 @@ class Department {
         return $this->model->delete( $id );
     }
 
+    /**
+     * Count the number of items.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     *
+     * @return int
+     */
+    public function count( array $args = [] ): int {
+        return $this->model->count( $args );
+    }
 }
