@@ -1,4 +1,3 @@
-import { PlusIcon } from '@heroicons/react/20/solid'
 import {__} from "@wordpress/i18n";
 import {XMarkIcon} from "@heroicons/react/24/outline";
 

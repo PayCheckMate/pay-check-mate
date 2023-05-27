@@ -15,7 +15,7 @@ type TableProps = {
 }
 
 export const Table = ({columns = [], data = [], isLoading = true}: TableProps) => {
-    if (!data.length){
+    if (!data.length && !isLoading){
         return (
             <>
                 <Card>
