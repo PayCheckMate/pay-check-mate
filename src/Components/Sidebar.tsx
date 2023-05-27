@@ -14,7 +14,7 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Designation', 'pcm'), href: 'designation', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Designations', 'pcm'), href: 'designations', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
         ]
     },
     {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],

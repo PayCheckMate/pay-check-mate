@@ -3,15 +3,15 @@ import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
-import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
+import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
 import useFetchApi from "../../Helpers/useFetchApi2";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 
-export const DepartmentList = () => {
-    const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
+export const DesignationList = () => {
+    const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [showModal, setShowModal] = useState(false);
-    const [departments, setDepartments] = useState<DepartmentType[]>([])
+    const [designations, setDesignations] = useState<DesignationType[]>([])
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const {
@@ -22,30 +22,30 @@ export const DepartmentList = () => {
         makePutRequest,
         makePostRequest,
         setFilterObject,
-    } = useFetchApi<DepartmentType>('/pay-check-mate/v1/departments');
+    } = useFetchApi<DesignationType>('/pay-check-mate/v1/designations');
     useEffect(() => {
         if (models) {
-            setDepartments(models as DepartmentType[]);
+            setDesignations(models as DesignationType[]);
             setTotalPages(totalPage as number);
         }
     }, [models]);
 
     const columns = [
-        {title: 'Department name', dataIndex: 'department_name'},
+        {title: 'Designation name', dataIndex: 'designation_name'},
         {
             title: 'Status', dataIndex: 'status',
-            render: (text: string, record: DepartmentType) => {
+            render: (text: string, record: DesignationType) => {
                 const status = parseInt(String(record.status))
                 return (
-                    <span className={`${status === DepartmentStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {status === DepartmentStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
+                    <span className={`${status === DesignationStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
+                        {status === DesignationStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
                     </span>
                 )
             }
         },
         {
             title: 'Created on', dataIndex: 'created_on',
-            render: (text: string, record: DepartmentType) => {
+            render: (text: string, record: DesignationType) => {
                 return (
                     <span>
                         {record.created_on}
@@ -56,12 +56,12 @@ export const DepartmentList = () => {
         {
             title: 'Action',
             dataIndex: 'action',
-            render: (text: string, record: DepartmentType) => (
+            render: (text: string, record: DesignationType) => (
                 <div className="flex">
                     <button className="text-indigo-600 hover:text-indigo-900" onClick={()=>handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
-                    {parseInt(String(record.status)) === DepartmentStatus.Active && (
+                    {parseInt(String(record.status)) === DesignationStatus.Active && (
                         <>
                             <span className="mx-2 text-gray-300">|</span>
                             <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
@@ -69,7 +69,7 @@ export const DepartmentList = () => {
                             </button>
                         </>
                     )}
-                    {parseInt(String(record.status)) === DepartmentStatus.Inactive && (
+                    {parseInt(String(record.status)) === DesignationStatus.Inactive && (
                         <>
                             <span className="mx-2 text-gray-300">|</span>
                             <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
@@ -84,8 +84,8 @@ export const DepartmentList = () => {
 
     const deleteDepartment = (id: number) => {
         try {
-            makeDeleteRequest(`/pay-check-mate/v1/departments/${id}`, false).then((data: unknown) => {
-                setDepartments(models.filter((department: DepartmentType) => department.id !== id))
+            makeDeleteRequest(`/pay-check-mate/v1/designations/${id}`, false).then((data: unknown) => {
+                setDesignations(models.filter((department: DesignationType) => department.id !== id))
             }).catch((e: unknown) => {
                 console.log(e);
             })
@@ -94,19 +94,19 @@ export const DepartmentList = () => {
         }
     }
 
-    const getDepartments = (id: number) => {
-        return departments.find((department: DepartmentType) => department.id === id);
+    const getDesignations = (id: number) => {
+        return designations.find((department: DesignationType) => department.id === id);
     }
 
     const handleStatus = (id: number, status: number) => {
-        const department_name = getDepartments(id)?.department_name;
+        const department_name = getDesignations(id)?.designation_name;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, department_name, status, _wpnonce};
         try {
-            makePutRequest(`/pay-check-mate/v1/departments/${id}`, data, false).then((data: unknown) => {
+            makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
                 if (data) {
-                    setDepartments(models.map((department: DepartmentType) => {
+                    setDesignations(models.map((department: DesignationType) => {
                         if (department.id === id) {
                             department.status = status;
                         }
@@ -121,7 +121,7 @@ export const DepartmentList = () => {
         }
     }
 
-    const handleModal = (data: DepartmentType) => {
+    const handleModal = (data: DesignationType) => {
         if (data) {
             setFormData(data)
         }
@@ -141,10 +141,10 @@ export const DepartmentList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data: DepartmentType) => {
-                    setDepartments(models.map((department: DepartmentType) => {
+                makePutRequest(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data: DesignationType) => {
+                    setDesignations(models.map((department: DesignationType) => {
                         if (department.id === formData.id) {
-                            department.department_name = formData.department_name;
+                            department.designation_name = formData.designation_name;
                         }
                         return department;
                     }))
@@ -157,8 +157,8 @@ export const DepartmentList = () => {
             }
         } else {
             try {
-                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data: DepartmentType) => {
-                    setDepartments([...models, formData])
+                makePostRequest('/pay-check-mate/v1/designations', data, false).then((data: DesignationType) => {
+                    setDesignations([...models, formData])
                     setShowModal(false)
                 }).catch((e: unknown) => {
                     console.log(e);
@@ -174,11 +174,11 @@ export const DepartmentList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Department list', 'pcm')}
+                            {__('Designation list', 'pcm')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={()=>handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
+                        <Button onClick={()=>handleModal({} as DesignationType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
                             {__('Add department', 'pcm')}
                         </Button>
@@ -187,7 +187,7 @@ export const DepartmentList = () => {
                                 {/*Create a form to save department*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="department_name" id="department_name" value={formData.department_name} onChange={(e) => setFormData({...formData, department_name: e.target.value})} />
+                                        <FormInput label={__('Department name', 'pcm')} name="department_name" id="department_name" value={formData.designation_name} onChange={(e) => setFormData({...formData, designation_name: e.target.value})} />
                                         <Button className="mt-4" onClick={()=>handleSubmit(event)}>
                                             {__('Add department', 'pcm')}
                                         </Button>
@@ -199,7 +199,7 @@ export const DepartmentList = () => {
                 </div>
                 <Table
                     columns={columns}
-                    data={departments}
+                    data={designations}
                     isLoading={loading}
                     totalPage={totalPages}
                     pageSize={10}

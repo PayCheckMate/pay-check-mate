@@ -176,16 +176,24 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_items( $request ): WP_REST_Response {
-        $departments = new Department( new DepartmentModel() );
-        $departments = $departments->all();
+        $department = new Department( new DepartmentModel() );
+        $args        = [
+            'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'   => 'DESC',
+            'orderby' => 'id',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+        ];
+
+        $departments = $department->all( $args );
         $data        = [];
 
-        foreach ( $departments as $department ) {
-            $item   = $this->prepare_item_for_response( $department, $request );
+        foreach ( $departments as $item ) {
+            $item   = $this->prepare_item_for_response( $item, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = count( $data );
+        $total     = $department->count();
         $max_pages = ceil( $total / (int) 10 );
 
         $response = new WP_REST_Response( $data );

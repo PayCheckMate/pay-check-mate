@@ -11,9 +11,11 @@ interface ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @return object
      */
-    public function all(): object;
+    public function all( array $args ): object;
 
     /**
      * Get a single item.

@@ -9,6 +9,7 @@ import {AddEmployee} from "./AddEmployee";
 import {DepartmentList} from "./Department/DepartmentList";
 import {EmptyState} from "../Components/EmptyState";
 import {Card} from "../Components/Card";
+import {DesignationList} from "./Designation/DesignationList";
 
 export default function Main() {
     useSelect((select) => {
@@ -27,6 +28,7 @@ export default function Main() {
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="employees" element={<EmployeeList/>}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="add-user" element={<AddEmployee/>}/>)}
                                 <Route path='departments' element={<DepartmentList />}/>
+                                <Route path='designations' element={<DesignationList />}/>
                                 <Route path="*" element={<Card><EmptyState /></Card>} />
                             </Routes>
                         </div>

@@ -170,19 +170,26 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
-        $designation  = new Designation( new DesignationModel() );
-        $designations = $designation->all();
-        $data         = [];
+        $designation = new Designation( new DesignationModel() );
+        $args        = [
+            'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'   => 'DESC',
+            'orderby' => 'id',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+        ];
 
-        foreach ( $designations as $designation ) {
-            $item   = $this->prepare_item_for_response( $designation, $request );
+        $designations = $designation->all( $args );
+        $data         = [];
+        foreach ( $designations as $value ) {
+            $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = count( $data );
+        $total     = $designation->count();
         $max_pages = ceil( $total / (int) 10 );
 
-        $response = new \WP_REST_Response( $data );
+        $response = new WP_REST_Response( $data );
 
         $response->header( 'X-WP-Total', (string) $total );
         $response->header( 'X-WP-TotalPages', (string) $max_pages );
@@ -261,7 +268,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         }
 
         return new WP_REST_Response( $designation, 200 );
-	}
+    }
 
     /**
      * Deletes one item from the collection.
@@ -281,7 +288,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         }
 
         return new WP_REST_Response( $designation, 200 );
-	}
+    }
 
     /**
      * Retrieves the item's schema, conforming to JSON Schema.
