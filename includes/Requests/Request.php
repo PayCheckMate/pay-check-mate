@@ -121,10 +121,12 @@ class Request implements FormRequestInterface {
             function ( $value, $key ) use ( $rules ) {
                 if ( isset( $rules[ $key ] ) ) {
                     $this->data[ $key ] = call_user_func( $rules[ $key ], $value );
+
                     return $this->data;
                 }
 
                 $this->data[ $key ] = $value;
+
                 return $this->data;
             }, $this->data, array_keys( $this->data )
         );
@@ -151,7 +153,7 @@ class Request implements FormRequestInterface {
      * @return void
      */
     public function addError( string $key, string $error ) {
-        $this->error[$key] = $error;
+        $this->error[ $key ] = $error;
     }
 
     /**
