@@ -40,6 +40,7 @@ class Databases {
     public function create_tables() {
         $this->create_table_departments();
         $this->create_table_designation();
+        $this->create_table_salary_head();
     }
 
     /**
@@ -77,6 +78,29 @@ class Databases {
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}designation` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `designation_name` varchar(255) NOT NULL,
+                `status` tinyint(1) NOT NULL DEFAULT '1',
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
+
+    /**
+     * Create table salary head.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_salary_head() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}salary_head` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `head_name` varchar(255) NOT NULL,
+                `head_type` tinyint(1) NOT NULL DEFAULT '1' Comment '1 = Earning, 2 = Deduction',
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
