@@ -2,20 +2,21 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use Exception;
-use PayCheckMate\Classes\Department;
-use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department as DepartmentModel;
-use PayCheckMate\Requests\DepartmentRequest;
 use WP_Error;
-use WP_HTTP_Response;
+use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
+use PayCheckMate\Classes\Department;
+use PayCheckMate\Requests\DepartmentRequest;
+use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Models\Department as DepartmentModel;
 
 class DepartmentApi extends RestController implements HookAbleApiInterface {
 
-    protected $namespace = 'pay-check-mate/v1';
-    protected $rest_base = 'departments';
+    public function __construct() {
+        $this->namespace = 'pay-check-mate/v1';
+        $this->rest_base = 'departments';
+    }
 
 
     /**

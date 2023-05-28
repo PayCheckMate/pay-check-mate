@@ -2,8 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Designation extends Model {
-
+class SalaryHead extends Model {
 
     /**
      * The table associated with the model.
@@ -14,15 +13,22 @@ class Designation extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'pay_check_mate_designations';
+    protected static string $table = 'pay_check_mate_salary_heads';
 
-    protected static array $fillable = [ 'designation_name' ];
+    /**
+     * @var array|string[] $fillable
+     */
+    protected static array $fillable = [ 'head_name' ];
 
+    /**
+     * @var array|string[] $columns
+     */
     protected static array $columns = [
-        'designation_name' => '%s',
-        'status'           => '%d',
-        'created_on'       => '%s',
-        'updated_at'       => '%s',
+        'head_name'  => '%s',
+        'head_type'  => '%s',
+        'status'     => '%d',
+        'created_on' => '%s',
+        'updated_at' => '%s',
     ];
 
     /**
@@ -58,6 +64,22 @@ class Designation extends Model {
      */
     public function get_created_on( string $date ) : string {
         return date( 'd-m-Y', strtotime( $date ) );
+    }
+
+    /**
+     * Get head type string
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $head_type
+     *
+     * @return array
+     */
+    public function get_head_type( string $head_type ): array {
+        return [
+            'head_type'      => $head_type,
+            'head_type_text' =>$head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' )
+        ];
     }
 
 }

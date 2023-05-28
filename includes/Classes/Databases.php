@@ -1,5 +1,5 @@
 <?php
-namespace PayCheckMate\Core;
+namespace PayCheckMate\Classes;
 
 class Databases {
 
@@ -75,7 +75,7 @@ class Databases {
     public function create_table_designation() {
         $this->include_db_delta();
 
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}designation` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}designations` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `designation_name` varchar(255) NOT NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
@@ -97,7 +97,7 @@ class Databases {
     public function create_table_salary_head() {
         $this->include_db_delta();
 
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}salary_head` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}salary_heads` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `head_name` varchar(255) NOT NULL,
                 `head_type` tinyint(1) NOT NULL DEFAULT '1' Comment '1 = Earning, 2 = Deduction',

@@ -323,7 +323,15 @@ class Model implements ModelInterface, FillableInterface {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
-                $item->$column = call_user_func( [ $this, $method ], $item->$column );
+                $value = call_user_func( [ $this, $method ], $item->$column );
+                if( is_array( $value ) ) {
+                    foreach ( $value as $key => $val ) {
+                        $item->$key = $val;
+                    }
+                    continue;
+                }
+
+                $item->$column = $value;
             }
         }
 
