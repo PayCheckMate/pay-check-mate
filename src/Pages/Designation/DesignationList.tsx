@@ -82,18 +82,6 @@ export const DesignationList = () => {
         }
     ]
 
-    const deleteDepartment = (id: number) => {
-        try {
-            makeDeleteRequest(`/pay-check-mate/v1/designations/${id}`, false).then((data: unknown) => {
-                setDesignations(models.filter((designation: DesignationType) => designation.id !== id))
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
-        }
-    }
-
     const getDesignations = (id: number) => {
         return designations.find((designation: DesignationType) => designation.id === id);
     }

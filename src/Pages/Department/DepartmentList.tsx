@@ -82,18 +82,6 @@ export const DepartmentList = () => {
         }
     ]
 
-    const deleteDepartment = (id: number) => {
-        try {
-            makeDeleteRequest(`/pay-check-mate/v1/departments/${id}`, false).then((data: unknown) => {
-                setDepartments(models.filter((department: DepartmentType) => department.id !== id))
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
-        }
-    }
-
     const getDepartments = (id: number) => {
         return departments.find((department: DepartmentType) => department.id === id);
     }

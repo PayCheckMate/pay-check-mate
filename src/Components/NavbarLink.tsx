@@ -55,7 +55,7 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
                                                 aria-hidden="true"
                                             />
                                         )}
-                                        <div className="flex items-center justify-between w-full">
+                                        <div onClick={()=> handleLinkClick(index)} className="flex items-center justify-between w-full">
                                             <div>{item.title}</div>
                                             <ChevronDownIcon
                                                 className={classNames(
