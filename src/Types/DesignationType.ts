@@ -1,7 +1,7 @@
 export interface DesignationType {
     id: number;
     designation_name: string;
-    status: number;
+    status: DesignationStatus;
     created_on: string;
     updated_at: string;
 }

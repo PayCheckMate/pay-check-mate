@@ -73,7 +73,7 @@ class SalaryHead extends Model {
      *
      * @param string $head_type
      *
-     * @return array
+     * @return array<string, string>
      */
     public function get_head_type( string $head_type ): array {
         return [

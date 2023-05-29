@@ -2,8 +2,8 @@
 
 namespace PayCheckMate\Classes;
 
-use PayCheckMate\Traits\CRUDTrait;
+use PayCheckMate\Traits\CrudTrait;
 
 class SalaryHead {
-    use CRUDTrait;
+    use CrudTrait;
 }

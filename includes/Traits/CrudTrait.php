@@ -5,7 +5,7 @@ namespace PayCheckMate\Traits;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
 
-trait CRUDTrait {
+trait CrudTrait {
 
     protected ModelInterface $model;
 

@@ -2,11 +2,14 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use PayCheckMate\Classes\SalaryHead;
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
-use PayCheckMate\Contracts\HookAbleApiInterface;
+use Exception;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use PayCheckMate\Classes\SalaryHead;
+use PayCheckMate\Requests\SalaryHeadRequest;
+use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 
 class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
@@ -40,6 +43,62 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 				'schema' => [ $this, 'get_public_item_schema' ],
 			],
         );
+
+        register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_item' ],
+					'permission_callback' => [ $this, 'get_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'update_item' ],
+					'permission_callback' => [ $this, 'update_item_permissions_check' ],
+					'args'                => [
+						'id'              => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+						'head_name' => [
+							'description' => __( 'Salary head name.', 'pcm' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+                        'head_type' => [
+                            'description' => __( 'Salary head type.', 'pcm' ),
+                            'type'        => 'string',
+                            'required'    => true,
+                        ],
+						'status'          => [
+							'description' => __( 'Department status.', 'pcm' ),
+							'type'        => 'number',
+						],
+					],
+				],
+				[
+					'methods'             => \WP_REST_Server::DELETABLE,
+					'callback'            => [ $this, 'delete_item' ],
+					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
+					'args'                => [
+						'id' => [
+							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+					],
+				],
+				'schema' => [ $this, 'get_public_item_schema' ],
+			],
+        );
     }
 
     /**
@@ -65,6 +124,45 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function create_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to read a item.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function get_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to update a item.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function update_item_permissions_check( $request ): bool {
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to delete a item.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     *
+     * @return bool
+     */
+    public function delete_item_permissions_check( $request ): bool {
         return true;
     }
 
@@ -106,6 +204,103 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Create a new item.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request
+     *
+     * @throws Exception
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function create_item( $request ) {
+        $department     = new SalaryHead( new SalaryHeadModel() );
+        $validated_data = new SalaryHeadRequest( $request->get_params() );
+        if ( ! empty( $validated_data->error ) ) {
+            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+        }
+
+        $department = $department->create( $validated_data );
+
+        if ( ! $department ) {
+            return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
+        }
+
+        return new WP_REST_Response( $department, 201 );
+    }
+
+    /**
+     * Get one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request Request object.
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function get_item( $request ) {
+        $department = new SalaryHead( new SalaryHeadModel() );
+        $department = $department->find( $request->get_param( 'id' ) );
+
+        if ( is_wp_error( $department ) ) {
+            return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );
+        }
+
+        $item = $this->prepare_item_for_response( $department, $request );
+        $data = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
+    }
+
+    /**
+     * Update one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request Request object.
+     *
+     * @throws Exception
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function update_item( $request ) {
+        $salary_head     = new SalaryHead( new SalaryHeadModel() );
+        $validated_data = new SalaryHeadRequest( $request->get_params() );
+        if ( ! empty( $validated_data->error ) ) {
+            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+        }
+
+        $salary_heads = $salary_head->update( $request->get_param( 'id' ), $validated_data );
+
+        if ( ! $salary_heads ) {
+            return new WP_Error( 500, __( 'Could not update department.', 'pcm' ) );
+        }
+
+        return new WP_REST_Response( __( 'Department updated', 'pcm' ), 200 );
+    }
+
+    /**
+     * Delete one item from the collection.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request Request object.
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function delete_item( $request ) {
+        $department = new SalaryHead( new SalaryHeadModel() );
+        $department = $department->delete( $request->get_param( 'id' ) );
+
+        if ( ! $department ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
+
+        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
+    }
+
+    /**
      * Retrieves the item's schema, conforming to JSON Schema.
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -118,40 +313,40 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'               => [
+                'id'             => [
                     'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'head_name'             => [
+                'head_name'      => [
                     'description' => __( 'Salary Head Name', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
-                'head_type'             => [
+                'head_type'      => [
                     'description' => __( 'Salary Head Type', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'head_type_text'             => [
+                'head_type_text' => [
                     'description' => __( 'Salary Head Type in Text', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
                 ],
-                'status'             => [
+                'status'         => [
                     'description' => __( 'Salary Head Status', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'created_on' => [
+                'created_on'     => [
                     'description' => __( 'The date the object was created.', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'updated_at' => [
+                'updated_at'     => [
                     'description' => __( 'The date the object was last updated.', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date-time',

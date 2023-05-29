@@ -1,7 +1,7 @@
 export interface DepartmentType {
     id: number;
     department_name: string;
-    status: number;
+    status: DepartmentStatus;
     created_on: string;
     updated_at: string;
 }
