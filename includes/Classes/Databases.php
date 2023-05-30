@@ -103,6 +103,8 @@ class Databases {
                 `head_type` tinyint(1) NOT NULL DEFAULT '1' Comment '1 = Earning, 2 = Deduction',
                 `head_amount` decimal(10,2) NOT NULL,
                 `is_percentage` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
+                `is_taxable` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
+                `priority` int(11) NOT NULL DEFAULT '0',
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,

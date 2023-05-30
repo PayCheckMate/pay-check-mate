@@ -2,6 +2,8 @@
 
 namespace PayCheckMate\Requests;
 
+use PayCheckMate\Models\SalaryHead;
+
 class SalaryHeadRequest extends Request {
 
     protected static string $nonce = 'pay_check_mate_nonce';

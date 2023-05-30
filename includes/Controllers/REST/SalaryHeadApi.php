@@ -356,6 +356,16 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
+                'is_taxable'     => [
+                    'description' => __( 'Salary Head is Taxable', 'pcm' ),
+                    'type'        => 'boolean',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'Priority'       => [
+                    'description' => __( 'Salary Head Priority', 'pcm' ),
+                    'type'        => 'integer',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
                 'status'         => [
                     'description' => __( 'Salary Head Status', 'pcm' ),
                     'type'        => 'string',

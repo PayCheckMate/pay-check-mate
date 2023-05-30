@@ -4,7 +4,6 @@ namespace PayCheckMate\Models;
 
 
 use Exception;
-use PayCheckMate\Contracts\FillableInterface;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
 use WP_Error;
@@ -12,7 +11,7 @@ use WP_Error;
 /**
  * Base Model for all the models to extend with Late Static Binding.
  */
-class Model implements ModelInterface, FillableInterface {
+class Model implements ModelInterface {
 
     /**
      * The table associated with the model.
@@ -102,7 +101,7 @@ class Model implements ModelInterface, FillableInterface {
 
 
     /**
-     * Get the fillable attributes.
+     * Get the item from the database.
      *
      * @since PAY_CHECK_MATE_SINCE
      *

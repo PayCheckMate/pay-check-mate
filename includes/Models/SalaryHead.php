@@ -16,11 +16,6 @@ class SalaryHead extends Model {
     protected static string $table = 'pay_check_mate_salary_heads';
 
     /**
-     * @var array|string[] $fillable
-     */
-    protected static array $fillable = [ 'head_name', 'head_type', 'head_amount', 'is_percentage' ];
-
-    /**
      * @var array|string[] $columns
      */
     protected static array $columns = [
