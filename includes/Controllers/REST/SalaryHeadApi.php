@@ -10,7 +10,6 @@ use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Requests\SalaryHeadRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
-use const _PHPStan_3b6bd74b1\__;
 
 class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
