@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Core;
+namespace PayCheckMate\Classes;
 
 class PayCheckMateUserRoles {
 

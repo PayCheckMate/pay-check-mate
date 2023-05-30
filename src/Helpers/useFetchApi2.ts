@@ -50,11 +50,6 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         }
 
         return apiFetchUnparsed(requestUrl, requestOptions).then((response: any) => {
-            if (response.data && run) {
-                setModels(response.data);
-                setTotal(response.data.headers['X-WP-Total']);
-                setTotalPage(response.data.headers['X-WP-TotalPages']);
-            }
             setLoading(false);
 
             return response.data;
@@ -92,7 +87,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
 
             setLoading(false);
         });
-    }, [filterObject]);
+    }, [filterObject, run]);
 
     return {
         models,

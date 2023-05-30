@@ -60,11 +60,13 @@ class Assets implements HookAbleInterface {
      * @return void
      */
     public function register_translations(): void {
+        $user = wp_get_current_user();
+        unset( $user->user_pass );
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
 				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),
 				'pay_check_mate_nonce' => wp_create_nonce( 'pay_check_mate_nonce' ),
-				'currentUser'          => wp_get_current_user(),
+				'currentUser'          => $user,
 			],
         );
     }

@@ -2,13 +2,14 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use PayCheckMate\Classes\Designation;
-use PayCheckMate\Models\Designation as DesignationModel;
-use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Requests\DesignationRequest;
 use WP_Error;
+use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
+use PayCheckMate\Classes\Designation;
+use PayCheckMate\Requests\DesignationRequest;
+use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Models\Designation as DesignationModel;
 
 class DesignationApi extends RestController implements HookAbleApiInterface {
 
@@ -204,7 +205,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
-     * @throws \Exception
+     * @throws Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
@@ -215,7 +216,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         }
 
         $designation = $designation->create( $validated_data );
-        if ( ! $designation ) {
+        if ( is_wp_error( $designation ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 

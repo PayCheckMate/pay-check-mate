@@ -35,9 +35,9 @@ interface ModelInterface {
      *
      * @param Request $data
      *
-     * @return int
+     * @return object
      */
-    public function create( Request $data ): int;
+    public function create( Request $data ): object;
 
     /**
      * Update an item.

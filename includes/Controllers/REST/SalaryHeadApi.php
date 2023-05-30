@@ -2,25 +2,24 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use WP_Error;
 use Exception;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\Department;
-use PayCheckMate\Requests\DepartmentRequest;
+use PayCheckMate\Classes\SalaryHead;
+use PayCheckMate\Requests\SalaryHeadRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department as DepartmentModel;
+use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 
-class DepartmentApi extends RestController implements HookAbleApiInterface {
+class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
     public function __construct() {
         $this->namespace = 'pay-check-mate/v1';
-        $this->rest_base = 'departments';
+        $this->rest_base = 'salary-heads';
     }
 
-
     /**
-     * Register the necessary Routes.
+     * Register the routes for the objects of the controller.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
@@ -69,11 +68,36 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'department_name' => [
-							'description' => __( 'Department name.', 'pcm' ),
+						'head_name' => [
+							'description' => __( 'Salary head name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
+                        'head_type' => [
+                            'description' => __( 'Salary head type.', 'pcm' ),
+                            'type'        => 'integer',
+                            'required'    => true,
+                        ],
+                        'head_amount' => [
+                            'description' => __( 'Salary head amount.', 'pcm' ),
+                            'type'        => 'number',
+                            'required'    => true,
+                        ],
+                        'is_percentage' => [
+                            'description' => __( 'Salary head is percentage.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
+                        'is_taxable' => [
+                            'description' => __( 'Salary head is taxable.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
+                        'priority' => [
+                            'description' => __( 'Salary head priority.', 'pcm' ),
+                            'type'        => 'integer',
+                            'required'    => true,
+                        ],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
 							'type'        => 'number',
@@ -98,103 +122,97 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
-     * Check if a given request has access to get items.
+     * Checks if a given request has access to create items.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function get_items_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to create items.
+     * Checks if a given request has access to create items.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function create_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to get a specific item.
+     * Checks if a given request has access to read a item.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function get_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to update a specific item.
+     * Checks if a given request has access to update a item.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function update_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Check if a given request has access to delete a specific item.
+     * Checks if a given request has access to delete a item.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request
+     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
      * @return bool
      */
     public function delete_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return true;
     }
 
     /**
-     * Get a collection of items.
+     * Retrieves a collection of designations.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string>> $request Request object.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @return WP_REST_Response
+     * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
-        $department = new Department( new DepartmentModel() );
+        $salary_head = new SalaryHead( new SalaryHeadModel() );
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => 'DESC',
             'orderby' => 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
-        $departments = $department->all( $args );
-        $data        = [];
-
-        foreach ( $departments as $item ) {
-            $item   = $this->prepare_item_for_response( $item, $request );
+        $salary_heads = $salary_head->all( $args );
+        $data         = [];
+        foreach ( $salary_heads as $value ) {
+            $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $department->count();
+        $total     = $salary_head->count();
         $max_pages = ceil( $total / (int) 10 );
 
         $response = new WP_REST_Response( $data );
@@ -217,19 +235,19 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
-        $validated_data = new DepartmentRequest( $request->get_params() );
+        $salary_head = new SalaryHead( new SalaryHeadModel() );
+        $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->create( $validated_data );
+        $head = $salary_head->create( $validated_data );
 
-        if ( is_wp_error( $department ) ) {
+        if ( is_wp_error( $head ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 201 );
+        return new WP_REST_Response( $head, 201 );
     }
 
     /**
@@ -242,7 +260,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
-        $department = new Department( new DepartmentModel() );
+        $department = new SalaryHead( new SalaryHeadModel() );
         $department = $department->find( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
@@ -267,19 +285,19 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
-        $validated_data = new DepartmentRequest( $request->get_params() );
+        $salary_head     = new SalaryHead( new SalaryHeadModel() );
+        $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->update( $request->get_param( 'id' ), $validated_data );
+        $salary_heads = $salary_head->update( $request->get_param( 'id' ), $validated_data );
 
-        if ( ! $department ) {
-            return new WP_REST_Response( __( 'Department not found', 'pcm' ), 500 );
+        if ( ! $salary_heads ) {
+            return new WP_Error( 500, __( 'Could not update department.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 200 );
+        return new WP_REST_Response( __( 'Salary head updated', 'pcm' ), 200 );
     }
 
     /**
@@ -292,7 +310,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function delete_item( $request ) {
-        $department = new Department( new DepartmentModel() );
+        $department = new SalaryHead( new SalaryHeadModel() );
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {
@@ -303,48 +321,77 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
-     * Get the query params for collections. These are query params that are used for every collection request.
+     * Retrieves the item's schema, conforming to JSON Schema.
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array<string, array<string, array<string, array<int, string>|bool|string>>|string> Collection parameters.
+     * @return array<string, mixed> Item schema data.
      */
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'department',
+            'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'              => [
-                    'description' => __( 'Unique identifier for the object', 'pcm' ),
+                'id'             => [
+                    'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'department_name' => [
-                    'description' => __( 'Department name', 'pcm' ),
+                'head_name'      => [
+                    'description' => __( 'Salary Head Name', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => false,
                     'required'    => true,
                 ],
-                'status'          => [
-                    'description' => __( 'Status', 'pcm' ),
+                'head_type'      => [
+                    'description' => __( 'Salary Head Type', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => false,
                 ],
-                'created_on'      => [
-                    'description' => __( 'Created on', 'pcm' ),
+                'head_type_text' => [
+                    'description' => __( 'Salary Head Type in Text', 'pcm' ),
                     'type'        => 'string',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'context'     => [ 'view' ],
                     'readonly'    => true,
                 ],
-                'updated_at'      => [
-                    'description' => __( 'Updated on', 'pcm' ),
+                'head_amount'    => [
+                    'description' => __( 'Salary Head Amount', 'pcm' ),
+                    'type'        => 'number',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'is_percentage'  => [
+                    'description' => __( 'Salary Head is Percentage', 'pcm' ),
+                    'type'        => 'boolean',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'is_taxable'     => [
+                    'description' => __( 'Salary Head is Taxable', 'pcm' ),
+                    'type'        => 'integer',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'priority'       => [
+                    'description' => __( 'Salary Head Priority', 'pcm' ),
+                    'type'        => 'integer',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'status'         => [
+                    'description' => __( 'Salary Head Status', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
+                ],
+                'created_on'     => [
+                    'description' => __( 'The date the object was created.', 'pcm' ),
+                    'type'        => 'string',
+                    'format'      => 'date-time',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'updated_at'     => [
+                    'description' => __( 'The date the object was last updated.', 'pcm' ),
+                    'type'        => 'string',
+                    'format'      => 'date-time',
+                    'context'     => [ 'view', 'edit' ],
                 ],
             ],
         ];

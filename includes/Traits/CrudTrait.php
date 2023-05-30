@@ -5,7 +5,7 @@ namespace PayCheckMate\Traits;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
 
-trait CRUDTrait {
+trait CrudTrait {
 
     protected ModelInterface $model;
 
@@ -56,9 +56,9 @@ trait CRUDTrait {
      *
      * @param Request $data
      *
-     * @return int
+     * @return object
      */
-    public function create( Request $data ): int {
+    public function create( Request $data ): object {
         return $this->model->create( $data );
     }
 

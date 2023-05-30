@@ -4,6 +4,6 @@ namespace PayCheckMate\Classes;
 
 use PayCheckMate\Traits\CrudTrait;
 
-class Department {
+class SalaryHead {
     use CrudTrait;
 }

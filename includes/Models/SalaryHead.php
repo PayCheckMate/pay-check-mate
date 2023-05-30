@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Department extends Model {
+class SalaryHead extends Model {
 
     /**
      * The table associated with the model.
@@ -13,16 +13,21 @@ class Department extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'pay_check_mate_departments';
+    protected static string $table = 'pay_check_mate_salary_heads';
 
     /**
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'department_name' => '%s',
-        'status'          => '%d',
-        'created_on'      => '%s',
-        'updated_at'      => '%s',
+        'head_name'     => '%s',
+        'head_type'     => '%s',
+        'head_amount'   => '%f',
+        'is_percentage' => '%d',
+        'is_taxable'    => '%d',
+        'priority'      => '%d',
+        'status'        => '%d',
+        'created_on'    => '%s',
+        'updated_at'    => '%s',
     ];
 
     /**
@@ -58,6 +63,22 @@ class Department extends Model {
      */
     public function get_created_on( string $date ) : string {
         return date( 'd-m-Y', strtotime( $date ) );
+    }
+
+    /**
+     * Get head type string
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $head_type
+     *
+     * @return array<string, string>
+     */
+    public function get_head_type( string $head_type ) : array {
+        return [
+            'head_type'      => $head_type,
+            'head_type_text' => $head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' ),
+        ];
     }
 
 }

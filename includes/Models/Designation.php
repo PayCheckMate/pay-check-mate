@@ -14,9 +14,7 @@ class Designation extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'pay_check_mate_designation';
-
-    protected static array $fillable = [ 'designation_name' ];
+    protected static string $table = 'pay_check_mate_designations';
 
     protected static array $columns = [
         'designation_name' => '%s',
