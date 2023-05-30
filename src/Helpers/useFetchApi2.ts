@@ -87,7 +87,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
 
             setLoading(false);
         });
-    }, [filterObject]);
+    }, [filterObject, run]);
 
     return {
         models,

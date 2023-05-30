@@ -8,6 +8,7 @@ import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 import {HeadType, SalaryHeadStatus, SalaryHeadType, SelectBoxType} from "../../Types/SalaryHeadType";
 import {SelectBox} from "../../Components/SelectBox";
+import {FormCheckBox} from "../../Components/FormCheckBox";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -34,7 +35,7 @@ export const SalaryHeadList = () => {
         makePutRequest,
         makePostRequest,
         setFilterObject,
-    } = useFetchApi<SalaryHeadType>('/pay-check-mate/v1/salary-heads');
+    } = useFetchApi<SalaryHeadType>('/pay-check-mate/v1/salary-heads', {'per_page': 10, 'orderby': 'priority', 'order': 'asc'});
     useEffect(() => {
         if (models) {
             setSalaryHeads(models as SalaryHeadType[]);
@@ -61,12 +62,24 @@ export const SalaryHeadList = () => {
                 return (
                     <span>
                         {record.head_amount}
-                        {parseInt(String(record.is_percentage)) === 1 ? ' %' : ' $' }
+                        {parseInt(String(record.is_percentage)) === 1 ? ' %' : ' $'}
                     </span>
                 )
             }
 
         },
+        {
+            title: __('Is Taxable', 'pcm'), dataIndex: 'is_taxable',
+            render: (text: string, record: SalaryHeadType) => {
+                const isTaxable = parseInt(String(record.is_taxable))
+                return (
+                    <span className={`${isTaxable === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                        {isTaxable === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
+                    </span>
+                )
+            }
+        },
+        {title: __('Priority', 'pcm'), dataIndex: 'priority'},
         {
             title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
@@ -125,11 +138,13 @@ export const SalaryHeadList = () => {
         const head = getSalaryHead(id);
         const head_name = head?.head_name;
         const head_type = head?.head_type;
-        const is_percentage = head?.is_percentage;
         const head_amount = head?.head_amount;
+        const is_percentage = head?.is_percentage;
+        const is_taxable = head?.is_taxable;
+        const priority = head?.priority;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, head_name, status, head_type, is_percentage, head_amount,  _wpnonce};
+        const data = {id, head_name, status, head_type, is_percentage, head_amount, is_taxable, priority, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/salary-heads/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -149,9 +164,9 @@ export const SalaryHeadList = () => {
     }
 
     const handleModal = (data: SalaryHeadType) => {
-        if (data) {
-            setFormData(data)
-        }
+        setSelectedHeadType({id: data.head_type, name: parseInt(String(data.head_type)) === HeadType.Earning ? __('Earning', 'pcm') : __('Deduction', 'pcm')})
+        setIsPercentage({id: data.is_percentage, name: parseInt(String(data.is_percentage)) === 1 ? __('Yes', 'pcm') : __('No', 'pcm')})
+        setFormData(data)
         setShowModal(true)
     };
 
@@ -173,12 +188,14 @@ export const SalaryHeadList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         data.head_type = selectedHeadType.id;
         data.is_percentage = isPercentage.id ? 1 : 0;
+        data.is_taxable = formData.is_taxable ?? 1;
+        data.priority = formData.priority ?? 1;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, false).then((data: SalaryHeadType) => {
+                makePutRequest(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, true).then((data: SalaryHeadType) => {
                     setSalaryHeads(models.map((salaryHead: SalaryHeadType) => {
                         if (salaryHead.id === formData.id) {
-                            salaryHead.head_name = formData.head_name;
+                            salaryHead = formData;
                         }
                         return salaryHead;
                     }))
@@ -204,7 +221,6 @@ export const SalaryHeadList = () => {
     }
     const handleInputChange = (event: any) => {
         const {name, value} = event.target;
-        console.log(value)
         setFormData({...formData, [name]: value});
     }
     return (
@@ -237,7 +253,7 @@ export const SalaryHeadList = () => {
                                         />
                                         <FormInput
                                             label={__('Head amount', 'pcm')}
-                                            type='text'
+                                            type="text"
                                             name="head_amount"
                                             id="head_amount"
                                             value={formData.head_amount}
@@ -246,24 +262,54 @@ export const SalaryHeadList = () => {
                                             }
                                         />
                                         <SelectBox
-                                            title={__('Is percentage', 'pcm')}
-                                            options={is_percentage}
-                                            selected={isPercentage}
-                                            setSelected={handlePercentage}
-                                        />
-                                        <SelectBox
                                             title={__('Head type', 'pcm')}
                                             options={headType}
                                             selected={selectedHeadType}
                                             setSelected={handleHeadType}
                                         />
-                                        <Button className="mt-4" onClick={()=>handleSubmit(event)}>
-                                            {__('Add salary head', 'pcm')}
-                                        </Button>
+                                        <FormInput label={__('Priority', 'pcm')} type="number" name="priority" id="priority" value={formData.priority} onChange={(e) => handleInputChange(e)} />
+                                        <div className="flex space-x-6">
+                                            <FormCheckBox
+                                                label={__('Is percentage', 'pcm')}
+                                                name="is_percentage"
+                                                id="is_percentage"
+                                                value={formData.is_percentage}
+                                                checked={parseInt(String(formData.is_percentage)) === 1}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setFormData({ ...formData, is_percentage: 1 });
+                                                    } else {
+                                                        setFormData({ ...formData, is_percentage: 0 });
+                                                    }
+                                                }}
+                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            />
+                                            <div className="w-4" />
+                                            <FormCheckBox
+                                                label={__('Is Taxable', 'pcm')}
+                                                name="is_taxable"
+                                                id="is_taxable"
+                                                value={formData.is_taxable}
+                                                checked={parseInt(String(formData.is_taxable)) === 1}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setFormData({ ...formData, is_taxable: 1 });
+                                                    } else {
+                                                        setFormData({ ...formData, is_taxable: 0 });
+                                                    }
+                                                }}
+                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            />
+                                        </div>
+                                        <div className="text-right">
+                                            <Button className="mt-4" onClick={() => handleSubmit(event)}>
+                                                {__('Add salary head', 'pcm')}
+                                            </Button>
+                                        </div>
                                     </form>
-                            </div>
+                                </div>
                             </Modal>
-                            )}
+                        )}
                     </div>
                 </div>
                 <Table

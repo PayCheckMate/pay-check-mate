@@ -88,6 +88,16 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
+                        'is_taxable' => [
+                            'description' => __( 'Salary head is taxable.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
+                        'priority' => [
+                            'description' => __( 'Salary head priority.', 'pcm' ),
+                            'type'        => 'integer',
+                            'required'    => true,
+                        ],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
 							'type'        => 'number',
@@ -225,7 +235,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $salary_head     = new SalaryHead( new SalaryHeadModel() );
+        $salary_head = new SalaryHead( new SalaryHeadModel() );
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -358,10 +368,10 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'is_taxable'     => [
                     'description' => __( 'Salary Head is Taxable', 'pcm' ),
-                    'type'        => 'boolean',
+                    'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'Priority'       => [
+                'priority'       => [
                     'description' => __( 'Salary Head Priority', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],

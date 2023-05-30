@@ -4,6 +4,8 @@ export interface SalaryHeadType {
     head_type: HeadType;
     head_amount: number;
     is_percentage: number;
+    is_taxable: number;
+    priority: number;
     status: SalaryHeadStatus;
     created_on: string;
     updated_at: string;

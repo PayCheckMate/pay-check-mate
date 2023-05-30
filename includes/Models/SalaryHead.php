@@ -23,6 +23,8 @@ class SalaryHead extends Model {
         'head_type'     => '%s',
         'head_amount'   => '%f',
         'is_percentage' => '%d',
+        'is_taxable'    => '%d',
+        'priority'      => '%d',
         'status'        => '%d',
         'created_on'    => '%s',
         'updated_at'    => '%s',
