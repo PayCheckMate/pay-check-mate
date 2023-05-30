@@ -7,6 +7,7 @@ use Exception;
 use PayCheckMate\Contracts\FillableInterface;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
+use WP_Error;
 
 /**
  * Base Model for all the models to extend with Late Static Binding.
@@ -126,19 +127,27 @@ class Model implements ModelInterface, FillableInterface {
      * @param Request $data
      *
      * @throws Exception
-     * @return int The number of rows inserted, or false on error.
+     * @return object|WP_Error The number of rows inserted, or false on error.
      */
-    public function create( Request $data ) : int {
+    public function create( Request $data ): object {
         global $wpdb;
 
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
 
-        return $wpdb->insert(
+        $wpdb->insert(
             $this->get_table(),
             $filteredData,
             $this->get_where_format( $filteredData ),
         );
+
+        $last_id = $wpdb->insert_id;
+
+        if ( ! $last_id ) {
+            return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pcm' ) );
+        }
+
+        return $this->find($last_id);
     }
 
     /**

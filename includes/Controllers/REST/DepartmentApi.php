@@ -225,7 +225,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 
         $department = $department->create( $validated_data );
 
-        if ( ! $department ) {
+        if ( is_wp_error( $department ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 

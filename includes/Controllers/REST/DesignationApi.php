@@ -216,7 +216,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         }
 
         $designation = $designation->create( $validated_data );
-        if ( ! $designation ) {
+        if ( is_wp_error( $designation ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 

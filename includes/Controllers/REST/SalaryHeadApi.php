@@ -10,6 +10,7 @@ use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Requests\SalaryHeadRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
+use const _PHPStan_3b6bd74b1\__;
 
 class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
@@ -75,7 +76,17 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 						],
                         'head_type' => [
                             'description' => __( 'Salary head type.', 'pcm' ),
-                            'type'        => 'string',
+                            'type'        => 'integer',
+                            'required'    => true,
+                        ],
+                        'head_amount' => [
+                            'description' => __( 'Salary head amount.', 'pcm' ),
+                            'type'        => 'number',
+                            'required'    => true,
+                        ],
+                        'is_percentage' => [
+                            'description' => __( 'Salary head is percentage.', 'pcm' ),
+                            'type'        => 'boolean',
                             'required'    => true,
                         ],
 						'status'          => [
@@ -215,19 +226,19 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $department     = new SalaryHead( new SalaryHeadModel() );
+        $salary_head     = new SalaryHead( new SalaryHeadModel() );
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->create( $validated_data );
+        $head = $salary_head->create( $validated_data );
 
-        if ( ! $department ) {
+        if ( is_wp_error( $head ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 201 );
+        return new WP_REST_Response( $head, 201 );
     }
 
     /**
@@ -277,7 +288,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Could not update department.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( __( 'Department updated', 'pcm' ), 200 );
+        return new WP_REST_Response( __( 'Salary head updated', 'pcm' ), 200 );
     }
 
     /**
@@ -327,13 +338,24 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'head_type'      => [
                     'description' => __( 'Salary Head Type', 'pcm' ),
-                    'type'        => 'string',
+                    'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'head_type_text' => [
                     'description' => __( 'Salary Head Type in Text', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
+                    'readonly'    => true,
+                ],
+                'head_amount'    => [
+                    'description' => __( 'Salary Head Amount', 'pcm' ),
+                    'type'        => 'number',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'is_percentage'  => [
+                    'description' => __( 'Salary Head is Percentage', 'pcm' ),
+                    'type'        => 'boolean',
+                    'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'status'         => [
                     'description' => __( 'Salary Head Status', 'pcm' ),

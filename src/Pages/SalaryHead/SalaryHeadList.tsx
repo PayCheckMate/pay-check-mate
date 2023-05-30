@@ -6,7 +6,18 @@ import React, {useEffect, useState} from "@wordpress/element";
 import useFetchApi from "../../Helpers/useFetchApi2";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
-import {SalaryHeadStatus, SalaryHeadType} from "../../Types/SalaryHeadType";
+import {HeadType, SalaryHeadStatus, SalaryHeadType, SelectBoxType} from "../../Types/SalaryHeadType";
+import {SelectBox} from "../../Components/SelectBox";
+
+const headType = [
+    {id: HeadType.Earning, name: __('Earning', 'pcm')},
+    {id: HeadType.Deduction, name: __('Deduction', 'pcm')},
+]
+
+const is_percentage = [
+    {id: 1, name: __('Yes', 'pcm')},
+    {id: 0, name: __('No', 'pcm')},
+]
 
 export const SalaryHeadList = () => {
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
@@ -14,6 +25,8 @@ export const SalaryHeadList = () => {
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([])
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedHeadType, setSelectedHeadType] = useState<SelectBoxType>(headType[0] as SelectBoxType);
+    const [isPercentage, setIsPercentage] = useState<SelectBoxType>(is_percentage[0] as SelectBoxType);
     const {
         models,
         loading,
@@ -30,9 +43,32 @@ export const SalaryHeadList = () => {
     }, [models]);
 
     const columns = [
-        {title: 'Salary Head', dataIndex: 'head_name'},
+        {title: __('Salary Head', 'pcm'), dataIndex: 'head_name'},
         {
-            title: 'Status', dataIndex: 'status',
+            title: __('Head Type', 'pcm'), dataIndex: 'head_type',
+            render: (text: string, record: SalaryHeadType) => {
+                const headType = parseInt(String(record.head_type))
+                return (
+                    <span className={`${headType === HeadType.Earning ? 'text-green-600' : 'text-red-600'}`}>
+                        {headType === HeadType.Earning ? __('Earning', 'pcm') : __('Deduction', 'pcm')}
+                    </span>
+                )
+            }
+        },
+        {
+            title: __('Head Amount', 'pcm'), dataIndex: 'head_amount',
+            render: (text: string, record: SalaryHeadType) => {
+                return (
+                    <span>
+                        {record.head_amount}
+                        {parseInt(String(record.is_percentage)) === 1 ? ' %' : ' $' }
+                    </span>
+                )
+            }
+
+        },
+        {
+            title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
                 const status = parseInt(String(record.status))
                 return (
@@ -43,7 +79,7 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title: 'Created on', dataIndex: 'created_on',
+            title: __('Created on', 'pcm'), dataIndex: 'created_on',
             render: (text: string, record: SalaryHeadType) => {
                 return (
                     <span>
@@ -53,11 +89,11 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title: 'Action',
+            title: __('Action', 'pcm'),
             dataIndex: 'action',
             render: (text: string, record: SalaryHeadType) => (
                 <div className="flex">
-                    <button className="text-indigo-600 hover:text-indigo-900" onClick={()=>handleModal(record)}>
+                    <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
                     {parseInt(String(record.status)) === SalaryHeadStatus.Active && (
@@ -86,10 +122,14 @@ export const SalaryHeadList = () => {
     }
 
     const handleStatus = (id: number, status: number) => {
-        const head_name = getSalaryHead(id)?.head_name;
+        const head = getSalaryHead(id);
+        const head_name = head?.head_name;
+        const head_type = head?.head_type;
+        const is_percentage = head?.is_percentage;
+        const head_amount = head?.head_amount;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, head_name, status, _wpnonce};
+        const data = {id, head_name, status, head_type, is_percentage, head_amount,  _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/salary-heads/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -116,16 +156,23 @@ export const SalaryHeadList = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setFilterObject({ 'per_page': 10, 'page': page }); // Update the filter object with the new page value
+        setFilterObject({'per_page': 10, 'page': page}); // Update the filter object with the new page value
         setCurrentPage(page);
     };
 
-
+    const handleHeadType = (data: SelectBoxType) => {
+        setSelectedHeadType(data);
+    }
+    const handlePercentage = (data: SelectBoxType) => {
+        setIsPercentage(data);
+    }
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const data = formData
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
+        data.head_type = selectedHeadType.id;
+        data.is_percentage = isPercentage.id ? 1 : 0;
         if (formData.id) {
             try {
                 makePutRequest(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, false).then((data: SalaryHeadType) => {
@@ -144,8 +191,8 @@ export const SalaryHeadList = () => {
             }
         } else {
             try {
-                makePostRequest('/pay-check-mate/v1/salary-heads', data, false).then((data: SalaryHeadType) => {
-                    setSalaryHeads([...models, formData])
+                makePostRequest<SalaryHeadType>('/pay-check-mate/v1/salary-heads', data, false).then((data: SalaryHeadType) => {
+                    setSalaryHeads([...models, data])
                     setShowModal(false)
                 }).catch((e: unknown) => {
                     console.log(e);
@@ -154,6 +201,11 @@ export const SalaryHeadList = () => {
                 console.log(error); // Handle the error accordingly
             }
         }
+    }
+    const handleInputChange = (event: any) => {
+        const {name, value} = event.target;
+        console.log(value)
+        setFormData({...formData, [name]: value});
     }
     return (
         <>
@@ -165,7 +217,7 @@ export const SalaryHeadList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={()=>handleModal({} as SalaryHeadType)} className="hover:text-white active:text-white">
+                        <Button onClick={() => handleModal({} as SalaryHeadType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
                             {__('Add salary head', 'pcm')}
                         </Button>
@@ -174,14 +226,44 @@ export const SalaryHeadList = () => {
                                 {/*Create a form to save salary head*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Salary Head name', 'pcm')} name="head_name" id="head_name" value={formData.head_name} onChange={(e) => setFormData({...formData, head_name: e.target.value})} />
+                                        <FormInput
+                                            label={__('Salary Head name', 'pcm')}
+                                            name="head_name"
+                                            id="head_name"
+                                            value={formData.head_name}
+                                            onChange={(e) =>
+                                                handleInputChange(e)
+                                            }
+                                        />
+                                        <FormInput
+                                            label={__('Head amount', 'pcm')}
+                                            type='text'
+                                            name="head_amount"
+                                            id="head_amount"
+                                            value={formData.head_amount}
+                                            onChange={(e) =>
+                                                handleInputChange(e)
+                                            }
+                                        />
+                                        <SelectBox
+                                            title={__('Is percentage', 'pcm')}
+                                            options={is_percentage}
+                                            selected={isPercentage}
+                                            setSelected={handlePercentage}
+                                        />
+                                        <SelectBox
+                                            title={__('Head type', 'pcm')}
+                                            options={headType}
+                                            selected={selectedHeadType}
+                                            setSelected={handleHeadType}
+                                        />
                                         <Button className="mt-4" onClick={()=>handleSubmit(event)}>
                                             {__('Add salary head', 'pcm')}
                                         </Button>
                                     </form>
-                                </div>
+                            </div>
                             </Modal>
-                        )}
+                            )}
                     </div>
                 </div>
                 <Table

@@ -5,15 +5,16 @@ interface TextInputProps {
     name: string;
     id: string;
     type?: string;
+    className?: string;
     placeholder?: string;
-    value: string;
+    value: string|number
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;
     ariaInvalid?: boolean | undefined;
     ariaDescribedBy?: string;
 }
 
-export const FormInput = ({label, name, id, type = "text", placeholder, value, onChange, error, ariaInvalid, ariaDescribedBy,}: TextInputProps) => {
+export const FormInput = ({label, name, id, className='', type = "text", placeholder, value, onChange, error, ariaInvalid, ariaDescribedBy,}: TextInputProps) => {
     return (
         <div>
             <label
@@ -27,7 +28,7 @@ export const FormInput = ({label, name, id, type = "text", placeholder, value, o
                     type={type}
                     name={name}
                     id={id}
-                    className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${
+                    className={className ? className : `block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-600 focus:ring-indigo-500 sm:text-sm ${
                         error ? "border-red-500" : ""
                     }`}
                     placeholder={placeholder}

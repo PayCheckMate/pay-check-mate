@@ -101,6 +101,8 @@ class Databases {
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `head_name` varchar(255) NOT NULL,
                 `head_type` tinyint(1) NOT NULL DEFAULT '1' Comment '1 = Earning, 2 = Deduction',
+                `head_amount` decimal(10,2) NOT NULL,
+                `is_percentage` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,

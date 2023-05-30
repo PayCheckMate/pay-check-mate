@@ -18,17 +18,19 @@ class SalaryHead extends Model {
     /**
      * @var array|string[] $fillable
      */
-    protected static array $fillable = [ 'head_name' ];
+    protected static array $fillable = [ 'head_name', 'head_type', 'head_amount', 'is_percentage' ];
 
     /**
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'head_name'  => '%s',
-        'head_type'  => '%s',
-        'status'     => '%d',
-        'created_on' => '%s',
-        'updated_at' => '%s',
+        'head_name'     => '%s',
+        'head_type'     => '%s',
+        'head_amount'   => '%f',
+        'is_percentage' => '%d',
+        'status'        => '%d',
+        'created_on'    => '%s',
+        'updated_at'    => '%s',
     ];
 
     /**
@@ -75,10 +77,10 @@ class SalaryHead extends Model {
      *
      * @return array<string, string>
      */
-    public function get_head_type( string $head_type ): array {
+    public function get_head_type( string $head_type ) : array {
         return [
             'head_type'      => $head_type,
-            'head_type_text' =>$head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' )
+            'head_type_text' => $head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' ),
         ];
     }
 
