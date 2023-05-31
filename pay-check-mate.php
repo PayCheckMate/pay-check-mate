@@ -53,12 +53,14 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
     define( 'PAY_CHECK_MATE_URL', plugins_url( '', __FILE__ ) );
 }
 
-/**
+/*
  * Main function to initialize the plugin.
  *
  * @since PAY_CHECK_MATE_SINCE
+ *
+ * @return void
  */
-function wp_pms_init() {
+function pay_check_mate_init(): void {
     PayCheckMate::get_instance();
 }
 
@@ -67,4 +69,4 @@ function wp_pms_init() {
  *
  * @since PAY_CHECK_MATE_SINCE
  */
-wp_pms_init();
+pay_check_mate_init();

@@ -51,3 +51,4 @@ phpcs.xml
 .idea
 build/
 dist
+.phpunit.result.cache

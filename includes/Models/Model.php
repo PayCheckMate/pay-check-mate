@@ -67,8 +67,9 @@ class Model implements ModelInterface {
             $args['limit'],
             $args['offset'],
         );
+        $results = $wpdb->get_results( $query );
 
-        return $this->process_items( $wpdb->get_results( $query ) );
+        return $this->process_items( $results );
     }
 
     /**
@@ -114,8 +115,9 @@ class Model implements ModelInterface {
         global $wpdb;
 
         $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
+        $results = $wpdb->get_row( $query );
 
-        return $this->process_item( $wpdb->get_row( $query ) );
+        return $this->process_item( $results );
     }
 
     /**
@@ -234,21 +236,6 @@ class Model implements ModelInterface {
         }
 
         return static::$columns;
-    }
-
-    /**
-     * Get the table's fillable column names.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return array<string>
-     */
-    public function fillable() : array {
-        if ( ! static::$fillable ) {
-            return [];
-        }
-
-        return static::$fillable;
     }
 
     /**

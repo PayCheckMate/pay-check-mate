@@ -1,0 +1,444 @@
+# Copyright (C) 2023 Ratul Hasan
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: PayCheckMate 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pay-check-mate\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-05-30T18:55:23+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: pcm\n"
+
+#. Plugin Name of the plugin
+#: includes/Controllers/AdminMenu.php:34
+#: includes/Controllers/AdminMenu.php:35
+#: dist/index.js:5730
+msgid "PayCheckMate"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/RatulHasan/pay-check-mate"
+msgstr ""
+
+#. Description of the plugin
+msgid "Pay Check Mate is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors."
+msgstr ""
+
+#. Author of the plugin
+msgid "Ratul Hasan"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://ratuljh.wordpress.com/"
+msgstr ""
+
+#: includes/Classes/PayCheckMateUserRoles.php:13
+msgid "PayCheckMate Accountant"
+msgstr ""
+
+#: includes/Classes/PayCheckMateUserRoles.php:18
+msgid "PayCheckMate Employee"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:56
+#: includes/Controllers/REST/DepartmentApi.php:68
+#: includes/Controllers/REST/DepartmentApi.php:89
+#: includes/Controllers/REST/DesignationApi.php:55
+#: includes/Controllers/REST/DesignationApi.php:67
+#: includes/Controllers/REST/DesignationApi.php:88
+#: includes/Controllers/REST/DesignationApi.php:309
+#: includes/Controllers/REST/SalaryHeadApi.php:55
+#: includes/Controllers/REST/SalaryHeadApi.php:67
+#: includes/Controllers/REST/SalaryHeadApi.php:113
+#: includes/Controllers/REST/SalaryHeadApi.php:337
+msgid "Unique identifier for the object."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:73
+msgid "Department name."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:78
+#: includes/Controllers/REST/SalaryHeadApi.php:102
+msgid "Department status."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:223
+#: includes/Controllers/REST/DepartmentApi.php:273
+#: includes/Controllers/REST/DesignationApi.php:215
+#: includes/Controllers/REST/DesignationApi.php:263
+#: includes/Controllers/REST/SalaryHeadApi.php:241
+#: includes/Controllers/REST/SalaryHeadApi.php:291
+msgid "Invalid data."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:229
+#: includes/Controllers/REST/DesignationApi.php:220
+#: includes/Controllers/REST/SalaryHeadApi.php:247
+msgid "Could not create department."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:279
+msgid "Department not found"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:299
+#: includes/Controllers/REST/DesignationApi.php:289
+#: includes/Controllers/REST/SalaryHeadApi.php:317
+msgid "Could not delete designation."
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:302
+#: includes/Controllers/REST/SalaryHeadApi.php:320
+msgid "Department deleted"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:319
+msgid "Unique identifier for the object"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:325
+#: dist/index.js:6776
+#: dist/index.js:7028
+msgid "Department name"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:332
+#: dist/index.js:7477
+msgid "Status"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:338
+#: dist/index.js:7486
+msgid "Created on"
+msgstr ""
+
+#: includes/Controllers/REST/DepartmentApi.php:344
+msgid "Updated on"
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:72
+msgid "Designation name."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:77
+msgid "Designation status."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:269
+msgid "Could not update designation."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:315
+msgid "The name for the designation."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:321
+msgid "The status for the designation."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:327
+msgid "The date the designation was created."
+msgstr ""
+
+#: includes/Controllers/REST/DesignationApi.php:333
+msgid "The date the designation was last updated."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:72
+msgid "Salary head name."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:77
+msgid "Salary head type."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:82
+msgid "Salary head amount."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:87
+msgid "Salary head is percentage."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:92
+msgid "Salary head is taxable."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:97
+msgid "Salary head priority."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:297
+msgid "Could not update department."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:300
+msgid "Salary head updated"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:343
+msgid "Salary Head Name"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:349
+msgid "Salary Head Type"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:354
+msgid "Salary Head Type in Text"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:360
+msgid "Salary Head Amount"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:365
+msgid "Salary Head is Percentage"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:370
+msgid "Salary Head is Taxable"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:375
+msgid "Salary Head Priority"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:380
+msgid "Salary Head Status"
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:385
+msgid "The date the object was created."
+msgstr ""
+
+#: includes/Controllers/REST/SalaryHeadApi.php:391
+msgid "The date the object was last updated."
+msgstr ""
+
+#: includes/Models/Model.php:146
+msgid "Could not insert row into the database table."
+msgstr ""
+
+#: includes/Requests/Request.php:85
+msgid "Nonce verification failed"
+msgstr ""
+
+#: includes/Requests/Request.php:104
+msgid " key is required for this form request."
+msgstr ""
+
+#: includes/Requests/Request.php:170
+msgid "Nonce is not defined for this form request."
+msgstr ""
+
+#: includes/Requests/Request.php:187
+msgid "Make sure you have defined rules for this form request."
+msgstr ""
+
+#: includes/Requests/Request.php:204
+msgid "Fillable are not defined for this form request."
+msgstr ""
+
+#: dist/index.js:5011
+msgid "No data found"
+msgstr ""
+
+#: dist/index.js:5013
+msgid "Sorry, we couldn’t find any matches."
+msgstr ""
+
+#: dist/index.js:5718
+msgid "Dashboard"
+msgstr ""
+
+#: dist/index.js:5724
+msgid "Employees"
+msgstr ""
+
+#: dist/index.js:5736
+msgid "Settings"
+msgstr ""
+
+#: dist/index.js:5742
+msgid "Departments"
+msgstr ""
+
+#: dist/index.js:5747
+msgid "Designations"
+msgstr ""
+
+#: dist/index.js:5752
+msgid "Salary Heads"
+msgstr ""
+
+#: dist/index.js:5758
+msgid "Reports"
+msgstr ""
+
+#: dist/index.js:5764
+msgid "Payroll"
+msgstr ""
+
+#: dist/index.js:5769
+msgid "P.F report"
+msgstr ""
+
+#: dist/index.js:5774
+msgid "Gratuity report"
+msgstr ""
+
+#: dist/index.js:5779
+msgid "Loan report"
+msgstr ""
+
+#: dist/index.js:5784
+msgid "Advance salary report"
+msgstr ""
+
+#: dist/index.js:5789
+msgid "Arrear salary report"
+msgstr ""
+
+#: dist/index.js:6646
+#: dist/index.js:6672
+#: dist/index.js:6898
+#: dist/index.js:6924
+#: dist/index.js:7483
+#: dist/index.js:7509
+msgid "Active"
+msgstr ""
+
+#: dist/index.js:6646
+#: dist/index.js:6667
+#: dist/index.js:6898
+#: dist/index.js:6919
+#: dist/index.js:7483
+#: dist/index.js:7504
+msgid "Inactive"
+msgstr ""
+
+#: dist/index.js:6662
+#: dist/index.js:6914
+#: dist/index.js:7195
+#: dist/index.js:7499
+msgid "Edit"
+msgstr ""
+
+#: dist/index.js:6759
+msgid "Department list"
+msgstr ""
+
+#: dist/index.js:6767
+#: dist/index.js:6769
+#: dist/index.js:6787
+msgid "Add department"
+msgstr ""
+
+#: dist/index.js:7011
+msgid "Designation list"
+msgstr ""
+
+#: dist/index.js:7019
+#: dist/index.js:7021
+#: dist/index.js:7039
+msgid "Add designation"
+msgstr ""
+
+#: dist/index.js:7191
+msgid "View"
+msgstr ""
+
+#: dist/index.js:7199
+msgid "Delete"
+msgstr ""
+
+#: dist/index.js:7211
+msgid "Employee List"
+msgstr ""
+
+#: dist/index.js:7221
+msgid "Add user"
+msgstr ""
+
+#: dist/index.js:7408
+#: dist/index.js:7456
+#: dist/index.js:7556
+msgid "Earning"
+msgstr ""
+
+#: dist/index.js:7411
+#: dist/index.js:7456
+#: dist/index.js:7556
+msgid "Deduction"
+msgstr ""
+
+#: dist/index.js:7415
+#: dist/index.js:7471
+#: dist/index.js:7560
+msgid "Yes"
+msgstr ""
+
+#: dist/index.js:7418
+#: dist/index.js:7471
+#: dist/index.js:7560
+msgid "No"
+msgstr ""
+
+#: dist/index.js:7447
+msgid "Salary Head"
+msgstr ""
+
+#: dist/index.js:7450
+msgid "Head Type"
+msgstr ""
+
+#: dist/index.js:7459
+msgid "Head Amount"
+msgstr ""
+
+#: dist/index.js:7465
+#: dist/index.js:7699
+msgid "Is Taxable"
+msgstr ""
+
+#: dist/index.js:7474
+#: dist/index.js:7668
+msgid "Priority"
+msgstr ""
+
+#: dist/index.js:7492
+msgid "Action"
+msgstr ""
+
+#: dist/index.js:7633
+msgid "Salary Head list"
+msgstr ""
+
+#: dist/index.js:7641
+#: dist/index.js:7643
+#: dist/index.js:7723
+msgid "Add salary head"
+msgstr ""
+
+#: dist/index.js:7650
+msgid "Salary Head name"
+msgstr ""
+
+#: dist/index.js:7656
+msgid "Head amount"
+msgstr ""
+
+#: dist/index.js:7663
+msgid "Head type"
+msgstr ""
+
+#: dist/index.js:7677
+msgid "Is percentage"
+msgstr ""

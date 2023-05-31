@@ -143,4 +143,8 @@
     <rule ref="Squiz.PHP.CommentedOutCode.Found">
         <severity>0</severity>
     </rule>
+<!--    Make a function return type in single line-->
+    <rule ref="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid">
+        <severity>0</severity>
+    </rule>
 </ruleset>

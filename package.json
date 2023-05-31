@@ -18,7 +18,8 @@
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
     "test:e2e": "wp-scripts test-e2e",
-    "test:unit": "wp-scripts test-unit-js"
+    "test:unit": "wp-scripts test-unit-js",
+    "make-pot": "wp i18n make-pot . languages/pay-check-mate.pot"
   },
   "keywords": [],
   "author": "Ratul Hasan",
@@ -27,7 +28,7 @@
     "@babel/preset-typescript": "^7.21.5",
     "@playwright/test": "^1.33.0",
     "@tailwindcss/forms": "^0.5.3",
-    "@wordpress/i18n": "^4.33.0",
+    "@wordpress/i18n": "^4.34.0",
     "@wordpress/scripts": "^26.4.0",
     "archiver": "^5.3.1",
     "autoprefixer": "^10.4.14",
