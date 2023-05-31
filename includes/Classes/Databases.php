@@ -41,6 +41,8 @@ class Databases {
         $this->create_table_departments();
         $this->create_table_designation();
         $this->create_table_salary_head();
+        $this->create_table_employees();
+        $this->create_table_employee_salary_history();
     }
 
     /**
@@ -113,6 +115,66 @@ class Databases {
 
         dbDelta( $sql );
     }
+
+    /**
+     * Create table employees.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employees() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employees` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `employee_first_name` varchar(255) NOT NULL,
+                `employee_middle_name` varchar(255) NULL,
+                `employee_last_name` varchar(255) NOT NULL,
+                `employee_email` varchar(255) NOT NULL,
+                `employee_phone` varchar(255) NOT NULL,
+                `employee_address` varchar(255) NOT NULL,
+                `employee_department` bigint(20) unsigned NOT NULL,
+                `employee_designation` bigint(20) unsigned NOT NULL,
+                `employee_joining_date` DATE NOT NULL,
+                `employee_regine_date` DATE NULL,
+                `status` tinyint(1) NOT NULL DEFAULT '1',
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                FOREIGN KEY (`employee_department`) REFERENCES `{$this->table_prefix}departments`(`id`),
+                FOREIGN KEY (`employee_designation`) REFERENCES `{$this->table_prefix}designations`(`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
+
+    /**
+     * Create table employee salary.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+	public function create_table_employee_salary_history() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_salary_history` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `employee_id` bigint(20) unsigned NOT NULL,
+                `salary_head_ids` text NOT NULL,
+                `salary_head_amounts` text NOT NULL,
+                `status` tinyint(1) NOT NULL DEFAULT '1',
+                `active_from` DATE NOT NULL,
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                FOREIGN KEY (`employee_id`) REFERENCES `{$this->table_prefix}employees`(`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+	}
+
 
     /**
      * Include the db delta file
