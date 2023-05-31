@@ -95,4 +95,61 @@ class RestController extends WP_REST_Controller {
 
         return $data;
     }
+
+    /**
+     * Get the query params for collections.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string,array<string,string|bool|int>> Collection parameters.
+     */
+    public function get_collection_params(): array {
+        return [
+            'search' => [
+                'description'       => __( 'Limit results to those matching a string.', 'pcm' ),
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+                'validate_callback' => 'rest_validate_request_arg',
+                'default'           => '',
+            ],
+            'page'   => [
+                'description'       => __( 'Current page of the collection.', 'pcm' ),
+                'type'              => 'integer',
+                'sanitize_callback' => 'absint',
+                'validate_callback' => 'rest_validate_request_arg',
+                'default'           => 1,
+                'minimum'           => 1,
+                'maximum'           => PHP_INT_MAX,
+            ],
+            'per_page'  => [
+                'description'       => __( 'Maximum number of items to be returned in result set.', 'pcm' ),
+                'type'              => 'integer',
+                'sanitize_callback' => 'absint',
+                'validate_callback' => 'rest_validate_request_arg',
+                'default'           => 10,
+                'minimum'           => 1,
+                'maximum'           => 100,
+            ],
+            'orderby'   => [
+                'description'       => __( 'Sort collection by object attribute.', 'pcm' ),
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_key',
+                'validate_callback' => 'rest_validate_request_arg',
+                'default'           => 'id',
+            ],
+            'order'     => [
+                'description'       => __( 'Order sort attribute ascending or descending.', 'pcm' ),
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_key',
+                'validate_callback' => 'rest_validate_request_arg',
+                'default'           => 'desc',
+            ],
+            'status'    => [
+                'description'       => __( 'Limit result set to items with a specific status.', 'pcm' ),
+                'type'              => 'integer',
+                'sanitize_callback' => 'absint',
+                'validate_callback' => 'rest_validate_request_arg',
+            ],
+        ];
+    }
 }

@@ -62,7 +62,7 @@ class SalaryHead extends Model {
      * @return string
      */
     public function get_created_on( string $date ) : string {
-        return date( 'd-m-Y', strtotime( $date ) );
+        return get_date_from_gmt( $date, 'd M Y' );
     }
 
     /**
