@@ -1,4 +1,4 @@
-import {Sidebar} from "../Components/Sidebar";
+import {Sidebar} from "./Sidebar";
 import {Route, Routes} from "react-router-dom";
 import {Dashboard} from "./Dashboard";
 import {EmployeeList} from "./EmployeeList";
@@ -9,6 +9,7 @@ import {EmptyState} from "../Components/EmptyState";
 import {Card} from "../Components/Card";
 import {DesignationList} from "./Designation/DesignationList";
 import {SalaryHeadList} from "./SalaryHead/SalaryHeadList";
+import CreatePayroll from "./Payroll/CreatePayroll";
 
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');
@@ -26,6 +27,7 @@ export default function Main() {
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='departments' element={<DepartmentList />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='designations' element={<DesignationList />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='salary-heads' element={<SalaryHeadList />}/>)}
+                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='create-payroll' element={<CreatePayroll />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><EmptyState /></Card>} />)}
                             </Routes>
                         </div>
