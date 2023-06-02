@@ -1,0 +1,89 @@
+.payroll-table-container {
+  margin-top: 100px;
+  width: 100%;
+  overflow: auto;
+  max-height: 75vh; /* Adjust the height as needed */
+
+  .payroll-table {
+    width: max-content;
+    border-collapse: collapse;
+
+    th,
+    td {
+      padding: 8px;
+      border: 1px solid #15171a;
+    }
+
+    th.fixed-column,
+    td.fixed-column {
+      position: sticky;
+      left: 0;
+      z-index: 50;
+      background-color: #f2f2f2;
+    }
+
+    .salary {
+      background-color: #c3e2f3;
+      font-weight: bold;
+    }
+
+    .total_salary {
+      background-color: #c3e2f3;
+      font-weight: bold;
+    }
+
+    .deduction {
+      background-color: #fceee4;
+      font-weight: bold;
+    }
+
+    .total_deduction {
+      background-color: #fceee4;
+      font-weight: bold;
+    }
+
+    .net_payable {
+      background-color: #f1fdf6;
+      font-weight: bold;
+    }
+
+    .non_taxable {
+      background-color: #dbf2ff;
+      font-weight: bold;
+    }
+
+    .total_payable {
+      background-color: #ddfae0;
+      font-weight: bold;
+    }
+
+    tbody td:nth-child(2) {
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      background-color: #fff;
+    }
+
+    .second-row {
+      position: sticky;
+      top: 34px;
+      left: 0;
+      background-color: #f2f2f2;
+    }
+
+    td.text-left {
+      text-align: left;
+    }
+
+    td.text-right {
+      text-align: right;
+    }
+  }
+
+  thead th {
+    position: sticky;
+    top: -1px;
+    z-index: 10;
+    background-color: #f2f2f2;
+  }
+}

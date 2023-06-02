@@ -15,51 +15,5 @@
     .custom-font {
         @apply font-sans;
     }
-    .payroll-table-container {
-        margin-top: 100px;
-        width: 100%;
-        overflow: auto;
-        height: 600px; /* Adjust the height as needed */
-    }
-
-    .payroll-table thead th {
-        position: sticky;
-        top: -1px;
-        z-index: 10;
-        background-color: #f2f2f2;
-    }
-
-    .payroll-table tbody td:nth-child(2) {
-        position: sticky;
-        left: 0;
-        z-index: 10;
-        background-color: #fff;
-    }
-
-    .payroll-table {
-        width: max-content;
-        border-collapse: collapse;
-    }
-
-    .payroll-table th,
-    .payroll-table td {
-        padding: 8px;
-        border: 1px solid #ccc;
-    }
-
-    .payroll-table th.fixed-column,
-    .payroll-table td.fixed-column {
-        position: sticky;
-        left: 0;
-        z-index: 50;
-        background-color: #f2f2f2;
-    }
-
-    .payroll-table .next-row {
-        position: sticky;
-        top: 34px;
-        left: 0;
-        background-color: #f2f2f2;
-    }
 
 }
