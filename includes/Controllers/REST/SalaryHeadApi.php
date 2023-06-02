@@ -100,7 +100,8 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                         ],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
-							'type'        => 'number',
+							'type'        => 'boolean',
+                            'required'    => true,
 						],
 					],
 				],
@@ -360,6 +361,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Salary Head Amount', 'pcm' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
                 ],
                 'is_percentage'  => [
                     'description' => __( 'Salary Head is Percentage', 'pcm' ),
@@ -368,7 +370,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'is_taxable'     => [
                     'description' => __( 'Salary Head is Taxable', 'pcm' ),
-                    'type'        => 'integer',
+                    'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'priority'       => [
@@ -378,7 +380,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'status'         => [
                     'description' => __( 'Salary Head Status', 'pcm' ),
-                    'type'        => 'string',
+                    'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'created_on'     => [
