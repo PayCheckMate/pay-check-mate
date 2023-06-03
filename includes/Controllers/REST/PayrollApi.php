@@ -61,9 +61,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_head_types = [];
         foreach ( $salary_heads->toArray() as $salary_head ) {
             if ( 1 === absint( $salary_head->head_type ) ) {
-                $salary_head_types['earnings'][] = $salary_head;
+                $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
             } else {
-                $salary_head_types['deductions'][] = $salary_head;
+                $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
             }
         }
 
@@ -72,6 +72,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'limit'     => - 1,
             'order'     => 'ASC',
             'orderby'   => 'employee_id',
+            'mutation_fields' => [
+                'full_name',
+            ],
             'relations' => [
                 [
                     'table'       => 'pay_check_mate_designations',
@@ -133,107 +136,28 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'employee_last_name',
                 'designation_id',
                 'department_id',
-            ]
+            ], $salary_head_types
         );
-        echo '<pre>';
-        print_r( $employees );
-        exit();
+
+        /**
+*
+        [id] => 1
+        [employee_id] => 10000
+        [employee_first_name] => John
+        [employee_middle_name] => Doe
+        [employee_last_name] => Doe
+        [designation_id] => 1
+        [department_id] => 1
+        [designation_name] => Software Engineer
+        [department_name] => Human Resource
+        [basic_salary] => 1000.00
+        [gross_salary] => 1200.00
+        [salary_head_details] => {'1':500,'2':200,'3':100,'4':50,'5':25,'6':10}
+         */
         $employee_salary_history = [
             [
                 'id'              => 1,
                 'employee_id'     => 1,
-                'employee_name'   => 'John Doe',
-                'designation'     => 'Software Engineer',
-                'department'      => 'Development',
-                'salary_head_ids' => [
-                    'earnings'   => [
-                        1 => 10000,
-                        2 => 5000,
-                        3 => 2000,
-                        4 => 1000,
-                        5 => 1000,
-                        6 => 1000,
-                        8 => 1000,
-                    ],
-                    'deductions' => [
-                        9  => 1000,
-                        10 => 1000,
-                        11 => 1000,
-                    ],
-                ],
-            ],
-            [
-                'id'              => 2,
-                'employee_id'     => 2,
-                'employee_name'   => 'Jane Smith',
-                'designation'     => 'Software Engineer',
-                'department'      => 'Development',
-                'salary_head_ids' => [
-                    'earnings'   => [
-                        1 => 10000,
-                        2 => 5000,
-                        3 => 2000,
-                        4 => 1000,
-                        5 => 1000,
-                        6 => 100,
-                        8 => 1000,
-                    ],
-                    'deductions' => [
-                        9  => 100,
-                        10 => 1000,
-                        11 => 1000,
-                    ],
-                ],
-            ],
-            [
-                'id'              => 3,
-                'employee_id'     => 3,
-                'employee_name'   => 'Michael Johnson',
-                'designation'     => 'Designer',
-                'department'      => 'Design',
-                'salary_head_ids' => [
-                    'earnings'   => [
-                        1 => 10000,
-                        2 => 5000,
-                        3 => 2000,
-                        4 => 1000,
-                        5 => 100,
-                        6 => 1000,
-                        8 => 1000,
-                    ],
-                    'deductions' => [
-                        9  => 100,
-                        10 => 1000,
-                        11 => 1000,
-                    ],
-                ],
-            ],
-            [
-                'id'              => 4,
-                'employee_id'     => 4,
-                'employee_name'   => 'Jane Smith',
-                'designation'     => 'Software Engineer',
-                'department'      => 'Development',
-                'salary_head_ids' => [
-                    'earnings'   => [
-                        1 => 10000,
-                        2 => 5000,
-                        3 => 2000,
-                        4 => 1000,
-                        5 => 1000,
-                        6 => 100,
-                        8 => 1000,
-                    ],
-                    'deductions' => [
-                        9  => 100,
-                        10 => 1000,
-                        11 => 1000,
-                    ],
-                ],
-            ],
-            [
-                'id'              => 5,
-                'employee_id'     => 5,
                 'employee_name'   => 'John Doe',
                 'designation'     => 'Software Engineer',
                 'department'      => 'Development',
@@ -260,6 +184,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             [
                 'salary_head_types'       => $salary_head_types,
                 'employee_salary_history' => $employee_salary_history,
+                'employees'               => $employees->toArray(),
             ], 200
         );
     }

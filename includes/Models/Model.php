@@ -32,6 +32,8 @@ class Model implements ModelInterface {
 
     protected object $results;
     protected object $result;
+    protected array $mutation_fields = [];
+    protected array $additional_logical_data = [];
 
     /**
      * @var mixed
@@ -45,11 +47,12 @@ class Model implements ModelInterface {
      *
      * @param array<string, mixed> $args
      * @param array<string>        $fields
+     * @param array<string, mixed>        $additional_logical_data
      *
      * @throws \Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all( array $args, array $fields = [ '*' ] ): object {
+    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -63,14 +66,23 @@ class Model implements ModelInterface {
             ]
         );
 
+        if ( ! empty( $args['mutation_fields'] ) ) {
+            $this->mutation_fields = $args['mutation_fields'];
+            unset( $args['mutation_fields'] );
+        }
+
+        if ( ! empty( $additional_logical_data ) ) {
+            $this->additional_logical_data = $additional_logical_data;
+        }
+
         $relations         = '';
         $where             = 'WHERE 1=1';
         $relational_fields = [];
         if ( ! empty( $args['relations'] ) ) {
             // Get relational and where clause from get_relations() method.
-            $relational = $this->get_relational( $args );
-            $relations  = $relational->relations;
-            $where      = $relational->where;
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
             $relational_fields = $relational->fields;
         }
         if ( ! empty( $args['status'] ) ) {
@@ -115,8 +127,8 @@ class Model implements ModelInterface {
     public function get_relational( array $args = [] ): object {
         global $wpdb;
 
-        $where = 'WHERE 1=1';
-        $relations = '';
+        $where             = 'WHERE 1=1';
+        $relations         = '';
         $relational_fields = [];
         foreach ( $args['relations'] as $relation ) {
             // Add table prefix on the table name.
@@ -433,7 +445,7 @@ class Model implements ModelInterface {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
-                $value = call_user_func( [ $this, $method ], $item->$column );
+                $value = call_user_func( [ $this, $method ], $item->$column, $this->additional_logical_data );
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key => $val ) {
                         $item->$key = $val;
@@ -442,6 +454,24 @@ class Model implements ModelInterface {
                 }
 
                 $item->$column = $value;
+            }
+        }
+
+        if ( ! empty( $this->mutation_fields ) ) {
+            foreach ( $this->mutation_fields as $mutation_field ) {
+                $method = "get_$mutation_field";
+                if ( method_exists( $this, $method ) ) {
+                    // Check if the column has any mutation like, get_created_on, get_updated_at etc.
+                    $value = call_user_func( [ $this, $method ], $this->additional_logical_data );
+                    if ( is_array( $value ) ) {
+                        foreach ( $value as $key => $val ) {
+                            $item->$key = $val;
+                        }
+                        continue;
+                    }
+
+                    $item->$mutation_field = $value;
+                }
             }
         }
 

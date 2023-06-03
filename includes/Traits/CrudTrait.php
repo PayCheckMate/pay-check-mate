@@ -19,47 +19,50 @@ trait CrudTrait {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param array<string, mixed> $args
-     *                            - 'status'    => int,
-     *                            - 'limit'     => string|int,
-     *                            - 'order'     => 'ASC',
-     *                            - 'orderby'   => string,
-     *                            - 'relations' => [
-     *                                [
-     *                                    'table'       => '{RELATION_TABLE_NAME}',
-     *                                    'local_key'   => '{{RELATION_TABLE_LOCAL_KEY}',
-     *                                    'foreign_key' => '{CURRENT_TABLE_FOREIGN_KEY}',
-     *                                    'join_type'   => '{JOIN_TYPE}',
-     *                                    'where'       => [
-     *                                        '{FIELD}' => [
+     *                                            - 'status'    => int,
+     *                                            - 'limit'     => string|int,
+     *                                            - 'order'     => 'ASC',
+     *                                            - 'orderby'   => string,
+     *                                            - 'mutation_fields' => ['string'], this will call get_{field_name} method
+     *                                            - 'relations' => [
+     *                                            [
+     *                                            'table'       => '{RELATION_TABLE_NAME}',
+     *                                            'local_key'   => '{{RELATION_TABLE_LOCAL_KEY}',
+     *                                            'foreign_key' => '{CURRENT_TABLE_FOREIGN_KEY}',
+     *                                            'join_type'   => '{JOIN_TYPE}',
+     *                                            'where'       => [
+     *                                            '{FIELD}' => [
      *                                            'operator' => '{OPERATOR}',
      *                                            'value'    => {VALUE},
-     *                                        ],
-     *                                    ],
-     *                                    'fields'      => [
-     *                                        '{FIELD_NAME}',
-     *                                    ],
-     *                                ],
-     *                                // Add more relations if needed
-     *                            ],
+     *                                            ],
+     *                                            ],
+     *                                            'fields'      => [
+     *                                            '{FIELD_NAME}',
+     *                                            ],
+     *                                            ],
+     *                                            // Add more relations if needed
+     *                                            ],
      * @param string[]             $fields
+     * @param array<string, mixed>        $additional_logical_data
      *
      * @return object
      */
 
-    public function all( array $args = [], array $fields = [ '*' ] ): object {
+    public function all( array $args = [], array $fields = [ '*' ], array $additional_logical_data = [] ): object {
         $args = wp_parse_args(
             $args, [
-                'limit'   => 10,
-                'offset'  => 0,
-                'order'   => 'DESC',
-                'orderby' => 'id',
-                'status'  => '',
-                'groupby'   => '',
-                'relations' => [],
+                'limit'           => 10,
+                'offset'          => 0,
+                'order'           => 'DESC',
+                'orderby'         => 'id',
+                'status'          => '',
+                'groupby'         => '',
+                'relations'       => [],
+                'mutation_fields' => [],
             ]
         );
 
-        return $this->model->all( $args, $fields );
+        return $this->model->all( $args, $fields, $additional_logical_data );
     }
 
     /**
