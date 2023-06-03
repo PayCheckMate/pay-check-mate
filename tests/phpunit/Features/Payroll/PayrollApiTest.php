@@ -58,7 +58,7 @@ class PayrollApiTest extends WP_UnitTestCase {
         $response = $this->payroll_api->create_payroll( $request );
         $data     = $response->get_data();
 
-        $this->assertArrayHasKey( 'salary_heads', $data );
+        $this->assertArrayHasKey( 'salary_head_details', $data );
         $this->assertArrayHasKey( 'employee_salary_history', $data );
 
         $this->assertCount( 5, $data['employee_salary_history'] );

@@ -182,7 +182,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 
         $designations = $designation->all( $args );
         $data         = [];
-        foreach ( $designations as $value ) {
+        foreach ( $designations->toArray() as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }

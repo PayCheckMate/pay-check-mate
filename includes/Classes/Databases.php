@@ -128,6 +128,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employees` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `employee_id` varchar(255) NOT NULL,
                 `department_id` bigint(20) unsigned NOT NULL,
                 `designation_id` bigint(20) unsigned NOT NULL,
                 `employee_first_name` varchar(255) NOT NULL,
@@ -164,8 +165,7 @@ class Databases {
                 `employee_id` bigint(20) unsigned NOT NULL,
                 `basic_salary` decimal(10,2) NOT NULL,
                 `gross_salary` decimal(10,2) NOT NULL,
-                `salary_head_ids` text NOT NULL,
-                `salary_head_amounts` text NOT NULL,
+                `salary_head_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,
                 `remarks` text NULL,

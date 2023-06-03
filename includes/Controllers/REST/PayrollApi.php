@@ -2,6 +2,10 @@
 
 namespace PayCheckMate\Controllers\REST;
 
+use PayCheckMate\Classes\Employee;
+use PayCheckMate\Models\Employee as EmployeeModel;
+use PayCheckMate\Classes\SalaryHead;
+use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -46,63 +50,94 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
-        $salary_heads = [
-            'earnings'   => [
+        $args              = [
+            'status'  => 1,
+            'limit'   => - 1,
+            'order'   => 'ASC',
+            'orderby' => 'priority',
+        ];
+        $salary_heads      = new SalaryHead( new SalaryHeadModel() );
+        $salary_heads      = $salary_heads->all( $args );
+        $salary_head_types = [];
+        foreach ( $salary_heads->toArray() as $salary_head ) {
+            if ( 1 === absint( $salary_head->head_type ) ) {
+                $salary_head_types['earnings'][] = $salary_head;
+            } else {
+                $salary_head_types['deductions'][] = $salary_head;
+            }
+        }
+
+        $args = [
+            'status'    => 1,
+            'limit'     => - 1,
+            'order'     => 'ASC',
+            'orderby'   => 'employee_id',
+            'relations' => [
                 [
-                    'id'        => 1,
-                    'head_name' => 'Basic',
-                    'head_type' => '1',
+                    'table'       => 'pay_check_mate_designations',
+                    'local_key'   => 'designation_id',
+                    'foreign_key' => 'id',
+                    'join_type'   => 'left',
+                    'where'       => [
+                        'status' => [
+                            'operator' => '=',
+                            'value'    => 1,
+						],
+                    ],
+                    'fields'      => [
+                        'designation_name',
+                    ],
                 ],
                 [
-                    'id'        => 2,
-                    'head_name' => 'House Rent',
-                    'head_type' => '1',
+                    'table'       => 'pay_check_mate_departments',
+                    'local_key'   => 'department_id',
+                    'foreign_key' => 'id',
+                    'join_type'   => 'left',
+                    'where'       => [
+                        'status' => [
+                            'operator' => '=',
+                            'value'    => 1,
+                        ],
+                    ],
+                    'fields'      => [
+                        'department_name',
+                    ],
                 ],
                 [
-                    'id'        => 3,
-                    'head_name' => 'Medical',
-                    'head_type' => '1',
-                ],
-                [
-                    'id'        => 4,
-                    'head_name' => 'Conveyance',
-                    'head_type' => '1',
-                ],
-                [
-                    'id'        => 5,
-                    'head_name' => 'Allowance',
-                    'head_type' => '1',
-                ],
-                [
-                    'id'        => 6,
-                    'head_name' => 'Provident Fund',
-                    'head_type' => '1',
-                ],
-                [
-                    'id'        => 8,
-                    'head_name' => 'Others',
-                    'head_type' => '1',
-                ],
-            ],
-            'deductions' => [
-                [
-                    'id'        => 9,
-                    'head_name' => 'Provident Fund',
-                    'head_type' => '2',
-                ],
-                [
-                    'id'        => 10,
-                    'head_name' => 'Tax',
-                    'head_type' => '2',
-                ],
-                [
-                    'id'        => 11,
-                    'head_name' => 'Others',
-                    'head_type' => '2',
+                    'table'       => 'pay_check_mate_employee_salary_history',
+                    'local_key'   => 'employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'left',
+                    'where'       => [
+                        'active_from' => [
+                            'operator' => '<=',
+                            'value'    => $parameters['date'],
+                        ],
+                    ],
+                    'fields'      => [
+                        'basic_salary',
+                        'gross_salary',
+                        'salary_head_details',
+                    ],
                 ],
             ],
         ];
 
+        $employees = new Employee( new EmployeeModel() );
+        $employees = $employees->all(
+            $args, [
+                'id',
+                'employee_id',
+                'employee_first_name',
+                'employee_middle_name',
+                'employee_last_name',
+                'designation_id',
+                'department_id',
+            ]
+        );
+        echo '<pre>';
+        print_r( $employees );
+        exit();
         $employee_salary_history = [
             [
                 'id'              => 1,
@@ -221,10 +256,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        return new WP_REST_Response( [
-            'salary_heads'           => $salary_heads,
-            'employee_salary_history' => $employee_salary_history,
-        ], 200 );
+        return new WP_REST_Response(
+            [
+                'salary_head_types'       => $salary_head_types,
+                'employee_salary_history' => $employee_salary_history,
+            ], 200
+        );
     }
 
     /**

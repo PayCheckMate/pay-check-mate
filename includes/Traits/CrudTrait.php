@@ -19,21 +19,47 @@ trait CrudTrait {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param array<string, mixed> $args
+     *                            - 'status'    => int,
+     *                            - 'limit'     => string|int,
+     *                            - 'order'     => 'ASC',
+     *                            - 'orderby'   => string,
+     *                            - 'relations' => [
+     *                                [
+     *                                    'table'       => '{RELATION_TABLE_NAME}',
+     *                                    'local_key'   => '{{RELATION_TABLE_LOCAL_KEY}',
+     *                                    'foreign_key' => '{CURRENT_TABLE_FOREIGN_KEY}',
+     *                                    'join_type'   => '{JOIN_TYPE}',
+     *                                    'where'       => [
+     *                                        '{FIELD}' => [
+     *                                            'operator' => '{OPERATOR}',
+     *                                            'value'    => {VALUE},
+     *                                        ],
+     *                                    ],
+     *                                    'fields'      => [
+     *                                        '{FIELD_NAME}',
+     *                                    ],
+     *                                ],
+     *                                // Add more relations if needed
+     *                            ],
+     * @param string[]             $fields
      *
      * @return object
      */
-    public function all( array $args ): object {
+
+    public function all( array $args = [], array $fields = [ '*' ] ): object {
         $args = wp_parse_args(
             $args, [
-                'limit'  => 20,
+                'limit'   => 10,
                 'offset'  => 0,
                 'order'   => 'DESC',
                 'orderby' => 'id',
                 'status'  => '',
+                'groupby'   => '',
+                'relations' => [],
             ]
         );
 
-        return $this->model->all( $args );
+        return $this->model->all( $args, $fields );
     }
 
     /**
@@ -101,4 +127,5 @@ trait CrudTrait {
     public function count( array $args = [] ): int {
         return $this->model->count( $args );
     }
+
 }

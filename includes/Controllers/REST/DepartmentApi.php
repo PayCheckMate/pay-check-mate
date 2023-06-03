@@ -189,7 +189,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $departments = $department->all( $args );
         $data        = [];
 
-        foreach ( $departments as $item ) {
+        foreach ( $departments->toArray() as $item ) {
             $item   = $this->prepare_item_for_response( $item, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }

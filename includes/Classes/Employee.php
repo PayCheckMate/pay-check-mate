@@ -2,6 +2,8 @@
 
 namespace PayCheckMate\Classes;
 
-class Employee {
+use PayCheckMate\Traits\CrudTrait;
 
+class Employee {
+    use CrudTrait;
 }

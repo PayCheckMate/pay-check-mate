@@ -32,7 +32,7 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function set_created_on() : string {
+    public function set_created_on(): string {
         return current_time( 'mysql', true );
     }
 
@@ -43,7 +43,7 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function set_updated_at() : string {
+    public function set_updated_at(): string {
         return current_time( 'mysql', true );
     }
 
@@ -56,7 +56,7 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_created_on( string $date ) : string {
+    public function get_created_on( string $date ): string {
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
@@ -67,32 +67,8 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_full_name() : string {
-        return $this->employee_first_name . ' ' . $this->employee_middle_name . ' ' . $this->employee_last_name;
-    }
-
-    /**
-     * Get employee department
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @throws \Exception
-     * @return string
-     */
-    public function get_department() : string {
-        return Department::find( $this->department_id )->department_name;
-    }
-
-    /**
-     * Get employee designation
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @throws \Exception
-     * @return string
-     */
-    public function get_designation() : string {
-        return Designation::find( $this->designation_id )->designation_name;
+    public function get_full_name(): string {
+        return $this->employee_first_name . ' ' . $this->employee_last_name;
     }
 
     /**
@@ -102,7 +78,7 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_joining_date() : string {
+    public function get_joining_date(): string {
         return get_date_from_gmt( $this->employee_joining_date, 'd M Y' );
     }
 
@@ -113,7 +89,7 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_regine_date() : string {
+    public function get_regine_date(): string {
         return get_date_from_gmt( $this->employee_regine_date, 'd M Y' );
     }
 
@@ -124,19 +100,19 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_status() : string {
+    public function get_status(): string {
         return $this->status ? 'Active' : 'Inactive';
     }
 
-/**
+    /**
      * Get employee salary heads
      *
      * @since PAY_CHECK_MATE_SINCE
      *
      * @return string
      */
-    public function get_salary_heads() : string {
-
-    }
+    //    public function get_salary_heads() : string {
+    //
+    //    }
 
 }
