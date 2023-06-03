@@ -172,7 +172,7 @@ class Databases {
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
-                FOREIGN KEY (`employee_id`) REFERENCES `{$this->table_prefix}employees`(`id`)
+                FOREIGN KEY (`employee_id`) REFERENCES `{$this->table_prefix}employees`(`employee_id`)
             ) {$this->charset_collate};";
 
         dbDelta( $sql );

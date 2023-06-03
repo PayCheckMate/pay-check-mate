@@ -118,17 +118,17 @@ class Employee extends Model {
         $salary_head_details = json_decode( $salary_head_details, true );
         $salary              = [
             'salary_head_details' => [
-                'earnings'   => [],
-                'deductions' => [],
+                'earnings'    => [],
+                'deductions'  => [],
+                'non_taxable' => [],
             ],
         ];
 
         foreach ( $salary_head_details as $key => $amount ) {
-            if ( array_key_exists( $key, $salary_head_types['earnings'] ) ) {
-                $salary['salary_head_details']['earnings'][$key] = $amount;
-            }
-            if ( array_key_exists( $key, $salary_head_types['deductions'] ) ) {
-                $salary['salary_head_details']['deductions'][$key] = $amount;
+            foreach ( array_keys( $salary_head_types ) as $type ) {
+                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
+                    $salary['salary_head_details'][$type][$key] = $amount;
+                }
             }
         }
 

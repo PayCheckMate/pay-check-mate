@@ -47,7 +47,7 @@ class Model implements ModelInterface {
      *
      * @param array<string, mixed> $args
      * @param array<string>        $fields
-     * @param array<string, mixed>        $additional_logical_data
+     * @param array<string, mixed> $additional_logical_data
      *
      * @throws \Exception
      * @return object Array of stdClass objects or null if no results.

@@ -27,7 +27,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function register_api_routes(): void {
         register_rest_route(
             $this->namespace,
-            '/' . $this->rest_base . '/create-payroll', [
+            '/' . $this->rest_base, [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_payrolls' ],
+                    'permission_callback' => [ $this, 'get_payrolls_permissions_check' ],
+                    'args'                => $this->get_collection_params(),
+                ],
                 [
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => [ $this, 'create_payroll' ],
@@ -39,8 +45,25 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         );
     }
 
+    public function get_payrolls_permissions_check( $request ): bool {
+        return true;
+    }
+
     public function create_payroll_permissions_check( $request ): bool {
         return true;
+    }
+
+    /**
+     * Get a collection of items
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request $request Full details about the request.
+     *
+     * @return \WP_REST_Response Response object on success, or WP_Error object on failure.
+     */
+    public function get_payrolls( \WP_REST_Request $request ): WP_REST_Response {
+        return new WP_REST_Response( [ 'message' => 'Hello World!' ], 200 );
     }
 
     public function create_payroll( \WP_REST_Request $request ) {
@@ -60,22 +83,26 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_heads      = $salary_heads->all( $args );
         $salary_head_types = [];
         foreach ( $salary_heads->toArray() as $salary_head ) {
-            if ( 1 === absint( $salary_head->head_type ) ) {
-                $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
+            if ( $salary_head->is_taxable ) {
+				if ( 1 === absint( $salary_head->head_type ) ) {
+					$salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
+				} else {
+					$salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
+				}
             } else {
-                $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
+                $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
             }
         }
 
         $args = [
-            'status'    => 1,
-            'limit'     => - 1,
-            'order'     => 'ASC',
-            'orderby'   => 'employee_id',
+            'status'          => 1,
+            'limit'           => - 1,
+            'order'           => 'ASC',
+            'orderby'         => 'employee_id',
             'mutation_fields' => [
                 'full_name',
             ],
-            'relations' => [
+            'relations'       => [
                 [
                     'table'       => 'pay_check_mate_designations',
                     'local_key'   => 'designation_id',
@@ -85,7 +112,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                         'status' => [
                             'operator' => '=',
                             'value'    => 1,
-						],
+                        ],
                     ],
                     'fields'      => [
                         'designation_name',
@@ -129,62 +156,20 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $employees = new Employee( new EmployeeModel() );
         $employees = $employees->all(
             $args, [
-                'id',
-                'employee_id',
-                'employee_first_name',
-                'employee_middle_name',
-                'employee_last_name',
-                'designation_id',
-                'department_id',
-            ], $salary_head_types
+				'id',
+				'employee_id',
+				'employee_first_name',
+				'employee_middle_name',
+				'employee_last_name',
+				'designation_id',
+				'department_id',
+			], $salary_head_types
         );
-
-        /**
-*
-        [id] => 1
-        [employee_id] => 10000
-        [employee_first_name] => John
-        [employee_middle_name] => Doe
-        [employee_last_name] => Doe
-        [designation_id] => 1
-        [department_id] => 1
-        [designation_name] => Software Engineer
-        [department_name] => Human Resource
-        [basic_salary] => 1000.00
-        [gross_salary] => 1200.00
-        [salary_head_details] => {'1':500,'2':200,'3':100,'4':50,'5':25,'6':10}
-         */
-        $employee_salary_history = [
-            [
-                'id'              => 1,
-                'employee_id'     => 1,
-                'employee_name'   => 'John Doe',
-                'designation'     => 'Software Engineer',
-                'department'      => 'Development',
-                'salary_head_ids' => [
-                    'earnings'   => [
-                        1 => 10000,
-                        2 => 5000,
-                        3 => 2000,
-                        4 => 1000,
-                        5 => 1000,
-                        6 => 1000,
-                        8 => 1000,
-                    ],
-                    'deductions' => [
-                        9  => 1000,
-                        10 => 1000,
-                        11 => 1000,
-                    ],
-                ],
-            ],
-        ];
 
         return new WP_REST_Response(
             [
                 'salary_head_types'       => $salary_head_types,
-                'employee_salary_history' => $employee_salary_history,
-                'employees'               => $employees->toArray(),
+                'employee_salary_history' => $employees->toArray(),
             ], 200
         );
     }

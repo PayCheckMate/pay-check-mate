@@ -1,9 +1,43 @@
-import React from "@wordpress/element";
+import React, {useEffect, useState} from "@wordpress/element";
 import {EmployeeSalary, HeadType, SalaryHeadsResponseType} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
+import useFetchApi from "../../Helpers/useFetchApi2";
 
 const CreatePayroll = () => {
-    const salaryHeads: SalaryHeadsResponseType = {
+    const {
+        models,
+        loading,
+        makePostRequest,
+        filterObject,
+        setFilterObject,
+    } = useFetchApi<SalaryHeadsResponseType>('/pay-check-mate/v1/payroll');
+    const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
+    useEffect(() => {
+        if (models) {
+            console.log(models)
+        }
+        try {
+            makePostRequest<any>('', {'date': '2023-05-01'}, false).then((data) => {
+                const earning_types = Object.values(data.salary_head_types.earnings).map(item => item);
+                const deduction_types = Object.values(data.salary_head_types.deductions).map(item => item);
+                const non_taxable_types = Object.values(data.salary_head_types.non_taxable).map(item => item);
+                const salary_heads = {
+                    earnings: earning_types,
+                    deductions: deduction_types,
+                    nonTaxable: non_taxable_types,
+                }
+                setSalaryHeads(salary_heads)
+            }).catch((e: unknown) => {
+                console.log(e);
+            })
+        } catch (error) {
+            console.log(error); // Handle the error accordingly
+        }
+    }, [filterObject]);
+
+
+
+    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
         earnings: [
             {
                 id: 2,
@@ -77,42 +111,41 @@ const CreatePayroll = () => {
             }
 
         ]
-    };
+    });
 
-    const tableData: EmployeeSalary[] = [];
 
-    for (let i = 1; i <= 100; i++) {
-        const data: EmployeeSalary = {
-            id: i,
-            employeeName: "Ratul Hasan",
-            designation: "Software Engineer",
-            department: "Engineering",
-            basic: 62500,
-            allowance: {
-                2: 25000,
-                3: 15000,
-                4: 5000,
-                5: 5500,
-            },
-            totalAllowance: 50500,
-            deductions: {
-                9: 5500,
-                10: 250,
-                11: 10,
-                12: 5000,
-            },
-            totalDeductions: 10760,
-            netPayable: 102240,
-            nonTaxableAllowance: {
-                13: 500,
-                14: 1000,
-                15: 2000,
-            },
-            totalPayable: 105740,
-        };
-
-        tableData.push(data);
-    }
+    // for (let i = 1; i <= 100; i++) {
+    //     const data: EmployeeSalary = {
+    //         id: i,
+    //         employeeName: "Ratul Hasan",
+    //         designation: "Software Engineer",
+    //         department: "Engineering",
+    //         basic: 62500,
+    //         allowance: {
+    //             2: 25000,
+    //             3: 15000,
+    //             4: 5000,
+    //             5: 5500,
+    //         },
+    //         totalAllowance: 50500,
+    //         deductions: {
+    //             9: 5500,
+    //             10: 250,
+    //             11: 10,
+    //             12: 5000,
+    //         },
+    //         totalDeductions: 10760,
+    //         netPayable: 102240,
+    //         nonTaxableAllowance: {
+    //             13: 500,
+    //             14: 1000,
+    //             15: 2000,
+    //         },
+    //         totalPayable: 105740,
+    //     };
+    //
+    //     tableData.push(data);
+    // }
     const sumValues = (values: { [key: number]: number }): number => {
         return Object.values(values).reduce((sum, value) => sum + value, 0);
     };
@@ -177,18 +210,18 @@ const CreatePayroll = () => {
                         <td className="text-left">{data.department}</td>
                         <td className="text-left">{data.basic}</td>
                         {/* Loop over data.allowance */}
-                        {Object.entries(data.allowance).map(([key, value]) => (
+                        {Object.entries(data.salary_head_details.allowance).map(([key, value]) => (
                             <td className="text-right" key={key}>{value}</td>
                         ))}
                         <td className="text-right total_salary">{data.totalAllowance}</td>
                         {/* Loop over data.deductions */}
-                        {Object.entries(data.deductions).map(([key, value]) => (
+                        {Object.entries(data.salary_head_details.deductions).map(([key, value]) => (
                             <td className="text-right" key={key}>{value}</td>
                         ))}
                         <td className="total_deduction text-right">{data.totalDeductions}</td>
                         <td className="net_payable text-right">{data.netPayable}</td>
                         {/* Loop over data.nonTaxableAllowance */}
-                        {Object.entries(data.nonTaxableAllowance).map(([key, value]) => (
+                        {Object.entries(data.salary_head_details.nonTaxableAllowance).map(([key, value]) => (
                             <td className="text-right" key={key}>{value}</td>
                         ))}
                         <td className="total_payable text-right">{data.totalPayable}</td>
