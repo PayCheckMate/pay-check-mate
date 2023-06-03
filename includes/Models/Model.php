@@ -31,9 +31,9 @@ class Model implements ModelInterface {
     protected static array $columns;
 
     /**
-     * @var array|string[] $fillable
+     * @var mixed
      */
-    protected static array $fillable;
+    private $data;
 
     /**
      * Get all the items.
@@ -49,7 +49,7 @@ class Model implements ModelInterface {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
-                'limit'  => 20,
+                'limit'   => 20,
                 'offset'  => 0,
                 'order'   => 'DESC',
                 'orderby' => 'id',
@@ -62,7 +62,7 @@ class Model implements ModelInterface {
             $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
         }
 
-        $query = $wpdb->prepare(
+        $query   = $wpdb->prepare(
             "SELECT * FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
             $args['limit'],
             $args['offset'],
@@ -114,7 +114,7 @@ class Model implements ModelInterface {
     public function find( int $id ) : object {
         global $wpdb;
 
-        $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
+        $query   = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
         $results = $wpdb->get_row( $query );
 
         return $this->process_item( $results );
@@ -130,7 +130,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return object|WP_Error The number of rows inserted, or false on error.
      */
-    public function create( Request $data ): object {
+    public function create( Request $data ) : object {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -148,7 +148,7 @@ class Model implements ModelInterface {
             return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pcm' ) );
         }
 
-        return $this->find($last_id);
+        return $this->find( $last_id );
     }
 
     /**
@@ -313,13 +313,14 @@ class Model implements ModelInterface {
      * @return object
      */
     private function process_item( object $item ) : object {
+        $this->data = $item;
         $columns = $this->get_columns();
         foreach ( $columns as $column => $type ) {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
                 $value = call_user_func( [ $this, $method ], $item->$column );
-                if( is_array( $value ) ) {
+                if ( is_array( $value ) ) {
                     foreach ( $value as $key => $val ) {
                         $item->$key = $val;
                     }
@@ -333,5 +334,35 @@ class Model implements ModelInterface {
         return $item;
     }
 
+    /**
+     * Magic method to get the data. This will return the data if it exists.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $name
+     *
+     * @return mixed|null
+     */
+    public function __get( string $name ) {
+        if ( array_key_exists( $name, $this->data ) ) {
+            return $this->data[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Magic method to set the data. This will set the data if it exists.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function __set( string $name, $value ) {
+        $this->data[$name] = $value;
+    }
 
 }

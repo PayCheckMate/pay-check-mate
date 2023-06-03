@@ -8,14 +8,14 @@ class Databases {
      *
      * @var string
      */
-    protected $charset_collate;
+    protected string $charset_collate;
 
     /**
      * Database prefix.
      *
      * @var string
      */
-    protected $prefix;
+    protected string $prefix;
     protected string $table_prefix;
 
     /**
@@ -128,22 +128,22 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employees` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `department_id` bigint(20) unsigned NOT NULL,
+                `designation_id` bigint(20) unsigned NOT NULL,
                 `employee_first_name` varchar(255) NOT NULL,
                 `employee_middle_name` varchar(255) NULL,
                 `employee_last_name` varchar(255) NOT NULL,
                 `employee_email` varchar(255) NOT NULL,
                 `employee_phone` varchar(255) NOT NULL,
                 `employee_address` varchar(255) NOT NULL,
-                `employee_department` bigint(20) unsigned NOT NULL,
-                `employee_designation` bigint(20) unsigned NOT NULL,
                 `employee_joining_date` DATE NOT NULL,
                 `employee_regine_date` DATE NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
-                FOREIGN KEY (`employee_department`) REFERENCES `{$this->table_prefix}departments`(`id`),
-                FOREIGN KEY (`employee_designation`) REFERENCES `{$this->table_prefix}designations`(`id`)
+                FOREIGN KEY (`department_id`) REFERENCES `{$this->table_prefix}departments`(`id`),
+                FOREIGN KEY (`designation_id`) REFERENCES `{$this->table_prefix}designations`(`id`)
             ) {$this->charset_collate};";
 
         dbDelta( $sql );
@@ -168,6 +168,7 @@ class Databases {
                 `salary_head_amounts` text NOT NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,
+                `remarks` text NULL,
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`),
