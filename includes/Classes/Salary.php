@@ -12,9 +12,4 @@ class Salary {
     public function __construct( Employee $employee ) {
         $this->employee = $employee;
     }
-
-    public function get_salary_heads() {
-
-    }
-
 }
