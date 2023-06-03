@@ -13,18 +13,7 @@ interface CheckBoxProps {
     ariaDescribedBy?: string;
 }
 
-export const FormCheckBox = ({
-                                 label,
-                                 name,
-                                 id,
-                                 className = '',
-                                 value,
-                                 checked,
-                                 onChange,
-                                 error,
-                                 ariaInvalid,
-                                 ariaDescribedBy,
-                             }: CheckBoxProps) => {
+export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,}: CheckBoxProps) => {
     return (
         <div>
             <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">

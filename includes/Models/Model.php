@@ -41,11 +41,12 @@ class Model implements ModelInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param array<string, mixed> $args
+     * @param array<string>        $fields
      *
-     * @throws Exception
+     * @throws \Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all( array $args ) : object {
+    public function all( array $args, array $fields = [ '*' ] ) : object {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -62,11 +63,13 @@ class Model implements ModelInterface {
             $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
         }
 
-        $query   = $wpdb->prepare(
-            "SELECT * FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+        $fields = implode(', ', esc_sql($fields));
+        $query = $wpdb->prepare(
+            "SELECT $fields FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
             $args['limit'],
-            $args['offset'],
+            $args['offset']
         );
+
         $results = $wpdb->get_results( $query );
 
         return $this->process_items( $results );
@@ -106,15 +109,18 @@ class Model implements ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int $id
+     * @param int           $id
+     * @param array<string> $fields
+     *
      *
      * @throws \Exception
      * @return object
      */
-    public function find( int $id ) : object {
+    public function find( int $id, array $fields=['*'] ) : object {
         global $wpdb;
 
-        $query   = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
+        $fields  = implode( ',', esc_sql( $fields ) );
+        $query   = $wpdb->prepare( "SELECT $fields FROM {$this->get_table()} WHERE id = %d", $id );
         $results = $wpdb->get_row( $query );
 
         return $this->process_item( $results );
@@ -314,7 +320,7 @@ class Model implements ModelInterface {
      */
     private function process_item( object $item ) : object {
         $this->data = $item;
-        $columns = $this->get_columns();
+        $columns    = $this->get_columns();
         foreach ( $columns as $column => $type ) {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {

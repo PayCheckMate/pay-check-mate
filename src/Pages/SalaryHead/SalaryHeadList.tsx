@@ -27,7 +27,7 @@ export const SalaryHeadList = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedHeadType, setSelectedHeadType] = useState<SelectBoxType>(headType[0] as SelectBoxType);
-    const [isPercentage, setIsPercentage] = useState<SelectBoxType>(is_percentage[0] as SelectBoxType);
+    const [isPercentage, setIsPercentage] = useState(is_percentage[0]);
     const {
         models,
         loading,
@@ -62,7 +62,7 @@ export const SalaryHeadList = () => {
                 return (
                     <span>
                         {record.head_amount}
-                        {parseInt(String(record.is_percentage)) === 1 ? ' %' : ' $'}
+                        {parseInt(String(record.is_percentage)) === 1 ? ' %' : ''}
                     </span>
                 )
             }
@@ -164,6 +164,16 @@ export const SalaryHeadList = () => {
     }
 
     const handleModal = (data: SalaryHeadType) => {
+        if (!data.head_type){
+            data = {
+                ...data,
+                head_type: HeadType.Earning,
+                is_percentage: 1,
+                is_taxable: 1,
+                priority: 1,
+                status: 1
+            }
+        }
         setSelectedHeadType({id: data.head_type, name: parseInt(String(data.head_type)) === HeadType.Earning ? __('Earning', 'pcm') : __('Deduction', 'pcm')})
         setIsPercentage({id: data.is_percentage, name: parseInt(String(data.is_percentage)) === 1 ? __('Yes', 'pcm') : __('No', 'pcm')})
         setFormData(data)
@@ -178,9 +188,7 @@ export const SalaryHeadList = () => {
     const handleHeadType = (data: SelectBoxType) => {
         setSelectedHeadType(data);
     }
-    const handlePercentage = (data: SelectBoxType) => {
-        setIsPercentage(data);
-    }
+
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const data = formData
@@ -238,8 +246,9 @@ export const SalaryHeadList = () => {
                             {__('Add salary head', 'pcm')}
                         </Button>
                         {showModal && (
-                            <Modal setShowModal={setShowModal} header={__('Add salary head', 'pcm')}>
-                                {/*Create a form to save salary head*/}
+                            <Modal setShowModal={setShowModal} header={__('Add salary head', 'pcm')}
+                                   description={__('No need to add Basic as salary head. It will be added automatically.', 'pcm')}
+                            >
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <FormInput
@@ -261,46 +270,45 @@ export const SalaryHeadList = () => {
                                                 handleInputChange(e)
                                             }
                                         />
+                                        <FormCheckBox
+                                            label={__('^ Is percentage', 'pcm')}
+                                            name="is_percentage"
+                                            id="is_percentage"
+                                            value={formData.is_percentage}
+                                            checked={parseInt(String(formData.is_percentage)) === 1}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setFormData({ ...formData, is_percentage: 1 });
+                                                    setIsPercentage({id: 1, name: 'Yes'})
+                                                } else {
+                                                    setFormData({ ...formData, is_percentage: 0 });
+                                                    setIsPercentage({id: 0, name: 'No'})
+                                                }
+                                            }}
+                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        />
                                         <SelectBox
                                             title={__('Head type', 'pcm')}
                                             options={headType}
                                             selected={selectedHeadType}
                                             setSelected={handleHeadType}
                                         />
+                                        <FormCheckBox
+                                            label={__('^ Is Taxable', 'pcm')}
+                                            name="is_taxable"
+                                            id="is_taxable"
+                                            value={formData.is_taxable}
+                                            checked={parseInt(String(formData.is_taxable)) === 1}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setFormData({ ...formData, is_taxable: 1 });
+                                                } else {
+                                                    setFormData({ ...formData, is_taxable: 0 });
+                                                }
+                                            }}
+                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        />
                                         <FormInput label={__('Priority', 'pcm')} type="number" name="priority" id="priority" value={formData.priority} onChange={(e) => handleInputChange(e)} />
-                                        <div className="flex space-x-6">
-                                            <FormCheckBox
-                                                label={__('Is percentage', 'pcm')}
-                                                name="is_percentage"
-                                                id="is_percentage"
-                                                value={formData.is_percentage}
-                                                checked={parseInt(String(formData.is_percentage)) === 1}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setFormData({ ...formData, is_percentage: 1 });
-                                                    } else {
-                                                        setFormData({ ...formData, is_percentage: 0 });
-                                                    }
-                                                }}
-                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            />
-                                            <div className="w-4" />
-                                            <FormCheckBox
-                                                label={__('Is Taxable', 'pcm')}
-                                                name="is_taxable"
-                                                id="is_taxable"
-                                                value={formData.is_taxable}
-                                                checked={parseInt(String(formData.is_taxable)) === 1}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setFormData({ ...formData, is_taxable: 1 });
-                                                    } else {
-                                                        setFormData({ ...formData, is_taxable: 0 });
-                                                    }
-                                                }}
-                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            />
-                                        </div>
                                         <div className="text-right">
                                             <Button className="mt-4" onClick={() => handleSubmit(event)}>
                                                 {__('Add salary head', 'pcm')}
