@@ -142,9 +142,7 @@ class Databases {
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                FOREIGN KEY (`department_id`) REFERENCES `{$this->table_prefix}departments`(`id`),
-                FOREIGN KEY (`designation_id`) REFERENCES `{$this->table_prefix}designations`(`id`)
+                PRIMARY KEY (`id`)
             ) {$this->charset_collate};";
 
         dbDelta( $sql );
@@ -164,15 +162,13 @@ class Databases {
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `employee_id` bigint(20) unsigned NOT NULL,
                 `basic_salary` decimal(10,2) NOT NULL,
-                `gross_salary` decimal(10,2) NOT NULL,
                 `salary_head_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,
                 `remarks` text NULL,
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
-                PRIMARY KEY (`id`),
-                FOREIGN KEY (`employee_id`) REFERENCES `{$this->table_prefix}employees`(`employee_id`)
+                PRIMARY KEY (`id`)
             ) {$this->charset_collate};";
 
         dbDelta( $sql );

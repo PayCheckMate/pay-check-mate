@@ -72,6 +72,13 @@ class Employee extends Model {
     }
 
     /**
+     * Get basic salary
+     */
+    public function get_basic_salary(): float {
+        return doubleval($this->basic_salary );
+    }
+
+    /**
      * Get employee joining date
      *
      * @since PAY_CHECK_MATE_SINCE

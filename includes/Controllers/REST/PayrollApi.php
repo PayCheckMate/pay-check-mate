@@ -84,11 +84,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_head_types = [];
         foreach ( $salary_heads->toArray() as $salary_head ) {
             if ( $salary_head->is_taxable ) {
-				if ( 1 === absint( $salary_head->head_type ) ) {
-					$salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
-				} else {
-					$salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
-				}
+                if ( 1 === absint( $salary_head->head_type ) ) {
+                    $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
+                } else {
+                    $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
+                }
             } else {
                 $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
             }
@@ -139,15 +139,26 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
                     'where'       => [
+                        'status' => [
+                            'operator' => '=',
+                            'value'    => 1,
+                        ],
+                    ],
+                    'where_max'   => [
                         'active_from' => [
                             'operator' => '<=',
-                            'value'    => $parameters['date'],
+                            'value'    => "$parameters[date]",
+                            'compare'  => [
+                                'key'      => 'active_from',
+                                'operator' => '<=',
+                                'value'    => "$parameters[date]",
+                            ],
                         ],
                     ],
                     'fields'      => [
                         'basic_salary',
-                        'gross_salary',
                         'salary_head_details',
+                        'active_from',
                     ],
                 ],
             ],

@@ -33,10 +33,16 @@ export interface SalaryHeadTypeForPayroll {
     head_type: HeadType;
     priority: number;
 }
+
+export interface SalaryResponseType {
+    salary_head_types: SalaryHeadsResponseType
+    employee_salary_history: EmployeeSalary[];
+}
+
 export interface SalaryHeadsResponseType {
     earnings: SalaryHeadTypeForPayroll[];
     deductions: SalaryHeadTypeForPayroll[];
-    nonTaxable: SalaryHeadTypeForPayroll[];
+    non_taxable: SalaryHeadTypeForPayroll[];
 }
 
 // Employee Salary Response Type
@@ -54,15 +60,20 @@ export interface NonTaxableAllowance {
 
 export interface EmployeeSalary {
     id: number;
-    employeeName: string;
-    designation: string;
-    department: string;
-    basic: number;
-    allowance: Allowance;
-    totalAllowance: number;
-    deductions: Deductions;
-    totalDeductions: number;
-    netPayable: number;
-    nonTaxableAllowance: NonTaxableAllowance;
-    totalPayable: number;
+    employee_id: string | number;
+    full_name: string;
+    designation_name: string;
+    department_name: string;
+    basic_salary: number;
+    salary_head_details: {
+        earnings: {
+            [id: number]: number;
+        }
+        deductions: {
+            [id: number]: number;
+        }
+        non_taxable: {
+            [id: number]: number;
+        }
+    }
 }

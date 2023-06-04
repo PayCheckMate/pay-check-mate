@@ -36,29 +36,29 @@ class PayrollApiTest extends WP_UnitTestCase {
         $this->payroll_api->register_api_routes();
 
         $routes = $wp_rest_server->get_routes();
-        $this->assertArrayHasKey( '/pay-check-mate/v1/payroll/create-payroll', $routes );
-        $this->assertCount( 1, $routes['/pay-check-mate/v1/payroll/create-payroll'] );
-        $this->assertArrayHasKey( 'POST', $routes['/pay-check-mate/v1/payroll/create-payroll'][0]['methods'] );
-        $this->assertEquals( [ $this->payroll_api, 'create_payroll' ], $routes['/pay-check-mate/v1/payroll/create-payroll'][0]['callback'] );
-        $this->assertEquals( [ $this->payroll_api, 'create_payroll_permissions_check' ], $routes['/pay-check-mate/v1/payroll/create-payroll'][0]['permission_callback'] );
-        $this->assertArrayHasKey( 'date', $routes['/pay-check-mate/v1/payroll/create-payroll'][0]['args'] );
+        $this->assertArrayHasKey( '/pay-check-mate/v1/payroll', $routes );
+        $this->assertCount( 1, $routes['/pay-check-mate/v1/payroll'] );
+        $this->assertArrayHasKey( 'POST', $routes['/pay-check-mate/v1/payroll'][1]['methods'] );
+        $this->assertEquals( [ $this->payroll_api, 'create_payroll' ], $routes['/pay-check-mate/v1/payroll'][1]['callback'] );
+        $this->assertEquals( [ $this->payroll_api, 'create_payroll_permissions_check' ], $routes['/pay-check-mate/v1/payroll'][1]['permission_callback'] );
+        $this->assertArrayHasKey( 'date', $routes['/pay-check-mate/v1/payroll'][1]['args'] );
     }
 
     public function test_create_payroll_permissions_check() {
-        $request  = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll/create-payroll' );
+        $request  = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll' );
         $response = $this->payroll_api->create_payroll_permissions_check( $request );
 
         $this->assertTrue( $response );
     }
 
     public function test_create_payroll_with_valid_date() {
-        $request = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll/create-payroll' );
+        $request = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll' );
         $request->set_param( 'date', '2023-05-31' );
 
         $response = $this->payroll_api->create_payroll( $request );
         $data     = $response->get_data();
 
-        $this->assertArrayHasKey( 'salary_head_details', $data );
+        $this->assertArrayHasKey( 'salary_head_types', $data );
         $this->assertArrayHasKey( 'employee_salary_history', $data );
 
         $this->assertCount( 5, $data['employee_salary_history'] );
@@ -67,7 +67,7 @@ class PayrollApiTest extends WP_UnitTestCase {
     }
 
     public function test_create_payroll_without_date() {
-        $request = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll/create-payroll' );
+        $request = new WP_REST_Request( 'POST', '/pay-check-mate/v1/payroll' );
 
         $response = $this->payroll_api->create_payroll( $request );
         $data     = $response->get_data();
