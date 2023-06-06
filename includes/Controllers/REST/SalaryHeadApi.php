@@ -88,6 +88,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
+                        'is_variable' => [
+                            'description' => __( 'Is Changeable in every month?', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
                         'is_taxable' => [
                             'description' => __( 'Salary head is taxable.', 'pcm' ),
                             'type'        => 'boolean',
@@ -365,6 +370,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'is_percentage'  => [
                     'description' => __( 'Salary Head is Percentage', 'pcm' ),
+                    'type'        => 'boolean',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'is_variable'  => [
+                    'description' => __( 'Is Changeable in every month?', 'pcm' ),
                     'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],

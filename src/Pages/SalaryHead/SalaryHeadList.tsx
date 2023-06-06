@@ -20,6 +20,11 @@ const is_percentage = [
     {id: 0, name: __('No', 'pcm')},
 ]
 
+const is_variable = [
+    {id: 1, name: __('Yes', 'pcm')},
+    {id: 0, name: __('No', 'pcm')},
+]
+
 export const SalaryHeadList = () => {
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
     const [showModal, setShowModal] = useState(false);
@@ -28,6 +33,7 @@ export const SalaryHeadList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedHeadType, setSelectedHeadType] = useState<SelectBoxType>(headType[0] as SelectBoxType);
     const [isPercentage, setIsPercentage] = useState(is_percentage[0]);
+    const [isVariable, setIsVariable] = useState(is_variable[0]);
     const {
         models,
         loading,
@@ -63,6 +69,7 @@ export const SalaryHeadList = () => {
                     <span>
                         {record.head_amount}
                         {parseInt(String(record.is_percentage)) === 1 ? ' %' : ''}
+                        {parseInt(String(record.is_variable)) === 1 ? __(' and variable', 'pcm') : ''}
                     </span>
                 )
             }
@@ -140,11 +147,12 @@ export const SalaryHeadList = () => {
         const head_type = head?.head_type;
         const head_amount = head?.head_amount;
         const is_percentage = head?.is_percentage;
+        const is_variable = head?.is_variable;
         const is_taxable = head?.is_taxable;
         const priority = head?.priority;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, head_name, status, head_type, is_percentage, head_amount, is_taxable, priority, _wpnonce};
+        const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/salary-heads/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -196,6 +204,7 @@ export const SalaryHeadList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         data.head_type = selectedHeadType.id;
         data.is_percentage = isPercentage.id ? 1 : 0;
+        data.is_variable = isVariable.id ? 1 : 0;
         data.is_taxable = formData.is_taxable ?? 1;
         data.priority = formData.priority ?? 1;
         if (formData.id) {
@@ -270,23 +279,46 @@ export const SalaryHeadList = () => {
                                                 handleInputChange(e)
                                             }
                                         />
-                                        <FormCheckBox
-                                            label={__('^ Is percentage', 'pcm')}
-                                            name="is_percentage"
-                                            id="is_percentage"
-                                            value={formData.is_percentage}
-                                            checked={parseInt(String(formData.is_percentage)) === 1}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setFormData({ ...formData, is_percentage: 1 });
-                                                    setIsPercentage({id: 1, name: 'Yes'})
-                                                } else {
-                                                    setFormData({ ...formData, is_percentage: 0 });
-                                                    setIsPercentage({id: 0, name: 'No'})
-                                                }
-                                            }}
-                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                        />
+                                        <div className="flex items-center justify-between">
+                                            <FormCheckBox
+                                              label={__('^ Is percentage', 'pcm')}
+                                              name="is_percentage"
+                                              id="is_percentage"
+                                              value={formData.is_percentage}
+                                              checked={parseInt(String(formData.is_percentage)) === 1}
+                                              onChange={(e) => {
+                                                  if (e.target.checked) {
+                                                      setFormData({ ...formData, is_percentage: 1 });
+                                                      setIsPercentage({id: 1, name: 'Yes'})
+                                                  } else {
+                                                      setFormData({ ...formData, is_percentage: 0 });
+                                                      setIsPercentage({id: 0, name: 'No'})
+                                                  }
+                                              }}
+                                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            />
+                                            <FormCheckBox
+                                              label={__('^ Is changeable in every payroll', 'pcm')}
+                                              name="is_variable"
+                                              id="is_variable"
+                                              value={formData.is_variable}
+                                              checked={parseInt(String(formData.is_variable)) === 1}
+                                              onChange={(e) => {
+                                                  if (e.target.checked) {
+                                                      setFormData({
+                                                          ...formData,
+                                                          is_variable: 1,
+                                                          head_amount: 0
+                                                      });
+                                                      setIsVariable({id: 1, name: 'Yes'})
+                                                  } else {
+                                                      setFormData({ ...formData, is_variable: 0 });
+                                                      setIsVariable({id: 0, name: 'No'})
+                                                  }
+                                              }}
+                                              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            />
+                                        </div>
                                         <SelectBox
                                             title={__('Head type', 'pcm')}
                                             options={headType}

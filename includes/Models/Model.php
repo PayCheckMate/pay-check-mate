@@ -141,8 +141,8 @@ class Model implements ModelInterface {
                 }
             }
 
-            if ( ! empty( $relation['where_max'] ) ) {
-                foreach ( $relation['where_max'] as $key => $value ) {
+            if ( ! empty( $relation['select_max'] ) ) {
+                foreach ( $relation['select_max'] as $key => $value ) {
                     $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}", $value['value'] );
                     $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})", $value['value'] );
                 }

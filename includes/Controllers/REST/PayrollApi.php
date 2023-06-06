@@ -144,7 +144,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                             'value'    => 1,
                         ],
                     ],
-                    'where_max'   => [
+                    'select_max'   => [
                         'active_from' => [
                             'operator' => '<=',
                             'value'    => "$parameters[date]",
