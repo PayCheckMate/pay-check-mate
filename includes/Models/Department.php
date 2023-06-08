@@ -19,7 +19,7 @@ class Department extends Model {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'department_name' => '%s',
+        'name' => '%s',
         'status'          => '%d',
         'created_on'      => '%s',
         'updated_at'      => '%s',

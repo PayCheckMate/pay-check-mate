@@ -106,7 +106,7 @@ class Model implements ModelInterface {
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
-        if ( - 1 === $args['limit'] ) {
+        if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
                 "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$args['orderby']} {$args['order']}",
             );

@@ -57,7 +57,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
 			    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			    `department_name` varchar(255) NOT NULL,
+			    `name` varchar(255) NOT NULL,
 			    `status` tinyint(1) NOT NULL DEFAULT '1',
 			    `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			    `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -79,7 +79,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}designations` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                `designation_name` varchar(255) NOT NULL,
+                `name` varchar(255) NOT NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,

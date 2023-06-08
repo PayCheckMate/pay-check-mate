@@ -124,10 +124,10 @@ class RestController extends WP_REST_Controller {
             'per_page'  => [
                 'description'       => __( 'Maximum number of items to be returned in result set.', 'pcm' ),
                 'type'              => 'integer',
-                'sanitize_callback' => 'absint',
+                'sanitize_callback' => 'sanitize_text_field',
                 'validate_callback' => 'rest_validate_request_arg',
                 'default'           => 10,
-                'minimum'           => 1,
+                'minimum'           => -1,
                 'maximum'           => 100,
             ],
             'orderby'   => [

@@ -73,9 +73,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
+        $date = date( 'Y-m-d', strtotime( $parameters['date'] ) );
+        $month = date( 'm', strtotime( $date ) );
+        $year = date( 'Y', strtotime( $date ) );
+        $lastDayOfMonth = date( 't', strtotime( $date ) );
+
+        $parameters['date'] = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $lastDayOfMonth ) );
+
         $args              = [
             'status'  => 1,
-            'limit'   => - 1,
+            'limit'   => '-1',
             'order'   => 'ASC',
             'orderby' => 'priority',
         ];
@@ -94,45 +101,63 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             }
         }
 
+        $department_args = [
+            'table'       => 'pay_check_mate_departments',
+            'local_key'   => 'department_id',
+            'foreign_key' => 'id',
+            'join_type'   => 'left',
+            'where'       => [
+                'status' => [
+                    'operator' => '=',
+                    'value'    => 1,
+                ],
+            ],
+            'fields'      => [
+                'name as department_name',
+            ],
+        ];
+
+        $designation_args = [
+            'table'       => 'pay_check_mate_designations',
+            'local_key'   => 'designation_id',
+            'foreign_key' => 'id',
+            'join_type'   => 'left',
+            'where'       => [
+                'status' => [
+                    'operator' => '=',
+                    'value'    => 1,
+                ],
+            ],
+            'fields'      => [
+                'name as designation_name',
+            ],
+        ];
+
+        if ( ! empty( $parameters['department_id'] ) ) {
+            $department_args['where']['id'] = [
+                'operator' => '=',
+                'value'    => $parameters['department_id'],
+            ];
+        }
+
+        if ( ! empty( $parameters['designation_id'] ) ) {
+            $designation_args['where']['id'] = [
+                'operator' => '=',
+                'value'    => $parameters['designation_id'],
+            ];
+        }
+
         $args = [
             'status'          => 1,
-            'limit'           => - 1,
+            'limit'           => -1,
             'order'           => 'ASC',
             'orderby'         => 'employee_id',
             'mutation_fields' => [
                 'full_name',
             ],
             'relations'       => [
-                [
-                    'table'       => 'pay_check_mate_designations',
-                    'local_key'   => 'designation_id',
-                    'foreign_key' => 'id',
-                    'join_type'   => 'left',
-                    'where'       => [
-                        'status' => [
-                            'operator' => '=',
-                            'value'    => 1,
-                        ],
-                    ],
-                    'fields'      => [
-                        'designation_name',
-                    ],
-                ],
-                [
-                    'table'       => 'pay_check_mate_departments',
-                    'local_key'   => 'department_id',
-                    'foreign_key' => 'id',
-                    'join_type'   => 'left',
-                    'where'       => [
-                        'status' => [
-                            'operator' => '=',
-                            'value'    => 1,
-                        ],
-                    ],
-                    'fields'      => [
-                        'department_name',
-                    ],
-                ],
+                $designation_args,
+                $department_args,
                 [
                     'table'       => 'pay_check_mate_employee_salary_history',
                     'local_key'   => 'employee_id',
@@ -203,6 +228,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
                     'required'    => true,
+                ],
+                'designation_id' => [
+                    'description' => __( 'Unique identifier for the designation.', 'pcm' ),
+                    'type'        => 'integer',
+                ],
+                'department_id'  => [
+                    'description' => __( 'Unique identifier for the department.', 'pcm' ),
+                    'type'        => 'integer',
                 ],
             ],
         ];

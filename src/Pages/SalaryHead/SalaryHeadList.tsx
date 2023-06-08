@@ -209,7 +209,7 @@ export const SalaryHeadList = () => {
         data.priority = formData.priority ?? 1;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, true).then((data: SalaryHeadType) => {
+                makePutRequest<SalaryHeadType>(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, true).then((data) => {
                     setSalaryHeads(models.map((salaryHead: SalaryHeadType) => {
                         if (salaryHead.id === formData.id) {
                             salaryHead = formData;

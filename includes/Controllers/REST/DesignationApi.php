@@ -68,7 +68,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'designation_name' => [
+						'name' => [
 							'description' => __( 'Designation name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
@@ -311,7 +311,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'designation_name' => [
+                'name' => [
                     'description' => __( 'The name for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
