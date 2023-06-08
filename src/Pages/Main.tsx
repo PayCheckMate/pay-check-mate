@@ -1,7 +1,6 @@
 import {Sidebar} from "./Sidebar";
 import {Route, Routes} from "react-router-dom";
 import {Dashboard} from "./Dashboard";
-import {EmployeeList} from "./EmployeeList";
 import {userIs} from "../Helpers/User";
 import {AddEmployee} from "./AddEmployee";
 import {DepartmentList} from "./Department/DepartmentList";
@@ -10,6 +9,7 @@ import {Card} from "../Components/Card";
 import {DesignationList} from "./Designation/DesignationList";
 import {SalaryHeadList} from "./SalaryHead/SalaryHeadList";
 import CreatePayroll from "./Payroll/CreatePayroll";
+import {EmployeeList} from "./Employee/EmployeeList";
 
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');

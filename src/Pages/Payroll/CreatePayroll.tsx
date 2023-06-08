@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "@wordpress/element";
 import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Loading} from "../../Components/Loading";
 import {SelectBox} from "../../Components/SelectBox";
 import {__} from "@wordpress/i18n";

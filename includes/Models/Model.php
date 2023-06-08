@@ -52,7 +52,7 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
+    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ) : object {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -108,11 +108,11 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$args['orderby']} {$args['order']}",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']}",
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
                 $args['limit'],
                 $args['offset']
             );
@@ -124,13 +124,18 @@ class Model implements ModelInterface {
         return $this;
     }
 
-    public function get_relational( array $args = [] ): object {
+    public function get_relational( array $args = [] ) : object {
         global $wpdb;
 
         $where             = 'WHERE 1=1';
         $relations         = '';
         $relational_fields = [];
+
         foreach ( $args['relations'] as $relation ) {
+            if ( empty( $relation['join_type'] ) ) {
+                $relation['join_type'] = 'INNER';
+            }
+
             // Add table prefix on the table name.
             $relation['table'] = $wpdb->prefix . $relation['table'];
             $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
@@ -211,7 +216,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return int
      */
-    public function count( array $args = [] ): int {
+    public function count( array $args = [] ) : int {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -242,7 +247,7 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object
      */
-    public function find( int $id, array $fields = [ '*' ] ): object {
+    public function find( int $id, array $fields = [ '*' ] ) : object {
         global $wpdb;
 
         $fields  = implode( ',', esc_sql( $fields ) );
@@ -264,7 +269,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return object|WP_Error The number of rows inserted, or false on error.
      */
-    public function create( Request $data ): object {
+    public function create( Request $data ) : object {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -296,7 +301,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return bool
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( int $id, Request $data ) : bool {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -325,7 +330,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return int The number of rows deleted, or false on error.
      */
-    public function delete( int $id ): int {
+    public function delete( int $id ) : int {
         global $wpdb;
 
         return $wpdb->delete(
@@ -347,7 +352,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return string
      */
-    public static function get_table(): string {
+    public static function get_table() : string {
         global $wpdb;
         if ( empty( static::$table ) ) {
             throw new Exception( 'Table name is not defined' );
@@ -364,7 +369,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return array<string>
      */
-    public static function get_columns(): array {
+    public static function get_columns() : array {
         if ( empty( static::$columns ) ) {
             return [];
         }
@@ -381,7 +386,7 @@ class Model implements ModelInterface {
      *
      * @return array<string>
      */
-    private function get_where_format( $data ): array {
+    private function get_where_format( $data ) : array {
         $format = [];
         foreach ( $data as $key => $value ) {
             if ( isset( static::$columns[$key] ) ) {
@@ -402,7 +407,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return array<string>
      */
-    private function filter_data( array $data ): array {
+    private function filter_data( array $data ) : array {
         // Loop through columns and, check if the model has mutations.
         // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
@@ -424,7 +429,7 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object
      */
-    public function process_items( array $data ): object {
+    public function process_items( array $data ) : object {
         if ( empty( $data ) ) {
             return (object) [];
         }
@@ -446,7 +451,7 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object
      */
-    private function process_item( object $item ): object {
+    private function process_item( object $item ) : object {
         $this->data = $item;
         foreach ( (array) $item as $column => $type ) {
             $method = "get_$column";
@@ -524,7 +529,7 @@ class Model implements ModelInterface {
      *
      * @return array
      */
-    public function toArray(): array {
+    public function toArray() : array {
         return (array) $this->results;
     }
 
@@ -535,7 +540,7 @@ class Model implements ModelInterface {
      *
      * @return string
      */
-    public function toJson(): string {
+    public function toJson() : string {
         return json_encode( $this->results );
     }
 

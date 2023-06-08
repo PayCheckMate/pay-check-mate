@@ -4,7 +4,7 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 
@@ -129,7 +129,7 @@ export const DepartmentList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data: DepartmentType) => {
+                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data) => {
                     setDepartments(models.map((department: DepartmentType) => {
                         if (department.id === formData.id) {
                             department.name = formData.name;
@@ -145,7 +145,7 @@ export const DepartmentList = () => {
             }
         } else {
             try {
-                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data: DepartmentType) => {
+                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data) => {
                     setDepartments([...models, formData])
                     setShowModal(false)
                 }).catch((e: unknown) => {

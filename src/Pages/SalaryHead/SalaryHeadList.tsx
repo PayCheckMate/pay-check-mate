@@ -3,7 +3,7 @@ import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 import {HeadType, SalaryHeadStatus, SalaryHeadType, SelectBoxType} from "../../Types/SalaryHeadType";

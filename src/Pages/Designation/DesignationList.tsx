@@ -4,7 +4,7 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
 import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 import {SalaryHeadsResponseType} from "../../Types/SalaryHeadType";
