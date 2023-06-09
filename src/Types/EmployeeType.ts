@@ -1,20 +1,6 @@
-/**
- * 'department_id'         => '%d',
- *         'designation_id'        => '%d',
- *         'employee_first_name'   => '%s',
- *         'employee_middle_name'  => '%s',
- *         'employee_last_name'    => '%s',
- *         'employee_email'        => '%s',
- *         'employee_phone'        => '%s',
- *         'employee_address'      => '%s',
- *         'employee_joining_date' => '%s',
- *         'employee_regine_date'  => '%s',
- *         'status'                => '%d',
- *         'created_on'            => '%s',
- *         'updated_at'            => '%s',
- */
 export interface EmployeeType {
     id: number;
+    employee_id: string;
     department_id: number;
     designation_id: number;
     employee_first_name: string;

@@ -100,6 +100,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
+                'employee_id'           => [
+                    'description' => __( 'Employee ID', 'pcm' ),
+                    'type'        => 'integer',
+                    'required'    => true,
+                ],
                 'department_id'         => [
                     'description' => __( 'Department ID', 'pcm' ),
                     'type'        => 'integer',

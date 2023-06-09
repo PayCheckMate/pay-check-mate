@@ -37,6 +37,10 @@ export const EmployeeList = () => {
 
     const columns = [
         {
+            title: 'Employee ID',
+            dataIndex: 'employee_id',
+        },
+        {
             title: 'Name',
             dataIndex: 'employee_first_name',
             render: (text: string, record: any) => {
