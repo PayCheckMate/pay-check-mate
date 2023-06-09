@@ -42,7 +42,7 @@ export const EmployeeList = () => {
         },
         {
             title: 'Name',
-            dataIndex: 'employee_first_name',
+            dataIndex: 'first_name',
             render: (text: string, record: any) => {
                 return (
                     <a href="#" className="text-indigo-600 hover:text-indigo-900">
@@ -51,7 +51,7 @@ export const EmployeeList = () => {
                 )
             }
         },
-        {title: 'Email', dataIndex: 'employee_email'},
+        {title: 'Email', dataIndex: 'email'},
         {
             title: 'Action',
             dataIndex: 'action',

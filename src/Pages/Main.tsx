@@ -2,7 +2,7 @@ import {Sidebar} from "./Sidebar";
 import {Route, Routes} from "react-router-dom";
 import {Dashboard} from "./Dashboard";
 import {userIs} from "../Helpers/User";
-import {AddEmployee} from "./AddEmployee";
+import {AddEmployee} from "./Employee/AddEmployee";
 import {DepartmentList} from "./Department/DepartmentList";
 import {EmptyState} from "../Components/EmptyState";
 import {Card} from "../Components/Card";

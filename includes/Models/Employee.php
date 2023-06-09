@@ -12,14 +12,13 @@ class Employee extends Model {
     protected static array $columns = [
         'department_id'         => '%d',
         'designation_id'        => '%d',
-        'employee_first_name'   => '%s',
-        'employee_middle_name'  => '%s',
-        'employee_last_name'    => '%s',
-        'employee_email'        => '%s',
-        'employee_phone'        => '%s',
-        'employee_address'      => '%s',
-        'employee_joining_date' => '%s',
-        'employee_regine_date'  => '%s',
+        'first_name'   => '%s',
+        'last_name'    => '%s',
+        'email'        => '%s',
+        'phone'        => '%s',
+        'address'      => '%s',
+        'joining_date' => '%s',
+        'regine_date'  => '%s',
         'status'                => '%d',
         'created_on'            => '%s',
         'updated_at'            => '%s',
@@ -68,7 +67,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_full_name(): string {
-        return $this->employee_first_name . ' ' . $this->employee_last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -86,7 +85,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_joining_date(): string {
-        return get_date_from_gmt( $this->employee_joining_date, 'd M Y' );
+        return get_date_from_gmt( $this->joining_date, 'd M Y' );
     }
 
     /**
@@ -97,7 +96,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_regine_date(): string {
-        return get_date_from_gmt( $this->employee_regine_date, 'd M Y' );
+        return get_date_from_gmt( $this->regine_date, 'd M Y' );
     }
 
     /**

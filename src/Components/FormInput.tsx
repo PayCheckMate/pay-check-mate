@@ -12,9 +12,10 @@ interface TextInputProps {
     error?: string;
     ariaInvalid?: boolean | undefined;
     ariaDescribedBy?: string;
+    required?: boolean;
 }
 
-export const FormInput = ({label, name, id, className='', type = "text", placeholder, value, onChange, error, ariaInvalid, ariaDescribedBy,}: TextInputProps) => {
+export const FormInput = ({label, name, id, className='', type = "text", placeholder, value, onChange, error, ariaInvalid, ariaDescribedBy, required = false}: TextInputProps) => {
     return (
         <div>
             <div className="relative mt-2 rounded-md shadow-sm">
@@ -35,6 +36,7 @@ export const FormInput = ({label, name, id, className='', type = "text", placeho
                     value={value}
                     onChange={onChange}
                     aria-invalid={ariaInvalid}
+                    required={required}
                     aria-describedby={ariaDescribedBy}
                 />
                 {/*{error && (*/}

@@ -115,40 +115,36 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'integer',
                     'required'    => true,
                 ],
-                'employee_first_name'   => [
+                'first_name'   => [
                     'description' => __( 'Employee First Name', 'pcm' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
-                'employee_middle_name'  => [
-                    'description' => __( 'Employee Middle Name', 'pcm' ),
-                    'type'        => 'string',
-                ],
-                'employee_last_name'    => [
+                'last_name'    => [
                     'description' => __( 'Employee Last Name', 'pcm' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
-                'employee_email'        => [
+                'email'        => [
                     'description' => __( 'Employee Email', 'pcm' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
-                'employee_phone'        => [
+                'phone'        => [
                     'description' => __( 'Employee Phone Number', 'pcm' ),
                     'type'        => 'string',
                 ],
-                'employee_address'      => [
+                'address'      => [
                     'description' => __( 'Employee Address', 'pcm' ),
                     'type'        => 'string',
                 ],
-                'employee_joining_date' => [
+                'joining_date' => [
                     'description' => __( 'Employee Joining Date', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'required'    => true,
                 ],
-                'employee_regine_date'  => [
+                'regine_date'  => [
                     'description' => __( 'Employee Regine Date', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date-time',

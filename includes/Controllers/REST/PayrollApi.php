@@ -194,9 +194,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $args, [
 				'id',
 				'employee_id',
-				'employee_first_name',
-				'employee_middle_name',
-				'employee_last_name',
+				'first_name',
+				'last_name',
 				'designation_id',
 				'department_id',
 			], $salary_head_types

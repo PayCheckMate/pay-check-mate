@@ -13,9 +13,11 @@ interface SelectBoxProps {
     options: SelectBoxType[];
     selected: SelectBoxType;
     setSelected: (selected: SelectBoxType) => void;
+    required?: boolean;
 }
 
-export const SelectBox = ({title, options, selected, setSelected}: SelectBoxProps) => {
+export const SelectBox = ({title, options, selected, setSelected,  required= false}: SelectBoxProps) => {
+    const isSelectionValid = required ? selected.id !== null : true;
     return (
         <div>
             <div className="relative mt-2 rounded-md shadow-sm">
@@ -76,6 +78,9 @@ export const SelectBox = ({title, options, selected, setSelected}: SelectBoxProp
                                     </Listbox.Options>
                                 </Transition>
                             </div>
+                            {isSelectionValid ? null : (
+                                <p className="mt-2 text-sm text-red-600">Please select a value.</p>
+                            )}
                         </>
                     )}
                 </Listbox>
