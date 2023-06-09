@@ -81,7 +81,6 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         const queryParam = new URLSearchParams(filterObject as URLSearchParams).toString();
         const path = url + '?' + queryParam;
         apiFetchUnparsed(path, initialFilters).then((response: any) => {
-            console.log(response, 'response')
             if (response.data.status === 200 && response.data) {
                 setModels(response.data.data);
                 setTotal(response.data.headers['X-WP-Total']);

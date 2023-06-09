@@ -7,15 +7,15 @@ interface TextInputProps {
     type?: string;
     className?: string;
     placeholder?: string;
-    value: string|number
+    value: string | number
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;
-    ariaInvalid?: boolean | undefined;
-    ariaDescribedBy?: string;
     required?: boolean;
+    helpText?: string;
+    disabled?: boolean;
 }
 
-export const FormInput = ({label, name, id, className='', type = "text", placeholder, value, onChange, error, ariaInvalid, ariaDescribedBy, required = false}: TextInputProps) => {
+export const FormInput = ({label, name, id, className = '', type = "text", placeholder, value, onChange, error, required = false, helpText = '', disabled= false}: TextInputProps) => {
     return (
         <div>
             <div className="relative mt-2 rounded-md shadow-sm">
@@ -35,10 +35,17 @@ export const FormInput = ({label, name, id, className='', type = "text", placeho
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
-                    aria-invalid={ariaInvalid}
                     required={required}
-                    aria-describedby={ariaDescribedBy}
+                    disabled={disabled}
                 />
+                {helpText && (
+                    <p
+                        className="mt-2 text-sm text-gray-500"
+                        id={id}
+                    >
+                        {helpText}
+                    </p>
+                )}
                 {/*{error && (*/}
                 {/*    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">*/}
                 {/*        <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true"/>*/}

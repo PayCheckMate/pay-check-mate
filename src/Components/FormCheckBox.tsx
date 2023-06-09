@@ -11,9 +11,10 @@ interface CheckBoxProps {
     error?: string;
     ariaInvalid?: boolean | undefined;
     ariaDescribedBy?: string;
+    helpText?: string;
 }
 
-export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,}: CheckBoxProps) => {
+export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,helpText}: CheckBoxProps) => {
     return (
         <div>
             <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
@@ -33,6 +34,14 @@ export const FormCheckBox = ({label, name, id, className = '', value, checked, o
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                 />
+                {helpText && (
+                    <p
+                        className="mt-2 text-sm text-gray-500"
+                        id={id}
+                    >
+                        {helpText}
+                    </p>
+                )}
                 {error && (
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />

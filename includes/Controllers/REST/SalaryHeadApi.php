@@ -93,6 +93,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
+                        'is_basic_affect' => [
+                            'description' => __( 'Is basic salary affect?', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
                         'is_taxable' => [
                             'description' => __( 'Salary head is taxable.', 'pcm' ),
                             'type'        => 'boolean',
@@ -205,9 +210,9 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $salary_head = new SalaryHead( new SalaryHeadModel() );
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
-            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) -1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'   => 'DESC',
-            'orderby' => 'id',
+            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
+            'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
@@ -375,6 +380,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'is_variable'  => [
                     'description' => __( 'Is Changeable in every month?', 'pcm' ),
+                    'type'        => 'boolean',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'is_basic_affect'  => [
+                    'description' => __( 'Is Basic Salary Affect?', 'pcm' ),
                     'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],

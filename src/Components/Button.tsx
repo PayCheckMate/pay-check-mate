@@ -8,7 +8,7 @@ interface ButtonProps {
     type?: "button" | "submit" | "reset";
 }
 
-export const Button = ({ className, children, onClick, path, type }: ButtonProps) => {
+export const Button = ({ className, children, onClick, path, type='button' }: ButtonProps) => {
     const buttonClass = className ? `btn-primary ${className}` : 'btn-primary';
 
     const handleClick = () => {
@@ -26,7 +26,7 @@ export const Button = ({ className, children, onClick, path, type }: ButtonProps
     }
 
     return (
-        <button type={type || 'button'} className={buttonClass} onClick={handleClick}>
+        <button type={type} className={buttonClass} onClick={handleClick}>
             {children}
         </button>
     );

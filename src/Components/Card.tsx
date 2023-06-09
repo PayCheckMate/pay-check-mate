@@ -1,6 +1,6 @@
-export const Card = ({children}: any) => {
+export const Card = ({children, className}: any) => {
     return (
-        <div className="overflow-hidden bg-white shadow sm:rounded-lg py-14">
+        <div className={className ? className : `overflow-hidden bg-white shadow sm:rounded-lg py-8 px-8`}>
             {children}
         </div>
     )
