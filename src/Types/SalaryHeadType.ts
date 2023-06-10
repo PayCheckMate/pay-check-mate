@@ -6,7 +6,6 @@ export interface SalaryHeadType {
     head_amount: number;
     is_percentage: number;
     is_variable: number;
-    is_basic_affect: number;
     is_taxable: number;
     priority: number;
     status: SalaryHeadStatus;

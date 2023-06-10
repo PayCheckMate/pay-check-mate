@@ -361,27 +361,6 @@ export const SalaryHeadList = () => {
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                             />
-                                            <FormCheckBox
-                                                label={__('Is basic affected?', 'pcm')}
-                                                name="is_basic_affect"
-                                                id="is_basic_affect"
-                                                value={formData.is_basic_affect}
-                                                checked={parseInt(String(formData.is_basic_affect)) === 1}
-                                                onChange={(e) => {
-                                                    if (e.target.checked) {
-                                                        setFormData({
-                                                                        ...formData,
-                                                                        is_basic_affect: 1,
-                                                                        head_amount:     0
-                                                                    });
-                                                        setIsVariable({id: 1, name: 'Yes'})
-                                                    } else {
-                                                        setFormData({...formData, is_basic_affect: 0});
-                                                        setIsVariable({id: 0, name: 'No'})
-                                                    }
-                                                }}
-                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            />
                                         </div>
                                         <FormInput
                                             label={__('Priority', 'pcm')}

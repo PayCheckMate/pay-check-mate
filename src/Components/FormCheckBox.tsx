@@ -5,7 +5,7 @@ interface CheckBoxProps {
     name: string;
     id: string;
     className?: string;
-    value: string | number;
+    value: any;
     checked: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;

@@ -5,28 +5,29 @@ import {PersonalInformation} from "./Components/PersonalInformation";
 import {__} from "@wordpress/i18n";
 import {EmployeeType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
-import {useEffect} from "@wordpress/element";
 import {SalaryInformation} from "./Components/SalaryInformation";
+import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
+import {SalaryHeadType} from "../../Types/SalaryHeadType";
 
 export const AddEmployee = () => {
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState({} as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState({});
     // Get initial personal information from local storage
-    let savedPersonalInformation = localStorage.getItem('personalInformation');
-    let savedSalaryInformation = localStorage.getItem('salaryInformation');
+    let employeePersonalInformation = localStorage.getItem('Employee.personalInformation');
     // @ts-ignore
-    savedPersonalInformation = JSON.parse(savedPersonalInformation);
+    let savedPersonalInformation = JSON.parse(employeePersonalInformation) as EmployeeType;
+
+    let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
     // @ts-ignore
-    savedSalaryInformation = JSON.parse(savedSalaryInformation);
-    // @ts-ignore
+    let savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
     const handlePersonalInformation = (personalInformation: EmployeeType) => {
         setPersonalInformation(personalInformation);
-        localStorage.setItem('personalInformation', JSON.stringify(personalInformation));
+        localStorage.setItem('Employee.personalInformation', JSON.stringify(personalInformation));
     };
     const handleSalaryInformation = (salary: string) => {
         setSalaryInformation(salary);
-        localStorage.setItem('salaryInformation', JSON.stringify(salary));
+        localStorage.setItem('Employee.salaryInformation', JSON.stringify(salary));
     }
     const steps = [
         {label: 'Personal Info'},
@@ -36,12 +37,16 @@ export const AddEmployee = () => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
     }
+
+    // const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
+    // employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
     return (
         <>
             <div>
                 <Steps
                     steps={steps}
                     currentStep={step}
+                    setStep={(step: number) => setStep(step)}
                 />
                 <Card>
                     <form onSubmit={handleSubmit}>
@@ -81,7 +86,7 @@ export const AddEmployee = () => {
                                 </h2>
                                 <div className="mx-auto w-3/4">
                                     <SalaryInformation
-                                        initialValues={salaryInformation}
+                                        initialValues={savedSalaryInformation}
                                         setSalaryData={(salary: string) => handleSalaryInformation(salary)}
                                     />
                                     <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
@@ -101,6 +106,9 @@ export const AddEmployee = () => {
                                     </div>
                                 </div>
                             </div>
+                        )}
+                        {step === 3 && (
+                            <ReviewInformation personalInformation={savedPersonalInformation} salaryInformation={savedSalaryInformation} />
                         )}
                     </form>
                 </Card>

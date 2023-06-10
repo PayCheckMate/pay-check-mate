@@ -11,15 +11,16 @@ import {EmployeeType} from "../../../Types/EmployeeType";
 import {Textarea} from "../../../Components/Textarea";
 
 export const PersonalInformation = ({setFormData, initialValues = {}, children}: any) => {
+    if (initialValues === null) {
+        initialValues = {} as EmployeeType;
+    }
     const [designations, setDesignations] = useState<DesignationType[]>([]);
     const [departments, setDepartments] = useState<DepartmentType[]>([]);
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
 
-    const {
-              makeGetRequest,
-          } = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/payroll', {}, false);
+    const {makeGetRequest} = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/payroll', {}, false);
 
     useEffect(() => {
         const data = {
@@ -58,6 +59,14 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;
         setFormValues({...formValues, [name]: value});
+        if (name === 'department_id') {
+            const department = departments.find((item: SelectBoxType) => parseInt(String(item.id)) === parseInt(value)) as SelectBoxType;
+            localStorage.setItem('Employee.department', JSON.stringify(department));
+        }
+        if (name === 'designation_id') {
+            const designation = designations.find((item: SelectBoxType) => parseInt(String(item.id)) === parseInt(value)) as SelectBoxType;
+            localStorage.setItem('Employee.designation', JSON.stringify(designation));
+        }
         setFormData({...formValues, [name]: value});
     }
     return (
@@ -94,8 +103,8 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     options={departments}
                                     selected={selectedDepartment}
                                     setSelected={(selectedDepartment) => {
-                                        handleFormInputChange({target: {name: 'department_id', value: selectedDepartment.id}})
                                         setSelectedDepartment(selectedDepartment)
+                                        handleFormInputChange({target: {name: 'department_id', value: selectedDepartment.id}})
                                     }}
                                 />
                             </div>
@@ -106,8 +115,8 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     options={designations}
                                     selected={selectedDesignation}
                                     setSelected={(selectedDesignation) => {
-                                        handleFormInputChange({target: {name: 'designation_id', value: selectedDesignation.id}})
                                         setSelectedDesignation(selectedDesignation)
+                                        handleFormInputChange({target: {name: 'designation_id', value: selectedDesignation.id}})
                                     }}
                                 />
                             </div>
@@ -152,7 +161,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     />
                                     <FormInput
                                         type="file"
-                                        label=''
+                                        label=""
                                         name="photo"
                                         id="photo"
                                         value={formValues.phone}
