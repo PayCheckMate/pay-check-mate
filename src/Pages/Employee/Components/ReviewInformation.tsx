@@ -1,6 +1,7 @@
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {__} from "@wordpress/i18n";
 import {SelectBoxType} from "../../../Types/SalaryHeadType";
+import {Button} from "../../../Components/Button";
 
 export type SalaryInformationType = {
     [key: string]: number;
@@ -61,6 +62,12 @@ export const ReviewInformation = ({personalInformation, salaryInformation}: { pe
                             {__('Designation', 'pcm')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{employeeDesignation.name}</dd>
+                    </div>
+                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-900">
+                            {__('Joining Date', 'pcm')}
+                        </dt>
+                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{personalInformation.joining_date}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">

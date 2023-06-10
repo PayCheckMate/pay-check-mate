@@ -138,6 +138,16 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     onChange={handleFormInputChange}
                                 />
                             </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
+                                    type='date'
+                                    label={__('Joining date', 'pcm')}
+                                    name="joining_date"
+                                    id="joining_date"
+                                    value={formValues.joining_date}
+                                    onChange={handleFormInputChange}
+                                />
+                            </div>
                             <div className="col-span-full">
                                 <Textarea
                                     label={__("Address", 'pcm')}

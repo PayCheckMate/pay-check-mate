@@ -396,13 +396,13 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 'created_on'     => [
                     'description' => __( 'The date the object was created.', 'pcm' ),
                     'type'        => 'string',
-                    'format'      => 'date-time',
+                    'format'      => 'date',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'updated_at'     => [
                     'description' => __( 'The date the object was last updated.', 'pcm' ),
                     'type'        => 'string',
-                    'format'      => 'date-time',
+                    'format'      => 'date',
                     'context'     => [ 'view', 'edit' ],
                 ],
             ],

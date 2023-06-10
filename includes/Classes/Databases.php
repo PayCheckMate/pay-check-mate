@@ -129,7 +129,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employees` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                `employee_id` varchar(255) NOT NULL,
+                `employee_id` varchar(255) NOT NULL UNIQUE,
                 `user_id` bigint(20) unsigned NOT NULL,
                 `department_id` bigint(20) unsigned NOT NULL,
                 `designation_id` bigint(20) unsigned NOT NULL,
