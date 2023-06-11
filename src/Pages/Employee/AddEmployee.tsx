@@ -7,10 +7,10 @@ import {EmployeeType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
-import {SalaryHeadType} from "../../Types/SalaryHeadType";
 import useFetchApi from "../../Helpers/useFetchApi";
 
 export const AddEmployee = () => {
+    const [error, setError] = useState(false);
     // Get initial personal information from local storage
     let employeePersonalInformation = localStorage.getItem('Employee.personalInformation');
     // @ts-ignore
@@ -186,17 +186,21 @@ export const AddEmployee = () => {
                                 <ReviewInformation
                                     personalInformation={savedPersonalInformation}
                                     salaryInformation={savedSalaryInformation}
+                                    setError={setError}
                                 />
-                                <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                    <Button
-                                        type="submit"
-                                        onClick={() => {
-                                        }}
-                                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                    >
-                                        {__('Submit', 'pcm')}
-                                    </Button>
-                                </div>
+                                {!error && (
+                                    <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+                                        <Button
+                                            type="submit"
+                                            onClick={() => {
+                                            }}
+                                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                        >
+                                            {__('Submit', 'pcm')}
+                                        </Button>
+                                    </div>
+                                )
+                                }
                             </>
                         )}
                     </form>

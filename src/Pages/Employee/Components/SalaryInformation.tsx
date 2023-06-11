@@ -78,7 +78,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                 }));
 
                 // @ts-ignore
-                if (parseInt(isAffect[`is_${head.id}_active`]) === 0) {
+                if (parseInt(isAffect[`is_${head.id}_active`]) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
                     headAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -110,7 +110,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
 
                 let updatedHeadAmount = headAmount;
                 // @ts-ignore
-                if (parseInt(isAffect[`is_${head.id}_active`]) === 0) {
+                if (parseInt(isAffect[`is_${head.id}_active`]) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
                     updatedHeadAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -189,14 +189,16 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                     value={formValues[`${head.id}`]}
                                     onChange={handleFormInputChange}
                                 />
+                                {parseInt(String(head.is_personal_savings)) === 0 && (
                                 <FormCheckBox
                                     label={__('Uncheck, if you want to exclude this head from salary calculation.', 'pcm')}
                                     name={`is_${head.id}_active`}
                                     id={`is_${head.id}_active`}
-                                    value={isAffect[`is_${head.id}_active`]}
-                                    checked={parseInt(String(isAffect[`is_${head.id}_active`])) === 1}
+                                    value={isAffect?.[`is_${head.id}_active` as keyof typeof isAffect]}
+                                    checked={parseInt(String(isAffect?.[`is_${head.id}_active` as keyof typeof isAffect])) === 1}
                                     onChange={(e) => handleIsAffectChange(e, head)}
                                 />
+                                    )}
 
                             </div>
                         ))}

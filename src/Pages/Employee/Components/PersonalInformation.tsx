@@ -20,7 +20,22 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
 
-    const {makeGetRequest} = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/payroll', {}, false);
+    const {models, makeGetRequest} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'orderby': 'employee_id', 'order': 'desc'});
+
+    // Get last employee id and set next employee id.
+    useEffect(() => {
+        if (models.length > 0) {
+            console.log(models)
+            const employeeId = String(parseInt(models[0].employee_id) + 1);
+            setFormValues((prevState: EmployeeType) => ({
+                ...prevState,
+                employee_id: employeeId,
+            }));
+
+            setFormData({...formValues, employee_id: employeeId});
+        }
+    }, [models]);
+
 
     useEffect(() => {
         const data = {
@@ -140,7 +155,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    type='date'
+                                    type="date"
                                     label={__('Joining date', 'pcm')}
                                     name="joining_date"
                                     id="joining_date"
