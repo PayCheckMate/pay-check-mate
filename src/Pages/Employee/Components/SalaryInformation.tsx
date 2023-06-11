@@ -10,6 +10,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }
+    let TotalSalaryInHand = 0;
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([]);
     const [formValues, setFormValues] = useState(initialValues);
     const [grossSalary, setGrossSalary] = useState<number>(formValues.gross_salary || 0);
@@ -71,7 +72,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
             });
 
             setGrossSalary(Math.round(updatedGrossSalary));
-        }else if (name === 'gross_salary') {
+        } else if (name === 'gross_salary') {
             setGrossSalary(parseInt(value));
             const grossSalary = parseInt(value);
             setFormValues((prevState: SalaryHeadType) => ({
@@ -103,7 +104,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
             });
 
             formValues.basic_salary = Math.round(updatedBasicSalary);
-        }else {
+        } else {
             setFormValues((prevState: SalaryHeadType) => ({
                 ...prevState,
                 [name]: parseInt(value),
@@ -114,7 +115,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
     // Set callback function form parent component.
     useEffect(() => {
         setSalaryData(formValues);
-    }, [formValues] );
+    }, [formValues]);
 
     return (
         <div className="space-y-12">
@@ -152,11 +153,50 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                     id={`${head.id}`}
                                     value={formValues[`${head.id}`]}
                                     onChange={handleFormInputChange}
-                                    helpText={parseInt(String(head.should_affect_basic_salary))===1 ? __('This head will affect basic salary.', 'pcm') : ''}
+                                    helpText={parseInt(String(head.should_affect_basic_salary)) === 1 ? __('This head will affect basic salary.', 'pcm') : ''}
                                 />
 
                             </div>
                         ))}
+                        <div className="col-span-full">
+                            <div>
+                                <h3 className="font-bold text-2xl leading-6 text-gray-600">{__('Salary in hand', 'pcm')}</h3>
+                                {Object.keys(formValues).map((head) => {
+                                    if ( head === 'gross_salary' || head === 'remarks') {
+                                        return;
+                                    }
+                                    if (head === 'basic_salary') {
+                                        TotalSalaryInHand += formValues[head];
+                                    }
+                                    const salaryHead = salaryHeads.find((salaryHead) => {
+                                        if (parseInt(String(salaryHead.id)) === parseInt(head)){
+                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Deduction){
+                                                TotalSalaryInHand -= formValues[head];
+                                            }
+                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Earning){
+                                                TotalSalaryInHand += formValues[head];
+                                            }
+                                            return salaryHead;
+                                        }
+                                    });
+                                    return (
+                                        <div key={head} className="flex items-center justify-between mt-2">
+                                            <span className="text-sm text-gray-500">{salaryHead?.head_name ? salaryHead?.head_name : head.replace(/_/g, ' ').toUpperCase()}</span>
+                                            <span className="text-sm text-gray-500">
+                                                {parseInt(String(salaryHead?.head_type)) === HeadType.Deduction && '(-)'}
+                                                {parseInt(String(salaryHead?.head_type)) === HeadType.Earning && '(+)'}
+                                                {formValues[head]}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+
+                                <div className="flex items-center justify-between mt-2 border-t-2 border-gray-400 pt-2">
+                                    <span className="font-bold text-xl text-gray-500">{__('Total Salary in hand', 'pcm')}</span>
+                                    <span className="text-sm text-gray-500">{TotalSalaryInHand}</span>
+                                </div>
+                            </div>
+                        </div>
                         <div className="col-span-full">
                             <Textarea
                                 label="Remarks"

@@ -99,6 +99,7 @@ class Databases {
     public function create_table_salary_head() {
         $this->include_db_delta();
 
+        // In the future, we will use (is_personal_savings) for PF.
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}salary_heads` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `head_name` varchar(255) NOT NULL,

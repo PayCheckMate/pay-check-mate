@@ -96,6 +96,9 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     public function create_item( $request ) {
         $data              = $request->get_params();
         $salaryInformation = $data['salary_information'];
+        echo '<pre>';
+        print_r( $data );
+        exit();
         unset( $data['salary_information'] );
         $employee_model = new Employee( new EmployeeModel() );
         $validated_data = new EmployeeRequest( $data );

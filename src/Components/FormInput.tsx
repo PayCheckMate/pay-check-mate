@@ -17,7 +17,7 @@ interface TextInputProps {
 }
 
 export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false,}: TextInputProps) => {
-    const [isSelectionValid, setIsSelectionValid] = useState(!required || (value !== "" || value !== undefined));
+    const [isSelectionValid, setIsSelectionValid] = useState(!required || (value !== "" && value !== undefined));
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         onChange(event);

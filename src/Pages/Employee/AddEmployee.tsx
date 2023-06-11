@@ -33,8 +33,8 @@ export const AddEmployee = () => {
         localStorage.setItem('Employee.salaryInformation', JSON.stringify(salary));
     }
     const steps = [
-        {label: 'Personal Info'},
-        {label: 'Salary Info'},
+        {label: 'Personal Information'},
+        {label: 'Salary Information'},
         {label: 'Review'},
     ]
 
