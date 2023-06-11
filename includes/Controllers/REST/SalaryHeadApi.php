@@ -98,6 +98,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
+                        'is_personal_savings' => [
+                            'description' => __( 'Salary head is personal savings.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
                         'priority' => [
                             'description' => __( 'Salary head priority.', 'pcm' ),
                             'type'        => 'integer',
