@@ -73,12 +73,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
-        $date = date( 'Y-m-d', strtotime( $parameters['date'] ) );
-        $month = date( 'm', strtotime( $date ) );
-        $year = date( 'Y', strtotime( $date ) );
-        $lastDayOfMonth = date( 't', strtotime( $date ) );
+        $date = gmdate( 'Y-m-d', strtotime( $parameters['date'] ) );
+        $month = gmdate( 'm', strtotime( $date ) );
+        $year = gmdate( 'Y', strtotime( $date ) );
+        $last_day_of_month = gmdate( 't', strtotime( $date ) );
 
-        $parameters['date'] = date( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $lastDayOfMonth ) );
+        $parameters['date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
 
         $args              = [
             'status'  => 1,

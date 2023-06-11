@@ -199,6 +199,9 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {salaryInformation && Object.keys(salaryInformation).map((key, index) => {
+                                if (key === 'remarks'){
+                                    return ;
+                                }
                                 return (
                                     <div key={`info${index}`}>
                                         <span className="font-bold text-gray-900" key={index}>{key.replace(/_/g, ' ').toUpperCase()}:</span>

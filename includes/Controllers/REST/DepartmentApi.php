@@ -180,7 +180,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $department = new Department( new DepartmentModel() );
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
-            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) -1 ) * $request->get_param( 'per_page' ) : 0,
+            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',

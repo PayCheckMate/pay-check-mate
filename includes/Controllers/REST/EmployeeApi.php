@@ -95,7 +95,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function create_item( $request ) {
         $data              = $request->get_params();
-        $salaryInformation = $data['salary_information'];
+        $salary_information = $data['salary_information'];
         echo '<pre>';
         print_r( $data );
         exit();
@@ -106,8 +106,6 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             return new WP_REST_Response( $validated_data->error, 400 );
         }
         $employee       = $employee_model->create( $validated_data );
-
-//        $employee->salaryInformation()->create( $salaryInformation );
     }
 
     public function get_item_schema(): array {
