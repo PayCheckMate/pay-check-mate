@@ -97,6 +97,18 @@ export const SalaryHeadList = () => {
                 )
             }
         },
+        {
+            title:  __('Should Affect Basic Salary', 'pcm'), dataIndex: 'should_affect_basic_salary',
+            render: (text: string, record: SalaryHeadType) => {
+                console.log(record)
+                const shouldAffectSalary = parseInt(String(record.should_affect_basic_salary))
+                return (
+                    <span className={`${shouldAffectSalary === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                        {shouldAffectSalary === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
+                    </span>
+                )
+            }
+        },
         {title: __('Priority', 'pcm'), dataIndex: 'priority'},
         {
             title:  __('Status', 'pcm'), dataIndex: 'status',
@@ -170,9 +182,11 @@ export const SalaryHeadList = () => {
         const is_variable = head?.is_variable;
         const is_taxable = head?.is_taxable;
         const priority = head?.priority;
+        const is_personal_savings = head?.is_personal_savings;
+        const should_affect_basic_salary = head?.should_affect_basic_salary;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, _wpnonce};
+        const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, should_affect_basic_salary, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/salary-heads/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -220,7 +234,6 @@ export const SalaryHeadList = () => {
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const data = formData
-        console.log(data)
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
@@ -245,6 +258,8 @@ export const SalaryHeadList = () => {
             data.is_variable = isVariable.id ? 1 : 0;
             data.is_taxable = formData.is_taxable ?? 1;
             data.priority = formData.priority ?? 1;
+            data.is_personal_savings = formData.is_personal_savings ?? 0;
+            data.should_affect_basic_salary = formData.should_affect_basic_salary ?? 1;
             try {
                 makePostRequest<SalaryHeadType>('/pay-check-mate/v1/salary-heads', data, false).then((data: SalaryHeadType) => {
                     setSalaryHeads([...models, data])
@@ -389,6 +404,22 @@ export const SalaryHeadList = () => {
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                             />
                                         </div>
+
+                                        <FormCheckBox
+                                            label={__('Should affect salary?', 'pcm')}
+                                            name="should_affect_basic_salary"
+                                            id="should_affect_basic_salary"
+                                            value={formData.should_affect_basic_salary}
+                                            checked={parseInt(String(formData.should_affect_basic_salary)) === 1}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setFormData({...formData, should_affect_basic_salary: 1});
+                                                } else {
+                                                    setFormData({...formData, should_affect_basic_salary: 0});
+                                                }
+                                            }}
+                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        />
                                         <FormInput
                                             label={__('Priority', 'pcm')}
                                             type="number"

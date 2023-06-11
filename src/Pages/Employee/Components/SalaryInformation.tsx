@@ -10,17 +10,9 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }
-    let isAffectCheckBox = localStorage.getItem('Employee.isAffectCheckBox');
-    // @ts-ignore
-    isAffectCheckBox = JSON.parse(isAffectCheckBox);
-    if (isAffectCheckBox === null) {
-        // @ts-ignore
-        isAffectCheckBox = {};
-    }
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([]);
     const [formValues, setFormValues] = useState(initialValues);
     const [grossSalary, setGrossSalary] = useState<number>(formValues.gross_salary || 0);
-    const [isAffect, setIsAffect] = useState(isAffectCheckBox);
 
     const {models} = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/salary-heads', {'per_page': '-1', 'orderby': 'head_type', 'order': 'asc', 'status': 1});
 
@@ -31,17 +23,6 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
             setSalaryHeads(models);
         }
     }, [models]);
-
-    // After change salary heads, set default value for isAffected checkbox.
-    useEffect(() => {
-        if (salaryHeads && (isAffectCheckBox === null || Object.keys(isAffectCheckBox).length === 0)){
-            const initialAffectState: any = {};
-            salaryHeads.forEach((head) => {
-                initialAffectState[`is_${head.id}_active`] = 1;
-            });
-            setIsAffect(initialAffectState);
-        }
-    }, [salaryHeads]);
 
     const handleRemarksChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -78,7 +59,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                 }));
 
                 // @ts-ignore
-                if (parseInt(isAffect[`is_${head.id}_active`]) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
+                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
                     headAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -110,7 +91,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
 
                 let updatedHeadAmount = headAmount;
                 // @ts-ignore
-                if (parseInt(isAffect[`is_${head.id}_active`]) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
+                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
                     updatedHeadAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -133,24 +114,6 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
     useEffect(() => {
         setSalaryData(formValues);
     }, [formValues] );
-
-    const handleIsAffectChange = (e: React.ChangeEvent<HTMLInputElement>, head: SalaryHeadType) => {
-        const { name, checked } = e.target;
-        setIsAffect((prevState: any) => ({
-            ...prevState,
-            [`is_${head.id}_active`]: checked ? 1 : 0,
-        }));
-
-        if (checked){
-            parseInt(String(head.head_type)) === HeadType.Earning ? parseInt(String(formValues.basic_salary += formValues[`${head.id}`])) : formValues.basic_salary -= parseInt(String(formValues[`${head.id}`]));
-        }else {
-            parseInt(String(head.head_type)) === HeadType.Earning ? formValues.basic_salary -= parseInt(String(formValues[`${head.id}`])) : formValues.basic_salary += formValues[`${head.id}`];
-        }
-    };
-
-    useEffect(() => {
-        localStorage.setItem('Employee.isAffectCheckBox', JSON.stringify(isAffect));
-    }, [isAffect]);
 
     return (
         <div className="space-y-12">
@@ -188,17 +151,8 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                     id={`${head.id}`}
                                     value={formValues[`${head.id}`]}
                                     onChange={handleFormInputChange}
+                                    helpText={parseInt(String(head.should_affect_basic_salary))===1 ? __('This head will affect basic salary.', 'pcm') : ''}
                                 />
-                                {parseInt(String(head.is_personal_savings)) === 0 && (
-                                <FormCheckBox
-                                    label={__('Uncheck, if you want to exclude this head from salary calculation.', 'pcm')}
-                                    name={`is_${head.id}_active`}
-                                    id={`is_${head.id}_active`}
-                                    value={isAffect?.[`is_${head.id}_active` as keyof typeof isAffect]}
-                                    checked={parseInt(String(isAffect?.[`is_${head.id}_active` as keyof typeof isAffect])) === 1}
-                                    onChange={(e) => handleIsAffectChange(e, head)}
-                                />
-                                    )}
 
                             </div>
                         ))}

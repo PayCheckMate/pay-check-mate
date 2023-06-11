@@ -20,17 +20,18 @@ class SalaryHead extends Model {
      */
     protected static array $columns
         = [
-            'head_name'           => '%s',
-            'head_type'           => '%s',
-            'head_amount'         => '%f',
-            'is_percentage'       => '%d',
-            'is_variable'         => '%d',
-            'is_taxable'          => '%d',
-            'is_personal_savings' => '%d',
-            'priority'            => '%d',
-            'status'              => '%d',
-            'created_on'          => '%s',
-            'updated_at'          => '%s',
+            'head_name'            => '%s',
+            'head_type'            => '%s',
+            'head_amount'          => '%f',
+            'is_percentage'        => '%d',
+            'is_variable'          => '%d',
+            'is_taxable'           => '%d',
+            'is_personal_savings'  => '%d',
+            'should_affect_basic_salary' => '%d',
+            'priority'             => '%d',
+            'status'               => '%d',
+            'created_on'           => '%s',
+            'updated_at'           => '%s',
         ];
 
     /**

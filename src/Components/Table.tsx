@@ -58,7 +58,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
             {isLoading ? (
                 <Loading />
             ) : (
-                <div>
+                <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                         <tr>

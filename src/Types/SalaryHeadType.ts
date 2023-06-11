@@ -8,6 +8,7 @@ export interface SalaryHeadType {
     is_variable: number;
     is_taxable: number;
     is_personal_savings: number;
+    should_affect_basic_salary: number;
     priority: number;
     status: SalaryHeadStatus;
     created_on: string;

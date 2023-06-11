@@ -13,7 +13,7 @@ class RestController extends WP_REST_Controller {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param object $item Default item object.
+     * @param object                          $item    Default item object.
      *
      * @param \WP_REST_Request<array<string>> $request Request object.
      *
@@ -105,14 +105,14 @@ class RestController extends WP_REST_Controller {
      */
     public function get_collection_params(): array {
         return [
-            'search' => [
+            'search'   => [
                 'description'       => __( 'Limit results to those matching a string.', 'pcm' ),
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_text_field',
                 'validate_callback' => 'rest_validate_request_arg',
                 'default'           => '',
             ],
-            'page'   => [
+            'page'     => [
                 'description'       => __( 'Current page of the collection.', 'pcm' ),
                 'type'              => 'integer',
                 'sanitize_callback' => 'absint',
@@ -121,30 +121,30 @@ class RestController extends WP_REST_Controller {
                 'minimum'           => 1,
                 'maximum'           => PHP_INT_MAX,
             ],
-            'per_page'  => [
+            'per_page' => [
                 'description'       => __( 'Maximum number of items to be returned in result set.', 'pcm' ),
                 'type'              => 'integer',
                 'sanitize_callback' => 'sanitize_text_field',
                 'validate_callback' => 'rest_validate_request_arg',
                 'default'           => 10,
-                'minimum'           => -1,
+                'minimum'           => - 1,
                 'maximum'           => 100,
             ],
-            'orderby'   => [
+            'orderby'  => [
                 'description'       => __( 'Sort collection by object attribute.', 'pcm' ),
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_key',
                 'validate_callback' => 'rest_validate_request_arg',
                 'default'           => 'id',
             ],
-            'order'     => [
+            'order'    => [
                 'description'       => __( 'Order sort attribute ascending or descending.', 'pcm' ),
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_key',
                 'validate_callback' => 'rest_validate_request_arg',
                 'default'           => 'desc',
             ],
-            'status'    => [
+            'status'   => [
                 'description'       => __( 'Limit result set to items with a specific status.', 'pcm' ),
                 'type'              => 'integer',
                 'sanitize_callback' => 'absint',
@@ -152,4 +152,5 @@ class RestController extends WP_REST_Controller {
             ],
         ];
     }
+
 }
