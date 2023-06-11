@@ -27,7 +27,7 @@ export enum SalaryHeadStatus {
 }
 
 export interface SelectBoxType {
-    id: HeadType,
+    id: number|null,
     name: string
 }
 

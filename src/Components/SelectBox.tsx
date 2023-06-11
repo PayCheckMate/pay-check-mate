@@ -2,6 +2,7 @@ import { Fragment, useState } from '@wordpress/element';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { SelectBoxType } from '../Types/SalaryHeadType';
+import {__} from "@wordpress/i18n";
 
 // @ts-ignore
 function classNames(...classes) {
@@ -26,6 +27,7 @@ export const SelectBox = ({title, options, selected, setSelected,  required= fal
                         <>
                             <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">
                                 {title}
+                                {required && <span className="text-red-500">*</span>}
                             </Listbox.Label>
                             <div className="relative mt-2">
                                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -79,7 +81,9 @@ export const SelectBox = ({title, options, selected, setSelected,  required= fal
                                 </Transition>
                             </div>
                             {isSelectionValid ? null : (
-                                <p className="mt-2 text-sm text-red-600">Please select a value.</p>
+                                <p className="mt-2 text-sm text-red-600">
+                                    {__('Please select a value.', 'pcm')}
+                                </p>
                             )}
                         </>
                     )}

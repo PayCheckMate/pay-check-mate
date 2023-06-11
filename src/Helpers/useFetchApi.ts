@@ -53,6 +53,13 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
             setLoading(false);
 
             return response.data;
+            // if (response.data.data) {
+            //     return response.data.data;
+            // }else if (response.data) {
+            //     return response.data;
+            // }else {
+            //     return response;
+            // }
         });
     }
     const makeGetRequest = async <DataType>(requestUrl?: string, data?: any, run = true): Promise<DataType> => {

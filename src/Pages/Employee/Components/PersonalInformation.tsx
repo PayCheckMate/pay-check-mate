@@ -1,11 +1,11 @@
-import {PhotoIcon, UserCircleIcon} from "@heroicons/react/24/outline";
+import {UserCircleIcon} from "@heroicons/react/24/outline";
 import {FormInput} from "../../../Components/FormInput";
 import {__} from "@wordpress/i18n";
 import {SelectBox} from "../../../Components/SelectBox";
 import {useEffect, useState} from "@wordpress/element";
 import {DesignationType} from "../../../Types/DesignationType";
 import {DepartmentType} from "../../../Types/DepartmentType";
-import {SalaryResponseType, SelectBoxType} from "../../../Types/SalaryHeadType";
+import {SelectBoxType} from "../../../Types/SalaryHeadType";
 import useFetchApi from "../../../Helpers/useFetchApi";
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {Textarea} from "../../../Components/Textarea";
@@ -25,7 +25,6 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
     // Get last employee id and set next employee id.
     useEffect(() => {
         if (models.length > 0) {
-            console.log(models)
             const employeeId = String(parseInt(models[0].employee_id) + 1);
             setFormValues((prevState: EmployeeType) => ({
                 ...prevState,
@@ -48,7 +47,13 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                     name: item.name,
                 }
             })
-
+            designation = [
+                {
+                    id: null,
+                    name: __('Select one', 'pcm'),
+                }
+                // @ts-ignore
+            ].concat(designation);
             setDesignations(designation);
             const designationId = initialValues.designation_id ? initialValues.designation_id : designation[0].id;
             setSelectedDesignation(designation.find((item: SelectBoxType) => item.id === designationId) as SelectBoxType);
@@ -62,7 +67,13 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                     name: item.name,
                 }
             })
-
+            department = [
+                {
+                    id: null,
+                    name: __('Select one', 'pcm'),
+                }
+                // @ts-ignore
+            ].concat(department);
             setDepartments(department);
             const departmentId = initialValues.department_id ? initialValues.department_id : department[0].id;
             setSelectedDepartment(department.find((item: SelectBoxType) => item.id === departmentId) as SelectBoxType);
@@ -74,14 +85,6 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;
         setFormValues({...formValues, [name]: value});
-        if (name === 'department_id') {
-            const department = departments.find((item: SelectBoxType) => parseInt(String(item.id)) === parseInt(value)) as SelectBoxType;
-            localStorage.setItem('Employee.department', JSON.stringify(department));
-        }
-        if (name === 'designation_id') {
-            const designation = designations.find((item: SelectBoxType) => parseInt(String(item.id)) === parseInt(value)) as SelectBoxType;
-            localStorage.setItem('Employee.designation', JSON.stringify(designation));
-        }
         setFormData({...formValues, [name]: value});
     }
     return (
@@ -138,6 +141,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                             <div className="sm:col-span-3">
                                 <FormInput
                                     label={__('Employee id', 'pcm')}
+                                    required={true}
                                     name="employee_id"
                                     id="employee_id"
                                     value={formValues.employee_id}
@@ -146,6 +150,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
+                                    required={true}
                                     label={__('Email address', 'pcm')}
                                     name="email"
                                     id="email"
@@ -155,6 +160,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
+                                    required={true}
                                     type="date"
                                     label={__('Joining date', 'pcm')}
                                     name="joining_date"
@@ -171,28 +177,6 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     value={formValues.address}
                                     onChange={handleFormInputChange}
                                 />
-                            </div>
-                            <div className="col-span-full">
-                                <label
-                                    htmlFor="photo"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                    Photo
-                                </label>
-                                <div className="mt-2 flex items-center gap-x-3">
-                                    <UserCircleIcon
-                                        className="h-12 w-12 text-gray-300"
-                                        aria-hidden="true"
-                                    />
-                                    <FormInput
-                                        type="file"
-                                        label=""
-                                        name="photo"
-                                        id="photo"
-                                        value={formValues.phone}
-                                        onChange={handleFormInputChange}
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>

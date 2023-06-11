@@ -3,21 +3,38 @@ import {__} from "@wordpress/i18n";
 import {SalaryHeadType, SelectBoxType} from "../../../Types/SalaryHeadType";
 import {Button} from "../../../Components/Button";
 import {useState} from "react";
+import useFetchApi from "../../../Helpers/useFetchApi";
+import {useEffect} from "@wordpress/element";
+import {DesignationType} from "../../../Types/DesignationType";
+import {DepartmentType} from "../../../Types/DepartmentType";
 
 export type SalaryInformationType = {
     [key: string]: number;
 }
 export const ReviewInformation = ({personalInformation, salaryInformation, setError}: { personalInformation: EmployeeType, salaryInformation: SalaryInformationType, setError: any }) => {
-    let designation = localStorage.getItem('Employee.designation');
-    let employeeDesignation = {} as SelectBoxType;
-    if (designation != null) {
-        employeeDesignation = JSON.parse(designation) as SelectBoxType;
-    }
-    let department = localStorage.getItem('Employee.department');
-    let employeeDepartment = {} as SelectBoxType;
-    if (department != null) {
-        employeeDepartment = JSON.parse(department) as SelectBoxType;
-    }
+    const [employeeDesignation, setEmployeeDesignation] = useState<DesignationType>({} as DesignationType);
+    const [employeeDepartment, setEmployeeDepartment] = useState<DepartmentType>({} as DepartmentType);
+    const {models, makeGetRequest} = useFetchApi<DesignationType>('/pay-check-mate/v1/designations', {'per_page': '-1'}, true);
+    useEffect(() => {
+        if (models){
+            setEmployeeDesignation(models.find((item: DesignationType) => item.id === personalInformation.designation_id) as DesignationType);
+        }
+
+    }, [models]);
+
+    useEffect(() => {
+        console.log(personalInformation.department_id)
+        if (personalInformation.department_id === null) {
+            return;
+        }
+        makeGetRequest('/pay-check-mate/v1/departments', {'per_page': '-1'}, false).then((data: any) => {
+            if (data) {
+                setEmployeeDepartment(data.data.find((item: DepartmentType) => item.id === personalInformation.department_id) as DepartmentType);
+            }
+        }).catch((e: unknown) => {
+            console.log(e, 'error');
+        })
+    }, []);
 
     let salaryHeads = localStorage.getItem('Employee.SalaryHeads');
     let employeeSalaryHeads = [] as SalaryHeadType[];
@@ -25,7 +42,6 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
         employeeSalaryHeads = JSON.parse(salaryHeads) as SalaryHeadType[];
         employeeSalaryHeads.forEach((head: SalaryHeadType) => {
             if (salaryInformation.hasOwnProperty(head.id)) {
-                console.log(salaryInformation[head.id])
                 salaryInformation = {
                     ...salaryInformation,
                     [head.head_name]: salaryInformation[head.id],
@@ -54,7 +70,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                     {setError(true)}
                                     <span className="text-red-500">{__('Employee ID cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : personalInformation.employee_id}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {personalInformation.employee_id}
+                                </>
+                            )}
+
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -67,7 +89,12 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                     {setError(true)}
                                     <span className="text-red-500">{__('First name cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : personalInformation.first_name}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {personalInformation.first_name}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -80,7 +107,12 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                     {setError(true)}
                                     <span className="text-red-500">{__('Last name cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : personalInformation.last_name}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {personalInformation.last_name}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -93,7 +125,12 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                     {setError(true)}
                                     <span className="text-red-500">{__('Email address cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : personalInformation.email}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {personalInformation.email}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -101,12 +138,17 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             {__('Department', 'pcm')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {!employeeDepartment.name ? (
+                            {!employeeDepartment || Object.keys(employeeDepartment).length === 0 ? (
                                 <>
                                     {setError(true)}
                                     <span className="text-red-500">{__('Department cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : employeeDepartment.name}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {employeeDepartment.name}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -114,12 +156,17 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             {__('Designation', 'pcm')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                            {!employeeDesignation.name ? (
+                            {!employeeDesignation || Object.keys(employeeDesignation).length === 0 ? (
                                 <>
                                     {setError(true)}
                                     <span className="text-red-500">{__('Designation cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : employeeDesignation.name}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {employeeDesignation.name}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -132,7 +179,12 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                     {setError(true)}
                                     <span className="text-red-500">{__('Joining date cannot be empty.', 'pcm')}</span>
                                 </>
-                            ) : personalInformation.joining_date}
+                            ) : (
+                                <>
+                                    {setError(false)}
+                                    {personalInformation.joining_date}
+                                </>
+                            )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -148,10 +200,10 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {salaryInformation && Object.keys(salaryInformation).map((key, index) => {
                                 return (
-                                    <>
+                                    <div key={`info${index}`}>
                                         <span className="font-bold text-gray-900" key={index}>{key.replace(/_/g, ' ').toUpperCase()}:</span>
-                                        <span className="ml-4">{salaryInformation[key]}<br /></span>
-                                    </>
+                                        <span key={`value${index}`} className="ml-4">{salaryInformation[key]}<br /></span>
+                                    </div>
                                 );
                             })
                             }
