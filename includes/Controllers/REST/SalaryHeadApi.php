@@ -219,12 +219,13 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         }
 
         $total     = $salary_head->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
 
         $response->header( 'X-WP-Total', (string) $total );
         $response->header( 'X-WP-TotalPages', (string) $max_pages );
+        $response->header( 'per_page', (string) $args['limit'] );
 
         return new WP_REST_Response( $response, 200 );
     }
@@ -371,17 +372,22 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 'is_percentage'  => [
                     'description' => __( 'Salary Head is Percentage', 'pcm' ),
                     'type'        => 'boolean',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
                 ],
                 'is_variable'  => [
                     'description' => __( 'Is Changeable in every month?', 'pcm' ),
                     'type'        => 'boolean',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
                 ],
                 'is_taxable'     => [
                     'description' => __( 'Salary Head is Taxable', 'pcm' ),
                     'type'        => 'boolean',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
+                ],
+                'is_personal_savings'     => [
+                    'description' => __( 'Salary Head is Personal Savings', 'pcm' ),
+                    'type'        => 'boolean',
+                    'required'    => true,
                 ],
                 'priority'       => [
                     'description' => __( 'Salary Head Priority', 'pcm' ),

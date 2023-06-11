@@ -20,16 +20,17 @@ class SalaryHead extends Model {
      */
     protected static array $columns
         = [
-            'head_name'     => '%s',
-            'head_type'     => '%s',
-            'head_amount'   => '%f',
-            'is_percentage' => '%d',
-            'is_variable'   => '%d',
-            'is_taxable'    => '%d',
-            'priority'      => '%d',
-            'status'        => '%d',
-            'created_on'    => '%s',
-            'updated_at'    => '%s',
+            'head_name'           => '%s',
+            'head_type'           => '%s',
+            'head_amount'         => '%f',
+            'is_percentage'       => '%d',
+            'is_variable'         => '%d',
+            'is_taxable'          => '%d',
+            'is_personal_savings' => '%d',
+            'priority'            => '%d',
+            'status'              => '%d',
+            'created_on'          => '%s',
+            'updated_at'          => '%s',
         ];
 
     /**
@@ -39,8 +40,7 @@ class SalaryHead extends Model {
      *
      * @return string
      */
-    public function set_created_on()
-    : string {
+    public function set_created_on() : string {
         return current_time( 'mysql', true );
     }
 
@@ -51,8 +51,7 @@ class SalaryHead extends Model {
      *
      * @return string
      */
-    public function set_updated_at()
-    : string {
+    public function set_updated_at() : string {
         return current_time( 'mysql', true );
     }
 
@@ -65,8 +64,7 @@ class SalaryHead extends Model {
      *
      * @return string
      */
-    public function get_created_on( string $date )
-    : string {
+    public function get_created_on( string $date ) : string {
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
@@ -79,8 +77,7 @@ class SalaryHead extends Model {
      *
      * @return array<string, string>
      */
-    public function get_head_type( string $head_type )
-    : array {
+    public function get_head_type( string $head_type ) : array {
         return [
             'head_type'      => $head_type,
             'head_type_text' => $head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' ),

@@ -7,6 +7,7 @@ export interface SalaryHeadType {
     is_percentage: number;
     is_variable: number;
     is_taxable: number;
+    is_personal_savings: number;
     priority: number;
     status: SalaryHeadStatus;
     created_on: string;
@@ -14,13 +15,13 @@ export interface SalaryHeadType {
 }
 
 export enum HeadType {
-    Earning = 1,
-    Deduction = 2,
+    Earning    = 1,
+    Deduction  = 2,
     NonTaxable = 3
 }
 
 export enum SalaryHeadStatus {
-    Active = 1,
+    Active   = 1,
     Inactive = 0
 }
 

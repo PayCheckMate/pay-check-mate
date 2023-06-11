@@ -195,7 +195,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         }
 
         $total     = $department->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
 

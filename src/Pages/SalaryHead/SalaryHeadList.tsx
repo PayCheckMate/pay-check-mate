@@ -16,13 +16,13 @@ const headType = [
 ]
 
 const is_percentage = [
-    {id: 1, name: __('Yes', 'pcm')},
     {id: 0, name: __('No', 'pcm')},
+    {id: 1, name: __('Yes', 'pcm')},
 ]
 
 const is_variable = [
-    {id: 1, name: __('Yes', 'pcm')},
     {id: 0, name: __('No', 'pcm')},
+    {id: 1, name: __('Yes', 'pcm')},
 ]
 
 export const SalaryHeadList = () => {
@@ -41,7 +41,7 @@ export const SalaryHeadList = () => {
               makePutRequest,
               makePostRequest,
               setFilterObject,
-          } = useFetchApi<SalaryHeadType>('/pay-check-mate/v1/salary-heads', {'per_page': 10, 'orderby': 'priority', 'order': 'asc'});
+          } = useFetchApi<SalaryHeadType>('/pay-check-mate/v1/salary-heads', {'per_page': 20, 'orderby': 'id', 'order': 'asc'});
     useEffect(() => {
         if (models) {
             setSalaryHeads(models as SalaryHeadType[]);
@@ -82,6 +82,17 @@ export const SalaryHeadList = () => {
                 return (
                     <span className={`${isTaxable === 1 ? 'text-green-600' : 'text-red-600'}`}>
                         {isTaxable === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
+                    </span>
+                )
+            }
+        },
+        {
+            title:  __('Is Personal Savings', 'pcm'), dataIndex: 'is_personal_savings',
+            render: (text: string, record: SalaryHeadType) => {
+                const isPersonalSavings = parseInt(String(record.is_personal_savings))
+                return (
+                    <span className={`${isPersonalSavings === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                        {isPersonalSavings === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
                     </span>
                 )
             }
@@ -209,13 +220,9 @@ export const SalaryHeadList = () => {
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const data = formData
+        console.log(data)
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
-        data.head_type = selectedHeadType.id;
-        data.is_percentage = isPercentage.id ? 1 : 0;
-        data.is_variable = isVariable.id ? 1 : 0;
-        data.is_taxable = formData.is_taxable ?? 1;
-        data.priority = formData.priority ?? 1;
         if (formData.id) {
             try {
                 makePutRequest<SalaryHeadType>(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, true).then((data) => {
@@ -233,6 +240,11 @@ export const SalaryHeadList = () => {
                 console.log(error); // Handle the error accordingly
             }
         } else {
+            data.head_type = selectedHeadType.id;
+            data.is_percentage = isPercentage.id ? 1 : 0;
+            data.is_variable = isVariable.id ? 1 : 0;
+            data.is_taxable = formData.is_taxable ?? 1;
+            data.priority = formData.priority ?? 1;
             try {
                 makePostRequest<SalaryHeadType>('/pay-check-mate/v1/salary-heads', data, false).then((data: SalaryHeadType) => {
                     setSalaryHeads([...models, data])
@@ -357,6 +369,21 @@ export const SalaryHeadList = () => {
                                                         setFormData({...formData, is_taxable: 1});
                                                     } else {
                                                         setFormData({...formData, is_taxable: 0});
+                                                    }
+                                                }}
+                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            />
+                                            <FormCheckBox
+                                                label={__('Is personal savings?', 'pcm')}
+                                                name="is_personal_savings"
+                                                id="is_personal_savings"
+                                                value={formData.is_personal_savings}
+                                                checked={parseInt(String(formData.is_personal_savings)) === 1}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setFormData({...formData, is_personal_savings: 1});
+                                                    } else {
+                                                        setFormData({...formData, is_personal_savings: 0});
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"

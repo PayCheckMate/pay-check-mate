@@ -80,7 +80,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $total     = $employee_data->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $employees );
 

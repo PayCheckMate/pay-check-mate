@@ -107,6 +107,7 @@ class Databases {
                 `is_percentage` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
                 `is_variable` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
                 `is_taxable` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
+                `is_personal_savings` tinyint(1) NOT NULL DEFAULT '0' Comment '0 = No, 1 = Yes',
                 `priority` int(11) NOT NULL DEFAULT '0',
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
