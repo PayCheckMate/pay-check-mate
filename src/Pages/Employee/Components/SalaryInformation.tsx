@@ -21,6 +21,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
         if (models) {
             // @ts-ignore
             setSalaryHeads(models);
+            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(models));
         }
     }, [models]);
 

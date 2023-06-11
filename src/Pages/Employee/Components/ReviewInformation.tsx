@@ -1,6 +1,6 @@
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {__} from "@wordpress/i18n";
-import {SelectBoxType} from "../../../Types/SalaryHeadType";
+import {SalaryHeadType, SelectBoxType} from "../../../Types/SalaryHeadType";
 import {Button} from "../../../Components/Button";
 import {useState} from "react";
 
@@ -17,6 +17,22 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
     let employeeDepartment = {} as SelectBoxType;
     if (department != null) {
         employeeDepartment = JSON.parse(department) as SelectBoxType;
+    }
+
+    let salaryHeads = localStorage.getItem('Employee.SalaryHeads');
+    let employeeSalaryHeads = [] as SalaryHeadType[];
+    if (salaryHeads != null) {
+        employeeSalaryHeads = JSON.parse(salaryHeads) as SalaryHeadType[];
+        employeeSalaryHeads.forEach((head: SalaryHeadType) => {
+            if (salaryInformation.hasOwnProperty(head.id)) {
+                console.log(salaryInformation[head.id])
+                salaryInformation = {
+                    ...salaryInformation,
+                    [head.head_name]: salaryInformation[head.id],
+                };
+                delete salaryInformation[head.id];
+            }
+        });
     }
 
     return (
@@ -132,7 +148,10 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {salaryInformation && Object.keys(salaryInformation).map((key, index) => {
                                 return (
-                                    <span key={index}>{key}: {salaryInformation[key]}<br /></span>
+                                    <>
+                                        <span className="font-bold text-gray-900" key={index}>{key.replace(/_/g, ' ').toUpperCase()}:</span>
+                                        <span className="ml-4">{salaryInformation[key]}<br /></span>
+                                    </>
                                 );
                             })
                             }
