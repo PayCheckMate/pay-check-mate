@@ -189,6 +189,7 @@ const CreatePayroll = () => {
                                 <thead>
                                 <tr>
                                     <th rowSpan={2}>Sl</th>
+                                    <th rowSpan={2}>Employee id</th>
                                     <th rowSpan={2} className="fixed-column">Employee Name</th>
                                     <th rowSpan={2}>Designation</th>
                                     <th rowSpan={2}>Department</th>
@@ -218,6 +219,7 @@ const CreatePayroll = () => {
                                 {tableData.map((data, index) => (
                                     <tr key={data.id}>
                                         <td className="text-right">{index + 1}</td>
+                                        <td className="text-right">{data.employee_id}</td>
                                         <td className="text-left fixed-column">{data.full_name}</td>
                                         <td className="text-left">{data.designation_name}</td>
                                         <td className="text-left">{data.department_name}</td>
@@ -240,7 +242,7 @@ const CreatePayroll = () => {
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td className="fixed-column" colSpan={4}>Total:</td>
+                                    <td className="fixed-column text-right font-bold text-xl" colSpan={5}>Total:</td>
                                     <td className="text-right">{sumValues(tableData.map((data) => data.basic_salary))}</td>
                                     {salaryHeads.earnings.map((earning) => (
                                         <td className="text-right" key={earning.id}>{sumValues(tableData.map((data) => data.salary_head_details.earnings[earning.id] || 0))}</td>

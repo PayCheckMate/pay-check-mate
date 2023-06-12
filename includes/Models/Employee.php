@@ -10,18 +10,19 @@ class Employee extends Model {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'department_id'         => '%d',
-        'designation_id'        => '%d',
-        'first_name'   => '%s',
-        'last_name'    => '%s',
-        'email'        => '%s',
-        'phone'        => '%s',
-        'address'      => '%s',
-        'joining_date' => '%s',
-        'regine_date'  => '%s',
-        'status'                => '%d',
-        'created_on'            => '%s',
-        'updated_at'            => '%s',
+        'employee_id'    => '%s',
+        'department_id'  => '%d',
+        'designation_id' => '%d',
+        'first_name'     => '%s',
+        'last_name'      => '%s',
+        'email'          => '%s',
+        'phone'          => '%s',
+        'address'        => '%s',
+        'joining_date'   => '%s',
+        'regine_date'    => '%s',
+        'status'         => '%d',
+        'created_on'     => '%s',
+        'updated_at'     => '%s',
     ];
 
     /**
@@ -74,7 +75,7 @@ class Employee extends Model {
      * Get basic salary
      */
     public function get_basic_salary(): float {
-        return doubleval($this->basic_salary );
+        return doubleval( $this->basic_salary );
     }
 
     /**

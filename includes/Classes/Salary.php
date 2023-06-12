@@ -2,14 +2,9 @@
 
 namespace PayCheckMate\Classes;
 
+use PayCheckMate\Traits\CrudTrait;
+
 class Salary {
+    use CrudTrait;
 
-    /**
-     * @var \PayCheckMate\Classes\Employee
-     */
-    private Employee $employee;
-
-    public function __construct( Employee $employee ) {
-        $this->employee = $employee;
-    }
 }

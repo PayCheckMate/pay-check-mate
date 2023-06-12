@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {useState} from "@wordpress/element";
+import {useNavigate} from "react-router-dom";
 import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
@@ -10,6 +11,7 @@ import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInfor
 import useFetchApi from "../../Helpers/useFetchApi";
 
 export const AddEmployee = () => {
+    const navigate = useNavigate();
     const [error, setError] = useState(false);
     // Get initial personal information from local storage
     let employeePersonalInformation = localStorage.getItem('Employee.personalInformation');
@@ -101,19 +103,31 @@ export const AddEmployee = () => {
         // Save data to database
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
+        delete salaryInformation.gross_salary;
         const data = {
             '_wpnonce': _wpnonce,
             ...personalInformation,
-            'salaryInformation': salaryInformation,
+            'salaryInformation': {
+                ...salaryInformation,
+                'basic_salary': salaryInformation.basic_salary,
+                'remarks': salaryInformation.remarks,
+                'salary_head_details': salaryInformation.salary_head_details,
+            },
         }
 
         makePostRequest('/pay-check-mate/v1/employees', data).then(response => {
-            console.log(response);
+            if (response.status === 200) {
+                const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
+                employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
+                // Push to employee list page
+                navigate('/employees');
+            } else {
+                console.log(response)
+            }
+        }).catch(error => {
+            console.log(error);
         })
     }
-
-    // const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
-    // employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
     return (
         <>
             <div>

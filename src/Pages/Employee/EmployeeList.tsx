@@ -11,13 +11,14 @@ export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const per_page = 20;
     const {
         loading,
         models,
         totalPage,
         setFilterObject,
         filterObject,
-    } = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {page: 1, per_page: 10}, true);
+    } = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {page: 1, per_page}, true);
     const [employees, setEmployees] = useState([] as EmployeeType[]);
     useEffect(() => {
         if (models) {
@@ -27,7 +28,7 @@ export const EmployeeList = () => {
     },[models, filterObject])
 
     const handlePageChange = (page: number) => {
-        setFilterObject({'per_page': 10, 'page': page}); // Update the filter object with the new page value
+        setFilterObject({'per_page': per_page, 'page': page}); // Update the filter object with the new page value
         setCurrentPage(page);
     };
 
@@ -104,7 +105,7 @@ export const EmployeeList = () => {
                     data={employees}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={10}
+                    pageSize={per_page}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />

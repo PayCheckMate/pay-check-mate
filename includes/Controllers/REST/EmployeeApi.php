@@ -3,11 +3,17 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\Salary;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\Employee as EmployeeModel;
+use PayCheckMate\Models\SalaryHistory as SalaryHistoryModel;
 use PayCheckMate\Requests\EmployeeRequest;
+use PayCheckMate\Requests\SalaryHistoryRequest;
+use WP_Error;
+use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use const _PHPStan_5aecd7174\__;
 
 class EmployeeApi extends RestController implements HookAbleApiInterface {
 
@@ -28,7 +34,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 ],
                 [
                     'methods'             => WP_REST_Server::CREATABLE,
-                    'callback'            => [ $this, 'create_item' ],
+                    'callback'            => [ $this, 'create_employee' ],
                     'permission_callback' => [ $this, 'create_employee_permissions_check' ],
                     'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
                 ],
@@ -91,21 +97,80 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Create a single item from the data in the request.
+     *
+     * @param \WP_REST_Request $request Full details about the request.
+     *
      * @throws \Exception
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function create_item( $request ) {
-        $data              = $request->get_params();
-        $salary_information = $data['salary_information'];
-        echo '<pre>';
-        print_r( $data );
-        exit();
-        unset( $data['salary_information'] );
+
+    public function create_employee( WP_REST_Request $request ) {
+        global $wpdb;
+        $data                              = $request->get_params();
+        $salary_information                = $data['salaryInformation'];
+        $salary_information['_wpnonce']    = $data['_wpnonce'];
+        $salary_information['active_from'] = $salary_information['active_from'] ? $data['joining_date'] : gmdate( 'Y-m-d' );
+        unset( $data['salaryInformation'] );
         $employee_model = new Employee( new EmployeeModel() );
         $validated_data = new EmployeeRequest( $data );
         if ( $validated_data->error ) {
-            return new WP_REST_Response( $validated_data->error, 400 );
+            return new WP_Error(
+                'rest_invalid_employee_data', __( 'Invalid employee data', 'pcm' ), [
+                    'data'   => $validated_data->error,
+                    'status' => 400,
+                ]
+            );
         }
-        $employee       = $employee_model->create( $validated_data );
+
+        $wpdb->query( 'START TRANSACTION' );
+        $employee = $employee_model->create( $validated_data );
+
+        if ( is_wp_error( $employee ) ) {
+            return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
+        }
+
+        $salary_information['employee_id'] = $data['employee_id'];
+        $salary_data                       = [
+            'employee_id',
+            'basic_salary',
+            'active_from',
+            'remarks',
+            '_wpnonce',
+        ];
+        $head_details                      = $salary_information;
+        $salary_information                = array_intersect_key( $salary_information, array_flip( $salary_data ) );
+        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id' ];
+        $salary_head_details               = array_filter(
+            $head_details, function ( $key ) use ( $keys_to_remove ) {
+            return ! in_array( $key, $keys_to_remove, true );
+        }, ARRAY_FILTER_USE_KEY
+        );
+
+        $salary_information['salary_head_details'] = wp_json_encode( $salary_head_details );
+        $validate_salary_data                      = new SalaryHistoryRequest( $salary_information );
+        if ( $validate_salary_data->error ) {
+            return new WP_Error(
+                'rest_invalid_salary_data', __( 'Invalid salary data', 'pcm' ), [
+                    'data'   => $validate_salary_data->error,
+                    'status' => 400,
+                ]
+            );
+        }
+
+        $salary_history_model = new Salary( new SalaryHistoryModel() );
+        $salary_history       = $salary_history_model->create( $validate_salary_data );
+
+        if ( is_wp_error( $salary_history ) ) {
+            return new WP_REST_Response( $salary_history, 400 );
+        }
+
+        // If everything is fine, then commit the data.
+        $wpdb->query( 'COMMIT' );
+
+        $response = $this->prepare_item_for_response( $employee, $request );
+
+        return new WP_REST_Response( $response, 200 );
     }
 
     public function get_item_schema(): array {

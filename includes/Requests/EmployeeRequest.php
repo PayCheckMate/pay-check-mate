@@ -10,6 +10,7 @@ class EmployeeRequest extends Request {
 
     // Have to create a rule that will validate $request in next.
     protected static array $rules = [
+        'employee_id'     => 'sanitize_text_field',
         'department_id'   => 'absint',
         'designation_id'  => 'absint',
         'first_name'      => 'sanitize_text_field',

@@ -19,10 +19,10 @@ class Department extends Model {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'name' => '%s',
-        'status'          => '%d',
-        'created_on'      => '%s',
-        'updated_at'      => '%s',
+        'name'       => '%s',
+        'status'     => '%d',
+        'created_on' => '%s',
+        'updated_at' => '%s',
     ];
 
     /**
@@ -32,7 +32,7 @@ class Department extends Model {
      *
      * @return string
      */
-    public function set_created_on() : string {
+    public function set_created_on(): string {
         return current_time( 'mysql', true );
     }
 
@@ -43,7 +43,7 @@ class Department extends Model {
      *
      * @return string
      */
-    public function set_updated_at() : string {
+    public function set_updated_at(): string {
         return current_time( 'mysql', true );
     }
 
@@ -56,7 +56,7 @@ class Department extends Model {
      *
      * @return string
      */
-    public function get_created_on( string $date ) : string {
+    public function get_created_on( string $date ): string {
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
