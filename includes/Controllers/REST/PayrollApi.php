@@ -155,6 +155,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'mutation_fields' => [
                 'full_name',
             ],
+            'where'           => [
+                'joining_date' => [
+                    'operator' => '<=',
+                    'value'    => $parameters['date'],
+                    'type'     => 'AND',
+                ],
+            ],
             'relations'       => [
                 $designation_args,
                 $department_args,
@@ -167,16 +174,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                         'status' => [
                             'operator' => '=',
                             'value'    => 1,
+                            'type'     => 'AND',
                         ],
                     ],
                     'select_max'   => [
                         'active_from' => [
                             'operator' => '<=',
-                            'value'    => "$parameters[date]",
+                            'value'    => $parameters['date'],
                             'compare'  => [
                                 'key'      => 'active_from',
                                 'operator' => '<=',
-                                'value'    => "$parameters[date]",
+                                'value'    => $parameters['date'],
                             ],
                         ],
                     ],

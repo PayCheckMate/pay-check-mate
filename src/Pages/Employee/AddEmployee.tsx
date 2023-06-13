@@ -116,6 +116,7 @@ export const AddEmployee = () => {
         }
 
         makePostRequest('/pay-check-mate/v1/employees', data).then(response => {
+            // @ts-ignore
             if (response.status === 200) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));

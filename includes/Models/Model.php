@@ -85,6 +85,13 @@ class Model implements ModelInterface {
             $where             = $relational->where;
             $relational_fields = $relational->fields;
         }
+
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type = !empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
         if ( ! empty( $args['status'] ) ) {
             $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
         }
