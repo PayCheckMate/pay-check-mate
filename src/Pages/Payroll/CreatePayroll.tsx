@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from "@wordpress/element";
-import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType} from "../../Types/SalaryHeadType";
+import {
+    EmployeeSalary,
+    SalaryHeadsResponseType,
+    SalaryHeadType, SalaryHeadTypeForPayroll,
+    SalaryResponseType,
+    SelectBoxType
+} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
 import {Loading} from "../../Components/Loading";
@@ -14,12 +20,9 @@ import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 
 const CreatePayroll = () => {
     const {
-        models,
         loading,
         makeGetRequest,
         makePostRequest,
-        filterObject,
-        setFilterObject,
     } = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/payroll', {}, false);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const [designations, setDesignations] = useState<DesignationType[]>([]);
@@ -43,14 +46,12 @@ const CreatePayroll = () => {
                 'designation_id': selectedDesignation.id,
             }
             makePostRequest<SalaryResponseType>('', data, false).then((response) => {
-                const earning_types = Object.values(response.salary_head_types.earnings).map(item => item);
-                const deduction_types = Object.values(response.salary_head_types.deductions).map(item => item);
-                const non_taxable_types = Object.values(response.salary_head_types.non_taxable).map(item => item);
                 const salary_heads = {
-                    earnings: earning_types,
-                    deductions: deduction_types,
-                    non_taxable: non_taxable_types,
-                }
+                    earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
+                    deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
+                    non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
+                };
+
                 setSalaryHeads(salary_heads)
                 setTableData(response.employee_salary_history)
             }).catch((e: unknown) => {
@@ -175,9 +176,9 @@ const CreatePayroll = () => {
                                 <div className="flex items-end">
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize bg-blue-600 rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+                                        className="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 rounded hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
                                     >
-                                        Filter
+                                        {__('Create Payroll', 'pcm')}
                                     </button>
                                 </div>
                             </div>
@@ -188,19 +189,25 @@ const CreatePayroll = () => {
                             <table className="payroll-table">
                                 <thead>
                                 <tr>
-                                    <th rowSpan={2}>Sl</th>
-                                    <th rowSpan={2}>Employee id</th>
-                                    <th rowSpan={2} className="fixed-column">Employee Name</th>
-                                    <th rowSpan={2}>Designation</th>
-                                    <th rowSpan={2}>Department</th>
-                                    <th rowSpan={3}>Basic</th>
-                                    <th className="salary" colSpan={salaryHeads.earnings.length}>Salary</th>
-                                    <th className="total_salary" rowSpan={2}>Total Allowance</th>
-                                    <th className="deduction" colSpan={salaryHeads.deductions.length}>Deductions</th>
-                                    <th className="total_deduction" rowSpan={2}>Total Deductions</th>
-                                    <th className="net_payable" rowSpan={2}>Net Payable</th>
-                                    <th className="non_taxable" colSpan={salaryHeads.non_taxable.length}>Non-Taxable Allowance</th>
-                                    <th className="total_payable" rowSpan={2}>Total Payable</th>
+                                    <th rowSpan={2}>{__('Sl. No.', 'pcm')}</th>
+                                    <th rowSpan={2}>{__('Employee ID', 'pcm')}</th>
+                                    <th rowSpan={2} className="fixed-column">{__('Employee Name', 'pcm')}</th>
+                                    <th rowSpan={2}>{__('Designation', 'pcm')}</th>
+                                    <th rowSpan={2}>{__('Department', 'pcm')}</th>
+                                    <th rowSpan={3}>{__('Basic Salary', 'pcm')}</th>
+                                    {salaryHeads.earnings.length > 0 && (
+                                        <th className="salary" colSpan={salaryHeads.earnings.length}>Earnings</th>
+                                    )}
+                                    <th className="total_salary" rowSpan={2}>{__('Total Earnings', 'pcm')}</th>
+                                    {salaryHeads.deductions.length > 0 && (
+                                        <th className="deduction" colSpan={salaryHeads.deductions.length}>{__('Deductions', 'pcm')}</th>
+                                    )}
+                                    <th className="total_deduction" rowSpan={2}>{__('Total Deductions', 'pcm')}</th>
+                                    <th className="net_payable" rowSpan={2}>{__('Net Payable', 'pcm')}</th>
+                                    {salaryHeads.non_taxable.length > 0 && (
+                                        <th className="non_taxable" colSpan={salaryHeads.non_taxable.length}>{__('Non Taxable', 'pcm')}</th>
+                                    )}
+                                    <th className="total_payable" rowSpan={2}>{__('Total Payable', 'pcm')}</th>
                                 </tr>
                                 <tr className="second-row">
                                     {salaryHeads.earnings.map((earning) => (
@@ -242,7 +249,7 @@ const CreatePayroll = () => {
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td className="fixed-column text-right font-bold text-xl" colSpan={5}>Total:</td>
+                                    <td className="fixed-column text-right font-bold text-xl" colSpan={5}>{__('Total', 'pcm')}</td>
                                     <td className="text-right">{sumValues(tableData.map((data) => data.basic_salary))}</td>
                                     {salaryHeads.earnings.map((earning) => (
                                         <td className="text-right" key={earning.id}>{sumValues(tableData.map((data) => data.salary_head_details.earnings[earning.id] || 0))}</td>

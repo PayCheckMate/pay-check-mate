@@ -213,6 +213,7 @@ export const SalaryHeadList = () => {
                 is_percentage: 1,
                 is_taxable:    1,
                 priority:      1,
+                should_affect_basic_salary: 1,
                 status:        1
             }
         }
@@ -253,7 +254,7 @@ export const SalaryHeadList = () => {
                 console.log(error); // Handle the error accordingly
             }
         } else {
-            data.head_type = selectedHeadType.id;
+            data.head_type = selectedHeadType.id as HeadType;
             data.is_percentage = isPercentage.id ? 1 : 0;
             data.is_variable = isVariable.id ? 1 : 0;
             data.is_taxable = formData.is_taxable ?? 1;
@@ -364,6 +365,7 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                tooltip={__('If you select yes, you will be able to change the amount in every payroll.', 'pcm')}
                                             />
                                         </div>
                                         <SelectBox
@@ -419,6 +421,7 @@ export const SalaryHeadList = () => {
                                                 }
                                             }}
                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            tooltip={__('If checked, this salary head will be calculated with basic salary.', 'pcm')}
                                         />
                                         <FormInput
                                             label={__('Priority', 'pcm')}

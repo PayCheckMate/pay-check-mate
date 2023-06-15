@@ -1,4 +1,6 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import Tooltip from "./Tooltip";
+import {QuestionMarkCircleIcon} from "@heroicons/react/24/solid";
 
 interface CheckBoxProps {
     label: string;
@@ -12,13 +14,19 @@ interface CheckBoxProps {
     ariaInvalid?: boolean | undefined;
     ariaDescribedBy?: string;
     helpText?: string;
+    tooltip?: string;
 }
 
-export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,helpText}: CheckBoxProps) => {
+export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,helpText, tooltip}: CheckBoxProps) => {
     return (
         <div>
             <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
                 {label}
+                {tooltip && (
+                    <Tooltip text={tooltip} >
+                        <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500 ml-1" aria-hidden="true" />
+                    </Tooltip>
+                )}
             </label>
             <div className="relative mt-2 rounded-md shadow-sm">
                 <input

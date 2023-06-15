@@ -1,5 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { useState } from "@wordpress/element";
+import Tooltip from "./Tooltip";
+import {QuestionMarkCircleIcon} from "@heroicons/react/24/solid";
 
 interface TextInputProps {
     label: string;
@@ -14,9 +16,10 @@ interface TextInputProps {
     required?: boolean;
     helpText?: string;
     disabled?: boolean;
+    tooltip?: string;
 }
 
-export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false,}: TextInputProps) => {
+export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip}: TextInputProps) => {
     const [isSelectionValid, setIsSelectionValid] = useState(!required || (value !== "" && value !== undefined));
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +33,11 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
                 <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
                     {label}
                     {required && <span className="text-red-500">*</span>}
+                    {tooltip && (
+                        <Tooltip text={tooltip} >
+                            <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500 ml-1" aria-hidden="true" />
+                        </Tooltip>
+                    )}
                 </label>
                 <input
                     type={type}
