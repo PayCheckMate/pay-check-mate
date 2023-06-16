@@ -1,34 +1,32 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import Tooltip from "./Tooltip";
+import {QuestionMarkCircleIcon} from "@heroicons/react/24/solid";
 
 interface CheckBoxProps {
     label: string;
     name: string;
     id: string;
     className?: string;
-    value: string | number;
+    value: any;
     checked: boolean;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: string;
     ariaInvalid?: boolean | undefined;
     ariaDescribedBy?: string;
+    helpText?: string;
+    tooltip?: string;
 }
 
-export const FormCheckBox = ({
-                                 label,
-                                 name,
-                                 id,
-                                 className = '',
-                                 value,
-                                 checked,
-                                 onChange,
-                                 error,
-                                 ariaInvalid,
-                                 ariaDescribedBy,
-                             }: CheckBoxProps) => {
+export const FormCheckBox = ({label, name, id, className = '', value, checked, onChange, error, ariaInvalid, ariaDescribedBy,helpText, tooltip}: CheckBoxProps) => {
     return (
         <div>
             <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
                 {label}
+                {tooltip && (
+                    <Tooltip text={tooltip} >
+                        <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500 ml-1" aria-hidden="true" />
+                    </Tooltip>
+                )}
             </label>
             <div className="relative mt-2 rounded-md shadow-sm">
                 <input
@@ -44,6 +42,14 @@ export const FormCheckBox = ({
                     aria-invalid={ariaInvalid}
                     aria-describedby={ariaDescribedBy}
                 />
+                {helpText && (
+                    <p
+                        className="mt-2 text-sm text-gray-500"
+                        id={id}
+                    >
+                        {helpText}
+                    </p>
+                )}
                 {error && (
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />

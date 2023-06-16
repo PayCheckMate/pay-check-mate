@@ -20,6 +20,7 @@ type TableProps = {
 };
 
 export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, pageSize = 10, currentPage = 1, onPageChange = (page: number) => {}}: TableProps) => {
+    console.log(data)
     if (!data.length && !isLoading) {
         return (
             <>
@@ -32,7 +33,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
 
     const hasSLColumn = columns.some((column) => column.dataIndex === "#");
 
-    let dataIndex = pageSize * (currentPage - 1) + 1;
+    let dataIndex = pageSize * (currentPage -1) + 1;
 
     if (!hasSLColumn) {
         columns = [
@@ -57,7 +58,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
             {isLoading ? (
                 <Loading />
             ) : (
-                <div>
+                <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                         <tr>
@@ -94,7 +95,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                     <div className="flex justify-center mt-4">
                         <nav className="flex items-center">
                             <button
-                                onClick={() => handlePageChange(currentPage - 1)}
+                                onClick={() => handlePageChange(currentPage -1)}
                                 disabled={currentPage === 1}
                                 className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-500 hover:bg-gray-300 focus:outline-none"
                             >

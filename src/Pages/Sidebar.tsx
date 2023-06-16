@@ -3,14 +3,14 @@ import {createHooks} from '@wordpress/hooks';
 import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
-import {NavbarLink} from "./NavbarLink";
+import {NavbarLink} from "../Components/NavbarLink";
 import {__} from "@wordpress/i18n";
 
 const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
     {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('PayCheckMate', 'pcm'), href: 'payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Create Payroll', 'pcm'), href: 'create-payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['administrator', 'pay_check_mate_accountant']},

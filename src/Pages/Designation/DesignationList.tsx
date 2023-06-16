@@ -4,9 +4,10 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
 import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
+import {SalaryHeadsResponseType} from "../../Types/SalaryHeadType";
 
 export const DesignationList = () => {
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
@@ -20,9 +21,10 @@ export const DesignationList = () => {
         totalPage,
         makeDeleteRequest,
         makePutRequest,
+        makeGetRequest,
         makePostRequest,
         setFilterObject,
-    } = useFetchApi<DesignationType>('/pay-check-mate/v1/designations');
+    } = useFetchApi<DesignationType>('/pay-check-mate/v1/designations', {'per_page': 10});
     useEffect(() => {
         if (models) {
             setDesignations(models as DesignationType[]);
@@ -31,7 +33,7 @@ export const DesignationList = () => {
     }, [models]);
 
     const columns = [
-        {title: 'Designation name', dataIndex: 'designation_name'},
+        {title: 'Designation name', dataIndex: 'name'},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DesignationType) => {
@@ -58,7 +60,7 @@ export const DesignationList = () => {
             dataIndex: 'action',
             render: (text: string, record: DesignationType) => (
                 <div className="flex">
-                    <button className="text-indigo-600 hover:text-indigo-900" onClick={()=>handleModal(record)}>
+                    <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
                     {parseInt(String(record.status)) === DesignationStatus.Active && (
@@ -87,10 +89,10 @@ export const DesignationList = () => {
     }
 
     const handleStatus = (id: number, status: number) => {
-        const designation_name = getDesignations(id)?.designation_name;
+        const name = getDesignations(id)?.name;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, designation_name, status, _wpnonce};
+        const data = {id, name, status, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -117,7 +119,7 @@ export const DesignationList = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setFilterObject({ 'per_page': 10, 'page': page }); // Update the filter object with the new page value
+        setFilterObject({'per_page': 10, 'page': page}); // Update the filter object with the new page value
         setCurrentPage(page);
     };
 
@@ -129,10 +131,10 @@ export const DesignationList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data: DesignationType) => {
+                makePutRequest<DesignationType>(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data) => {
                     setDesignations(models.map((designation: DesignationType) => {
                         if (designation.id === formData.id) {
-                            designation.designation_name = formData.designation_name;
+                            designation.name = formData.name;
                         }
                         return designation;
                     }))
@@ -145,7 +147,7 @@ export const DesignationList = () => {
             }
         } else {
             try {
-                makePostRequest('/pay-check-mate/v1/designations', data, false).then((data: DesignationType) => {
+                makePostRequest<DesignationType>('/pay-check-mate/v1/designations', data, false).then((data) => {
                     setDesignations([...models, formData])
                     setShowModal(false)
                 }).catch((e: unknown) => {
@@ -166,7 +168,7 @@ export const DesignationList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={()=>handleModal({} as DesignationType)} className="hover:text-white active:text-white">
+                        <Button onClick={() => handleModal({} as DesignationType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
                             {__('Add designation', 'pcm')}
                         </Button>
@@ -175,8 +177,8 @@ export const DesignationList = () => {
                                 {/*Create a form to save designation*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="designation_name" id="designation_name" value={formData.designation_name} onChange={(e) => setFormData({...formData, designation_name: e.target.value})} />
-                                        <Button className="mt-4" onClick={()=>handleSubmit(event)}>
+                                        <FormInput label={__('Department name', 'pcm')} name="name" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
                                             {__('Add designation', 'pcm')}
                                         </Button>
                                     </form>

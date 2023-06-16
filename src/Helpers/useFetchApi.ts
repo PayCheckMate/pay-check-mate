@@ -1,112 +1,85 @@
-import apiFetch, { APIFetchOptions } from '@wordpress/api-fetch';
-import { useEffect, useState } from '@wordpress/element';
+import apiFetch, {APIFetchOptions} from '@wordpress/api-fetch';
+import {useEffect, useState} from '@wordpress/element';
 
-interface UnparsedResponse<Model> {
-    data: {
-        headers: Headers;
-        data: Model;
-        status: number;
-    }
-}
+
 const apiFetchUnparsed = async <Model>(
     path: string,
     options?: APIFetchOptions,
     data?: any
 ): Promise<Model> => {
-    const requestOptions: APIFetchOptions = { path, parse: false, ...options };
-
+    const requestOptions: APIFetchOptions = {path, parse: false, ...options};
     if (data) {
         requestOptions.body = JSON.stringify(data);
     }
 
     // @ts-ignore
     return apiFetch(requestOptions).then((response: Response) => {
-        return Promise.all([response.headers, response.json()]).then(([headers, jsonData]) => {
-            return { headers, data: jsonData };
+        return Promise.all([response.json()]).then(([jsonData]) => {
+            return {data: jsonData};
         });
     });
 };
-
-const useFetchApi = <Model>(
-    url: string,
-    initialFilters?: object,
-    run = true
-): {
+const useFetchApi = <Model extends object>(url: string, initialFilters?: object, run = true): {
     models: Model[];
-    loading: boolean;
     total: number;
     totalPage: number;
-    setFilterObject: <FilterType>(newFilterObj: FilterType) => void;
     filterObject: object;
-    makePostRequest: <DataType>(requestUrl: string, data: DataType, run?: boolean) => Promise<Model>;
-    makePutRequest: <DataType>(requestUrl: string, data: DataType, run?: boolean) => Promise<Model>;
-    makeGetRequest: (requestUrl?: string, run?: boolean) => Promise<Model>;
-    makeDeleteRequest: (requestUrl: string, run?: boolean) => Promise<Model>;
+    setFilterObject: <FilterType>(newFilterObj: FilterType) => void;
+    loading: boolean;
+    makePostRequest: <DataType>(requestUrl: string, data: object, run?: boolean) => Promise<DataType>;
+    makePutRequest: <DataType>(requestUrl: string, data: object, run?: boolean) => Promise<DataType>;
+    makeGetRequest: <DataType>(requestUrl?: string, data?: object, run?: boolean) => Promise<DataType>;
+    makeDeleteRequest: <DataType>(requestUrl: string, run?: boolean) => Promise<DataType>;
 } => {
     const [loading, setLoading] = useState<boolean>(true);
-    const [total, setTotal] = useState<number>(0);
-    const [totalPage, setTotalPage] = useState<number>(0);
     const [models, setModels] = useState<Model[]>([]);
     const [filterObject, setFilter] = useState<object>(initialFilters || {});
+    const [total, setTotal] = useState<number>(0);
+    const [totalPage, setTotalPage] = useState<number>(0);
 
     const setFilterObject = <FilterType>(newFilterObj: FilterType): void => {
-        setFilter((prevFilter) => ({ ...prevFilter, ...newFilterObj }));
-    };
+        setFilter((prevFilter) => ({...prevFilter, ...newFilterObj}));
+    }
 
-    const makeRequest = async (
-        requestUrl: string,
-        requestMethod: string = 'GET',
-        run: boolean = true,
-        requestData?: any
-    ): Promise<Model> => {
+    const makeRequest = async<DataType> (requestUrl: string, requestMethod: string = 'GET', run: boolean = true, requestData?: any): Promise<DataType> => {
         setLoading(true);
-        const requestOptions: APIFetchOptions = {
-            method: requestMethod,
-            headers: { 'Content-Type': 'application/json' },
-        };
+        const requestOptions: APIFetchOptions = {method: requestMethod, headers: {'Content-Type': 'application/json'},};
 
         if (requestData) {
             requestOptions.body = JSON.stringify(requestData);
         }
 
-        return apiFetchUnparsed<UnparsedResponse<Model>>(requestUrl, requestOptions)
-            .then((response) => {
-                if (response.data.headers !== undefined) {
-                    setTotalPage(parseInt(response.data.headers.get('X-WP-TotalPages') || '0'));
-                    setTotal(parseInt(response.data.headers.get('X-WP-Total') || '0'));
-                }
-                if (run) {
-                    if (response.data.status === 200) {
-                        const responseData = response.data.data; // Access the 'data' property of the response
-                        setModels(Array.isArray(responseData) ? responseData : [responseData]);
-                    }
-                }
+        return apiFetchUnparsed(requestUrl, requestOptions).then((response: any) => {
+            setLoading(false);
 
-                setLoading(false);
-                return response.data.data; // Return the 'data' property of the response
-            })
-            .catch((e) => {
-                setLoading(false);
-                throw e;
-            });
-    };
-
-    const makePostRequest = async <DataType>(requestUrl: string, data: DataType, run = true): Promise<Model> => {
-        return makeRequest(url, 'POST', run, data);
-    };
-
-    const makePutRequest = async <DataType>(requestUrl: string, data: DataType, run = true): Promise<Model> => {
-        console.log('makePutRequest', requestUrl, data)
-        return makeRequest(requestUrl || url, 'PUT', run, data);
-    };
-
-    const makeGetRequest = async (requestUrl?: string, run = true): Promise<Model> => {
+            return response.data;
+            // if (response.data.data) {
+            //     return response.data.data;
+            // }else if (response.data) {
+            //     return response.data;
+            // }else {
+            //     return response;
+            // }
+        });
+    }
+    const makeGetRequest = async <DataType>(requestUrl?: string, data?: any, run = true): Promise<DataType> => {
+        if (data) {
+            const queryParams = new URLSearchParams(data).toString();
+            requestUrl += `?${queryParams}`;
+        }
         return makeRequest(requestUrl || url, 'GET', run);
     };
 
-    const makeDeleteRequest = async (requestUrl: string, run = true): Promise<Model> => {
-        return makeRequest(requestUrl, 'DELETE', run);
-    };
+    const makePostRequest = async <DataType>(requestUrl: string, data: object, run = true): Promise<DataType> => {
+        return makeRequest(requestUrl || url, 'POST', run, data);
+    }
+    const makePutRequest = async <DataType>(requestUrl: string, data: object, run = true): Promise<DataType> => {
+        return makeRequest(requestUrl || url, 'PUT', run, data);
+    }
+    const makeDeleteRequest = async <DataType>(requestUrl: string, run = true): Promise<DataType> => {
+        return makeRequest(requestUrl || url, 'DELETE', run);
+    }
+
 
     useEffect(() => {
         if (!run) return;
@@ -114,32 +87,29 @@ const useFetchApi = <Model>(
         setLoading(true);
         const queryParam = new URLSearchParams(filterObject as URLSearchParams).toString();
         const path = url + '?' + queryParam;
-        apiFetchUnparsed<UnparsedResponse<Model>>(path, initialFilters)
-            .then((response) => {
-                if (response.data.status === 200) {
-                    const responseData = response.data.data; // Access the 'data' property of the response
-                    setModels(Array.isArray(responseData) ? responseData : [responseData]);
-                }
-                setLoading(false);
-            })
-            .catch((e) => {
-                setLoading(false);
-            });
+        apiFetchUnparsed(path, initialFilters).then((response: any) => {
+            if (response.data.status === 200 && response.data) {
+                setModels(response.data.data);
+                setTotal(response.data.headers['X-WP-Total']);
+                setTotalPage(response.data.headers['X-WP-TotalPages']);
+            }
+
+            setLoading(false);
+        });
     }, [filterObject, run]);
 
-    // TODO: Handle error
     return {
         models,
-        loading,
         total,
         totalPage,
-        setFilterObject,
+        loading,
         filterObject,
+        setFilterObject,
+        makeGetRequest,
         makePostRequest,
         makePutRequest,
-        makeGetRequest,
-        makeDeleteRequest,
-    };
+        makeDeleteRequest
+    }
 };
 
 export default useFetchApi;

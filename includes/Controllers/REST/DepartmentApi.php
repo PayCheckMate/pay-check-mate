@@ -69,7 +69,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'department_name' => [
+						'name' => [
 							'description' => __( 'Department name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
@@ -189,13 +189,13 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $departments = $department->all( $args );
         $data        = [];
 
-        foreach ( $departments as $item ) {
+        foreach ( $departments->toArray() as $item ) {
             $item   = $this->prepare_item_for_response( $item, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
         $total     = $department->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
 
@@ -321,7 +321,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'department_name' => [
+                'name' => [
                     'description' => __( 'Department name', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],

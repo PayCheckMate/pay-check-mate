@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "@wordpress/element";
+import { Link, useLocation } from "react-router-dom";
 import { NavbarLinkProps } from "../Types/NavigationType";
 import { userIs } from "../Helpers/User";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -12,6 +12,7 @@ function classNames(...classes) {
 export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
     const [expandedLinks, setExpandedLinks] = useState<number[]>([]);
     const [currentLink, setCurrentLink] = useState<number>(-1);
+    const location = useLocation();
 
     const toggleLinkExpansion = (index: number) => {
         if (expandedLinks.includes(index)) {
@@ -32,6 +33,17 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
         console.log(updatedNavigation); // You can use the updated navigation array as needed
     };
 
+    useEffect(() => {
+        // Find the index of the current active link based on the URL hash
+        const activeIndex = navigation.findIndex(
+            (item) => item.href === location.pathname.split('/')[1] || item.children?.some((child) => child.href === location.pathname.split('/')[1]) || item.href === '#'
+        );
+        if (activeIndex !== -1) {
+            setCurrentLink(activeIndex);
+            setExpandedLinks([activeIndex])
+        }
+    }, [location, navigation]);
+
     return (
         <>
             {navigation.map((item, index) => (
@@ -50,12 +62,9 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
                                         onClick={() => toggleLinkExpansion(index)}
                                     >
                                         {item.icon && (
-                                            <item.icon
-                                                className="h-6 w-6 shrink-0"
-                                                aria-hidden="true"
-                                            />
+                                            <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                         )}
-                                        <div onClick={()=> handleLinkClick(index)} className="flex items-center justify-between w-full">
+                                        <div onClick={() => handleLinkClick(index)} className="flex items-center justify-between w-full">
                                             <div>{item.title}</div>
                                             <ChevronDownIcon
                                                 className={classNames(
@@ -86,10 +95,7 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
                                     onClick={() => handleLinkClick(index)}
                                 >
                                     {item.icon && (
-                                        <item.icon
-                                            className="h-6 w-6 shrink-0"
-                                            aria-hidden="true"
-                                        />
+                                        <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                     )}
                                     {item.title}
                                 </Link>

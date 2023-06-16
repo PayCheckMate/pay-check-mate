@@ -1,6 +1,7 @@
+import { HTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 
-interface ButtonProps {
+interface ButtonProps extends HTMLAttributes<HTMLButtonElement>{
     path?: string;
     className?: string;
     children: React.ReactNode;
@@ -8,7 +9,7 @@ interface ButtonProps {
     type?: "button" | "submit" | "reset";
 }
 
-export const Button = ({ className, children, onClick, path, type }: ButtonProps) => {
+export const Button = ({ className, children, onClick, path, type='button' }: ButtonProps) => {
     const buttonClass = className ? `btn-primary ${className}` : 'btn-primary';
 
     const handleClick = () => {
@@ -26,7 +27,7 @@ export const Button = ({ className, children, onClick, path, type }: ButtonProps
     }
 
     return (
-        <button type={type || 'button'} className={buttonClass} onClick={handleClick}>
+        <button type={type} className={buttonClass} onClick={handleClick}>
             {children}
         </button>
     );

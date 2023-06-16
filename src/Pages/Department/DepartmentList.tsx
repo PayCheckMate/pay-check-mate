@@ -4,7 +4,7 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useEffect, useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
-import useFetchApi from "../../Helpers/useFetchApi2";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 
@@ -31,7 +31,7 @@ export const DepartmentList = () => {
     }, [models]);
 
     const columns = [
-        {title: 'Department name', dataIndex: 'department_name'},
+        {title: 'Department name', dataIndex: 'name'},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DepartmentType) => {
@@ -87,10 +87,10 @@ export const DepartmentList = () => {
     }
 
     const handleStatus = (id: number, status: number) => {
-        const department_name = getDepartments(id)?.department_name;
+        const name = getDepartments(id)?.name;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, department_name, status, _wpnonce};
+        const data = {id, name, status, _wpnonce};
         try {
             makePutRequest(`/pay-check-mate/v1/departments/${id}`, data, false).then((data: unknown) => {
                 if (data) {
@@ -129,10 +129,10 @@ export const DepartmentList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
             try {
-                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data: DepartmentType) => {
+                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data) => {
                     setDepartments(models.map((department: DepartmentType) => {
                         if (department.id === formData.id) {
-                            department.department_name = formData.department_name;
+                            department.name = formData.name;
                         }
                         return department;
                     }))
@@ -145,7 +145,7 @@ export const DepartmentList = () => {
             }
         } else {
             try {
-                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data: DepartmentType) => {
+                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data) => {
                     setDepartments([...models, formData])
                     setShowModal(false)
                 }).catch((e: unknown) => {
@@ -175,7 +175,7 @@ export const DepartmentList = () => {
                                 {/*Create a form to save department*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="department_name" id="department_name" value={formData.department_name} onChange={(e) => setFormData({...formData, department_name: e.target.value})} />
+                                        <FormInput label={__('Department name', 'pcm')} name="name" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
                                         <Button className="mt-4" onClick={()=>handleSubmit(event)}>
                                             {__('Add department', 'pcm')}
                                         </Button>

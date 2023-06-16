@@ -2,25 +2,22 @@
 
 namespace PayCheckMate\Models;
 
-class Designation extends Model {
+class SalaryHistory extends Model {
 
+    protected static string $table = 'pay_check_mate_employee_salary_history';
 
     /**
-     * The table associated with the model.
-     *
-     * @since  1.0.0
-     *
-     * @var string
-     *
-     * @access protected
+     * @var array|string[] $columns
      */
-    protected static string $table = 'pay_check_mate_designations';
-
     protected static array $columns = [
-        'name'       => '%s',
-        'status'     => '%d',
-        'created_on' => '%s',
-        'updated_at' => '%s',
+        'employee_id'         => '%d',
+        'basic_salary'        => '%d',
+        'salary_head_details' => '%s',
+        'status'              => '%d',
+        'active_from'         => '%s',
+        'remarks'             => '%s',
+        'created_on'          => '%s',
+        'updated_at'          => '%s',
     ];
 
     /**

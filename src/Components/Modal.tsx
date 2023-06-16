@@ -6,9 +6,10 @@ type ModalProps = {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     header?: React.ReactNode;
     children?: React.ReactNode;
+    description?: React.ReactNode;
 };
 
-export const Modal = ({ setShowModal, header, children }: ModalProps) => (
+export const Modal = ({ setShowModal, children, header, description = '' }: ModalProps) => (
     <>
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-auto" onClose={setShowModal}>
@@ -51,6 +52,9 @@ export const Modal = ({ setShowModal, header, children }: ModalProps) => (
                                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                                             {header}
                                         </Dialog.Title>
+                                        <Dialog.Description>
+                                            {description}
+                                        </Dialog.Description>
                                         <div className="mt-2">
                                             {children}
                                         </div>

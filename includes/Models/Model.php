@@ -30,10 +30,15 @@ class Model implements ModelInterface {
      */
     protected static array $columns;
 
+    protected object $results;
+    protected object $result;
+    protected array $mutation_fields = [];
+    protected array $additional_logical_data = [];
+
     /**
-     * @var array|string[] $fillable
+     * @var mixed
      */
-    protected static array $fillable;
+    private $data;
 
     /**
      * Get all the items.
@@ -41,35 +46,171 @@ class Model implements ModelInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param array<string, mixed> $args
+     * @param array<string>        $fields
+     * @param array<string, mixed> $additional_logical_data
      *
-     * @throws Exception
+     * @throws \Exception
      * @return object Array of stdClass objects or null if no results.
      */
-    public function all( array $args ) : object {
+    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
-                'limit'  => 20,
-                'offset'  => 0,
-                'order'   => 'DESC',
-                'orderby' => 'id',
-                'status'  => '',
+                'limit'     => 20,
+                'offset'    => 0,
+                'order'     => 'DESC',
+                'orderby'   => 'id',
+                'status'    => '',
+                'groupby'   => '',
+                'relations' => [],
             ]
         );
 
-        $where = '';
-        if ( ! empty( $args['status'] ) ) {
-            $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
+        if ( ! empty( $args['mutation_fields'] ) ) {
+            $this->mutation_fields = $args['mutation_fields'];
+            unset( $args['mutation_fields'] );
         }
 
-        $query = $wpdb->prepare(
-            "SELECT * FROM {$this->get_table()} {$where} ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
-            $args['limit'],
-            $args['offset'],
-        );
-        $results = $wpdb->get_results( $query );
+        if ( ! empty( $additional_logical_data ) ) {
+            $this->additional_logical_data = $additional_logical_data;
+        }
 
-        return $this->process_items( $results );
+        $relations         = '';
+        $where             = 'WHERE 1=1';
+        $relational_fields = [];
+        if ( ! empty( $args['relations'] ) ) {
+            // Get relational and where clause from get_relations() method.
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
+            $relational_fields = $relational->fields;
+        }
+
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type = !empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
+        if ( ! empty( $args['status'] ) ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+        }
+
+        $groupby = '';
+        if ( ! empty( $args['groupby'] ) ) {
+            $groupby = $wpdb->prepare( 'GROUP BY %s', $args['groupby'] );
+        }
+
+        // If fields has column name id, then add the table name as prefix and esc_sql the fields.
+        if ( in_array( 'id', $fields, true ) ) {
+            $fields = array_map(
+                function ( $field ) {
+                    return $this->get_table() . '.' . esc_sql( $field );
+                }, $fields
+            );
+        }
+
+        $relational_fields = array_merge( ...$relational_fields );
+        $fields            = array_merge( $fields, $relational_fields );
+        $fields            = implode( ', ', esc_sql( $fields ) );
+        if ( '-1' === "$args[limit]" ) {
+            $query = $wpdb->prepare(
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']}",
+            );
+        } else {
+            $query = $wpdb->prepare(
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+                $args['limit'],
+                $args['offset']
+            );
+        }
+
+        $results       = $wpdb->get_results( $query );
+        $this->results = $this->process_items( $results );
+
+        return $this;
+    }
+
+    public function get_relational( array $args = [] ): object {
+        global $wpdb;
+
+        $where             = 'WHERE 1=1';
+        $relations         = '';
+        $relational_fields = [];
+
+        foreach ( $args['relations'] as $relation ) {
+            if ( empty( $relation['join_type'] ) ) {
+                $relation['join_type'] = 'INNER';
+            }
+
+            // Add table prefix on the table name.
+            $relation['table'] = $wpdb->prefix . $relation['table'];
+            $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
+
+            if ( ! empty( $relation['where'] ) ) {
+                foreach ( $relation['where'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} {$value['operator']} %s", $value['value'] );
+                }
+            }
+
+            if ( ! empty( $relation['select_max'] ) ) {
+                foreach ( $relation['select_max'] as $key => $value ) {
+                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}", $value['value'] );
+                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})", $value['value'] );
+                }
+            }
+
+            if ( ! empty( $relation['where_in'] ) ) {
+                foreach ( $relation['where_in'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} IN (%s)", $value );
+                }
+            }
+
+            if ( ! empty( $relation['where_not_in'] ) ) {
+                foreach ( $relation['where_not_in'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT IN (%s)", $value );
+                }
+            }
+
+            if ( ! empty( $relation['where_like'] ) ) {
+                foreach ( $relation['where_like'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} LIKE %s", $value );
+                }
+            }
+
+            if ( ! empty( $relation['where_not_like'] ) ) {
+                foreach ( $relation['where_not_like'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT LIKE %s", $value );
+                }
+            }
+
+            if ( ! empty( $relation['where_between'] ) ) {
+                foreach ( $relation['where_between'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} BETWEEN %s AND %s", $value );
+                }
+            }
+
+            if ( ! empty( $relation['where_not_between'] ) ) {
+                foreach ( $relation['where_not_between'] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT BETWEEN %s AND %s", $value );
+                }
+            }
+
+            if ( ! empty( $relation['fields'] ) ) {
+                $relational_fields[] = array_map(
+                    function ( $field ) use ( $relation ) {
+                        return $relation['table'] . '.' . esc_sql( $field );
+                    }, $relation['fields']
+                );
+            }
+        }
+
+        // Return relations and where.
+        return (object) [
+            'relations' => $relations,
+            'where'     => $where,
+            'fields'    => $relational_fields,
+        ];
     }
 
     /**
@@ -82,7 +223,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return int
      */
-    public function count( array $args = [] ) : int {
+    public function count( array $args = [] ): int {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -106,18 +247,23 @@ class Model implements ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int $id
+     * @param int           $id
+     * @param array<string> $fields
+     *
      *
      * @throws \Exception
      * @return object
      */
-    public function find( int $id ) : object {
+    public function find( int $id, array $fields = [ '*' ] ): object {
         global $wpdb;
 
-        $query = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE id = %d", $id );
+        $fields  = implode( ',', esc_sql( $fields ) );
+        $query   = $wpdb->prepare( "SELECT $fields FROM {$this->get_table()} WHERE id = %d", $id );
         $results = $wpdb->get_row( $query );
 
-        return $this->process_item( $results );
+        $this->result = $this->process_item( $results );
+
+        return $this;
     }
 
     /**
@@ -148,7 +294,7 @@ class Model implements ModelInterface {
             return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pcm' ) );
         }
 
-        return $this->find($last_id);
+        return $this->find( $last_id );
     }
 
     /**
@@ -162,7 +308,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return bool
      */
-    public function update( int $id, Request $data ) : bool {
+    public function update( int $id, Request $data ): bool {
         global $wpdb;
 
         $data         = $data->to_array();
@@ -191,7 +337,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return int The number of rows deleted, or false on error.
      */
-    public function delete( int $id ) : int {
+    public function delete( int $id ): int {
         global $wpdb;
 
         return $wpdb->delete(
@@ -213,7 +359,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return string
      */
-    public static function get_table() : string {
+    public static function get_table(): string {
         global $wpdb;
         if ( empty( static::$table ) ) {
             throw new Exception( 'Table name is not defined' );
@@ -230,7 +376,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return array<string>
      */
-    public static function get_columns() : array {
+    public static function get_columns(): array {
         if ( empty( static::$columns ) ) {
             return [];
         }
@@ -247,7 +393,7 @@ class Model implements ModelInterface {
      *
      * @return array<string>
      */
-    private function get_where_format( $data ) : array {
+    private function get_where_format( $data ): array {
         $format = [];
         foreach ( $data as $key => $value ) {
             if ( isset( static::$columns[$key] ) ) {
@@ -268,7 +414,7 @@ class Model implements ModelInterface {
      * @throws Exception
      * @return array<string>
      */
-    private function filter_data( array $data ) : array {
+    private function filter_data( array $data ): array {
         // Loop through columns and, check if the model has mutations.
         // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
@@ -290,7 +436,7 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object
      */
-    public function process_items( array $data ) : object {
+    public function process_items( array $data ): object {
         if ( empty( $data ) ) {
             return (object) [];
         }
@@ -312,14 +458,14 @@ class Model implements ModelInterface {
      * @throws \Exception
      * @return object
      */
-    private function process_item( object $item ) : object {
-        $columns = $this->get_columns();
-        foreach ( $columns as $column => $type ) {
+    private function process_item( object $item ): object {
+        $this->data = $item;
+        foreach ( (array) $item as $column => $type ) {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
-                $value = call_user_func( [ $this, $method ], $item->$column );
-                if( is_array( $value ) ) {
+                $value = call_user_func( [ $this, $method ], $item->$column, $this->additional_logical_data );
+                if ( is_array( $value ) ) {
                     foreach ( $value as $key => $val ) {
                         $item->$key = $val;
                     }
@@ -330,8 +476,79 @@ class Model implements ModelInterface {
             }
         }
 
+        if ( ! empty( $this->mutation_fields ) ) {
+            foreach ( $this->mutation_fields as $mutation_field ) {
+                $method = "get_$mutation_field";
+                if ( method_exists( $this, $method ) ) {
+                    // Check if the column has any mutation like, get_created_on, get_updated_at etc.
+                    $value = call_user_func( [ $this, $method ], $this->additional_logical_data );
+                    if ( is_array( $value ) ) {
+                        foreach ( $value as $key => $val ) {
+                            $item->$key = $val;
+                        }
+                        continue;
+                    }
+
+                    $item->$mutation_field = $value;
+                }
+            }
+        }
+
         return $item;
     }
 
+    /**
+     * Magic method to get the data. This will return the data if it exists.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $name
+     *
+     * @return mixed|null
+     */
+    public function __get( string $name ) {
+        if ( isset( $this->data->$name ) ) {
+            return $this->data->$name;
+        }
+
+        return null;
+    }
+
+    /**
+     * Magic method to set the data. This will set the data if it exists.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function __set( string $name, $value ) {
+        $this->data[$name] = $value;
+    }
+
+
+    /**
+     * Convert the object to an array.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array
+     */
+    public function toArray(): array {
+        return (array) $this->results;
+    }
+
+    /**
+     * Convert the object to a json string.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
+    public function toJson(): string {
+        return json_encode( $this->results );
+    }
 
 }

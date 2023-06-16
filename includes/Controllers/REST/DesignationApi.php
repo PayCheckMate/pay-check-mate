@@ -68,7 +68,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'designation_name' => [
+						'name' => [
 							'description' => __( 'Designation name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
@@ -182,13 +182,13 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 
         $designations = $designation->all( $args );
         $data         = [];
-        foreach ( $designations as $value ) {
+        foreach ( $designations->toArray() as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
         $total     = $designation->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
 
@@ -311,7 +311,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'designation_name' => [
+                'name' => [
                     'description' => __( 'The name for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],

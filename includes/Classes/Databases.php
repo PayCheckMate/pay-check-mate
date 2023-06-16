@@ -8,14 +8,14 @@ class Databases {
      *
      * @var string
      */
-    protected $charset_collate;
+    protected string $charset_collate;
 
     /**
      * Database prefix.
      *
      * @var string
      */
-    protected $prefix;
+    protected string $prefix;
     protected string $table_prefix;
 
     /**
@@ -41,6 +41,8 @@ class Databases {
         $this->create_table_departments();
         $this->create_table_designation();
         $this->create_table_salary_head();
+        $this->create_table_employees();
+        $this->create_table_employee_salary_history();
     }
 
     /**
@@ -55,7 +57,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}departments` (
 			    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			    `department_name` varchar(255) NOT NULL,
+			    `name` varchar(255) NOT NULL,
 			    `status` tinyint(1) NOT NULL DEFAULT '1',
 			    `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			    `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -77,7 +79,7 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}designations` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                `designation_name` varchar(255) NOT NULL,
+                `name` varchar(255) NOT NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -97,13 +99,17 @@ class Databases {
     public function create_table_salary_head() {
         $this->include_db_delta();
 
+        // In the future, we will use (is_personal_savings) for PF.
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}salary_heads` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `head_name` varchar(255) NOT NULL,
                 `head_type` tinyint(1) NOT NULL DEFAULT '1' Comment '1 = Earning, 2 = Deduction',
                 `head_amount` decimal(10,2) NOT NULL,
                 `is_percentage` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
+                `is_variable` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
                 `is_taxable` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
+                `is_personal_savings` tinyint(1) NOT NULL DEFAULT '0' Comment '0 = No, 1 = Yes',
+                `should_affect_basic_salary` tinyint(1) NOT NULL DEFAULT '1' Comment '0 = No, 1 = Yes',
                 `priority` int(11) NOT NULL DEFAULT '0',
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -113,6 +119,65 @@ class Databases {
 
         dbDelta( $sql );
     }
+
+    /**
+     * Create table employees.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employees() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employees` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `employee_id` varchar(255) NOT NULL UNIQUE,
+                `user_id` bigint(20) unsigned NOT NULL,
+                `department_id` bigint(20) unsigned NOT NULL,
+                `designation_id` bigint(20) unsigned NOT NULL,
+                `first_name` varchar(255) NOT NULL,
+                `last_name` varchar(255) NOT NULL,
+                `email` varchar(255) NOT NULL,
+                `phone` varchar(255) NOT NULL,
+                `address` varchar(255) NOT NULL,
+                `joining_date` DATE NOT NULL,
+                `regine_date` DATE NULL,
+                `status` tinyint(1) NOT NULL DEFAULT '1',
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
+
+    /**
+     * Create table employee salary.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+	public function create_table_employee_salary_history() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_salary_history` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `employee_id` bigint(20) unsigned NOT NULL,
+                `basic_salary` decimal(10,2) NOT NULL,
+                `salary_head_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
+                `status` tinyint(1) NOT NULL DEFAULT '1',
+                `active_from` DATE NOT NULL,
+                `remarks` text NULL,
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+	}
+
 
     /**
      * Include the db delta file

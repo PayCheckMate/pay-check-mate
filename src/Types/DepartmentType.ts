@@ -1,6 +1,6 @@
 export interface DepartmentType {
     id: number;
-    department_name: string;
+    name: string;
     status: DepartmentStatus;
     created_on: string;
     updated_at: string;

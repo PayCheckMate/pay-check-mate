@@ -6,7 +6,11 @@ module.exports = {
     fontFamily: {
       sans: ['SF Pro Text','Times New Roman', 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      zIndex: {
+        '100': '100',
+      }
+    },
     theme: {
       screens: {
         sm: '480px',

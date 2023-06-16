@@ -88,8 +88,23 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
+                        'is_variable' => [
+                            'description' => __( 'Is Changeable in every month?', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
                         'is_taxable' => [
                             'description' => __( 'Salary head is taxable.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
+                        'is_personal_savings' => [
+                            'description' => __( 'Salary head is personal savings.', 'pcm' ),
+                            'type'        => 'boolean',
+                            'required'    => true,
+                        ],
+                        'should_affect_basic_salary' => [
+                            'description' => __( 'Salary head should affect salary.', 'pcm' ),
                             'type'        => 'boolean',
                             'required'    => true,
                         ],
@@ -100,7 +115,8 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                         ],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
-							'type'        => 'number',
+							'type'        => 'boolean',
+                            'required'    => true,
 						],
 					],
 				],
@@ -200,25 +216,26 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'   => 'DESC',
-            'orderby' => 'id',
+            'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
+            'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
         $salary_heads = $salary_head->all( $args );
         $data         = [];
-        foreach ( $salary_heads as $value ) {
+        foreach ( $salary_heads->toArray() as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
         $total     = $salary_head->count();
-        $max_pages = ceil( $total / (int) 10 );
+        $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
 
         $response->header( 'X-WP-Total', (string) $total );
         $response->header( 'X-WP-TotalPages', (string) $max_pages );
+        $response->header( 'per_page', (string) $args['limit'] );
 
         return new WP_REST_Response( $response, 200 );
     }
@@ -360,16 +377,32 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Salary Head Amount', 'pcm' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
                 ],
                 'is_percentage'  => [
                     'description' => __( 'Salary Head is Percentage', 'pcm' ),
                     'type'        => 'boolean',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'required'    => true,
+                ],
+                'is_variable'  => [
+                    'description' => __( 'Is Changeable in every month?', 'pcm' ),
+                    'type'        => 'boolean',
+                    'required'    => true,
                 ],
                 'is_taxable'     => [
                     'description' => __( 'Salary Head is Taxable', 'pcm' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'type'        => 'boolean',
+                    'required'    => true,
+                ],
+                'is_personal_savings'     => [
+                    'description' => __( 'Salary Head is Personal Savings', 'pcm' ),
+                    'type'        => 'boolean',
+                    'required'    => true,
+                ],
+                'should_affect_basic_salary'     => [
+                    'description' => __( 'Salary Head should affect salary', 'pcm' ),
+                    'type'        => 'boolean',
+                    'required'    => true,
                 ],
                 'priority'       => [
                     'description' => __( 'Salary Head Priority', 'pcm' ),
@@ -378,19 +411,19 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
                 ],
                 'status'         => [
                     'description' => __( 'Salary Head Status', 'pcm' ),
-                    'type'        => 'string',
+                    'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'created_on'     => [
                     'description' => __( 'The date the object was created.', 'pcm' ),
                     'type'        => 'string',
-                    'format'      => 'date-time',
+                    'format'      => 'date',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'updated_at'     => [
                     'description' => __( 'The date the object was last updated.', 'pcm' ),
                     'type'        => 'string',
-                    'format'      => 'date-time',
+                    'format'      => 'date',
                     'context'     => [ 'view', 'edit' ],
                 ],
             ],
