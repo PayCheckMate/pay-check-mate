@@ -32,10 +32,10 @@
     <option name="PHPDOC_WRAP_LONG_LINES" value="true" />
     <option name="THROWS_WEIGHT" value="3" />
     <option name="PARAM_WEIGHT" value="2" />
-    <option name="RETURN_WEIGHT" value="7" />
+    <option name="RETURN_WEIGHT" value="3" />
     <option name="DEPRECATED_WEIGHT" value="4" />
     <option name="SEE_WEIGHT" value="5" />
-    <option name="SINCE_WEIGHT" value="0" />
+    <option name="SINCE_WEIGHT" value="1" />
     <option name="TODO_WEIGHT" value="6" />
     <option name="VAR_WEIGHT" value="1" />
     <option name="GROUP_USE_WRAP" value="0" />
@@ -159,6 +159,8 @@
       <option name="INDENT_SIZE" value="2" />
       <option name="CONTINUATION_INDENT_SIZE" value="2" />
       <option name="TAB_SIZE" value="2" />
+      <option name="RIGHT_MARGIN" value="600" />
+
     </indentOptions>
   </codeStyleSettings>
 </code_scheme>
