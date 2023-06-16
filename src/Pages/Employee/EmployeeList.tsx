@@ -60,15 +60,15 @@ export const EmployeeList = () => {
                 return (
                     <div className="flex">
                         <button onClick={() => viewEmployee(record.id)} className="text-green-600 hover:text-green-900">
-                            {__('View', 'pcm')}
+                            {__('Salary increment', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-indigo-600 hover:text-indigo-900">
-                            {__('Edit', 'pcm')}
+                            {__('Edit info', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-red-600 hover:text-red-900">
-                            {__('Delete', 'pcm')}
+                            {__('Terminate', 'pcm')}
                         </button>
                     </div>
                 );
@@ -85,10 +85,6 @@ export const EmployeeList = () => {
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
                             {__('Employee List', 'pcm')}
                         </h1>
-                        <p className="mt-2 text-sm text-gray-700">
-                            A list of all the users in your account including their name, title, email and role.
-                            {/*<Button onClick={() => setShowModal(true)}>Open Modal</Button>*/}
-                        </p>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <Button className="hover:text-white" path='/add-user'>

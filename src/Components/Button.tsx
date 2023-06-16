@@ -1,6 +1,7 @@
+import { HTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 
-interface ButtonProps {
+interface ButtonProps extends HTMLAttributes<HTMLButtonElement>{
     path?: string;
     className?: string;
     children: React.ReactNode;

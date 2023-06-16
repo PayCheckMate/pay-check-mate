@@ -344,6 +344,7 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                tooltip={__('If you want to add this head as percentage, please check this box.', 'pcm')}
                                             />
                                             <FormCheckBox
                                                 label={__('Is changeable in every payroll?', 'pcm')}
@@ -365,7 +366,7 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                tooltip={__('If you select yes, you will be able to change the amount in every payroll.', 'pcm')}
+                                                tooltip={__('If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc.', 'pcm')}
                                             />
                                         </div>
                                         <SelectBox
@@ -389,6 +390,7 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                tooltip={__("If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc.", 'pcm')}
                                             />
                                             <FormCheckBox
                                                 label={__('Is personal savings?', 'pcm')}
@@ -404,6 +406,7 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                tooltip={__("If this is a personal savings, then check this. Eg: PF, Gratuity, etc.", 'pcm')}
                                             />
                                         </div>
 
@@ -421,7 +424,7 @@ export const SalaryHeadList = () => {
                                                 }
                                             }}
                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            tooltip={__('If checked, this salary head will be calculated with basic salary.', 'pcm')}
+                                            tooltip={__('If you don\'t want to affect the basic salary on the creation of an employee, then uncheck this. Eg: Revenue Stamp', 'pcm')}
                                         />
                                         <FormInput
                                             label={__('Priority', 'pcm')}
