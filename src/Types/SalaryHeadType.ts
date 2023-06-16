@@ -31,12 +31,12 @@ export interface SelectBoxType {
     name: string
 }
 
-export interface SalaryHeadTypeForPayroll {
-    id: number;
-    head_name: string;
-    head_type: HeadType;
-    priority: number;
-}
+// export interface SalaryHeadTypeForPayroll {
+//     id: number;
+//     head_name: string;
+//     head_type: HeadType;
+//     priority: number;
+// }
 
 export interface SalaryResponseType {
     salary_head_types: SalaryHeadsResponseType
@@ -44,9 +44,9 @@ export interface SalaryResponseType {
 }
 
 export interface SalaryHeadsResponseType {
-    earnings: SalaryHeadTypeForPayroll[];
-    deductions: SalaryHeadTypeForPayroll[];
-    non_taxable: SalaryHeadTypeForPayroll[];
+    earnings: SalaryHeadType[];
+    deductions: SalaryHeadType[];
+    non_taxable: SalaryHeadType[];
 }
 
 // Employee Salary Response Type

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "@wordpress/element";
 import {
     EmployeeSalary,
     SalaryHeadsResponseType,
-    SalaryHeadType, SalaryHeadTypeForPayroll,
     SalaryResponseType,
     SelectBoxType
 } from "../../Types/SalaryHeadType";
@@ -149,7 +148,7 @@ const CreatePayroll = () => {
     return (
         <>
             {loading ? (
-                <Loading />
+                <Loading/>
             ) : (
 
                 <>
@@ -157,10 +156,10 @@ const CreatePayroll = () => {
                         <form className="p-6" onSubmit={handleFilter}>
                             <div className="grid grid-cols-4 gap-4">
                                 <div>
-                                    <SelectBox title={__('Designation', 'pcm')} options={designations} selected={selectedDesignation} setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)} />
+                                    <SelectBox title={__('Designation', 'pcm')} options={designations} selected={selectedDesignation} setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}/>
                                 </div>
                                 <div>
-                                    <SelectBox title={__('Department', 'pcm')} options={departments} selected={selectedDepartment} setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)} />
+                                    <SelectBox title={__('Department', 'pcm')} options={departments} selected={selectedDepartment} setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}/>
                                 </div>
                                 <div>
                                     <FormInput
@@ -232,17 +231,30 @@ const CreatePayroll = () => {
                                         <td className="text-left">{data.department_name}</td>
                                         <td className="text-right">{data.basic_salary}</td>
                                         {salaryHeads.earnings.map((earning) => (
-                                            <td className="text-right" key={earning.id}>{data.salary_head_details.earnings[earning.id] || 0}</td>
+                                            (parseInt(String(earning.is_variable)) === 1) ? (
+                                                <input type="number" name={`earnings[${data.id}][${earning.id}]`} value={data.salary_head_details.earnings[earning.id] || 0} className="text-right"/>
+                                            ) : (
+                                                <td className="text-right" key={earning.id}>{data.salary_head_details.earnings[earning.id] || 0}</td>
+                                            )
                                         ))}
                                         <td className="text-right total_salary">{sumValues(data.salary_head_details.earnings)}</td>
                                         {salaryHeads.deductions.map((deduction) => (
-                                            <td className="text-right" key={deduction.id}>{data.salary_head_details.deductions[deduction.id] || 0}</td>
+                                            (parseInt(String(deduction.is_variable)) === 1) ? (
+                                                <input type="number" name={`deductions[${data.id}][${deduction.id}]`} value={data.salary_head_details.deductions[deduction.id] || 0} className="text-right"/>
+                                            ) : (
+                                                <td className="text-right" key={deduction.id}>{data.salary_head_details.deductions[deduction.id] || 0}</td>
+                                            )
                                         ))}
                                         <td className="total_deduction text-right">{sumValues(data.salary_head_details.deductions)}</td>
                                         <td className="net_payable text-right">{rowNetPayable(data)}</td>
                                         {salaryHeads.non_taxable.map((non_taxable) => (
-                                            <td className="text-right" key={non_taxable.id}>{data.salary_head_details.non_taxable[non_taxable.id] || 0}</td>
-                                        ))}
+                                                (parseInt(String(non_taxable.is_variable)) === 1) ? (
+                                                    <input type="number" name={`non_taxable[${data.id}][${non_taxable.id}]`} value={data.salary_head_details.non_taxable[non_taxable.id] || 0} className="text-right"/>
+                                                ) : (
+                                                    <td className="text-right" key={non_taxable.id}>{data.salary_head_details.non_taxable[non_taxable.id] || 0}</td>
+                                                )
+                                            )
+                                        )}
                                         <td className="total_payable text-right">{rowTotalPayable(data)}</td>
                                     </tr>
                                 ))}
@@ -260,8 +272,8 @@ const CreatePayroll = () => {
                                     ))}
                                     <td className="text-right">{totalDeductions}</td>
                                     <td className="text-right">{netPayable}</td>
-                                    {salaryHeads.non_taxable.map((deduction) => (
-                                        <td className="text-right" key={deduction.id}>{sumValues(tableData.map((data) => data.salary_head_details.non_taxable[deduction.id] || 0))}</td>
+                                    {salaryHeads.non_taxable.map((non_taxable) => (
+                                        <td className="text-right" key={non_taxable.id}>{sumValues(tableData.map((data) => data.salary_head_details.non_taxable[non_taxable.id] || 0))}</td>
                                     ))}
                                     <td className="text-right">{totalNetPayable}</td>
                                 </tr>
@@ -273,7 +285,7 @@ const CreatePayroll = () => {
                             <EmptyState
                                 title={__('Payroll Sheet', 'pcm')}
                                 description={__('Select department or designation and pay month to view payroll list', 'pcm')}
-                                icon={<CurrencyDollarIcon className="w-6 h-6 text-red-600" aria-hidden="true" />}
+                                icon={<CurrencyDollarIcon className="w-6 h-6 text-red-600" aria-hidden="true"/>}
                             />
                         </Card>
                     )}
