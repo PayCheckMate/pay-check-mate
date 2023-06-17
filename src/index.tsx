@@ -1,5 +1,6 @@
-import {createRoot, render} from '@wordpress/element';
+import {createRoot} from '@wordpress/element';
 import './app.css';
+import './Store/Store';
 
 import {HashRouter} from "react-router-dom";
 import Main from "./Pages/Main";

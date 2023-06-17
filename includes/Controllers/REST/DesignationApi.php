@@ -28,71 +28,71 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     public function register_api_routes(): void {
         register_rest_route(
             $this->namespace, '/' . $this->rest_base, [
-				[
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_items' ],
-					'args'                => $this->get_collection_params(),
-					'permission_callback' => [ $this, 'get_items_permissions_check' ],
-				],
-				[
-					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => [ $this, 'create_item' ],
-					'permission_callback' => [ $this, 'create_item_permissions_check' ],
-					'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
-				],
-				'schema' => [ $this, 'get_public_item_schema' ],
-			],
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [ $this, 'get_items' ],
+                'args'                => $this->get_collection_params(),
+                'permission_callback' => [ $this, 'get_items_permissions_check' ],
+            ],
+            [
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => [ $this, 'create_item' ],
+                'permission_callback' => [ $this, 'create_item_permissions_check' ],
+                'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
+            ],
+            'schema' => [ $this, 'get_public_item_schema' ],
+        ],
         );
 
         register_rest_route(
             $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
-				[
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_item' ],
-					'permission_callback' => [ $this, 'get_item_permissions_check' ],
-					'args'                => [
-						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
-							'type'        => 'integer',
-							'required'    => true,
-						],
-					],
-				],
-				[
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'update_item' ],
-					'permission_callback' => [ $this, 'update_item_permissions_check' ],
-					'args'                => [
-						'id'               => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
-							'type'        => 'integer',
-							'required'    => true,
-						],
-						'name' => [
-							'description' => __( 'Designation name.', 'pcm' ),
-							'type'        => 'string',
-							'required'    => true,
-						],
-						'status'           => [
-							'description' => __( 'Designation status.', 'pcm' ),
-							'type'        => 'number',
-						],
-					],
-				],
-				[
-					'methods'             => \WP_REST_Server::DELETABLE,
-					'callback'            => [ $this, 'delete_item' ],
-					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
-					'args'                => [
-						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
-							'type'        => 'integer',
-							'required'    => true,
-						],
-					],
-				],
-				'schema' => [ $this, 'get_public_item_schema' ],
-			],
+            [
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => [ $this, 'get_item' ],
+                'permission_callback' => [ $this, 'get_item_permissions_check' ],
+                'args'                => [
+                    'id' => [
+                        'description' => __( 'Unique identifier for the object.', 'pcm' ),
+                        'type'        => 'integer',
+                        'required'    => true,
+                    ],
+                ],
+            ],
+            [
+                'methods'             => \WP_REST_Server::EDITABLE,
+                'callback'            => [ $this, 'update_item' ],
+                'permission_callback' => [ $this, 'update_item_permissions_check' ],
+                'args'                => [
+                    'id'     => [
+                        'description' => __( 'Unique identifier for the object.', 'pcm' ),
+                        'type'        => 'integer',
+                        'required'    => true,
+                    ],
+                    'name'   => [
+                        'description' => __( 'Designation name.', 'pcm' ),
+                        'type'        => 'string',
+                        'required'    => true,
+                    ],
+                    'status' => [
+                        'description' => __( 'Designation status.', 'pcm' ),
+                        'type'        => 'number',
+                    ],
+                ],
+            ],
+            [
+                'methods'             => \WP_REST_Server::DELETABLE,
+                'callback'            => [ $this, 'delete_item' ],
+                'permission_callback' => [ $this, 'delete_item_permissions_check' ],
+                'args'                => [
+                    'id' => [
+                        'description' => __( 'Unique identifier for the object.', 'pcm' ),
+                        'type'        => 'integer',
+                        'required'    => true,
+                    ],
+                ],
+            ],
+            'schema' => [ $this, 'get_public_item_schema' ],
+        ],
         );
     }
 
@@ -175,8 +175,8 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'   => 'DESC',
-            'orderby' => 'id',
+            'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
+            'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
         ];
 
@@ -305,31 +305,31 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'               => [
+                'id'         => [
                     'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'name' => [
+                'name'       => [
                     'description' => __( 'The name for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
-                'status'           => [
+                'status'     => [
                     'description' => __( 'The status for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => false,
                 ],
-                'created_on'       => [
+                'created_on' => [
                     'description' => __( 'The date the designation was created.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => false,
                 ],
-                'updated_at'       => [
+                'updated_at' => [
                     'description' => __( 'The date the designation was last updated.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],

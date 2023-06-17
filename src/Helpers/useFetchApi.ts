@@ -2,11 +2,7 @@ import apiFetch, {APIFetchOptions} from '@wordpress/api-fetch';
 import {useEffect, useState} from '@wordpress/element';
 
 
-const apiFetchUnparsed = async <Model>(
-    path: string,
-    options?: APIFetchOptions,
-    data?: any
-): Promise<Model> => {
+export const apiFetchUnparsed = async <Model>(path: string, options?: APIFetchOptions, data?: any): Promise<Model> => {
     const requestOptions: APIFetchOptions = {path, parse: false, ...options};
     if (data) {
         requestOptions.body = JSON.stringify(data);

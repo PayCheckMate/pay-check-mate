@@ -7,9 +7,11 @@ import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
-import {SalaryHeadsResponseType} from "../../Types/SalaryHeadType";
+import {useSelect} from "@wordpress/data";
+import designation from "../../Store/Designation";
 
 export const DesignationList = () => {
+    const initialDesignations = useSelect((select) => select(designation).getDesignations({per_page:'10'}), [])
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [showModal, setShowModal] = useState(false);
     const [designations, setDesignations] = useState<DesignationType[]>([])
@@ -24,14 +26,17 @@ export const DesignationList = () => {
         makeGetRequest,
         makePostRequest,
         setFilterObject,
-    } = useFetchApi<DesignationType>('/pay-check-mate/v1/designations', {'per_page': 10});
+    } = useFetchApi<DesignationType>('');
     useEffect(() => {
-        if (models) {
-            setDesignations(models as DesignationType[]);
-            setTotalPages(totalPage as number);
+        // @ts-ignore
+        if (initialDesignations.designations) {
+            // @ts-ignore
+            setDesignations(initialDesignations.designations.data as DesignationType[]);
+            setTotalPages(totalPage);
         }
-    }, [models]);
+    }, [initialDesignations]);
 
+    console.log(initialDesignations)
     const columns = [
         {title: 'Designation name', dataIndex: 'name'},
         {

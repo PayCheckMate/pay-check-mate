@@ -20,7 +20,6 @@ type TableProps = {
 };
 
 export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, pageSize = 10, currentPage = 1, onPageChange = (page: number) => {}}: TableProps) => {
-    console.log(data)
     if (!data.length && !isLoading) {
         return (
             <>
