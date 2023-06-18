@@ -1,4 +1,6 @@
 import {ArrowDownIcon, ArrowUpIcon, CursorArrowRaysIcon, EnvelopeOpenIcon, UsersIcon} from "@heroicons/react/24/outline";
+import {toast} from "react-toastify";
+import {__} from "@wordpress/i18n";
 
 const stats = [
     { id: 1, name: 'Total Subscribers', stat: '71,897', icon: UsersIcon, change: '122', changeType: 'increase' },
@@ -12,9 +14,17 @@ function classNames(...classes) {
 }
 
 export const Dashboard = () => {
+    const showToastMessage = () => {
+        toast.success(__('🦄 Wow so easy!', 'pcm'), {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 2000,
+            className: 'toast-message'
+        });
+    };
     return (
                 <div>
                     <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3>
+                    <button className="btn btn-primary" onClick={showToastMessage}>Show Toast</button>
 
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                         {stats.map((item) => (
