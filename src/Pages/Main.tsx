@@ -11,6 +11,9 @@ import {SalaryHeadList} from "./SalaryHead/SalaryHeadList";
 import CreatePayroll from "./Payroll/CreatePayroll";
 import {EmployeeList} from "./Employee/EmployeeList";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');
     return (
@@ -30,6 +33,17 @@ export default function Main() {
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='create-payroll' element={<CreatePayroll />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><EmptyState /></Card>} />)}
                             </Routes>
+                            <div>
+                                <ToastContainer
+                                    newestOnTop={false}
+                                    closeOnClick
+                                    rtl={false}
+                                    pauseOnFocusLoss={false}
+                                    draggable={false}
+                                    pauseOnHover
+                                    theme="light"
+                                />
+                            </div>
                         </div>
                     </main>
                 </div>

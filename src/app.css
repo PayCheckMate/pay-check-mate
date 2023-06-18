@@ -15,5 +15,14 @@
     .custom-font {
         @apply font-sans;
     }
+    .Toastify__toast-container--top-right {
+        @apply top-10 !important;
+    }
+    .Toastify__toast-container--top-left {
+        @apply top-10 !important;
+    }
+    .Toastify__toast-container--top-center {
+        @apply top-10 !important;
+    }
 
 }
