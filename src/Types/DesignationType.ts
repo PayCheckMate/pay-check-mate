@@ -11,7 +11,7 @@ export enum DesignationStatus {
     Inactive = 0
 }
 
-export interface argsType {
+export interface filtersType {
     per_page?: string,
     page?: number,
     order_by?: string,

@@ -2,39 +2,20 @@ import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
-import React, {useEffect, useState} from "@wordpress/element";
+import React, {useState} from "@wordpress/element";
 import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
-import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
-import {useSelect} from "@wordpress/data";
+import {dispatch, useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 
 export const DesignationList = () => {
-    const initialDesignations = useSelect((select) => select(designation).getDesignations({per_page: '10'}), [])
+    const per_page = '10';
+    const {designations, loading, totalPages, total} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [showModal, setShowModal] = useState(false);
-    const [designations, setDesignations] = useState<DesignationType[]>([])
-    const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-    const {
-        models,
-        loading,
-        totalPage,
-        makeDeleteRequest,
-        makePutRequest,
-        makeGetRequest,
-        makePostRequest,
-        setFilterObject,
-    } = useFetchApi<DesignationType>('');
-    useEffect(() => {
-        // @ts-ignore
-        if (initialDesignations.designations) {
-            // @ts-ignore
-            setDesignations(initialDesignations.designations.data as DesignationType[]);
-            setTotalPages(totalPage);
-        }
-    }, [initialDesignations]);
+
 
     const columns = [
         {title: 'Designation name', dataIndex: 'name'},
@@ -97,22 +78,22 @@ export const DesignationList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
-        try {
-            makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
-                if (data) {
-                    setDesignations(models.map((designation: DesignationType) => {
-                        if (designation.id === id) {
-                            designation.status = status;
-                        }
-                        return designation;
-                    }))
-                }
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
-        }
+        // try {
+            // makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
+                // if (data) {
+                //     setDesignations(models.map((designation: DesignationType) => {
+                //         if (designation.id === id) {
+                //             designation.status = status;
+                //         }
+                //         return designation;
+                //     }))
+                // }
+        //     }).catch((e: unknown) => {
+        //         console.log(e);
+        //     })
+        // } catch (error) {
+        //     console.log(error); // Handle the error accordingly
+        // }
     }
 
     const handleModal = (data: DesignationType) => {
@@ -123,7 +104,7 @@ export const DesignationList = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setFilterObject({'per_page': 10, 'page': page}); // Update the filter object with the new page value
+        dispatch(designation).getDesignations({per_page: per_page, page: page});
         setCurrentPage(page);
     };
 
@@ -134,32 +115,32 @@ export const DesignationList = () => {
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
-            try {
-                makePutRequest<DesignationType>(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data) => {
-                    setDesignations(models.map((designation: DesignationType) => {
-                        if (designation.id === formData.id) {
-                            designation.name = formData.name;
-                        }
-                        return designation;
-                    }))
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
-        } else {
-            try {
-                makePostRequest<DesignationType>('/pay-check-mate/v1/designations', data, false).then((data) => {
-                    setDesignations([...models, formData])
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
+            // try {
+            //     makePutRequest<DesignationType>(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data) => {
+                    // setDesignations(models.map((designation: DesignationType) => {
+                    //     if (designation.id === formData.id) {
+                    //         designation.name = formData.name;
+                    //     }
+                    //     return designation;
+                    // }))
+        //             setShowModal(false)
+        //         }).catch((e: unknown) => {
+        //             console.log(e);
+        //         })
+        //     } catch (error) {
+        //         console.log(error); // Handle the error accordingly
+        //     }
+        // } else {
+        //     try {
+        //         makePostRequest<DesignationType>('/pay-check-mate/v1/designations', data, false).then((data) => {
+                    // setDesignations([...models, formData])
+        //             setShowModal(false)
+        //         }).catch((e: unknown) => {
+        //             console.log(e);
+        //         })
+        //     } catch (error) {
+        //         console.log(error); // Handle the error accordingly
+        //     }
         }
     }
     return (
@@ -196,7 +177,7 @@ export const DesignationList = () => {
                     data={designations}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={10}
+                    pageSize={parseInt(per_page)}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />

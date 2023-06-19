@@ -30,7 +30,6 @@ export const NavbarLink = ({ navigation }: NavbarLinkProps) => {
         }));
         setCurrentLink(index);
         setExpandedLinks([]); // Reset expanded links when a link is clicked
-        console.log(updatedNavigation); // You can use the updated navigation array as needed
     };
 
     useEffect(() => {

@@ -177,7 +177,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
             'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
+            'status'  => $request->get_param( 'status' ) !== null ? $request->get_param( 'status' ) : '1',
         ];
 
         $designations = $designation->all( $args );

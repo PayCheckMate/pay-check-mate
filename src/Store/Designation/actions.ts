@@ -1,27 +1,29 @@
-import {argsType, DesignationType} from "../../Types/DesignationType";
+import {filtersType, DesignationType} from "../../Types/DesignationType";
 
 const actions = {
-    setDesignation: (designation: string) => ({
-        type: 'SET_DESIGNATION',
-        payload: designation,
-    }),
-
     setDesignations: (designations: DesignationType[]) => ({
         type: 'SET_DESIGNATIONS',
         payload: designations,
     }),
-
-    getDesignations: () => ({
-        type: 'GET_DESIGNATIONS',
+    setLoading: (loading: boolean) => ({
+        type: 'SET_LOADING',
+        payload: loading,
     }),
-
-    fetchFromAPI(path: string, args?: argsType) {
+    fetchFromAPI(path: string, filters?: filtersType) {
         return {
             type: 'FETCH_FROM_API',
             path,
-            args,
+            filters,
         };
     },
+    *getDesignations(filters: filtersType) {
+        const path: string = '/pay-check-mate/v1/designations'
+        yield actions.setLoading(true);
+        const designations: DesignationType[] = yield actions.fetchFromAPI(path, filters);
+        yield actions.setDesignations(designations);
+
+        return designations;
+    }
 }
 
 export default actions

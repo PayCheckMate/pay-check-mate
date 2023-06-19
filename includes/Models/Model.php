@@ -60,7 +60,7 @@ class Model implements ModelInterface {
                 'offset'    => 0,
                 'order'     => 'DESC',
                 'orderby'   => 'id',
-                'status'    => '',
+                'status'    => '1',
                 'groupby'   => '',
                 'relations' => [],
             ]
@@ -92,7 +92,7 @@ class Model implements ModelInterface {
                 $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
             }
         }
-        if ( ! empty( $args['status'] ) ) {
+        if ( isset( $args['status'] ) ) {
             $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
         }
 
