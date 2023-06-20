@@ -177,7 +177,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
             'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'  => $request->get_param( 'status' ) !== null ? $request->get_param( 'status' ) : '1',
+            'status'  => $request->get_param( 'status' ) !== null ? $request->get_param( 'status' ) : 'all',
         ];
 
         $designations = $designation->all( $args );
@@ -251,7 +251,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -263,13 +263,15 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $designation = $designation->update( $request->get_param( 'id' ), $validated_data );
-
-        if ( ! $designation ) {
+        if ( ! $designation->update( $request->get_param( 'id' ), $validated_data ) ) {
             return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $designation, 200 );
+        $designation = $designation->find( $request->get_param( 'id' ) );
+        $item        = $this->prepare_item_for_response( $designation, $request );
+        $data        = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**

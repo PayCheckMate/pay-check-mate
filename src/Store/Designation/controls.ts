@@ -9,6 +9,15 @@ const controls = {
         return apiFetchUnparsed( action.path ).then( ( response: any ) => {
             return response.data;
         });
+    },
+    UPDATE: ( action: any ) => {
+        const path = `/pay-check-mate/v1/designations/${action.item.id}`;
+        return apiFetchUnparsed( path, {
+            method: 'PUT',
+            body: JSON.stringify( action.item ),
+        }).then( ( response: any ) => {
+            return response.data;
+        });
     }
 }
 

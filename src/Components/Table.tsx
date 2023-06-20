@@ -30,18 +30,18 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
         );
     }
 
-    const hasSLColumn = columns.some((column) => column.dataIndex === "#");
+    const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
     let dataIndex = pageSize * (currentPage -1) + 1;
 
-    if (!hasSLColumn) {
+    if (!hasIdColumn) {
         columns = [
             {
                 title: "#",
                 dataIndex: "#",
-                render: () => <span>{dataIndex++}</span>
+                render: (_, record) => <span>{dataIndex++}</span>,
             },
-            ...columns
+            ...columns,
         ];
     }
 
@@ -51,7 +51,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
     const handlePageChange = (page: number) => {
         onPageChange(page);
     };
-
+    console.log(columns)
     return (
         <>
             {isLoading ? (

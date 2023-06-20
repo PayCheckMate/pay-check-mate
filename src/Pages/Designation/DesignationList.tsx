@@ -11,10 +11,10 @@ import designation from "../../Store/Designation";
 
 export const DesignationList = () => {
     const per_page = '10';
-    const {designations, loading, totalPages, total} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
+    const {designations, loading, totalPages, filters} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [showModal, setShowModal] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(filters.page);
 
 
     const columns = [
@@ -78,6 +78,7 @@ export const DesignationList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
+        dispatch(designation).updateDesignation(data);
         // try {
             // makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
                 // if (data) {

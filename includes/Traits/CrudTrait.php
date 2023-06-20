@@ -55,7 +55,7 @@ trait CrudTrait {
                 'offset'          => 0,
                 'order'           => 'DESC',
                 'orderby'         => 'id',
-                'status'          => '',
+                'status'          => 'all',
                 'groupby'         => '',
                 'relations'       => [],
                 'mutation_fields' => [],

@@ -13,7 +13,9 @@ const selectors = {
     getDesignations: ( state: DesignationState, filters: filtersType = filter ) => {
         return state;
     },
-
+    getFilters: ( state: DesignationState ) => {
+        return state.filters;
+    },
     getLoading: ( state: DesignationState ) => {
         return state.loading;
     }

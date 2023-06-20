@@ -10,10 +10,10 @@ class DesignationRequest extends Request {
 
     // Have to create a rule that will validate $request in next.
     protected static array $rules = [
-        'name' => 'sanitize_text_field',
-        'status'           => 'absint',
-        'created_on'       => 'sanitize_text_field',
-        'updated_at'       => 'sanitize_text_field',
+        'name'       => 'sanitize_text_field',
+        'status'     => 'absint',
+        'created_on' => 'sanitize_text_field',
+        'updated_at' => 'sanitize_text_field',
     ];
 
 }
