@@ -121,8 +121,8 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param string $salary_head_details
-     * @param array<array<string>>  $salary_head_types
+     * @param string               $salary_head_details
+     * @param array<array<string>> $salary_head_types
      *
      * @return array<array<string, mixed>>
      */
