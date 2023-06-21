@@ -10,6 +10,15 @@ const controls = {
             return response.data;
         });
     },
+    CREATE: ( action: any ) => {
+        const path = `/pay-check-mate/v1/designations`;
+        return apiFetchUnparsed( path, {
+            method: 'POST',
+            body: JSON.stringify( action.item ),
+        }).then( ( response: any ) => {
+            return response.data;
+        });
+    },
     UPDATE: ( action: any ) => {
         const path = `/pay-check-mate/v1/designations/${action.item.id}`;
         return apiFetchUnparsed( path, {

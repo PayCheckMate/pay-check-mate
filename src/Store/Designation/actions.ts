@@ -20,9 +20,10 @@ const actions = {
             filters,
         };
     },
-    updateDesignationStore: (designation: DesignationType) => ({
-        type: 'UPDATE_DESIGNATION_STATUS',
+    updateDesignationStore: (designation: DesignationType, create = false) => ({
+        type: 'UPDATE_DESIGNATION',
         payload: designation,
+        create,
     }),
     * getDesignations(filters: filtersType) {
         const path: string = '/pay-check-mate/v1/designations'
@@ -39,7 +40,18 @@ const actions = {
             item: designation,
         }
 
-        return actions.updateDesignationStore(response);
+        yield actions.updateDesignationStore(response);
+
+        return response;
+    },
+    *createDesignation(designation: any) {
+        yield actions.setLoading(true);
+        const response: DesignationType = yield{
+            type: 'CREATE',
+            item: designation,
+        }
+
+        yield actions.updateDesignationStore(response, true);
     }
 }
 

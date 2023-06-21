@@ -38,13 +38,25 @@ const reducer = (state = DefaultState, action: any) => {
                 ...state,
                 filters: action.payload,
             };
-        case "UPDATE_DESIGNATION_STATUS":
-            return {
-                ...state,
-                designations: state.designations.map((designation: DesignationType) => {
-                    designation.id === action.payload.id ? action.payload : designation
-                }),
-                loading: false,
+        case "UPDATE_DESIGNATION":
+            // Check if the designation is new or not. If new then add it to the top of the list
+            if (action.create) {
+                return {
+                    ...state,
+                    designations: [action.payload, ...state.designations],
+                    loading: false,
+                }
+            } else {
+                return {
+                    ...state,
+                    designations: state.designations.map((designation: DesignationType) => {
+                        if (designation.id === action.payload.id) {
+                            return action.payload;
+                        }
+                        return designation;
+                    }),
+                    loading: false,
+                }
             }
         default:
             return state;

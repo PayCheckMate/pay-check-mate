@@ -203,10 +203,10 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @throws Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     * @throws Exception
      */
     public function create_item( $request ) {
         $designation    = new Designation( new DesignationModel() );
@@ -219,6 +219,9 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         if ( is_wp_error( $designation ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
+
+        $designation = $this->prepare_item_for_response( $designation, $request );
+        $designation = $this->prepare_response_for_collection( $designation );
 
         return new WP_REST_Response( $designation, 201 );
     }
@@ -253,8 +256,8 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     * @throws \Exception
      */
     public function update_item( $request ) {
         $designation    = new Designation( new DesignationModel() );

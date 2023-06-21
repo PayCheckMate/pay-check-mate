@@ -51,7 +51,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
     const handlePageChange = (page: number) => {
         onPageChange(page);
     };
-    console.log(columns)
+
     return (
         <>
             {isLoading ? (

@@ -8,6 +8,7 @@ import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 import {dispatch, useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
+import {toast} from "react-toastify";
 
 export const DesignationList = () => {
     const per_page = '10';
@@ -79,22 +80,10 @@ export const DesignationList = () => {
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
         dispatch(designation).updateDesignation(data);
-        // try {
-            // makePutRequest(`/pay-check-mate/v1/designations/${id}`, data, false).then((data: unknown) => {
-                // if (data) {
-                //     setDesignations(models.map((designation: DesignationType) => {
-                //         if (designation.id === id) {
-                //             designation.status = status;
-                //         }
-                //         return designation;
-                //     }))
-                // }
-        //     }).catch((e: unknown) => {
-        //         console.log(e);
-        //     })
-        // } catch (error) {
-        //     console.log(error); // Handle the error accordingly
-        // }
+        toast.success(__('Designation updated successfully', 'pcm'), {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+        });
     }
 
     const handleModal = (data: DesignationType) => {
@@ -116,32 +105,19 @@ export const DesignationList = () => {
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
-            // try {
-            //     makePutRequest<DesignationType>(`/pay-check-mate/v1/designations/${formData.id}`, data, false).then((data) => {
-                    // setDesignations(models.map((designation: DesignationType) => {
-                    //     if (designation.id === formData.id) {
-                    //         designation.name = formData.name;
-                    //     }
-                    //     return designation;
-                    // }))
-        //             setShowModal(false)
-        //         }).catch((e: unknown) => {
-        //             console.log(e);
-        //         })
-        //     } catch (error) {
-        //         console.log(error); // Handle the error accordingly
-        //     }
-        // } else {
-        //     try {
-        //         makePostRequest<DesignationType>('/pay-check-mate/v1/designations', data, false).then((data) => {
-                    // setDesignations([...models, formData])
-        //             setShowModal(false)
-        //         }).catch((e: unknown) => {
-        //             console.log(e);
-        //         })
-        //     } catch (error) {
-        //         console.log(error); // Handle the error accordingly
-        //     }
+            dispatch(designation).updateDesignation(data);
+            setShowModal(false);
+            toast.success(__('📋 Designation updated successfully', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        } else {
+            dispatch(designation).createDesignation(data);
+            setShowModal(false);
+            toast.success(__('✅ Designation created successfully', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
         }
     }
     return (
