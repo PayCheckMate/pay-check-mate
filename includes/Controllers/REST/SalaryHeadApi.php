@@ -429,5 +429,4 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             ],
         ];
     }
-
 }

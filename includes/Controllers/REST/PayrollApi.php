@@ -256,5 +256,4 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
     }
-
 }

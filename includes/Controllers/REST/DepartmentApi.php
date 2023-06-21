@@ -349,5 +349,4 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             ],
         ];
     }
-
 }

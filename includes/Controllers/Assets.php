@@ -70,5 +70,4 @@ class Assets implements HookAbleInterface {
 			],
         );
     }
-
 }

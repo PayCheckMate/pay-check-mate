@@ -343,5 +343,4 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             ],
         ];
     }
-
 }
