@@ -131,5 +131,4 @@ trait CrudTrait {
     public function count( array $args = [] ): int {
         return $this->model->count( $args );
     }
-
 }
