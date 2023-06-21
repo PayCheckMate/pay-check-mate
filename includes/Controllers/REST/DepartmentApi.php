@@ -183,7 +183,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
         ];
 
         $departments = $department->all( $args );
@@ -229,6 +229,9 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
 
+        $department = $this->prepare_item_for_response( $department, $request );
+        $department = $this->prepare_response_for_collection( $department );
+
         return new WP_REST_Response( $department, 201 );
     }
 
@@ -273,13 +276,15 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $department = $department->update( $request->get_param( 'id' ), $validated_data );
-
-        if ( ! $department ) {
-            return new WP_REST_Response( __( 'Department not found', 'pcm' ), 500 );
+        if ( ! $department->update( $request->get_param( 'id' ), $validated_data ) ) {
+            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $department, 200 );
+        $department = $department->find( $request->get_param( 'id' ) );
+        $item        = $this->prepare_item_for_response( $department, $request );
+        $data        = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**

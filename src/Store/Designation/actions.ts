@@ -1,4 +1,5 @@
-import {filtersType, DesignationType} from "../../Types/DesignationType";
+import {DesignationType} from "../../Types/DesignationType";
+import {filtersType} from "../Store";
 
 const actions = {
     setDesignations: (designations: DesignationType[]) => ({

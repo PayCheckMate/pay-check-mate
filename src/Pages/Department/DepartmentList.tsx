@@ -2,33 +2,21 @@ import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
-import React, {useEffect, useState} from "@wordpress/element";
+import React, {useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
-import useFetchApi from "../../Helpers/useFetchApi";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
+import {dispatch, useSelect} from "@wordpress/data";
+import department from "../../Store/Department";
+import {toast} from "react-toastify";
 
 export const DepartmentList = () => {
+    const per_page = '10';
+    const {departments, loading, totalPages, filters} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
     const [showModal, setShowModal] = useState(false);
-    const [departments, setDepartments] = useState<DepartmentType[]>([])
-    const [totalPages, setTotalPages] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
-    const {
-        models,
-        loading,
-        totalPage,
-        makeDeleteRequest,
-        makePutRequest,
-        makePostRequest,
-        setFilterObject,
-    } = useFetchApi<DepartmentType>('/pay-check-mate/v1/departments');
-    useEffect(() => {
-        if (models) {
-            setDepartments(models as DepartmentType[]);
-            setTotalPages(totalPage as number);
-        }
-    }, [models]);
+    const [currentPage, setCurrentPage] = useState(filters.page);
+
 
     const columns = [
         {title: 'Department name', dataIndex: 'name'},
@@ -58,7 +46,7 @@ export const DepartmentList = () => {
             dataIndex: 'action',
             render: (text: string, record: DepartmentType) => (
                 <div className="flex">
-                    <button className="text-indigo-600 hover:text-indigo-900" onClick={()=>handleModal(record)}>
+                    <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
                     {parseInt(String(record.status)) === DepartmentStatus.Active && (
@@ -91,22 +79,11 @@ export const DepartmentList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
-        try {
-            makePutRequest(`/pay-check-mate/v1/departments/${id}`, data, false).then((data: unknown) => {
-                if (data) {
-                    setDepartments(models.map((department: DepartmentType) => {
-                        if (department.id === id) {
-                            department.status = status;
-                        }
-                        return department;
-                    }))
-                }
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
-        }
+        dispatch(department).updateDepartment(data);
+        toast.success(__('Department updated successfully', 'pcm'), {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+        });
     }
 
     const handleModal = (data: DepartmentType) => {
@@ -117,7 +94,7 @@ export const DepartmentList = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setFilterObject({ 'per_page': 10, 'page': page }); // Update the filter object with the new page value
+        dispatch(department).getDepartments({per_page: per_page, page: page});
         setCurrentPage(page);
     };
 
@@ -128,32 +105,19 @@ export const DepartmentList = () => {
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         if (formData.id) {
-            try {
-                makePutRequest(`/pay-check-mate/v1/departments/${formData.id}`, data, false).then((data) => {
-                    setDepartments(models.map((department: DepartmentType) => {
-                        if (department.id === formData.id) {
-                            department.name = formData.name;
-                        }
-                        return department;
-                    }))
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
+            dispatch(department).updateDepartment(data);
+            setShowModal(false);
+            toast.success(__('📋 Department updated successfully', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
         } else {
-            try {
-                makePostRequest('/pay-check-mate/v1/departments', data, false).then((data) => {
-                    setDepartments([...models, formData])
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
+            dispatch(department).createDepartment(data);
+            setShowModal(false);
+            toast.success(__('✅ Department created successfully', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
         }
     }
     return (
@@ -166,7 +130,7 @@ export const DepartmentList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={()=>handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
+                        <Button onClick={() => handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
                             {__('Add department', 'pcm')}
                         </Button>
@@ -176,7 +140,7 @@ export const DepartmentList = () => {
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <FormInput label={__('Department name', 'pcm')} name="name" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
-                                        <Button className="mt-4" onClick={()=>handleSubmit(event)}>
+                                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
                                             {__('Add department', 'pcm')}
                                         </Button>
                                     </form>
@@ -190,7 +154,7 @@ export const DepartmentList = () => {
                     data={departments}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={10}
+                    pageSize={parseInt(per_page)}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />
