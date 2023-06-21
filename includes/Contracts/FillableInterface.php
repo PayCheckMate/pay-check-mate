@@ -12,5 +12,4 @@ interface FillableInterface {
      * @return array<string>
      */
     public function fillable(): array;
-
 }

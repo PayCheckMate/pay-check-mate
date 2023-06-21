@@ -20,7 +20,6 @@ type TableProps = {
 };
 
 export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, pageSize = 10, currentPage = 1, onPageChange = (page: number) => {}}: TableProps) => {
-    console.log(data)
     if (!data.length && !isLoading) {
         return (
             <>
@@ -31,18 +30,18 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
         );
     }
 
-    const hasSLColumn = columns.some((column) => column.dataIndex === "#");
+    const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
     let dataIndex = pageSize * (currentPage -1) + 1;
 
-    if (!hasSLColumn) {
+    if (!hasIdColumn) {
         columns = [
             {
                 title: "#",
                 dataIndex: "#",
-                render: () => <span>{dataIndex++}</span>
+                render: (_, record) => <span>{dataIndex++}</span>,
             },
-            ...columns
+            ...columns,
         ];
     }
 
@@ -97,15 +96,15 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                             <button
                                 onClick={() => handlePageChange(currentPage -1)}
                                 disabled={currentPage === 1}
-                                className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-500 hover:bg-gray-300 focus:outline-none"
+                                className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
                             >
                                 Previous
                             </button>
                             <span className="px-2 py-1 text-sm font-medium text-gray-900">Page {currentPage} of {totalPages}</span>
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-500 hover:bg-gray-300 focus:outline-none"
+                                disabled={currentPage === parseInt(String(totalPages))}
+                                className="px-2 py-1 text-sm bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
                             >
                                 Next
                             </button>

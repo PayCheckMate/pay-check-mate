@@ -63,17 +63,17 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 					'callback'            => [ $this, 'update_item' ],
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
-						'id'               => [
+						'id'     => [
 							'description' => __( 'Unique identifier for the object.', 'pcm' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'name' => [
+						'name'   => [
 							'description' => __( 'Designation name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
-						'status'           => [
+						'status' => [
 							'description' => __( 'Designation status.', 'pcm' ),
 							'type'        => 'number',
 						],
@@ -175,9 +175,9 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'   => 'DESC',
-            'orderby' => 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '',
+            'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
+            'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
+            'status'  => $request->get_param( 'status' ) !== null ? $request->get_param( 'status' ) : 'all',
         ];
 
         $designations = $designation->all( $args );
@@ -203,10 +203,10 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @throws Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     * @throws Exception
      */
     public function create_item( $request ) {
         $designation    = new Designation( new DesignationModel() );
@@ -219,6 +219,9 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         if ( is_wp_error( $designation ) ) {
             return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
         }
+
+        $designation = $this->prepare_item_for_response( $designation, $request );
+        $designation = $this->prepare_response_for_collection( $designation );
 
         return new WP_REST_Response( $designation, 201 );
     }
@@ -251,10 +254,10 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     * @throws \Exception
      */
     public function update_item( $request ) {
         $designation    = new Designation( new DesignationModel() );
@@ -263,13 +266,15 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $designation = $designation->update( $request->get_param( 'id' ), $validated_data );
-
-        if ( ! $designation ) {
+        if ( ! $designation->update( $request->get_param( 'id' ), $validated_data ) ) {
             return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( $designation, 200 );
+        $designation = $designation->find( $request->get_param( 'id' ) );
+        $item        = $this->prepare_item_for_response( $designation, $request );
+        $data        = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**
@@ -305,31 +310,31 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'               => [
+                'id'         => [
                     'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'name' => [
+                'name'       => [
                     'description' => __( 'The name for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
-                'status'           => [
+                'status'     => [
                     'description' => __( 'The status for the designation.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => false,
                 ],
-                'created_on'       => [
+                'created_on' => [
                     'description' => __( 'The date the designation was created.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => false,
                 ],
-                'updated_at'       => [
+                'updated_at' => [
                     'description' => __( 'The date the designation was last updated.', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
@@ -338,5 +343,4 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             ],
         ];
     }
-
 }

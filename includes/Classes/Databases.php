@@ -189,5 +189,4 @@ class Databases {
             require ABSPATH . 'wp-admin/includes/upgrade.php';
         }
     }
-
 }

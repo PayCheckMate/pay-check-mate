@@ -12,5 +12,4 @@ interface FormRequestInterface {
      * @return mixed
      */
     public function validate();
-
 }

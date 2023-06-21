@@ -6,5 +6,4 @@ use PayCheckMate\Traits\CrudTrait;
 
 class Salary {
     use CrudTrait;
-
 }

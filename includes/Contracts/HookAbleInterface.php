@@ -11,5 +11,4 @@ interface HookAbleInterface {
      * @return void
      */
     public function hooks(): void;
-
 }

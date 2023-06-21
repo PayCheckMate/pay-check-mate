@@ -72,5 +72,4 @@ interface ModelInterface {
      * @return int
      */
     public function count( array $args = [] ): int;
-
 }

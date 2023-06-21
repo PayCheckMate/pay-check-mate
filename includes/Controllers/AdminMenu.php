@@ -51,5 +51,4 @@ class AdminMenu implements HookAbleInterface {
     public function menu_page(): void {
         echo '<div id="root" class="h-full wrap custom-font"></div>';
     }
-
 }

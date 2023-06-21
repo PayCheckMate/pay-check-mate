@@ -55,13 +55,14 @@ trait CrudTrait {
                 'offset'          => 0,
                 'order'           => 'DESC',
                 'orderby'         => 'id',
-                'status'          => '',
+                'status'          => 'all',
                 'groupby'         => '',
                 'relations'       => [],
                 'mutation_fields' => [],
             ]
         );
 
+        // @phpstan-ignore-next-line
         return $this->model->all( $args, $fields, $additional_logical_data );
     }
 
@@ -130,5 +131,4 @@ trait CrudTrait {
     public function count( array $args = [] ): int {
         return $this->model->count( $args );
     }
-
 }

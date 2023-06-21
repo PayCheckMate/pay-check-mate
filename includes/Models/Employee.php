@@ -68,6 +68,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_full_name(): string {
+        // @phpstan-ignore-next-line
         return $this->first_name . ' ' . $this->last_name;
     }
 
@@ -75,6 +76,7 @@ class Employee extends Model {
      * Get basic salary
      */
     public function get_basic_salary(): float {
+        // @phpstan-ignore-next-line
         return doubleval( $this->basic_salary );
     }
 
@@ -86,6 +88,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_joining_date(): string {
+        // @phpstan-ignore-next-line
         return get_date_from_gmt( $this->joining_date, 'd M Y' );
     }
 
@@ -97,6 +100,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_regine_date(): string {
+        // @phpstan-ignore-next-line
         return get_date_from_gmt( $this->regine_date, 'd M Y' );
     }
 
@@ -108,6 +112,7 @@ class Employee extends Model {
      * @return string
      */
     public function get_status(): string {
+        // @phpstan-ignore-next-line
         return $this->status ? 'Active' : 'Inactive';
     }
 
@@ -116,10 +121,10 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param string $salary_head_details
-     * @param array  $salary_head_types
+     * @param string               $salary_head_details
+     * @param array<array<string>> $salary_head_types
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     public function get_salary_head_details( string $salary_head_details, array $salary_head_types ): array {
         $salary_head_details = json_decode( $salary_head_details, true );

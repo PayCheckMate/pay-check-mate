@@ -11,5 +11,4 @@ interface HookAbleApiInterface {
      * @return void
      */
     public function register_api_routes(): void;
-
 }

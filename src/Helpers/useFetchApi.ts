@@ -2,16 +2,22 @@ import apiFetch, {APIFetchOptions} from '@wordpress/api-fetch';
 import {useEffect, useState} from '@wordpress/element';
 
 
-const apiFetchUnparsed = async <Model>(
-    path: string,
-    options?: APIFetchOptions,
-    data?: any
-): Promise<Model> => {
+export const apiFetchUnparsed = async <Model>(path: string, options?: APIFetchOptions, data?: any): Promise<Model> => {
+    // Add headers to the options
+    if (!options?.headers) {
+        options = {
+            ...options, headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+    }
+
     const requestOptions: APIFetchOptions = {path, parse: false, ...options};
     if (data) {
         requestOptions.body = JSON.stringify(data);
     }
 
+    console.log(requestOptions, 'requestOptions')
     // @ts-ignore
     return apiFetch(requestOptions).then((response: Response) => {
         return Promise.all([response.json()]).then(([jsonData]) => {
@@ -41,7 +47,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
         setFilter((prevFilter) => ({...prevFilter, ...newFilterObj}));
     }
 
-    const makeRequest = async<DataType> (requestUrl: string, requestMethod: string = 'GET', run: boolean = true, requestData?: any): Promise<DataType> => {
+    const makeRequest = async <DataType>(requestUrl: string, requestMethod: string = 'GET', run: boolean = true, requestData?: any): Promise<DataType> => {
         setLoading(true);
         const requestOptions: APIFetchOptions = {method: requestMethod, headers: {'Content-Type': 'application/json'},};
 
