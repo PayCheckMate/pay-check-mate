@@ -55,5 +55,4 @@ class PayCheckMateUserRoles {
             'pay_check_mate_manage_menu' => true,
         ];
     }
-
 }

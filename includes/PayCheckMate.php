@@ -143,5 +143,4 @@ final class PayCheckMate {
     private function load_hooks( HookAbleInterface $hook_able ): void {
         $hook_able->hooks();
     }
-
 }

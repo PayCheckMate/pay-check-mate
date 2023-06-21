@@ -13,5 +13,4 @@ class Installer {
         new PayCheckMateUserRoles();
         new Databases();
     }
-
 }

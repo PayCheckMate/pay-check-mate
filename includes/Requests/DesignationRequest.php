@@ -15,5 +15,4 @@ class DesignationRequest extends Request {
         'created_on' => 'sanitize_text_field',
         'updated_at' => 'sanitize_text_field',
     ];
-
 }
