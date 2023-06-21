@@ -62,6 +62,7 @@ trait CrudTrait {
             ]
         );
 
+        // @phpstan-ignore-next-line
         return $this->model->all( $args, $fields, $additional_logical_data );
     }
 

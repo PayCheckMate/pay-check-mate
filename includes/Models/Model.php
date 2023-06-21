@@ -32,7 +32,10 @@ class Model implements ModelInterface {
 
     protected object $results;
     protected object $result;
+
+    // @phpstan-ignore-next-line
     protected array $mutation_fields = [];
+    // @phpstan-ignore-next-line
     protected array $additional_logical_data = [];
 
     /**
@@ -131,6 +134,16 @@ class Model implements ModelInterface {
         return $this;
     }
 
+    /**
+     * Get relational and where clause from get_relations() method.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<array<string, mixed>> $args
+     *
+     * @return object
+     * @throws \Exception
+     */
     public function get_relational( array $args = [] ): object {
         global $wpdb;
 
@@ -534,7 +547,7 @@ class Model implements ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @return array
+     * @return array<array<string>>
      */
     public function toArray(): array {
         return (array) $this->results;

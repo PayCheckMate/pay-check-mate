@@ -45,11 +45,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         );
     }
 
-    public function get_payrolls_permissions_check( $request ): bool {
+    public function get_payrolls_permissions_check(): bool {
         return true;
     }
 
-    public function create_payroll_permissions_check( $request ): bool {
+    public function create_payroll_permissions_check(): bool {
         return true;
     }
 
@@ -58,7 +58,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request $request Full details about the request.
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return \WP_REST_Response Response object on success, or WP_Error object on failure.
      */
@@ -66,7 +66,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response( [ 'message' => 'Hello World!' ], 200 );
     }
 
-    public function create_payroll( \WP_REST_Request $request ) {
+    /**
+     * Create payroll.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @return \WP_REST_Response
+     */
+    public function create_payroll( \WP_REST_Request $request ): WP_REST_Response {
         $parameters = $request->get_params();
 
         if ( ! isset( $parameters['date'] ) ) {

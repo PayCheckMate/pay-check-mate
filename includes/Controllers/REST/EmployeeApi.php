@@ -27,7 +27,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             '/' . $this->rest_base, [
                 [
                     'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [ $this, 'get_items' ],
+                    'callback'            => [ $this, 'get_employees' ],
                     'permission_callback' => [ $this, 'get_employees_permissions_check' ],
                     'args'                => $this->get_collection_params(),
                 ],
@@ -42,12 +42,26 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         );
     }
 
-    public function get_employees_permissions_check( $request ): bool {
+    /**
+     * Get the employee permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employees_permissions_check(): bool {
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_accountant' );
     }
 
-    public function create_employee_permissions_check( $request ): bool {
+    /**
+     * Create employee permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function create_employee_permissions_check(): bool {
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_accountant' );
     }
@@ -57,11 +71,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param $request
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return WP_REST_Response
      */
-    public function get_items( $request ): WP_REST_Response {
+    public function get_employees( WP_REST_Request $request ): WP_REST_Response {
         $args           = [
             'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
@@ -109,12 +123,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     /**
      * Create a single item from the data in the request.
      *
-     * @param \WP_REST_Request $request Full details about the request.
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-
     public function create_employee( WP_REST_Request $request ) {
         global $wpdb;
         $data                              = $request->get_params();
@@ -183,6 +196,13 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response( $response, 200 );
     }
 
+    /**
+     * Get item schema.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed> Item schema data.
+     */
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
