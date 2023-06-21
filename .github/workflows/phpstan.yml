@@ -1,4 +1,4 @@
-name: PHPCS Inspections
+name: PHPStan
 on:
   pull_request:
     branches: [ "develop" ]
@@ -39,5 +39,5 @@ jobs:
                   FILES=$(curl --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -s -X GET -G $URL | jq -r -c ".[] | .filename" | xargs)
                   echo "files=$FILES" >> $GITHUB_ENV
 
-            - name: Detect coding standard violations
-              run: vendor/bin/phpcs ${{ env.files }} -q --report=checkstyle | cs2pr --graceful-warnings
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyze --configuration phpstan.neon --no-progress
