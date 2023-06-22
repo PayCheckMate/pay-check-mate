@@ -17,7 +17,6 @@ export const apiFetchUnparsed = async <Model>(path: string, options?: APIFetchOp
         requestOptions.body = JSON.stringify(data);
     }
 
-    console.log(requestOptions, 'requestOptions')
     // @ts-ignore
     return apiFetch(requestOptions).then((response: Response) => {
         return Promise.all([response.json()]).then(([jsonData]) => {
