@@ -218,7 +218,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
             'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 1,
+            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
         ];
 
         $salary_heads = $salary_head->all( $args );
@@ -261,8 +261,11 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $head = $salary_head->create( $validated_data );
 
         if ( is_wp_error( $head ) ) {
-            return new WP_Error( 500, __( 'Could not create department.', 'pcm' ) );
+            return new WP_Error( 500, __( 'Could not create salary head.', 'pcm' ) );
         }
+
+        $head = $this->prepare_item_for_response( $head, $request );
+        $head = $this->prepare_response_for_collection( $head );
 
         return new WP_REST_Response( $head, 201 );
     }
@@ -308,13 +311,15 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        $salary_heads = $salary_head->update( $request->get_param( 'id' ), $validated_data );
-
-        if ( ! $salary_heads ) {
-            return new WP_Error( 500, __( 'Could not update department.', 'pcm' ) );
+        if ( ! $salary_head->update( $request->get_param( 'id' ), $validated_data ) ) {
+            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( __( 'Salary head updated', 'pcm' ), 200 );
+        $salary_head = $salary_head->find( $request->get_param( 'id' ) );
+        $item        = $this->prepare_item_for_response( $salary_head, $request );
+        $data        = $this->prepare_response_for_collection( $item );
+
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**

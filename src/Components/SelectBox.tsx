@@ -9,16 +9,16 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
-interface SelectBoxProps {
+interface SelectBoxProps extends React.InputHTMLAttributes<HTMLDivElement> {
     title: string;
     options: SelectBoxType[];
     selected: SelectBoxType;
     setSelected: (selected: SelectBoxType) => void;
     required?: boolean;
+    error?: string;
 }
 
-export const SelectBox = ({title, options, selected, setSelected,  required= false}: SelectBoxProps) => {
-    const isSelectionValid = required ? selected.id !== null : true;
+export const SelectBox = ({title, options, selected, setSelected, error, required= false}: SelectBoxProps) => {
     return (
         <div>
             <div className="relative mt-2 rounded-md shadow-sm">
@@ -80,9 +80,9 @@ export const SelectBox = ({title, options, selected, setSelected,  required= fal
                                     </Listbox.Options>
                                 </Transition>
                             </div>
-                            {isSelectionValid ? null : (
-                                <p className="mt-2 text-sm text-red-600">
-                                    {__('Please select a value.', 'pcm')}
+                            {error && (
+                                <p className="mt-2 text-sm text-red-600" id={'error'+selected}>
+                                    {error}
                                 </p>
                             )}
                         </>

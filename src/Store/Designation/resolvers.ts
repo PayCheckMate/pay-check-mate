@@ -1,6 +1,7 @@
 import actions from "./actions";
-import {filtersType, DesignationType} from "../../Types/DesignationType";
+import {DesignationType} from "../../Types/DesignationType";
 import {filter} from "./selectors";
+import {filtersType} from "../Store";
 
 const resolvers = {
     *getDesignations(filters: filtersType=filter) {
