@@ -52,7 +52,14 @@ const actions = {
             item: salary_head,
         }
 
-        yield actions.updateSalaryHeadStore(response, true);
+        // @ts-ignore
+        if (!response.status || response.status !== 201) {
+            yield actions.setLoading(false);
+            return response;
+        }
+
+        // @ts-ignore
+        yield actions.updateSalaryHeadStore(response.data, true);
 
         return response;
     }

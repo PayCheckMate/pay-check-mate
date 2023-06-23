@@ -231,8 +231,10 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 
         $department = $this->prepare_item_for_response( $department, $request );
         $department = $this->prepare_response_for_collection( $department );
+        $response = new WP_REST_Response( $department );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $department, 201 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**
@@ -283,8 +285,10 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $department = $department->find( $request->get_param( 'id' ) );
         $item        = $this->prepare_item_for_response( $department, $request );
         $data        = $this->prepare_response_for_collection( $item );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $data, 200 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**

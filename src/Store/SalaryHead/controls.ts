@@ -15,6 +15,7 @@ const controls = {
         return apiFetchUnparsed( path, {
             method: 'POST',
             body: JSON.stringify( action.item ),
+            parse: true,
         }).then( ( response: any ) => {
             return response.data;
         });
@@ -24,6 +25,7 @@ const controls = {
         return apiFetchUnparsed( path, {
             method: 'PUT',
             body: JSON.stringify( action.item ),
+            parse: true,
         }).then( ( response: any ) => {
             return response.data;
         });

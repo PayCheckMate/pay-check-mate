@@ -264,10 +264,12 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Could not create salary head.', 'pcm' ) );
         }
 
-        $head = $this->prepare_item_for_response( $head, $request );
-        $head = $this->prepare_response_for_collection( $head );
+        $item   = $this->prepare_item_for_response( $head, $request );
+        $data = $this->prepare_response_for_collection( $item );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $head, 201 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**
@@ -318,8 +320,10 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $salary_head = $salary_head->find( $request->get_param( 'id' ) );
         $item        = $this->prepare_item_for_response( $salary_head, $request );
         $data        = $this->prepare_response_for_collection( $item );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $data, 200 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**

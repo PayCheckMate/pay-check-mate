@@ -8,7 +8,7 @@ import {FormInput} from "../../Components/FormInput";
 import {HeadType, SalaryHeadStatus, SalaryHeadType, SelectBoxType} from "../../Types/SalaryHeadType";
 import {SelectBox} from "../../Components/SelectBox";
 import {FormCheckBox} from "../../Components/FormCheckBox";
-import {dispatch, useSelect} from "@wordpress/data";
+import {useDispatch, useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {toast} from "react-toastify";
 
@@ -28,6 +28,7 @@ const is_variable = [
 ]
 
 export const SalaryHeadList = () => {
+    const dispatch = useDispatch();
     const per_page = '10';
     const {salaryHeads, loading, totalPages, filters} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
 
@@ -185,6 +186,7 @@ export const SalaryHeadList = () => {
     }
 
     const handleModal = (data: SalaryHeadType) => {
+        setFormError({});
         if (!data.head_type) {
             data = {
                 ...data,
@@ -220,6 +222,11 @@ export const SalaryHeadList = () => {
         const requiredFields = ['head_name', 'head_amount', 'head_type'];
         const errors = validateRequiredFields(data, requiredFields);
         if (Object.keys(errors).length > 0) {
+            toast.error(__('Please fill all required fields', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
+
             return;
         }
 
@@ -238,16 +245,29 @@ export const SalaryHeadList = () => {
             data.priority = formData.priority ?? 1;
             data.is_personal_savings = formData.is_personal_savings ?? 0;
             data.should_affect_basic_salary = formData.should_affect_basic_salary ?? 1;
-            const response = dispatch(salaryHead).createSalaryHead(data);
-            setShowModal(false);
             // @ts-ignore
-            toast.promise(response, {
-                pending: __('Creating salary head', 'pcm'),
-                success: __('Salary head created successfully', 'pcm'),
-                error: __('Error occurred while creating salary head', 'pcm')
-            }).catch((error) => {
-                console.log(error, 'error')
-            })
+            dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
+                if (response.status === 201) {
+                    toast.success(__('Salary head created successfully', 'pcm'), {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000
+                    });
+                }
+                if (response.data.status === 400) {
+                    toast.error(response.message, {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000
+                    });
+                }
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while creating salary head', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            });
+
+            setShowModal(false);
         }
     }
 

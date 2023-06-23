@@ -221,9 +221,11 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         }
 
         $designation = $this->prepare_item_for_response( $designation, $request );
-        $designation = $this->prepare_response_for_collection( $designation );
+        $data = $this->prepare_response_for_collection( $designation );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $designation, 201 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**
@@ -273,8 +275,10 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         $designation = $designation->find( $request->get_param( 'id' ) );
         $item        = $this->prepare_item_for_response( $designation, $request );
         $data        = $this->prepare_response_for_collection( $item );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $data, 200 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**
