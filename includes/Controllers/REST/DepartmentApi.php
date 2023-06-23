@@ -333,27 +333,22 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
                 'name' => [
                     'description' => __( 'Department name', 'pcm' ),
                     'type'        => 'string',
-                    'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => false,
                     'required'    => true,
                 ],
                 'status'          => [
                     'description' => __( 'Status', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => false,
                 ],
                 'created_on'      => [
                     'description' => __( 'Created on', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
                 ],
                 'updated_at'      => [
                     'description' => __( 'Updated on', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
                 ],
             ],
         ];

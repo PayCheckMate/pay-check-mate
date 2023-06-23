@@ -11,6 +11,8 @@ import {FormCheckBox} from "../../Components/FormCheckBox";
 import {useDispatch, useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {toast} from "react-toastify";
+import useNotify from "../../Helpers/useNotify";
+import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -178,10 +180,14 @@ export const SalaryHeadList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, should_affect_basic_salary, _wpnonce};
-        dispatch(salaryHead).updateSalaryHead(data);
-        toast.success(__('Successfully' + (status === 1 ? ' activated' : ' inactivated') + ' salary head', 'pcm'), {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000
+        dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
+            useNotify(response, __('Salary head status updated successfully', 'pcm'));
+        }).catch((error: any) => {
+            console.log(error)
+            toast.error(__('Something went wrong while creating salary head', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
         })
     }
 
@@ -220,23 +226,28 @@ export const SalaryHeadList = () => {
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
         // Handle required fields
         const requiredFields = ['head_name', 'head_amount', 'head_type'];
-        const errors = validateRequiredFields(data, requiredFields);
+        const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000
+                autoClose: false
             });
 
             return;
         }
 
         if (formData.id) {
-            dispatch(salaryHead).updateSalaryHead(data);
+            dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
+                useNotify(response, __('Successfully updated salary head', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while updating salary head', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
+
             setShowModal(false);
-            toast.success(__('Salary head updated successfully', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000
-            });
         } else {
             data.head_type = selectedHeadType.id as HeadType;
             data.is_percentage = isPercentage.id ? 1 : 0;
@@ -247,18 +258,7 @@ export const SalaryHeadList = () => {
             data.should_affect_basic_salary = formData.should_affect_basic_salary ?? 1;
             // @ts-ignore
             dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
-                if (response.status === 201) {
-                    toast.success(__('Salary head created successfully', 'pcm'), {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 3000
-                    });
-                }
-                if (response.data.status === 400) {
-                    toast.error(response.message, {
-                        position: toast.POSITION.TOP_RIGHT,
-                        autoClose: 3000
-                    });
-                }
+                useNotify(response, __('Successfully created salary head', 'pcm'));
             }).catch((error: any) => {
                 console.log(error)
                 toast.error(__('Something went wrong while creating salary head', 'pcm'), {
@@ -269,18 +269,6 @@ export const SalaryHeadList = () => {
 
             setShowModal(false);
         }
-    }
-
-    const validateRequiredFields = (data: any, requiredFields: string[]) => {
-        const errors: any = {};
-        setFormError({});
-        requiredFields.forEach((field) => {
-            if (!data[field]) {
-                errors[field] = __('This field is required', 'pcm');
-            }
-        });
-        setFormError(errors);
-        return errors;
     }
 
     const handleInputChange = (event: any) => {
