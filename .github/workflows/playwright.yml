@@ -16,8 +16,11 @@ jobs:
                     npm i
                     npm ci
                     npm run build
+            - name: Start WordPress Environment
+              run: |
+                  npm run env:start
             -   name: Install Playwright Browsers
-                run: npx playwright install --with-deps
+                run: playwright install chromium
             -   name: Run Playwright tests
                 run: npm run test:playwright
             -   uses: actions/upload-artifact@v3
