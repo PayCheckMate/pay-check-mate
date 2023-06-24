@@ -4,7 +4,7 @@ import Tooltip from "./Tooltip";
 import {QuestionMarkCircleIcon} from "@heroicons/react/24/solid";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement>{
-    label: string;
+    label?: string;
     name: string;
     id: string;
     type?: string;

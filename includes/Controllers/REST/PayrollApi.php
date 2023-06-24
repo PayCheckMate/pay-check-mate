@@ -82,9 +82,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
-        $date = gmdate( 'Y-m-d', strtotime( $parameters['date'] ) );
-        $month = gmdate( 'm', strtotime( $date ) );
-        $year = gmdate( 'Y', strtotime( $date ) );
+        $date              = gmdate( 'Y-m-d', strtotime( $parameters['date'] ) );
+        $month             = gmdate( 'm', strtotime( $date ) );
+        $year              = gmdate( 'Y', strtotime( $date ) );
         $last_day_of_month = gmdate( 't', strtotime( $date ) );
 
         $parameters['date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
@@ -158,7 +158,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $args = [
             'status'          => 1,
-            'limit'           => -1,
+            'limit'           => - 1,
             'order'           => 'ASC',
             'orderby'         => 'employee_id',
             'mutation_fields' => [
@@ -186,7 +186,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                             'type'     => 'AND',
                         ],
                     ],
-                    'select_max'   => [
+                    'select_max'  => [
                         'active_from' => [
                             'operator' => '<=',
                             'value'    => $parameters['date'],
@@ -239,7 +239,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'date' => [
+                'date'           => [
                     'description' => __( 'The date of the payroll', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
