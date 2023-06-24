@@ -12,17 +12,27 @@ export const apiFetchUnparsed = async <Model>(path: string, options?: APIFetchOp
         };
     }
 
-    const requestOptions: APIFetchOptions = {path, parse: false, ...options};
+    if (!options?.parse) {
+        options = {...options, parse: false};
+    }
+
+    const requestOptions: APIFetchOptions = {path, ...options};
     if (data) {
         requestOptions.body = JSON.stringify(data);
     }
 
     // @ts-ignore
     return apiFetch(requestOptions).then((response: Response) => {
-        return Promise.all([response.json()]).then(([jsonData]) => {
+        let data: any = response;
+        if(response.ok){
+            data = response.json();
+        }
+        return Promise.all([data]).then(([jsonData]) => {
             return {data: jsonData};
         });
-    });
+    }).catch((error) => {
+        return {data: error};
+    })
 };
 const useFetchApi = <Model extends object>(url: string, initialFilters?: object, run = true): {
     models: Model[];

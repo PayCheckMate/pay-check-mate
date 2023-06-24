@@ -103,6 +103,11 @@ class Request implements FormRequestInterface {
                 if ( ! array_key_exists( $item, $this->data ) ) {
                     $this->addError( $item, $item . __( ' key is required for this form request.', 'pcm' ) );
                 }
+
+                // Check if this key value is empty.
+                if ( empty( $this->data[ $item ] ) ) {
+                    $this->addError( $item, $item . __( ' key can not be empty.', 'pcm' ) );
+                }
             }
         }
     }

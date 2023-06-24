@@ -191,9 +191,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         // If everything is fine, then commit the data.
         $wpdb->query( 'COMMIT' );
 
-        $response = $this->prepare_item_for_response( $employee, $request );
+        $item   = $this->prepare_item_for_response( $employee, $request );
+        $data = $this->prepare_response_for_collection( $item );
+        $response = new WP_REST_Response( $data );
+        $response->set_status( 201 );
 
-        return new WP_REST_Response( $response, 200 );
+        return new WP_REST_Response( $response, 201 );
     }
 
     /**

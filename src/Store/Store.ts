@@ -1,6 +1,7 @@
 import {register} from "@wordpress/data";
 import designations from "./Designation";
 import department from "./Department";
+import salaryHead from "./SalaryHead";
 
 export interface filtersType {
     per_page?: string,
@@ -12,3 +13,4 @@ export interface filtersType {
 
 register(designations);
 register(department);
+register(salaryHead);

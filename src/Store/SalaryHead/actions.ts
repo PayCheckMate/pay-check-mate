@@ -1,10 +1,10 @@
-import {DesignationType} from "../../Types/DesignationType";
+import {SalaryHeadType} from "../../Types/SalaryHeadType";
 import {filtersType} from "../Store";
 
 const actions = {
-    setDesignations: (designations: DesignationType[]) => ({
-        type: 'SET_DESIGNATIONS',
-        payload: designations,
+    setSalaryHeads: (salaryHeads: SalaryHeadType[]) => ({
+        type: 'SET_SALARY_HEADS',
+        payload: salaryHeads,
     }),
     setLoading: (loading: boolean) => ({
         type: 'SET_LOADING',
@@ -21,24 +21,24 @@ const actions = {
             filters,
         };
     },
-    updateDesignationStore: (designation: DesignationType, create = false) => ({
-        type: 'UPDATE_DESIGNATION',
-        payload: designation,
+    updateSalaryHeadStore: (salary_head: SalaryHeadType, create = false) => ({
+        type: 'UPDATE_SALARY_HEAD',
+        payload: salary_head,
         create,
     }),
-    * getDesignations(filters: filtersType) {
-        const path: string = '/pay-check-mate/v1/designations'
+    *getSalaryHeads(filters: filtersType) {
+        const path: string = '/pay-check-mate/v1/salary-heads'
         yield actions.setLoading(true);
-        const designations: DesignationType[] = yield actions.fetchFromAPI(path, filters);
-        yield actions.setDesignations(designations);
+        const salaryHeads: SalaryHeadType[] = yield actions.fetchFromAPI(path, filters);
+        yield actions.setSalaryHeads(salaryHeads);
         yield actions.updateFilters(filters);
-        return designations;
+        return salaryHeads;
     },
-    * updateDesignation(designation: any) {
+    *updateSalaryHead(salary_head: any) {
         yield actions.setLoading(true);
-        const response: DesignationType = yield{
+        const response: SalaryHeadType = yield{
             type: 'UPDATE',
-            item: designation,
+            item: salary_head,
         }
 
         // @ts-ignore
@@ -48,15 +48,15 @@ const actions = {
         }
 
         // @ts-ignore
-        yield actions.updateDesignationStore(response.data);
+        yield actions.updateSalaryHeadStore(response.data);
 
         return response;
     },
-    *createDesignation(designation: any) {
+    *createSalaryHead(salary_head: any) {
         yield actions.setLoading(true);
-        const response: DesignationType = yield{
+        const response: SalaryHeadType = yield{
             type: 'CREATE',
-            item: designation,
+            item: salary_head,
         }
 
         // @ts-ignore
@@ -66,7 +66,7 @@ const actions = {
         }
 
         // @ts-ignore
-        yield actions.updateDesignationStore(response.data, true);
+        yield actions.updateSalaryHeadStore(response.data, true);
 
         return response;
     }

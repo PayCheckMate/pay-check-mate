@@ -6,14 +6,18 @@ import React, {useState} from "@wordpress/element";
 import {DesignationStatus, DesignationType} from "../../Types/DesignationType";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
-import {dispatch, useSelect} from "@wordpress/data";
+import {useDispatch, useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
+import useNotify from "../../Helpers/useNotify";
+import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
 
 export const DesignationList = () => {
+    const dispatch = useDispatch();
     const per_page = '10';
     const {designations, loading, totalPages, filters} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
+    const [formError, setFormError] = useState({} as { [key: string]: string });
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(filters.page);
 
@@ -79,11 +83,15 @@ export const DesignationList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
-        dispatch(designation).updateDesignation(data);
-        toast.success(__('Designation updated successfully', 'pcm'), {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-        });
+        dispatch(designation).updateDesignation(data).then((response: any) => {
+            useNotify(response, __('Designation status updated successfully', 'pcm'));
+        }).catch((error: any) => {
+            console.log(error)
+            toast.error(__('Something went wrong while updating designation', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
+        })
     }
 
     const handleModal = (data: DesignationType) => {
@@ -91,6 +99,7 @@ export const DesignationList = () => {
             setFormData(data)
         }
         setShowModal(true)
+        setFormError({})
     };
 
     const handlePageChange = (page: number) => {
@@ -104,20 +113,42 @@ export const DesignationList = () => {
         const data = formData
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
+        // Handle required fields
+        const requiredFields = ['name'];
+        const errors = validateRequiredFields(data, requiredFields, setFormError);
+        if (Object.keys(errors).length > 0) {
+            toast.error(__('Please fill all required fields', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false
+            });
+
+            return;
+        }
+
         if (formData.id) {
-            dispatch(designation).updateDesignation(data);
+            dispatch(designation).updateDesignation(data).then((response: any) => {
+                console.log(response)
+                useNotify(response, __('Designation updated successfully', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while updating designation', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
+
             setShowModal(false);
-            toast.success(__('📋 Designation updated successfully', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
         } else {
-            dispatch(designation).createDesignation(data);
+            dispatch(designation).createDesignation(data).then((response: any) => {
+                useNotify(response, __('Designation created successfully', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while creating designation', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
             setShowModal(false);
-            toast.success(__('✅ Designation created successfully', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
         }
     }
     return (
@@ -139,7 +170,15 @@ export const DesignationList = () => {
                                 {/*Create a form to save designation*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="name" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                                        <FormInput
+                                            label={__('Designation name', 'pcm')}
+                                            name="name"
+                                            id="name"
+                                            value={formData.name}
+                                            error={formError.name}
+                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                            required={true}
+                                        />
                                         <Button className="mt-4" onClick={() => handleSubmit(event)}>
                                             {__('Add designation', 'pcm')}
                                         </Button>

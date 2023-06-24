@@ -2,13 +2,17 @@ import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
-import React, {useEffect, useState} from "@wordpress/element";
-import useFetchApi from "../../Helpers/useFetchApi";
+import {useState} from "@wordpress/element";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
 import {HeadType, SalaryHeadStatus, SalaryHeadType, SelectBoxType} from "../../Types/SalaryHeadType";
 import {SelectBox} from "../../Components/SelectBox";
 import {FormCheckBox} from "../../Components/FormCheckBox";
+import {useDispatch, useSelect} from "@wordpress/data";
+import salaryHead from "../../Store/SalaryHead";
+import {toast} from "react-toastify";
+import useNotify from "../../Helpers/useNotify";
+import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -26,33 +30,23 @@ const is_variable = [
 ]
 
 export const SalaryHeadList = () => {
+    const dispatch = useDispatch();
+    const per_page = '10';
+    const {salaryHeads, loading, totalPages, filters} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
+
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
+    const [formError, setFormError] = useState({} as { [key: string]: string});
     const [showModal, setShowModal] = useState(false);
-    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([])
-    const [totalPages, setTotalPages] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(filters.page);
     const [selectedHeadType, setSelectedHeadType] = useState<SelectBoxType>(headType[0] as SelectBoxType);
     const [isPercentage, setIsPercentage] = useState(is_percentage[0]);
     const [isVariable, setIsVariable] = useState(is_variable[0]);
-    const {
-              models,
-              loading,
-              totalPage,
-              makePutRequest,
-              makePostRequest,
-              setFilterObject,
-          } = useFetchApi<SalaryHeadType>('/pay-check-mate/v1/salary-heads', {'per_page': 20, 'orderby': 'id', 'order': 'asc'});
-    useEffect(() => {
-        if (models) {
-            setSalaryHeads(models as SalaryHeadType[]);
-            setTotalPages(totalPage as number);
-        }
-    }, [models]);
+
 
     const columns = [
         {title: __('Salary Head', 'pcm'), dataIndex: 'head_name'},
         {
-            title:  __('Head Type', 'pcm'), dataIndex: 'head_type',
+            title: __('Head Type', 'pcm'), dataIndex: 'head_type',
             render: (text: string, record: SalaryHeadType) => {
                 const headType = parseInt(String(record.head_type))
                 return (
@@ -63,7 +57,7 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title:  __('Head Amount', 'pcm'), dataIndex: 'head_amount',
+            title: __('Head Amount', 'pcm'), dataIndex: 'head_amount',
             render: (text: string, record: SalaryHeadType) => {
                 return (
                     <span>
@@ -76,7 +70,7 @@ export const SalaryHeadList = () => {
 
         },
         {
-            title:  __('Is Taxable', 'pcm'), dataIndex: 'is_taxable',
+            title: __('Is Taxable', 'pcm'), dataIndex: 'is_taxable',
             render: (text: string, record: SalaryHeadType) => {
                 const isTaxable = parseInt(String(record.is_taxable))
                 return (
@@ -87,7 +81,7 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title:  __('Is Personal Savings', 'pcm'), dataIndex: 'is_personal_savings',
+            title: __('Is Personal Savings', 'pcm'), dataIndex: 'is_personal_savings',
             render: (text: string, record: SalaryHeadType) => {
                 const isPersonalSavings = parseInt(String(record.is_personal_savings))
                 return (
@@ -98,9 +92,8 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title:  __('Should Affect Basic Salary', 'pcm'), dataIndex: 'should_affect_basic_salary',
+            title: __('Should Affect Basic Salary', 'pcm'), dataIndex: 'should_affect_basic_salary',
             render: (text: string, record: SalaryHeadType) => {
-                console.log(record)
                 const shouldAffectSalary = parseInt(String(record.should_affect_basic_salary))
                 return (
                     <span className={`${shouldAffectSalary === 1 ? 'text-green-600' : 'text-red-600'}`}>
@@ -111,7 +104,7 @@ export const SalaryHeadList = () => {
         },
         {title: __('Priority', 'pcm'), dataIndex: 'priority'},
         {
-            title:  __('Status', 'pcm'), dataIndex: 'status',
+            title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
                 const status = parseInt(String(record.status))
                 return (
@@ -122,7 +115,7 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title:  __('Created on', 'pcm'), dataIndex: 'created_on',
+            title: __('Created on', 'pcm'), dataIndex: 'created_on',
             render: (text: string, record: SalaryHeadType) => {
                 return (
                     <span>
@@ -132,9 +125,9 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title:     __('Action', 'pcm'),
+            title: __('Action', 'pcm'),
             dataIndex: 'action',
-            render:    (text: string, record: SalaryHeadType) => (
+            render: (text: string, record: SalaryHeadType) => (
                 <div className="flex">
                     <button
                         className="text-indigo-600 hover:text-indigo-900"
@@ -187,34 +180,28 @@ export const SalaryHeadList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, should_affect_basic_salary, _wpnonce};
-        try {
-            makePutRequest(`/pay-check-mate/v1/salary-heads/${id}`, data, false).then((data: unknown) => {
-                if (data) {
-                    setSalaryHeads(models.map((salaryHead: SalaryHeadType) => {
-                        if (salaryHead.id === id) {
-                            salaryHead.status = status;
-                        }
-                        return salaryHead;
-                    }))
-                }
-            }).catch((e: unknown) => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error); // Handle the error accordingly
-        }
+        dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
+            useNotify(response, __('Salary head status updated successfully', 'pcm'));
+        }).catch((error: any) => {
+            console.log(error)
+            toast.error(__('Something went wrong while creating salary head', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
+        })
     }
 
     const handleModal = (data: SalaryHeadType) => {
+        setFormError({});
         if (!data.head_type) {
             data = {
                 ...data,
-                head_type:     HeadType.Earning,
+                head_type: HeadType.Earning,
                 is_percentage: 1,
-                is_taxable:    1,
-                priority:      1,
+                is_taxable: 1,
+                priority: 1,
                 should_affect_basic_salary: 1,
-                status:        1
+                status: 1
             }
         }
         setSelectedHeadType({id: data.head_type, name: parseInt(String(data.head_type)) === HeadType.Earning ? __('Earning', 'pcm') : __('Deduction', 'pcm')})
@@ -224,7 +211,7 @@ export const SalaryHeadList = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setFilterObject({'per_page': 10, 'page': page}); // Update the filter object with the new page value
+        dispatch(salaryHead).getSalaryHeads({per_page: per_page, page})
         setCurrentPage(page);
     };
 
@@ -237,22 +224,30 @@ export const SalaryHeadList = () => {
         const data = formData
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
+        // Handle required fields
+        const requiredFields = ['head_name', 'head_amount', 'head_type'];
+        const errors = validateRequiredFields(data, requiredFields, setFormError);
+        if (Object.keys(errors).length > 0) {
+            toast.error(__('Please fill all required fields', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false
+            });
+
+            return;
+        }
+
         if (formData.id) {
-            try {
-                makePutRequest<SalaryHeadType>(`/pay-check-mate/v1/salary-heads/${formData.id}`, data, true).then((data) => {
-                    setSalaryHeads(models.map((salaryHead: SalaryHeadType) => {
-                        if (salaryHead.id === formData.id) {
-                            salaryHead = formData;
-                        }
-                        return salaryHead;
-                    }))
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
+            dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
+                useNotify(response, __('Successfully updated salary head', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while updating salary head', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
+
+            setShowModal(false);
         } else {
             data.head_type = selectedHeadType.id as HeadType;
             data.is_percentage = isPercentage.id ? 1 : 0;
@@ -261,18 +256,21 @@ export const SalaryHeadList = () => {
             data.priority = formData.priority ?? 1;
             data.is_personal_savings = formData.is_personal_savings ?? 0;
             data.should_affect_basic_salary = formData.should_affect_basic_salary ?? 1;
-            try {
-                makePostRequest<SalaryHeadType>('/pay-check-mate/v1/salary-heads', data, false).then((data: SalaryHeadType) => {
-                    setSalaryHeads([...models, data])
-                    setShowModal(false)
-                }).catch((e: unknown) => {
-                    console.log(e);
-                })
-            } catch (error) {
-                console.log(error); // Handle the error accordingly
-            }
+            // @ts-ignore
+            dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
+                useNotify(response, __('Successfully created salary head', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while creating salary head', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            });
+
+            setShowModal(false);
         }
     }
+
     const handleInputChange = (event: any) => {
         const {name, value} = event.target;
         setFormData({...formData, [name]: value});
@@ -312,20 +310,24 @@ export const SalaryHeadList = () => {
                                             label={__('Salary Head name', 'pcm')}
                                             name="head_name"
                                             id="head_name"
+                                            required={true}
                                             value={formData.head_name}
                                             onChange={(e) =>
                                                 handleInputChange(e)
                                             }
+                                            error={formError.head_name}
                                         />
                                         <FormInput
                                             label={__('Head amount', 'pcm')}
                                             type="text"
+                                            required={true}
                                             name="head_amount"
                                             id="head_amount"
                                             value={formData.head_amount}
                                             onChange={(e) =>
                                                 handleInputChange(e)
                                             }
+                                            error={formError.head_amount}
                                         />
                                         <div className="flex items-center justify-between">
                                             <FormCheckBox
@@ -355,10 +357,10 @@ export const SalaryHeadList = () => {
                                                 onChange={(e) => {
                                                     if (e.target.checked) {
                                                         setFormData({
-                                                                        ...formData,
-                                                                        is_variable: 1,
-                                                                        head_amount: 0
-                                                                    });
+                                                            ...formData,
+                                                            is_variable: 1,
+                                                            head_amount: 0
+                                                        });
                                                         setIsVariable({id: 1, name: 'Yes'})
                                                     } else {
                                                         setFormData({...formData, is_variable: 0});
@@ -374,6 +376,8 @@ export const SalaryHeadList = () => {
                                             options={headType}
                                             selected={selectedHeadType}
                                             setSelected={handleHeadType}
+                                            required={true}
+                                            error={formError.head_type}
                                         />
                                         <div className="flex items-center justify-between">
                                             <FormCheckBox
@@ -453,7 +457,7 @@ export const SalaryHeadList = () => {
                     data={salaryHeads}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={10}
+                    pageSize={parseInt(per_page)}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
                 />

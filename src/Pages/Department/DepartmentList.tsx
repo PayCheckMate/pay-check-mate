@@ -6,14 +6,18 @@ import React, {useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
 import {Modal} from "../../Components/Modal";
 import {FormInput} from "../../Components/FormInput";
-import {dispatch, useSelect} from "@wordpress/data";
+import {useDispatch, useSelect} from "@wordpress/data";
 import department from "../../Store/Department";
 import {toast} from "react-toastify";
+import useNotify from "../../Helpers/useNotify";
+import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
 
 export const DepartmentList = () => {
+    const dispatch = useDispatch();
     const per_page = '10';
     const {departments, loading, totalPages, filters} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
+    const [formError, setFormError] = useState({} as { [key: string]: string});
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(filters.page);
 
@@ -79,11 +83,15 @@ export const DepartmentList = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
-        dispatch(department).updateDepartment(data);
-        toast.success(__('Department updated successfully', 'pcm'), {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-        });
+        dispatch(department).updateDepartment(data).then((response: any) => {
+            useNotify(response, __('Department status updated successfully', 'pcm'));
+        }).catch((error: any) => {
+            console.log(error)
+            toast.error(__('Something went wrong while updating department', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
+        })
     }
 
     const handleModal = (data: DepartmentType) => {
@@ -91,6 +99,7 @@ export const DepartmentList = () => {
             setFormData(data)
         }
         setShowModal(true)
+        setFormError({})
     };
 
     const handlePageChange = (page: number) => {
@@ -104,20 +113,42 @@ export const DepartmentList = () => {
         const data = formData
         // @ts-ignore
         data._wpnonce = payCheckMate.pay_check_mate_nonce;
+        // Handle required fields
+        const requiredFields = ['name'];
+        const errors = validateRequiredFields(data, requiredFields, setFormError);
+        if (Object.keys(errors).length > 0) {
+            toast.error(__('Please fill all required fields', 'pcm'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false
+            });
+
+            return;
+        }
+
         if (formData.id) {
-            dispatch(department).updateDepartment(data);
+            dispatch(department).updateDepartment(data).then((response: any) => {
+                console.log(response)
+                useNotify(response, __('Department updated successfully', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while updating department', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
+
             setShowModal(false);
-            toast.success(__('📋 Department updated successfully', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
         } else {
-            dispatch(department).createDepartment(data);
+            dispatch(department).createDepartment(data).then((response: any) => {
+                useNotify(response, __('Department created successfully', 'pcm'));
+            }).catch((error: any) => {
+                console.log(error)
+                toast.error(__('Something went wrong while creating department', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
             setShowModal(false);
-            toast.success(__('✅ Department created successfully', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
         }
     }
     return (
@@ -139,7 +170,15 @@ export const DepartmentList = () => {
                                 {/*Create a form to save department*/}
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput label={__('Department name', 'pcm')} name="name" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                                        <FormInput
+                                            label={__('Department name', 'pcm')}
+                                            name="name"
+                                            id="name"
+                                            value={formData.name}
+                                            error={formError.name}
+                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                            required={true}
+                                        />
                                         <Button className="mt-4" onClick={() => handleSubmit(event)}>
                                             {__('Add department', 'pcm')}
                                         </Button>

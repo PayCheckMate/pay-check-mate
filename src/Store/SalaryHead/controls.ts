@@ -11,7 +11,7 @@ const controls = {
         });
     },
     CREATE: ( action: any ) => {
-        const path = `/pay-check-mate/v1/departments`;
+        const path = `/pay-check-mate/v1/salary-heads`;
         return apiFetchUnparsed( path, {
             method: 'POST',
             body: JSON.stringify( action.item ),
@@ -21,7 +21,7 @@ const controls = {
         });
     },
     UPDATE: ( action: any ) => {
-        const path = `/pay-check-mate/v1/departments/${action.item.id}`;
+        const path = `/pay-check-mate/v1/salary-heads/${action.item.id}`;
         return apiFetchUnparsed( path, {
             method: 'PUT',
             body: JSON.stringify( action.item ),
