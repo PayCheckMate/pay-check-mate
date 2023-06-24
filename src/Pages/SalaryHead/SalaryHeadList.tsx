@@ -12,7 +12,7 @@ import {useDispatch, useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
-import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
+import {validateRequiredFields} from "../../Helpers/Helpers";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -91,17 +91,6 @@ export const SalaryHeadList = () => {
                 )
             }
         },
-        {
-            title: __('Should Affect Basic Salary', 'pcm'), dataIndex: 'should_affect_basic_salary',
-            render: (text: string, record: SalaryHeadType) => {
-                const shouldAffectSalary = parseInt(String(record.should_affect_basic_salary))
-                return (
-                    <span className={`${shouldAffectSalary === 1 ? 'text-green-600' : 'text-red-600'}`}>
-                        {shouldAffectSalary === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
-                    </span>
-                )
-            }
-        },
         {title: __('Priority', 'pcm'), dataIndex: 'priority'},
         {
             title: __('Status', 'pcm'), dataIndex: 'status',
@@ -176,10 +165,9 @@ export const SalaryHeadList = () => {
         const is_taxable = head?.is_taxable;
         const priority = head?.priority;
         const is_personal_savings = head?.is_personal_savings;
-        const should_affect_basic_salary = head?.should_affect_basic_salary;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, should_affect_basic_salary, _wpnonce};
+        const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, _wpnonce};
         dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
             useNotify(response, __('Salary head status updated successfully', 'pcm'));
         }).catch((error: any) => {
@@ -200,7 +188,6 @@ export const SalaryHeadList = () => {
                 is_percentage: 1,
                 is_taxable: 1,
                 priority: 1,
-                should_affect_basic_salary: 1,
                 status: 1
             }
         }
@@ -230,7 +217,7 @@ export const SalaryHeadList = () => {
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
-                autoClose: false
+                autoClose: 3000
             });
 
             return;
@@ -255,7 +242,6 @@ export const SalaryHeadList = () => {
             data.is_taxable = formData.is_taxable ?? 1;
             data.priority = formData.priority ?? 1;
             data.is_personal_savings = formData.is_personal_savings ?? 0;
-            data.should_affect_basic_salary = formData.should_affect_basic_salary ?? 1;
             // @ts-ignore
             dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
                 useNotify(response, __('Successfully created salary head', 'pcm'));
@@ -413,23 +399,6 @@ export const SalaryHeadList = () => {
                                                 tooltip={__("If this is a personal savings, then check this. Eg: PF, Gratuity, etc.", 'pcm')}
                                             />
                                         </div>
-
-                                        <FormCheckBox
-                                            label={__('Should affect salary?', 'pcm')}
-                                            name="should_affect_basic_salary"
-                                            id="should_affect_basic_salary"
-                                            value={formData.should_affect_basic_salary}
-                                            checked={parseInt(String(formData.should_affect_basic_salary)) === 1}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setFormData({...formData, should_affect_basic_salary: 1});
-                                                } else {
-                                                    setFormData({...formData, should_affect_basic_salary: 0});
-                                                }
-                                            }}
-                                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            tooltip={__('If you don\'t want to affect the basic salary on the creation of an employee, then uncheck this. Eg: Revenue Stamp', 'pcm')}
-                                        />
                                         <FormInput
                                             label={__('Priority', 'pcm')}
                                             type="number"
@@ -443,7 +412,7 @@ export const SalaryHeadList = () => {
                                                 className="mt-4"
                                                 onClick={() => handleSubmit(event)}
                                             >
-                                                {__('Add salary head', 'pcm')}
+                                                {formData.id ? __('Update', 'pcm') : __('Add', 'pcm')}
                                             </Button>
                                         </div>
                                     </form>

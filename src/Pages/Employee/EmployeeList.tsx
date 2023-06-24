@@ -89,7 +89,7 @@ export const EmployeeList = () => {
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         <Button className="hover:text-white" path='/add-user'>
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true"/>
-                            {__('Add user', 'pcm')}
+                            {__('Add Employee', 'pcm')}
                         </Button>
                         {showModal && (
                             <Modal setShowModal={setShowModal}/>

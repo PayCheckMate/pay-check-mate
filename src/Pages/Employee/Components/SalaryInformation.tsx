@@ -1,30 +1,27 @@
 import {useEffect, useState} from "react";
 import {FormInput} from "../../../Components/FormInput";
 import {Textarea} from "../../../Components/Textarea";
-import useFetchApi from "../../../Helpers/useFetchApi";
-import {HeadType, SalaryHeadType, SalaryResponseType} from "../../../Types/SalaryHeadType";
+import {HeadType, SalaryHeadType} from "../../../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
-import {FormCheckBox} from "../../../Components/FormCheckBox";
+import {useSelect} from "@wordpress/data";
+import salaryHead from "../../../Store/SalaryHead";
 
 export const SalaryInformation = ({setSalaryData, initialValues = {}, children}: any) => {
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }
     let TotalSalaryInHand = 0;
-    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([]);
     const [formValues, setFormValues] = useState(initialValues);
     const [grossSalary, setGrossSalary] = useState<number>(formValues.gross_salary || 0);
 
-    const {models} = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/salary-heads', {'per_page': '-1', 'orderby': 'head_type', 'order': 'asc', 'status': 1});
+    const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
 
     // Set salary heads after fetch data from api.
     useEffect(() => {
-        if (models) {
-            // @ts-ignore
-            setSalaryHeads(models);
-            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(models));
+        if (salaryHeads) {
+            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(salaryHeads));
         }
-    }, [models]);
+    }, [salaryHeads]);
 
     const handleRemarksChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -42,37 +39,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
             value = 0;
         }
 
-        if (name === 'basic_salary') {
-            const basicSalary = parseInt(value);
-            setFormValues((prevState: SalaryHeadType) => ({
-                ...prevState,
-                'basic_salary': basicSalary,
-            }));
-
-            let updatedGrossSalary = basicSalary;
-            salaryHeads.forEach((head) => {
-                let headAmount = parseInt(String(head.head_amount));
-                if (parseInt(String(head.is_percentage)) === 1) {
-                    headAmount = Math.round((basicSalary * head.head_amount) / 100);
-                }
-                setFormValues((prevState: SalaryHeadType) => ({
-                    ...prevState,
-                    [head.id]: headAmount,
-                }));
-
-                // @ts-ignore
-                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
-                    headAmount = 0;
-                }
-                if (parseInt(String(head.head_type)) === HeadType.Earning) {
-                    updatedGrossSalary += headAmount;
-                } else if (parseInt(String(head.head_type)) === HeadType.Deduction) {
-                    updatedGrossSalary -= headAmount;
-                }
-            });
-
-            setGrossSalary(Math.round(updatedGrossSalary));
-        } else if (name === 'gross_salary') {
+        if (name === 'gross_salary') {
             setGrossSalary(parseInt(value));
             const grossSalary = parseInt(value);
             setFormValues((prevState: SalaryHeadType) => ({
@@ -93,7 +60,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
 
                 let updatedHeadAmount = headAmount;
                 // @ts-ignore
-                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
+                if (parseInt(String(head.is_personal_savings)) === 1) {
                     updatedHeadAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -153,7 +120,6 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                     id={`${head.id}`}
                                     value={formValues[`${head.id}`]}
                                     onChange={handleFormInputChange}
-                                    helpText={parseInt(String(head.should_affect_basic_salary)) === 1 ? __('This head will affect basic salary.', 'pcm') : ''}
                                 />
 
                             </div>
