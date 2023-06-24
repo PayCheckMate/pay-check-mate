@@ -41,7 +41,14 @@ const actions = {
             item: designation,
         }
 
-        yield actions.updateDesignationStore(response);
+        // @ts-ignore
+        if (!response.status || response.status !== 201) {
+            yield actions.setLoading(false);
+            return response;
+        }
+
+        // @ts-ignore
+        yield actions.updateDesignationStore(response.data);
 
         return response;
     },
@@ -52,7 +59,16 @@ const actions = {
             item: designation,
         }
 
-        yield actions.updateDesignationStore(response, true);
+        // @ts-ignore
+        if (!response.status || response.status !== 201) {
+            yield actions.setLoading(false);
+            return response;
+        }
+
+        // @ts-ignore
+        yield actions.updateDesignationStore(response.data, true);
+
+        return response;
     }
 }
 
