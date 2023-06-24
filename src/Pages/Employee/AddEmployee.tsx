@@ -9,7 +9,11 @@ import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
 import useFetchApi from "../../Helpers/useFetchApi";
-
+type ResponseType = {
+    data: EmployeeType,
+    headers: any,
+    status: number,
+}
 export const AddEmployee = () => {
     const navigate = useNavigate();
     const [error, setError] = useState(false);
@@ -115,9 +119,8 @@ export const AddEmployee = () => {
             },
         }
 
-        makePostRequest('/pay-check-mate/v1/employees', data).then(response => {
-            // @ts-ignore
-            if (response.status === 200) {
+        makePostRequest<ResponseType>('/pay-check-mate/v1/employees', data).then((response) => {
+            if (response.status=== 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 // Push to employee list page

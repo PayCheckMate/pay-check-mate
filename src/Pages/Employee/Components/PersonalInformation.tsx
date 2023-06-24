@@ -11,15 +11,20 @@ import {EmployeeType} from "../../../Types/EmployeeType";
 import {Textarea} from "../../../Components/Textarea";
 import {Button} from "../../../Components/Button";
 import {validateRequiredFields} from "../../../Helpers/Helpers";
+import {useSelect} from "@wordpress/data";
+import department from "../../../Store/Department";
+import designation from "../../../Store/Designation";
 
 export const PersonalInformation = ({setFormData, initialValues = {}, children, nextStep}: any) => {
     if (initialValues === null) {
         initialValues = {} as EmployeeType;
     }
-    const [designations, setDesignations] = useState<DesignationType[]>([]);
-    const [departments, setDepartments] = useState<DepartmentType[]>([]);
+    const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
+
+    const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
+
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
 
@@ -40,50 +45,47 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
 
 
     useEffect(() => {
-        const data = {
-            'per_page': '-1',
-        }
-        makeGetRequest('/pay-check-mate/v1/designations', data).then((data: any) => {
-            let designation = data.data.map((item: DesignationType) => {
-                return {
-                    id: item.id,
-                    name: item.name,
-                }
-            })
-            designation = [
-                {
-                    id: null,
-                    name: __('Select one', 'pcm'),
-                }
-                // @ts-ignore
-            ].concat(designation);
-            setDesignations(designation);
-            const designationId = initialValues.designation_id ? initialValues.designation_id : designation[0].id;
-            setSelectedDesignation(designation.find((item: SelectBoxType) => item.id === designationId) as SelectBoxType);
-        }).catch((e: unknown) => {
-            console.log(e, 'error');
+        if (designations.length <= 0) return;
+        let selectOptions = designations.map((item: DesignationType) => {
+            return {
+                id: item.id,
+                name: item.name,
+            }
         })
-        makeGetRequest('/pay-check-mate/v1/departments', data).then((data: any) => {
-            let department = data.data.map((item: DepartmentType) => {
-                return {
-                    id: item.id,
-                    name: item.name,
-                }
-            })
-            department = [
-                {
-                    id: null,
-                    name: __('Select one', 'pcm'),
-                }
-                // @ts-ignore
-            ].concat(department);
-            setDepartments(department);
-            const departmentId = initialValues.department_id ? initialValues.department_id : department[0].id;
-            setSelectedDepartment(department.find((item: SelectBoxType) => item.id === departmentId) as SelectBoxType);
-        }).catch((e: unknown) => {
-            console.log(e, 'error');
+        // @ts-ignore
+        selectOptions = [
+            {
+                id: null,
+                name: __('Select one', 'pcm'),
+            }
+            // @ts-ignore
+        ].concat(selectOptions);
+        const designationId = initialValues.designation_id ? initialValues.designation_id : selectOptions[0].id;
+        setSelectedDesignation(selectOptions.find((item: SelectBoxType) => item.id === designationId) as SelectBoxType);
+    }, [designations]);
+
+    useEffect(() => {
+        if (departments.length <= 0) return;
+
+        let department = departments.map((item: DepartmentType) => {
+            return {
+                id: item.id,
+                name: item.name,
+            }
         })
-    }, []);
+        // @ts-ignore
+
+        department = [
+            {
+                id: null,
+                name: __('Select one', 'pcm'),
+            }
+            // @ts-ignore
+        ].concat(department);
+        const departmentId = initialValues.department_id ? initialValues.department_id : department[0].id;
+        setSelectedDepartment(department.find((item: SelectBoxType) => item.id === departmentId) as SelectBoxType);
+
+    }, [departments]);
 
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;

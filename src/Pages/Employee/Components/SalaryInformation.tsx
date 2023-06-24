@@ -1,30 +1,27 @@
 import {useEffect, useState} from "react";
 import {FormInput} from "../../../Components/FormInput";
 import {Textarea} from "../../../Components/Textarea";
-import useFetchApi from "../../../Helpers/useFetchApi";
-import {HeadType, SalaryHeadType, SalaryResponseType} from "../../../Types/SalaryHeadType";
+import {HeadType, SalaryHeadType} from "../../../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
-import {FormCheckBox} from "../../../Components/FormCheckBox";
+import {useSelect} from "@wordpress/data";
+import salaryHead from "../../../Store/SalaryHead";
 
 export const SalaryInformation = ({setSalaryData, initialValues = {}, children}: any) => {
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }
     let TotalSalaryInHand = 0;
-    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadType[]>([]);
     const [formValues, setFormValues] = useState(initialValues);
     const [grossSalary, setGrossSalary] = useState<number>(formValues.gross_salary || 0);
 
-    const {models} = useFetchApi<SalaryResponseType>('/pay-check-mate/v1/salary-heads', {'per_page': '-1', 'orderby': 'head_type', 'order': 'asc', 'status': 1});
+    const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
 
     // Set salary heads after fetch data from api.
     useEffect(() => {
-        if (models) {
-            // @ts-ignore
-            setSalaryHeads(models);
-            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(models));
+        if (salaryHeads) {
+            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(salaryHeads));
         }
-    }, [models]);
+    }, [salaryHeads]);
 
     const handleRemarksChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
