@@ -52,3 +52,7 @@ phpcs.xml
 build/
 dist
 .phpunit.result.cache
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
