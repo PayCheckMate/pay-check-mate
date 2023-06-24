@@ -19,9 +19,15 @@ import department from "../../Store/Department";
 import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import {Button} from "../../Components/Button";
+import {EmployeeType} from "../../Types/EmployeeType";
 
 const CreatePayroll = () => {
     const {loading, makePostRequest,} = useFetchApi('');
+    // Get initial table data from local storage
+    let PayrollTableData = localStorage.getItem('Payroll.TableData');
+    // @ts-ignore
+    let TableData = JSON.parse(PayrollTableData) as EmployeeSalary[];
+
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
@@ -132,6 +138,7 @@ const CreatePayroll = () => {
             const newTableData = [...prevTableData];
             // @ts-ignore
             newTableData[tableDataIndex].salary_head_details[head_type][salary_head_id] = value;
+            localStorage.setItem('Payroll.TableData', JSON.stringify(newTableData));
             return newTableData;
         })
     }
@@ -171,11 +178,12 @@ const CreatePayroll = () => {
                             />
                         </div>
                         <div className="flex items-end">
+                            {/*This button should flat and small*/}
                             <Button
                                 type="submit"
-                                className="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 rounded hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
+                                className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
                             >
-                                {__('Create Payroll', 'pcm')}
+                                {__('Generate', 'pcm')}
                             </Button>
                         </div>
                     </div>
@@ -263,13 +271,15 @@ const CreatePayroll = () => {
                                 <td className="text-right" key={`basic_salary${tableDataIndex}`}>{data.basic_salary}</td>
                                 {salaryHeads.earnings.map((earning) => (
                                     (parseInt(String(earning.is_variable)) === 1) ? (
-                                        <input
+                                        <FormInput
+                                            id={`earnings[${data.id}][${earning.id}]`}
                                             key={earning.id}
                                             type="number"
                                             name={`earnings[${data.id}][${earning.id}]`}
-                                            value={data.salary_head_details.earnings[earning.id] || 0}
+                                            value={data.salary_head_details.earnings[earning.id] || TableData[tableDataIndex].salary_head_details.earnings[earning.id] || 0}
                                             className="text-right"
-                                        />
+                                            onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
+                                         />
                                     ) : (
                                         <td
                                             className="text-right"
@@ -281,11 +291,11 @@ const CreatePayroll = () => {
                                 {salaryHeads.deductions.map((deduction) => (
                                     (parseInt(String(deduction.is_variable)) === 1) ? (
                                         <FormInput
-                                            id={`non_taxable[${data.id}][${deduction.id}]`}
+                                            id={`deductions[${data.id}][${deduction.id}]`}
                                             type="number"
                                             key={deduction.id}
                                             name={`deductions[${data.id}][${deduction.id}]`}
-                                            value={data.salary_head_details.deductions[deduction.id] || 0}
+                                            value={data.salary_head_details.deductions[deduction.id] || TableData[tableDataIndex].salary_head_details.deductions[deduction.id] || 0}
                                             className="text-right"
                                             onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                         />
@@ -305,7 +315,7 @@ const CreatePayroll = () => {
                                                 type="number"
                                                 key={non_taxable.id}
                                                 name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                value={data.salary_head_details.non_taxable[non_taxable.id] || 0}
+                                                value={data.salary_head_details.non_taxable[non_taxable.id] || TableData[tableDataIndex].salary_head_details.non_taxable[non_taxable.id] || 0}
                                                 className="text-right"
                                                 onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
                                             />

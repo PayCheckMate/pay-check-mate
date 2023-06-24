@@ -217,7 +217,7 @@ export const SalaryHeadList = () => {
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
-                autoClose: false
+                autoClose: 3000
             });
 
             return;
@@ -412,7 +412,7 @@ export const SalaryHeadList = () => {
                                                 className="mt-4"
                                                 onClick={() => handleSubmit(event)}
                                             >
-                                                {__('Add salary head', 'pcm')}
+                                                {formData.id ? __('Update', 'pcm') : __('Add', 'pcm')}
                                             </Button>
                                         </div>
                                     </form>

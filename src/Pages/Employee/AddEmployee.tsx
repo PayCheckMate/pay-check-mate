@@ -9,6 +9,7 @@ import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
 import useFetchApi from "../../Helpers/useFetchApi";
+import {toast} from "react-toastify";
 type ResponseType = {
     data: EmployeeType,
     headers: any,
@@ -125,6 +126,7 @@ export const AddEmployee = () => {
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 // Push to employee list page
                 navigate('/employees');
+                toast.success(__('Employee added successfully', 'pcm'));
             } else {
                 console.log(response)
             }
