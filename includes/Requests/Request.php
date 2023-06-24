@@ -211,5 +211,4 @@ class Request implements FormRequestInterface {
 
         return static::$fillable;
     }
-
 }

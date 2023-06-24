@@ -60,6 +60,7 @@ define( 'NONCE_SALT', '`my8@GrL_0v#.cNVOfu4:+D5G$2qQ;;!G )tbB~RU^?vuH,UrupK!vrt8
 /** * WordPress
  * database table prefix. * * You can have multiple installations in one database if you give each * a unique prefix.
  * Only numbers, letters, and underscores please! */
+// phpcs:ignore
 $table_prefix = 'wptests_';
 define( 'SITE_URL', 'http://pay-check-mate.test' );
 define( 'SITE_TITLE', 'Play WordPress Wright' );
