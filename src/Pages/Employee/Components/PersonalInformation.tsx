@@ -9,8 +9,10 @@ import {SelectBoxType} from "../../../Types/SalaryHeadType";
 import useFetchApi from "../../../Helpers/useFetchApi";
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {Textarea} from "../../../Components/Textarea";
+import {Button} from "../../../Components/Button";
+import {validateRequiredFields} from "../../../Helpers/Helpers";
 
-export const PersonalInformation = ({setFormData, initialValues = {}, children}: any) => {
+export const PersonalInformation = ({setFormData, initialValues = {}, children, nextStep}: any) => {
     if (initialValues === null) {
         initialValues = {} as EmployeeType;
     }
@@ -19,6 +21,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
+    const [formError, setFormError] = useState({} as { [key: string]: string});
 
     const {models, makeGetRequest} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'orderby': 'employee_id', 'order': 'desc'});
 
@@ -43,7 +46,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
         makeGetRequest('/pay-check-mate/v1/designations', data).then((data: any) => {
             let designation = data.data.map((item: DesignationType) => {
                 return {
-                    id:   item.id,
+                    id: item.id,
                     name: item.name,
                 }
             })
@@ -63,7 +66,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
         makeGetRequest('/pay-check-mate/v1/departments', data).then((data: any) => {
             let department = data.data.map((item: DepartmentType) => {
                 return {
-                    id:   item.id,
+                    id: item.id,
                     name: item.name,
                 }
             })
@@ -87,6 +90,15 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
         setFormValues({...formValues, [name]: value});
         setFormData({...formValues, [name]: value});
     }
+
+    const handleNextStep = () => {
+        const requiredFields = ['first_name', 'last_name', 'department_id', 'designation_id', 'employee_id', 'joining_date', 'email' ];
+        const errors = validateRequiredFields(formValues, requiredFields, setFormError);
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        nextStep();
+    }
     return (
         <>
             <div className="space-y-12">
@@ -101,6 +113,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     id="first_name"
                                     value={formValues.first_name}
                                     onChange={handleFormInputChange}
+                                    error={formError.first_name}
                                 />
                             </div>
 
@@ -112,6 +125,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     id="last_name"
                                     value={formValues.last_name}
                                     onChange={handleFormInputChange}
+                                    error={formError.last_name}
                                 />
                             </div>
                             <div className="sm:col-span-3">
@@ -120,6 +134,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     title={__('Department', 'pcm')}
                                     options={departments}
                                     selected={selectedDepartment}
+                                    error={formError.department_id}
                                     setSelected={(selectedDepartment) => {
                                         setSelectedDepartment(selectedDepartment)
                                         handleFormInputChange({target: {name: 'department_id', value: selectedDepartment.id}})
@@ -132,6 +147,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     title={__('Designation', 'pcm')}
                                     options={designations}
                                     selected={selectedDesignation}
+                                    error={formError.designation_id}
                                     setSelected={(selectedDesignation) => {
                                         setSelectedDesignation(selectedDesignation)
                                         handleFormInputChange({target: {name: 'designation_id', value: selectedDesignation.id}})
@@ -146,6 +162,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     id="employee_id"
                                     value={formValues.employee_id}
                                     onChange={handleFormInputChange}
+                                    error={formError.employee_id}
                                 />
                             </div>
                             <div className="sm:col-span-3">
@@ -156,6 +173,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     id="email"
                                     value={formValues.email}
                                     onChange={handleFormInputChange}
+                                    error={formError.email}
                                 />
                             </div>
                             <div className="sm:col-span-3">
@@ -167,6 +185,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                                     id="joining_date"
                                     value={formValues.joining_date}
                                     onChange={handleFormInputChange}
+                                    error={formError.joining_date}
                                 />
                             </div>
                             <div className="col-span-full">
@@ -181,6 +200,20 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children}:
                         </div>
                     </div>
                     {children ? children : ''}
+                    <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+                        <button
+                            type="button"
+                            className="text-sm font-semibold leading-6 text-gray-900"
+                        >
+                            Cancel
+                        </button>
+                        <Button
+                            onClick={() => handleNextStep()}
+                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                            {__('Save & Continue', 'pcm')}
+                        </Button>
+                    </div>
                 </div>
             </div>
         </>

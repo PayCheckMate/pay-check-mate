@@ -10,7 +10,7 @@ import {useDispatch, useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
-import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
+import {validateRequiredFields} from "../../Helpers/Helpers";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();

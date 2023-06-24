@@ -10,7 +10,7 @@ import {useDispatch, useSelect} from "@wordpress/data";
 import department from "../../Store/Department";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
-import {validateRequiredFields} from "../../Helpers/useValidateRequiredFields";
+import {validateRequiredFields} from "../../Helpers/Helpers";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();

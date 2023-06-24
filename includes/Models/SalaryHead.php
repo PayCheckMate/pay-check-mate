@@ -26,7 +26,6 @@ class SalaryHead extends Model {
         'is_variable'                => '%d',
         'is_taxable'                 => '%d',
         'is_personal_savings'        => '%d',
-        'should_affect_basic_salary' => '%d',
         'priority'                   => '%d',
         'status'                     => '%d',
         'created_on'                 => '%s',

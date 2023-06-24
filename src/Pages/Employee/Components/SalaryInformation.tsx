@@ -42,37 +42,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
             value = 0;
         }
 
-        if (name === 'basic_salary') {
-            const basicSalary = parseInt(value);
-            setFormValues((prevState: SalaryHeadType) => ({
-                ...prevState,
-                'basic_salary': basicSalary,
-            }));
-
-            let updatedGrossSalary = basicSalary;
-            salaryHeads.forEach((head) => {
-                let headAmount = parseInt(String(head.head_amount));
-                if (parseInt(String(head.is_percentage)) === 1) {
-                    headAmount = Math.round((basicSalary * head.head_amount) / 100);
-                }
-                setFormValues((prevState: SalaryHeadType) => ({
-                    ...prevState,
-                    [head.id]: headAmount,
-                }));
-
-                // @ts-ignore
-                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
-                    headAmount = 0;
-                }
-                if (parseInt(String(head.head_type)) === HeadType.Earning) {
-                    updatedGrossSalary += headAmount;
-                } else if (parseInt(String(head.head_type)) === HeadType.Deduction) {
-                    updatedGrossSalary -= headAmount;
-                }
-            });
-
-            setGrossSalary(Math.round(updatedGrossSalary));
-        } else if (name === 'gross_salary') {
+        if (name === 'gross_salary') {
             setGrossSalary(parseInt(value));
             const grossSalary = parseInt(value);
             setFormValues((prevState: SalaryHeadType) => ({
@@ -93,7 +63,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
 
                 let updatedHeadAmount = headAmount;
                 // @ts-ignore
-                if (parseInt(String(head.should_affect_basic_salary)) === 0 || parseInt(String(head.is_personal_savings)) === 1) {
+                if (parseInt(String(head.is_personal_savings)) === 1) {
                     updatedHeadAmount = 0;
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
@@ -153,7 +123,6 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                     id={`${head.id}`}
                                     value={formValues[`${head.id}`]}
                                     onChange={handleFormInputChange}
-                                    helpText={parseInt(String(head.should_affect_basic_salary)) === 1 ? __('This head will affect basic salary.', 'pcm') : ''}
                                 />
 
                             </div>

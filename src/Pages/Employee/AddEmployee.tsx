@@ -148,22 +148,8 @@ export const AddEmployee = () => {
                                     <PersonalInformation
                                         initialValues={savedPersonalInformation}
                                         setFormData={(personalInformation: EmployeeType) => handlePersonalInformation(personalInformation)}
-                                    >
-                                        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                            <button
-                                                type="button"
-                                                className="text-sm font-semibold leading-6 text-gray-900"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <Button
-                                                onClick={() => setStep(2)}
-                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                            >
-                                                {__('Save & Continue', 'pcm')}
-                                            </Button>
-                                        </div>
-                                    </PersonalInformation>
+                                        nextStep={() => setStep(2)}
+                                    />
                                 </div>
                             </>
                         )}
