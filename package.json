@@ -18,6 +18,9 @@
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
     "test:e2e": "wp-scripts test-e2e",
+    "test:playwright": "npx playwright test",
+    "test:e2e:debug": "npx playwright test --debug",
+    "test:e2e:headed": "npx playwright test --headed",
     "test:unit": "wp-scripts test-unit-js",
     "make-pot": "wp i18n make-pot . languages/pay-check-mate.pot"
   },
@@ -26,7 +29,7 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@babel/preset-typescript": "^7.21.5",
-    "@playwright/test": "^1.33.0",
+    "@playwright/test": "^1.35.1",
     "@tailwindcss/forms": "^0.5.3",
     "@wordpress/i18n": "^4.34.0",
     "@wordpress/scripts": "^26.4.0",
