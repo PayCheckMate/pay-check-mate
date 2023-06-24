@@ -156,7 +156,7 @@ export const DepartmentList = () => {
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
-                        <h1 className="text-base font-semibold leading-6 text-gray-900">
+                        <h1 className="heading text-base font-semibold leading-6 text-gray-900">
                             {__('Department list', 'pcm')}
                         </h1>
                     </div>
@@ -180,7 +180,7 @@ export const DepartmentList = () => {
                                             required={true}
                                         />
                                         <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                                            {__('Add department', 'pcm')}
+                                            {formData.id ? __('Update', 'pcm') : __('Save', 'pcm')}
                                         </Button>
                                     </form>
                                 </div>

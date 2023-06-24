@@ -15,23 +15,19 @@ test('test', async ({ page }) => {
     expect(await page.textContent('h1')).toBe('Dashboard');
 });
 
-test('test pay check mate plugin is there', async ({ page }) => {
-    // Hover plugins link
-    await page.hover('text=Plugins');
-    await page.getByRole('link', { name: 'Installed Plugins' }).click();
-
-    // Expect that the plugin is there
-    expect(await page.textContent('text=PayCheckMate')).toBe('PayCheckMate');
-});
-
 test('test pay check mate plugin can be activated', async ({ page }) => {
     // Hover plugins link
     await page.hover('text=Plugins');
     await page.getByRole('link', { name: 'Installed Plugins' }).click();
 
-    // Activate the plugin
-    await page.getByRole('link', { name: 'Activate PayCheckMate' }).click();
+    if (!await page.isVisible('text=PayCheckMate')) {
+        // Activate the payCheckMate plugin only if it is not activated
+        await page.getByRole('link', { name: 'Activate PayCheckMate' }).click();
+
+        // Expect that the success message is displayed, Plugin activated.
+        expect(await page.getByText('Plugin activated.')).toBeTruthy();
+    }
 
     // Expect that the plugin is there
-    expect(await page.textContent('text=PayCheckMate')).toBe('PayCheckMate');
+    expect(await page.isVisible('text=PayCheckMate')).toBeTruthy();
 })

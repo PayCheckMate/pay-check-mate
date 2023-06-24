@@ -83,7 +83,7 @@ export const Sidebar = () => {
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
-                                        <h1 className="text-white">PayCheckMate</h1>
+                                        <h3 className="text-white">PayCheckMate</h3>
                                     </div>
                                     <nav className="flex flex-1 flex-col">
                                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
