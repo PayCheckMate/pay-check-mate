@@ -25,7 +25,7 @@ const useNotify = (response?: response, successMessage?: string, errorMessage?: 
     if (response.code === 500) {
         toast.error(response.message, {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: false
+            autoClose: 10000
         });
     }
 }

@@ -105,7 +105,7 @@ class Request implements FormRequestInterface {
                 }
 
                 // Check if this key value is empty.
-                if ( empty( $this->data[ $item ] ) ) {
+                if ( '' === $this->data[ $item ] && empty( $this->data[ $item ] ) ) {
                     $this->addError( $item, $item . __( ' key can not be empty.', 'pcm' ) );
                 }
             }
@@ -211,4 +211,5 @@ class Request implements FormRequestInterface {
 
         return static::$fillable;
     }
+
 }
