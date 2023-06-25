@@ -71,9 +71,7 @@ const CreatePayroll = () => {
             id: 0,
             name: __('All', 'pcm'),
         }
-        // Add default designation to the list
-        // @ts-ignore
-        designations.unshift(defaultDesignation);
+
         setSelectedDesignation(defaultDesignation)
     }, [designations]);
 
@@ -84,11 +82,8 @@ const CreatePayroll = () => {
             id: 0,
             name: __('All', 'pcm'),
         }
-        // Add default department to the list
-        // @ts-ignore
-        departments.unshift(defaultDepartment);
-        setSelectedDepartment(defaultDepartment)
 
+        setSelectedDepartment(defaultDepartment)
     }, [departments]);
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
         earnings: [],
