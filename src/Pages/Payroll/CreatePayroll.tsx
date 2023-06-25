@@ -19,7 +19,7 @@ import department from "../../Store/Department";
 import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import {Button} from "../../Components/Button";
-import {EmployeeType} from "../../Types/EmployeeType";
+import {Spinner} from "../../Components/Spinner";
 
 const CreatePayroll = () => {
     const {loading, makePostRequest,} = useFetchApi('');
@@ -28,12 +28,13 @@ const CreatePayroll = () => {
     // @ts-ignore
     let TableData = JSON.parse(PayrollTableData) as EmployeeSalary[];
 
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
-    const [payDate, setPayDate] = useState('');
+    const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
 
     // @ts-ignore
     const handleFilter = (e) => {
@@ -138,6 +139,10 @@ const CreatePayroll = () => {
         })
     }
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setIsSubmitting(true);
+    }
     return (
         <>
             <div className="flex justify-between">
@@ -185,6 +190,7 @@ const CreatePayroll = () => {
                 </form>
             </div>
             {tableData.length > 0 ? (
+                <>
                 <div className="payroll-table-container">
                 {loading ? (
                     <Loading />
@@ -258,71 +264,103 @@ const CreatePayroll = () => {
                         <tbody>
                         {tableData.map((data, tableDataIndex) => (
                             <tr key={data.id}>
-                                <td className="text-right" key={`sl${tableDataIndex}`}>{tableDataIndex + 1}</td>
-                                <td className="text-right" key={`employee_id${tableDataIndex}`}>{data.employee_id}</td>
-                                <td className="text-left fixed-column" key={`employee_name${tableDataIndex}`}>{data.full_name}</td>
-                                <td className="text-left" key={`designation${tableDataIndex}`}>{data.designation_name}</td>
-                                <td className="text-left" key={`department${tableDataIndex}`}>{data.department_name}</td>
-                                <td className="text-right" key={`basic_salary${tableDataIndex}`}>{data.basic_salary}</td>
+                                <td
+                                    className="text-right"
+                                    key={`sl${tableDataIndex}`}
+                                >{tableDataIndex + 1}</td>
+                                <td
+                                    className="text-right"
+                                    key={`employee_id${tableDataIndex}`}
+                                >{data.employee_id}</td>
+                                <td
+                                    className="text-left fixed-column"
+                                    key={`employee_name${tableDataIndex}`}
+                                >{data.full_name}</td>
+                                <td
+                                    className="text-left"
+                                    key={`designation${tableDataIndex}`}
+                                >{data.designation_name}</td>
+                                <td
+                                    className="text-left"
+                                    key={`department${tableDataIndex}`}
+                                >{data.department_name}</td>
+                                <td
+                                    className="text-right"
+                                    key={`basic_salary${tableDataIndex}`}
+                                >{data.basic_salary}</td>
                                 {salaryHeads.earnings.map((earning) => (
-                                    (parseInt(String(earning.is_variable)) === 1) ? (
+                                    <td
+                                        className="text-right"
+                                        key={earning.id}
+                                    >{(parseInt(String(earning.is_variable)) === 1) ? (
                                         <FormInput
                                             id={`earnings[${data.id}][${earning.id}]`}
                                             key={earning.id}
                                             type="number"
                                             name={`earnings[${data.id}][${earning.id}]`}
-                                            value={data.salary_head_details.earnings[earning.id] || TableData[tableDataIndex].salary_head_details.earnings[earning.id] || 0}
+                                            value={data.salary_head_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_head_details.earnings[earning.id]) || 0}
                                             className="text-right"
-                                            onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
-                                         />
+                                            onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
+                                        />
                                     ) : (
-                                        <td
-                                            className="text-right"
-                                            key={earning.id}
-                                        >{data.salary_head_details.earnings[earning.id] || 0}</td>
-                                    )
+                                        data.salary_head_details.earnings[earning.id] || 0
+                                    )}
+                                    </td>
                                 ))}
-                                <td className="text-right total_salary" key={`total_earnings${tableDataIndex}`}>{sumValues(data.salary_head_details.earnings)}</td>
+                                <td
+                                    className="text-right total_salary"
+                                    key={`total_earnings${tableDataIndex}`}
+                                >{sumValues(data.salary_head_details.earnings)}</td>
                                 {salaryHeads.deductions.map((deduction) => (
-                                    (parseInt(String(deduction.is_variable)) === 1) ? (
+                                    <td
+                                        className="text-right"
+                                        key={deduction.id}
+                                    >{(parseInt(String(deduction.is_variable)) === 1) ? (
                                         <FormInput
                                             id={`deductions[${data.id}][${deduction.id}]`}
                                             type="number"
                                             key={deduction.id}
                                             name={`deductions[${data.id}][${deduction.id}]`}
-                                            value={data.salary_head_details.deductions[deduction.id] || TableData[tableDataIndex].salary_head_details.deductions[deduction.id] || 0}
+                                            value={data.salary_head_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_head_details.deductions[deduction.id]) || 0}
                                             className="text-right"
-                                            onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
+                                            onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                         />
                                     ) : (
-                                        <td
-                                            className="text-right"
-                                            key={deduction.id}
-                                        >{data.salary_head_details.deductions[deduction.id] || 0}</td>
-                                    )
+                                        data.salary_head_details.deductions[deduction.id] || 0
+                                    )}
+                                    </td>
                                 ))}
-                                <td className="total_deduction text-right" key={`total_deductions${tableDataIndex}`}>{sumValues(data.salary_head_details.deductions)}</td>
-                                <td className="net_payable text-right" key={`net_payable${tableDataIndex}`}>{rowNetPayable(data)}</td>
+                                <td
+                                    className="total_deduction text-right"
+                                    key={`total_deductions${tableDataIndex}`}
+                                >{sumValues(data.salary_head_details.deductions)}</td>
+                                <td
+                                    className="net_payable text-right"
+                                    key={`net_payable${tableDataIndex}`}
+                                >{rowNetPayable(data)}</td>
                                 {salaryHeads.non_taxable.map((non_taxable) => (
-                                        (parseInt(String(non_taxable.is_variable)) === 1) ? (
-                                            <FormInput
-                                                id={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                type="number"
-                                                key={non_taxable.id}
-                                                name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                value={data.salary_head_details.non_taxable[non_taxable.id] || TableData[tableDataIndex].salary_head_details.non_taxable[non_taxable.id] || 0}
-                                                className="text-right"
-                                                onChange={(event)=>handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
-                                            />
-                                        ) : (
-                                            <td
-                                                className="text-right"
-                                                key={non_taxable.id}
-                                            >{data.salary_head_details.non_taxable[non_taxable.id] || 0}</td>
-                                        )
-                                    )
-                                )}
-                                <td className="total_payable text-right" key={`total_payable${tableDataIndex}`}>{rowTotalPayable(data)}</td>
+                                    <td
+                                        className="text-right"
+                                        key={non_taxable.id}
+                                    >{(parseInt(String(non_taxable.is_variable)) === 1) ? (
+                                        <FormInput
+                                            id={`non_taxable[${data.id}][${non_taxable.id}]`}
+                                            type="number"
+                                            key={non_taxable.id}
+                                            name={`non_taxable[${data.id}][${non_taxable.id}]`}
+                                            value={data.salary_head_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_head_details.non_taxable[non_taxable.id]) || 0}
+                                            className="text-right"
+                                            onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
+                                        />
+                                    ) : (
+                                        data.salary_head_details.non_taxable[non_taxable.id] || 0
+                                    )}
+                                    </td>
+                                ))}
+                                <td
+                                    className="total_payable text-right"
+                                    key={`total_payable${tableDataIndex}`}
+                                >{rowTotalPayable(data)}</td>
                             </tr>
                         ))}
                         </tbody>
@@ -333,34 +371,50 @@ const CreatePayroll = () => {
                                 className="fixed-column text-right font-bold text-xl"
                                 colSpan={5}
                             >{__('Total', 'pcm')}</td>
-                            <td className="text-right" key={`total_basic_salary`}>{sumValues(tableData.map((data) => data.basic_salary))}</td>
+                            <td
+                                className="text-right"
+                                key={`total_basic_salary`}
+                            >{sumValues(tableData.map((data) => data.basic_salary))}</td>
                             {salaryHeads.earnings.map((earning) => (
                                 <td
                                     className="text-right"
                                     key={`total_${earning.id}`}
                                 >{sumValues(tableData.map((data) => data.salary_head_details.earnings[earning.id] || 0))}</td>
                             ))}
-                            <td className="total_salary text-right" key={`total_earnings`}>{totalAllowance}</td>
+                            <td
+                                className="total_salary text-right"
+                                key={`total_earnings`}
+                            >{totalAllowance}</td>
                             {salaryHeads.deductions.map((deduction) => (
                                 <td
                                     className="text-right"
                                     key={deduction.id}
                                 >{sumValues(tableData.map((data) => data.salary_head_details.deductions[deduction.id] || 0))}</td>
                             ))}
-                            <td className="text-right" key={`total_deductions`}>{totalDeductions}</td>
-                            <td className="text-right" key={`total_net_payable`}>{netPayable}</td>
+                            <td
+                                className="text-right"
+                                key={`total_deductions`}
+                            >{totalDeductions}</td>
+                            <td
+                                className="text-right"
+                                key={`total_net_payable`}
+                            >{netPayable}</td>
                             {salaryHeads.non_taxable.map((non_taxable) => (
                                 <td
                                     className="text-right"
                                     key={non_taxable.id}
                                 >{sumValues(tableData.map((data) => data.salary_head_details.non_taxable[non_taxable.id] || 0))}</td>
                             ))}
-                            <td className="text-right" key={`total_net_payable`}>{totalNetPayable}</td>
+                            <td
+                                className="text-right"
+                                key={`total_net_payable`}
+                            >{totalNetPayable}</td>
                         </tr>
                         </tfoot>
                     </table>
                 )};
                 </div>
+                    </>
             ) : (
                 <Card>
                     <EmptyState
