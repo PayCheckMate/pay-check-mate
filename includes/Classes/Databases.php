@@ -43,6 +43,8 @@ class Databases {
         $this->create_table_salary_head();
         $this->create_table_employees();
         $this->create_table_employee_salary_history();
+        $this->create_table_employee_payroll();
+        $this->create_table_employee_payroll_details();
     }
 
     /**
@@ -176,6 +178,54 @@ class Databases {
 
         dbDelta( $sql );
 	}
+
+    /**
+     * Create table employee payroll.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employee_payroll() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `created_employee_id` bigint(20) unsigned NOT NULL,
+                `status` tinyint(1) NOT NULL DEFAULT 0,
+                `payroll_month` DATE NOT NULL,
+                `remarks` text NULL,
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
+
+    /**
+     * Create table employee payroll details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employee_payroll_details() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll_details` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `payroll_id` bigint(20) unsigned NOT NULL,
+                `employee_id` bigint(20) unsigned NOT NULL,
+                `salary_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
+                `status` tinyint(1) NOT NULL DEFAULT 1,
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
 
 
     /**
