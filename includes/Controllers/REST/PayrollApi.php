@@ -7,6 +7,7 @@ use PayCheckMate\Models\Employee as EmployeeModel;
 use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
+use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
@@ -36,8 +37,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 ],
                 [
                     'methods'             => WP_REST_Server::CREATABLE,
-                    'callback'            => [ $this, 'create_payroll' ],
-                    'permission_callback' => [ $this, 'create_payroll_permissions_check' ],
+                    'callback'            => [ $this, 'generate_payroll' ],
+                    'permission_callback' => [ $this, 'generate_payroll_permissions_check' ],
+                    'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
+                ],
+                'schema' => [ $this, 'get_public_item_schema' ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace,
+            '/' . $this->rest_base . '/save-payroll', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'save_payroll' ],
+                    'permission_callback' => [ $this, 'save_payroll_permissions_check' ],
                     'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
                 ],
                 'schema' => [ $this, 'get_public_item_schema' ],
@@ -49,7 +63,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return true;
     }
 
-    public function create_payroll_permissions_check(): bool {
+    public function generate_payroll_permissions_check(): bool {
+        return true;
+    }
+
+    public function save_payroll_permissions_check(): bool {
         return true;
     }
 
@@ -58,11 +76,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return \WP_REST_Response Response object on success, or WP_Error object on failure.
      */
-    public function get_payrolls( \WP_REST_Request $request ): WP_REST_Response {
+    public function get_payrolls( WP_REST_Request $request ): WP_REST_Response {
         return new WP_REST_Response( [ 'message' => 'Hello World!' ], 200 );
     }
 
@@ -71,11 +89,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @return \WP_REST_Response
      */
-    public function create_payroll( \WP_REST_Request $request ): WP_REST_Response {
+    public function generate_payroll( WP_REST_Request $request ): WP_REST_Response {
         $parameters = $request->get_params();
 
         if ( ! isset( $parameters['date'] ) ) {
@@ -224,6 +242,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'employee_salary_history' => $employees->toArray(),
             ], 200
         );
+    }
+
+    /**
+     * Saves the payroll.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request $request Full details about the request.
+     *
+     * @return WP_REST_Response
+     */
+    public function save_payroll( WP_REST_Request $request ): WP_REST_Response {
+        echo '<pre>';
+        print_r( $request->get_params() );
+        exit();
     }
 
     /**

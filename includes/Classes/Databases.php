@@ -192,6 +192,8 @@ class Databases {
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `created_employee_id` bigint(20) unsigned NOT NULL,
+                `department_id` bigint(20) unsigned NOT NULL,
+                `designation_id` bigint(20) unsigned NOT NULL,
                 `status` tinyint(1) NOT NULL DEFAULT 0,
                 `payroll_month` DATE NOT NULL,
                 `remarks` text NULL,
