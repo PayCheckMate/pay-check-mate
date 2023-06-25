@@ -4,7 +4,7 @@ namespace PayCheckMate\Models;
 
 class Employee extends Model {
 
-    protected static string $table = 'pay_check_mate_employees';
+    protected static string $table = 'employees';
 
     /**
      * @var array|string[] $columns

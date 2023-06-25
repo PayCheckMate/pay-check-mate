@@ -13,7 +13,7 @@ class Department extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'pay_check_mate_departments';
+    protected static string $table = 'departments';
 
     /**
      * @var array|string[] $columns

@@ -191,12 +191,13 @@ class Databases {
 
         $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-                `created_employee_id` bigint(20) unsigned NOT NULL,
                 `department_id` bigint(20) unsigned NOT NULL,
                 `designation_id` bigint(20) unsigned NOT NULL,
-                `status` tinyint(1) NOT NULL DEFAULT 0,
-                `payroll_month` DATE NOT NULL,
+                `payroll_date` DATE NOT NULL,
                 `remarks` text NULL,
+                `status` tinyint(1) NOT NULL DEFAULT 0,
+                `created_employee_id` bigint(20) unsigned NOT NULL,
+                `approved_employee_id` bigint(20) unsigned NULL,
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)
@@ -219,8 +220,9 @@ class Databases {
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `payroll_id` bigint(20) unsigned NOT NULL,
                 `employee_id` bigint(20) unsigned NOT NULL,
+                `basic_salary` decimal(10,2) NOT NULL,
                 `salary_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
-                `status` tinyint(1) NOT NULL DEFAULT 1,
+                `status` tinyint(1) NOT NULL DEFAULT 1, /*1 = Current, 2 = Arear*/
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)

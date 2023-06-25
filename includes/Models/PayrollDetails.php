@@ -2,20 +2,16 @@
 
 namespace PayCheckMate\Models;
 
-class SalaryHistory extends Model {
+class PayrollDetails extends Model {
 
-    protected static string $table = 'employee_salary_history';
+    protected static string $table = 'payroll_details';
 
-    /**
-     * @var array|string[] $columns
-     */
     protected static array $columns = [
+        'payroll_id'          => '%d',
         'employee_id'         => '%d',
         'basic_salary'        => '%d',
-        'salary_head_details' => '%s',
+        'salary_details'      => '%s',
         'status'              => '%d',
-        'active_from'         => '%s',
-        'remarks'             => '%s',
         'created_on'          => '%s',
         'updated_at'          => '%s',
     ];
@@ -54,5 +50,4 @@ class SalaryHistory extends Model {
     public function get_created_on( string $date ): string {
         return get_date_from_gmt( $date, 'd M Y' );
     }
-
 }

@@ -13,6 +13,8 @@ use WP_Error;
  */
 class Model implements ModelInterface {
 
+    protected static string $table_prefix = 'pay_check_mate_';
+
     /**
      * The table associated with the model.
      *
@@ -378,7 +380,7 @@ class Model implements ModelInterface {
             throw new Exception( 'Table name is not defined' );
         }
 
-        return $wpdb->prefix . static::$table;
+        return $wpdb->prefix . static::$table_prefix . static::$table;
     }
 
     /**
