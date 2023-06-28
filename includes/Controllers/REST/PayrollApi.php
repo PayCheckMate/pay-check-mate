@@ -3,10 +3,15 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\Payroll;
+use PayCheckMate\Classes\PayrollDetails;
+use PayCheckMate\Models\Payroll as PayrollModel;
+use PayCheckMate\Models\PayrollDetails as PayrollDetailsModel;
 use PayCheckMate\Models\Employee as EmployeeModel;
 use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
 use WP_Error;
 use WP_REST_Request;
@@ -259,6 +264,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function save_payroll( WP_REST_Request $request ) {
+        global $wpdb;
         $parameters                        = $request->get_params();
         $parameters['created_employee_id'] = get_current_user_id();
 
@@ -266,11 +272,51 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         if ( $validated_data->error ) {
             return new WP_Error(
                 400, implode( ', ', $validated_data->error ), [
-					'status' => 400,
-					'error' => $validated_data->error,
-				]
+                    'status' => 400,
+                    'error'  => $validated_data->error,
+                ]
             );
         }
+
+        // Start the transaction.
+        $wpdb->query( 'START TRANSACTION' );
+
+        $payroll          = new Payroll( new PayrollModel() );
+        $inserted_payroll = $payroll->create( $validated_data );
+        if ( is_wp_error( $inserted_payroll ) ) {
+            return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
+        }
+
+        $payroll_details    = new PayrollDetails( new PayrollDetailsModel() );
+        $details_parameters = $parameters['employee_salary_history'];
+        $data['_wpnonce']   = $parameters['_wpnonce'];
+        $data['payroll_id'] = $inserted_payroll->id;
+        foreach ( $details_parameters as $detail ) {
+            $data['employee_id']  = $detail['employee_id'];
+            $data['basic_salary'] = $detail['basic_salary'];
+            $merged_array          = [];
+            array_walk_recursive(
+                $detail['salary_head_details'], function ( $value, $key ) use ( &$merged_array ) {
+					$merged_array[ $key ] = $value;
+				}
+            );
+            $data['salary_details'] = wp_json_encode( $merged_array );
+
+            $validated_data = new PayrollDetailsRequest( $data );
+            if ( $validated_data->error ) {
+                return new WP_Error(
+                    400, implode( ', ', $validated_data->error ), [
+                        'status' => 400,
+                        'error'  => $validated_data->error,
+                    ]
+                );
+            }
+
+            $inserted_payroll_details = $payroll_details->create( $validated_data );
+        }
+
+        // If everything is fine, then commit the data.
+        $wpdb->query( 'COMMIT' );
 
         return new WP_REST_Response(
             [

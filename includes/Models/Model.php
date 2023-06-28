@@ -93,7 +93,7 @@ class Model implements ModelInterface {
 
         if ( ! empty( $args['where'] ) ) {
             foreach ( $args['where'] as $key => $value ) {
-                $type = !empty( $value['type'] ) ? $value['type'] : 'AND';
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
                 $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
             }
         }
@@ -143,8 +143,8 @@ class Model implements ModelInterface {
      *
      * @param array<array<string, mixed>> $args
      *
-     * @return object
      * @throws \Exception
+     * @return object
      */
     public function get_relational( array $args = [] ): object {
         global $wpdb;

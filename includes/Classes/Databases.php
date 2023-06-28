@@ -189,7 +189,7 @@ class Databases {
     public function create_table_employee_payroll() {
         $this->include_db_delta();
 
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}payroll` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `department_id` bigint(20) unsigned NOT NULL,
                 `designation_id` bigint(20) unsigned NOT NULL,
@@ -216,7 +216,7 @@ class Databases {
     public function create_table_employee_payroll_details() {
         $this->include_db_delta();
 
-        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}employee_payroll_details` (
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}payroll_details` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `payroll_id` bigint(20) unsigned NOT NULL,
                 `employee_id` bigint(20) unsigned NOT NULL,
