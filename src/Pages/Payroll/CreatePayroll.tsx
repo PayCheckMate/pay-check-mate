@@ -47,7 +47,7 @@ const CreatePayroll = () => {
                 return;
             }
             const data = {
-                'date': payDate,
+                'payroll_date': payDate,
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
@@ -145,20 +145,29 @@ const CreatePayroll = () => {
         e.preventDefault()
         setIsSubmitting(true);
         try {
+            // @ts-ignore
+            const _wpnonce = payCheckMate.pay_check_mate_nonce;
             apiFetchUnparsed('pay-check-mate/v1/payroll/save-payroll', {
                 method: 'POST',
+                parse: true,
                 body: JSON.stringify({
-                    'date': payDate,
+                    'payroll_date': payDate,
                     'remarks': remarks,
                     'department_id': selectedDepartment.id,
                     'designation_id': selectedDesignation.id,
-                    'employee_salary_history': tableData
+                    'employee_salary_history': tableData,
+                    '_wpnonce': _wpnonce,
                 }),
                 headers: {
                     'Content-Type': 'application/json',
                 }
-            }).then((response) => {
-                console.log(response);
+            }).then((response: any) => {
+                if (response.data.code === 400){
+                    toast.error(response.data.message);
+                    setIsSubmitting(false);
+                    return;
+                }
+
                 setIsSubmitting(false);
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
@@ -423,7 +432,7 @@ const CreatePayroll = () => {
                                 >{totalDeductions}</td>
                                 <td
                                     className="text-right"
-                                    key={`total_net_payable`}
+                                    key={`non_taxable`}
                                 >{netPayable}</td>
                                 {salaryHeads.non_taxable.map((non_taxable) => (
                                     <td

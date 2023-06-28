@@ -7,9 +7,12 @@ use PayCheckMate\Models\Employee as EmployeeModel;
 use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Requests\PayrollRequest;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use const _PHPStan_5aecd7174\__;
 
 class PayrollApi extends RestController implements HookAbleApiInterface {
 
@@ -96,16 +99,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function generate_payroll( WP_REST_Request $request ): WP_REST_Response {
         $parameters = $request->get_params();
 
-        if ( ! isset( $parameters['date'] ) ) {
+        if ( ! isset( $parameters['payroll_date'] ) ) {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
-        $date              = gmdate( 'Y-m-d', strtotime( $parameters['date'] ) );
+        $date              = gmdate( 'Y-m-d', strtotime( $parameters['payroll_date'] ) );
         $month             = gmdate( 'm', strtotime( $date ) );
         $year              = gmdate( 'Y', strtotime( $date ) );
         $last_day_of_month = gmdate( 't', strtotime( $date ) );
 
-        $parameters['date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
+        $parameters['payroll_date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
 
         $args              = [
             'status'  => 1,
@@ -185,7 +188,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'where'           => [
                 'joining_date' => [
                     'operator' => '<=',
-                    'value'    => $parameters['date'],
+                    'value'    => $parameters['payroll_date'],
                     'type'     => 'AND',
                 ],
             ],
@@ -207,11 +210,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'select_max'  => [
                         'active_from' => [
                             'operator' => '<=',
-                            'value'    => $parameters['date'],
+                            'value'    => $parameters['payroll_date'],
                             'compare'  => [
                                 'key'      => 'active_from',
                                 'operator' => '<=',
-                                'value'    => $parameters['date'],
+                                'value'    => $parameters['payroll_date'],
                             ],
                         ],
                     ],
@@ -249,14 +252,31 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param WP_REST_Request $request Full details about the request.
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @return WP_REST_Response
+     * @throws \Exception
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function save_payroll( WP_REST_Request $request ): WP_REST_Response {
-        echo '<pre>';
-        print_r( $request->get_params() );
-        exit();
+    public function save_payroll( WP_REST_Request $request ) {
+        $parameters                        = $request->get_params();
+        $parameters['created_employee_id'] = get_current_user_id();
+
+        $validated_data = new PayrollRequest( $parameters );
+        if ( $validated_data->error ) {
+            return new WP_Error(
+                400, implode( ', ', $validated_data->error ), [
+					'status' => 400,
+					'error' => $validated_data->error,
+				]
+            );
+        }
+
+        return new WP_REST_Response(
+            [
+                'message' => __( 'Payroll saved successfully.', 'pcm' ),
+            ], 200
+        );
     }
 
     /**
@@ -272,7 +292,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'date'           => [
+                'payroll_date'   => [
                     'description' => __( 'The date of the payroll', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
