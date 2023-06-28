@@ -2,7 +2,7 @@ import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
-import React, {useEffect, useState} from "@wordpress/element";
+import {useEffect, useState} from "@wordpress/element";
 import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeType} from "../../Types/EmployeeType";

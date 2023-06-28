@@ -8,11 +8,12 @@ import {EmptyState} from "../Components/EmptyState";
 import {Card} from "../Components/Card";
 import {DesignationList} from "./Designation/DesignationList";
 import {SalaryHeadList} from "./SalaryHead/SalaryHeadList";
-import CreatePayroll from "./Payroll/CreatePayroll";
 import {EmployeeList} from "./Employee/EmployeeList";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {PayrollList} from "./Payroll/PayrollList";
+import CreatePayroll from "./Payroll/CreatePayroll";
 
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');
@@ -30,7 +31,8 @@ export default function Main() {
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='departments' element={<DepartmentList />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='designations' element={<DesignationList />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='salary-heads' element={<SalaryHeadList />}/>)}
-                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='create-payroll' element={<CreatePayroll />}/>)}
+                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='create-payroll' element={<PayrollList />}/>)}
+                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='generate-payroll' element={<CreatePayroll />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><EmptyState /></Card>} />)}
                             </Routes>
                             <div>
