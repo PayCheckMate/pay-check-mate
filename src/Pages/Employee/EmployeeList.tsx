@@ -40,10 +40,12 @@ export const EmployeeList = () => {
         {
             title: 'Employee ID',
             dataIndex: 'employee_id',
+            sortable: true,
         },
         {
             title: 'Name',
             dataIndex: 'first_name',
+            sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <a href="#" className="text-indigo-600 hover:text-indigo-900">

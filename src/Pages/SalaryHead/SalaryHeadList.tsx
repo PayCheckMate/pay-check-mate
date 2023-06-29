@@ -44,9 +44,9 @@ export const SalaryHeadList = () => {
 
 
     const columns = [
-        {title: __('Salary Head', 'pcm'), dataIndex: 'head_name'},
+        {title: __('Salary Head', 'pcm'), dataIndex: 'head_name', sortable: true},
         {
-            title: __('Head Type', 'pcm'), dataIndex: 'head_type',
+            title: __('Head Type', 'pcm'), dataIndex: 'head_type', sortable: true,
             render: (text: string, record: SalaryHeadType) => {
                 const headType = parseInt(String(record.head_type))
                 return (
@@ -91,7 +91,7 @@ export const SalaryHeadList = () => {
                 )
             }
         },
-        {title: __('Priority', 'pcm'), dataIndex: 'priority'},
+        {title: __('Priority', 'pcm'), dataIndex: 'priority', sortable: true},
         {
             title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {

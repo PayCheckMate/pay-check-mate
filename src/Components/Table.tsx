@@ -2,11 +2,15 @@ import {useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
+import {ArrowDownIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
+
+type SortDirection = "asc" | "desc" | "";
 
 type Column = {
     title: string;
     dataIndex: string;
     render?: (text: string, record: any) => JSX.Element;
+    sortable?: boolean;
 };
 
 type TableProps = {
@@ -32,7 +36,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
 
     const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
-    let dataIndex = pageSize * (currentPage -1) + 1;
+    let dataIndex = pageSize * (currentPage - 1) + 1;
 
     if (!hasIdColumn) {
         columns = [
@@ -45,13 +49,45 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
         ];
     }
 
+    const [sortColumn, setSortColumn] = useState("");
+    const [sortDirection, setSortDirection] = useState<SortDirection>("");
+
+    const handleSort = (column: Column) => {
+        if (column.sortable) {
+            if (sortColumn === column.dataIndex) {
+                // Reverse the sort direction if already sorted by the same column
+                if (sortDirection === "asc") {
+                    setSortDirection("desc");
+                } else {
+                    setSortDirection("asc");
+                }
+            } else {
+                // Set the new sort column and direction
+                setSortColumn(column.dataIndex);
+                setSortDirection("asc");
+            }
+        }
+    };
+
+    // Sorting logic
+    const sortedData = sortColumn ? data.slice().sort((a, b) => {
+        const aValue = a[sortColumn];
+        const bValue = b[sortColumn];
+        if (aValue < bValue) {
+            return sortDirection === "asc" ? -1 : 1;
+        } else if (aValue > bValue) {
+            return sortDirection === "asc" ? 1 : -1;
+        }
+        return 0;
+    }) : data;
+
     // Pagination logic
     const totalPages = totalPage || Math.ceil(data.length / pageSize);
 
     const handlePageChange = (page: number) => {
         onPageChange(page);
     };
-
+    console.log(sortDirection)
     return (
         <>
             {isLoading ? (
@@ -65,15 +101,31 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                                 <th
                                     scope="col"
                                     key={column.dataIndex}
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 cursor-pointer"
+                                    onClick={() => handleSort(column)}
                                 >
-                                    {column.title}
+                                    <span className="flex items-center">
+                                        {column.title}
+                                        {column.sortable && (
+                                            <span className="ml-1">
+                                            {sortColumn === column.dataIndex ? (
+                                                sortDirection === "asc" ? (
+                                                    <ArrowDownIcon className="w-4 h-4 text-gray-400" />
+                                                ) : (
+                                                    <ArrowUpIcon className="w-4 h-4 text-gray-400" />
+                                                )
+                                            ) : (
+                                                <ArrowDownIcon className="w-4 h-4 text-gray-400 opacity-30" />
+                                            )}
+                                        </span>
+                                        )}
+                                        </span>
                                 </th>
                             ))}
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                        {data.map((item, rowIndex) => (
+                        {sortedData.map((item, rowIndex) => (
                             <tr key={rowIndex}>
                                 {columns.map((column, colIndex) => (
                                     <td
@@ -94,19 +146,21 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                     <div className="flex justify-center mt-4">
                         <nav className="flex items-center">
                             <button
-                                onClick={() => handlePageChange(currentPage -1)}
+                                onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
                                 className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
                             >
                                 Previous
                             </button>
-                            <span className="px-2 py-1 text-sm font-medium text-gray-900">Page {currentPage} of {totalPages}</span>
+                            <span className="px-2 py-1 text-sm font-medium text-gray-900">
+                                Page {currentPage} of {totalPages}
+                            </span>
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === parseInt(String(totalPages))}
                                 className="px-2 py-1 text-sm bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
                             >
-                                Next
+                            Next
                             </button>
                         </nav>
                     </div>
