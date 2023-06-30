@@ -1,6 +1,6 @@
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
-import {Table} from "../../Components/Table";
+import {FilterObject, Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
 import {Modal} from "../../Components/Modal";
@@ -27,9 +27,9 @@ export const EmployeeList = () => {
         }
     },[models, filterObject])
 
-    const handlePageChange = (page: number) => {
-        setFilterObject({'per_page': per_page, 'page': page}); // Update the filter object with the new page value
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: FilterObject) => {
+        setFilterObject(filterObject); // Update the filter object with the new page value
+        setCurrentPage(filterObject.page); // Update the current page
     };
 
     const viewEmployee = (id: number) => {
@@ -103,9 +103,9 @@ export const EmployeeList = () => {
                     data={employees}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={per_page}
+                    per_page={per_page}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

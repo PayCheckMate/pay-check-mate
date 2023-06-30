@@ -118,7 +118,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'status'  => 1,
             'limit'   => '-1',
             'order'   => 'ASC',
-            'orderby' => 'priority',
+            'order_by' => 'priority',
         ];
         $salary_heads      = new SalaryHead( new SalaryHeadModel() );
         $salary_heads      = $salary_heads->all( $args );
@@ -185,7 +185,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'status'          => 1,
             'limit'           => - 1,
             'order'           => 'ASC',
-            'orderby'         => 'employee_id',
+            'order_by'         => 'employee_id',
             'mutation_fields' => [
                 'full_name',
             ],

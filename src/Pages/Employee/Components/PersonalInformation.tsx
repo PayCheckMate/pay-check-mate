@@ -28,7 +28,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
 
-    const {models, makeGetRequest} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'orderby': 'employee_id', 'order': 'desc'});
+    const {models, makeGetRequest} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'order_by': 'employee_id', 'order': 'desc'});
 
     // Get last employee id and set next employee id.
     useEffect(() => {

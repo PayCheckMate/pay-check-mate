@@ -13,6 +13,7 @@ import salaryHead from "../../Store/SalaryHead";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -31,7 +32,7 @@ const is_variable = [
 
 export const SalaryHeadList = () => {
     const dispatch = useDispatch();
-    const per_page = '10';
+    const per_page = '2';
     const {salaryHeads, loading, totalPages, filters} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
 
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
@@ -197,9 +198,9 @@ export const SalaryHeadList = () => {
         setShowModal(true)
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(salaryHead).getSalaryHeads({per_page: per_page, page})
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(salaryHead).getSalaryHeads(filterObject)
+        setCurrentPage(filterObject.page);
     };
 
     const handleHeadType = (data: SelectBoxType) => {
@@ -426,9 +427,9 @@ export const SalaryHeadList = () => {
                     data={salaryHeads}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

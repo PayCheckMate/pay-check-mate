@@ -22,7 +22,7 @@ trait CrudTrait {
      *                                            - 'status'    => int,
      *                                            - 'limit'     => string|int,
      *                                            - 'order'     => 'ASC',
-     *                                            - 'orderby'   => string,
+     *                                            - 'order_by'   => string,
      *                                            - 'mutation_fields' => ['string'], this will call get_{field_name} method
      *                                            - 'relations' => [
      *                                            [
@@ -54,8 +54,9 @@ trait CrudTrait {
                 'limit'           => 10,
                 'offset'          => 0,
                 'order'           => 'DESC',
-                'orderby'         => 'id',
+                'order_by'         => 'id',
                 'status'          => 'all',
+                'search'          => '',
                 'groupby'         => '',
                 'relations'       => [],
                 'mutation_fields' => [],

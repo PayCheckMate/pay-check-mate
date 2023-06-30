@@ -11,6 +11,7 @@ import department from "../../Store/Department";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export const DepartmentList = () => {
 
 
     const columns = [
-        {title: 'Department name', dataIndex: 'name'},
+        {title: 'Department name', dataIndex: 'name', sortable: true},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DepartmentType) => {
@@ -102,9 +103,9 @@ export const DepartmentList = () => {
         setFormError({})
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(department).getDepartments({per_page: per_page, page: page});
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(department).getDepartments(filterObject);
+        setCurrentPage(filterObject.page);
     };
 
 
@@ -193,9 +194,9 @@ export const DepartmentList = () => {
                     data={departments}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

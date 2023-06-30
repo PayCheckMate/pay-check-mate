@@ -11,6 +11,7 @@ import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export const DesignationList = () => {
 
 
     const columns = [
-        {title: 'Designation name', dataIndex: 'name'},
+        {title: 'Designation name', dataIndex: 'name', sortable: true},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DesignationType) => {
@@ -102,9 +103,9 @@ export const DesignationList = () => {
         setFormError({})
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(designation).getDesignations({per_page: per_page, page: page});
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(designation).getDesignations(filterObject)
+        setCurrentPage(filterObject.page);
     };
 
 
@@ -193,9 +194,9 @@ export const DesignationList = () => {
                     data={designations}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

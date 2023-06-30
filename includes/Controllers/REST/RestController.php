@@ -130,7 +130,7 @@ class RestController extends WP_REST_Controller {
                 'minimum'           => - 1,
                 'maximum'           => 100,
             ],
-            'orderby'  => [
+            'order_by'  => [
                 'description'       => __( 'Sort collection by object attribute.', 'pcm' ),
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_key',

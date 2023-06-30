@@ -80,7 +80,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'     => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
-            'orderby'   => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
+            'order_by'   => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'    => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
             'relations' => [
                 [

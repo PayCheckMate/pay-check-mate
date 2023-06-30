@@ -1,4 +1,5 @@
-import {DesignationType, filtersType} from "../../Types/DesignationType";
+import {DesignationType} from "../../Types/DesignationType";
+import {filtersType} from "../Store";
 
 export interface DesignationState {
     designations: DesignationType[],

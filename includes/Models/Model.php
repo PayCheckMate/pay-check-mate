@@ -64,7 +64,8 @@ class Model implements ModelInterface {
                 'limit'     => 20,
                 'offset'    => 0,
                 'order'     => 'DESC',
-                'orderby'   => 'id',
+                'order_by'   => 'id',
+                'search'    => '',
                 'status'    => 'all',
                 'groupby'   => '',
                 'relations' => [],
@@ -120,11 +121,11 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']}",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
                 $args['limit'],
                 $args['offset']
             );

@@ -1,8 +1,10 @@
-import {useState} from "@wordpress/element";
+import {useEffect, useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
 import {ArrowDownIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
+import {FormInput} from "./FormInput";
+import {filtersType} from "../Store/Store";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -18,12 +20,13 @@ type TableProps = {
     data: any[];
     isLoading?: boolean;
     totalPage?: number;
-    pageSize?: number;
+    per_page?: string | number;
     currentPage?: number;
-    onPageChange?: (page: number) => void;
+    onFilterChange?: (defaultFilterObject: filtersType) => void;
 };
 
-export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, pageSize = 10, currentPage = 1, onPageChange = (page: number) => {}}: TableProps) => {
+export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => {}}: TableProps) => {
+    per_page = parseInt(String(per_page));
     if (!data.length && !isLoading) {
         return (
             <>
@@ -36,7 +39,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
 
     const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
-    let dataIndex = pageSize * (currentPage - 1) + 1;
+    let dataIndex = per_page * (currentPage - 1) + 1;
 
     if (!hasIdColumn) {
         columns = [
@@ -51,6 +54,16 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
 
     const [sortColumn, setSortColumn] = useState("");
     const [sortDirection, setSortDirection] = useState<SortDirection>("");
+    const [searchText, setSearchText] = useState("");
+
+    const defaultFilterObject: filtersType = {
+        page: currentPage,
+        per_page: per_page,
+        search: searchText,
+        order_by: sortColumn,
+        order: sortDirection,
+    }
+    const [filterObject, setFilterObject] = useState(defaultFilterObject);
 
     const handleSort = (column: Column) => {
         if (column.sortable) {
@@ -66,34 +79,59 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                 setSortColumn(column.dataIndex);
                 setSortDirection("asc");
             }
+
+            setFilterObject((prevState) => ({
+                ...prevState,
+                order_by: column.dataIndex,
+                order: sortDirection === "asc" ? "asc" : "desc",
+            }));
+
+            onFilterChange({
+                ...filterObject,
+                order_by: column.dataIndex,
+                order: sortDirection === "asc" ? "asc" : "desc",
+            });
         }
     };
 
-    // Sorting logic
-    const sortedData = sortColumn ? data.slice().sort((a, b) => {
-        const aValue = a[sortColumn];
-        const bValue = b[sortColumn];
-        if (aValue < bValue) {
-            return sortDirection === "asc" ? -1 : 1;
-        } else if (aValue > bValue) {
-            return sortDirection === "asc" ? 1 : -1;
-        }
-        return 0;
-    }) : data;
 
     // Pagination logic
-    const totalPages = totalPage || Math.ceil(data.length / pageSize);
+    const totalPages = totalPage || Math.ceil(data.length / per_page);
 
     const handlePageChange = (page: number) => {
-        onPageChange(page);
+        setFilterObject((prevState) => ({
+            ...prevState,
+            page,
+        }));
+        onFilterChange({
+            ...filterObject,
+            page,
+        });
     };
-    console.log(sortDirection)
+
     return (
         <>
             {isLoading ? (
                 <Loading />
             ) : (
                 <div className="overflow-x-auto">
+                    <div className="mb-4 flex items-center justify-end">
+                        <label
+                            htmlFor="search"
+                            className="sr-only"
+                        >
+                          Search
+                        </label>
+                        <FormInput
+                            type="text"
+                            id="search"
+                            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-48 sm:w-auto"
+                            placeholder="Search..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            name="search"
+                        />
+                    </div>
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                         <tr>
@@ -101,7 +139,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                                 <th
                                     scope="col"
                                     key={column.dataIndex}
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 cursor-pointer"
+                                    className={"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 " + (column.sortable ? "cursor-pointer" : "")}
                                     onClick={() => handleSort(column)}
                                 >
                                     <span className="flex items-center">
@@ -125,7 +163,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                        {sortedData.map((item, rowIndex) => (
+                        {data.map((item, rowIndex) => (
                             <tr key={rowIndex}>
                                 {columns.map((column, colIndex) => (
                                     <td
@@ -148,7 +186,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                             <button
                                 onClick={() => handlePageChange(currentPage - 1)}
                                 disabled={currentPage === 1}
-                                className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
+                                className={"px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none " + (currentPage === 1 ? "cursor-not-allowed" : "")}
                             >
                                 Previous
                             </button>
@@ -158,7 +196,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                             <button
                                 onClick={() => handlePageChange(currentPage + 1)}
                                 disabled={currentPage === parseInt(String(totalPages))}
-                                className="px-2 py-1 text-sm bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
+                                className={"px-2 py-1 text-sm bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none rounded-md " + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
                             >
                             Next
                             </button>
