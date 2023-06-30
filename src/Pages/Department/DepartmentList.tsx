@@ -16,7 +16,7 @@ import {filtersType} from "../../Store/Store";
 export const DepartmentList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {departments, loading, totalPages, filters} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
+    const {departments, loading, totalPages, filters, total} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
     const [showModal, setShowModal] = useState(false);
@@ -191,6 +191,7 @@ export const DepartmentList = () => {
                 </div>
                 <Table
                     columns={columns}
+                    total={total}
                     data={departments}
                     isLoading={loading}
                     totalPage={totalPages}

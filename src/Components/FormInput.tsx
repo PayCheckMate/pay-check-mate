@@ -1,13 +1,13 @@
 import { __ } from "@wordpress/i18n";
 import { useState } from "@wordpress/element";
 import Tooltip from "./Tooltip";
-import {QuestionMarkCircleIcon} from "@heroicons/react/24/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement>{
+interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     name: string;
     id: string;
-    type?: string;
+    type?: "text" | "number" | "email" | "password" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "range" | "color";
     className?: string;
     placeholder?: string;
     value: string | number;
@@ -17,10 +17,18 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement>{
     helpText?: string;
     disabled?: boolean;
     tooltip?: string;
+    min?: number; // Added min prop
+    max?: number; // Added max prop
 }
 
-export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip}: TextInputProps) => {
+export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip, min, max,}: NumberInputProps) => {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (type === "number" && (min !== undefined || max !== undefined)) {
+            const numericValue = Number(event.target.value);
+            if ((min !== undefined && numericValue < min) || (max !== undefined && numericValue > max)) {
+                return; // Do not update the value if it is outside the min/max range
+            }
+        }
         onChange(event);
     };
 
@@ -31,7 +39,7 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
                     {label}
                     {required && <span className="text-red-500">*</span>}
                     {tooltip && (
-                        <Tooltip text={tooltip} >
+                        <Tooltip text={tooltip}>
                             <QuestionMarkCircleIcon className="h-5 w-5 text-gray-500 ml-1" aria-hidden="true" />
                         </Tooltip>
                     )}

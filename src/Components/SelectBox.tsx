@@ -2,7 +2,6 @@ import { Fragment, useState } from '@wordpress/element';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { SelectBoxType } from '../Types/SalaryHeadType';
-import {__} from "@wordpress/i18n";
 
 // @ts-ignore
 function classNames(...classes) {
@@ -18,10 +17,10 @@ interface SelectBoxProps extends React.InputHTMLAttributes<HTMLDivElement> {
     error?: string;
 }
 
-export const SelectBox = ({title, options, selected, setSelected, error, required= false}: SelectBoxProps) => {
+export const SelectBox = ({title, options, selected, setSelected, error, required= false, className, ...props}: SelectBoxProps) => {
     return (
         <div>
-            <div className="relative mt-2 rounded-md shadow-sm">
+            <div className={`relative mt-2 rounded-md shadow-sm ${className}`}>
                 <Listbox value={selected} onChange={setSelected}>
                     {({ open }) => (
                         <>

@@ -16,7 +16,7 @@ import {filtersType} from "../../Store/Store";
 export const DesignationList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {designations, loading, totalPages, filters} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
+    const {designations, loading, totalPages, filters, total} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [formError, setFormError] = useState({} as { [key: string]: string });
     const [showModal, setShowModal] = useState(false);
@@ -191,6 +191,7 @@ export const DesignationList = () => {
                 </div>
                 <Table
                     columns={columns}
+                    total={total}
                     data={designations}
                     isLoading={loading}
                     totalPage={totalPages}

@@ -1,11 +1,12 @@
 import {Button} from "../../Components/Button";
 import {CheckCircleIcon} from "@heroicons/react/24/outline";
-import {FilterObject, Table} from "../../Components/Table";
+import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
 import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeType} from "../../Types/EmployeeType";
+import {filtersType} from "../../Store/Store";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -18,6 +19,7 @@ export const EmployeeList = () => {
         totalPage,
         setFilterObject,
         filterObject,
+        total
     } = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {page: 1, per_page}, true);
     const [employees, setEmployees] = useState([] as EmployeeType[]);
     useEffect(() => {
@@ -27,9 +29,9 @@ export const EmployeeList = () => {
         }
     },[models, filterObject])
 
-    const handleFilterChange = (filterObject: FilterObject) => {
-        setFilterObject(filterObject); // Update the filter object with the new page value
-        setCurrentPage(filterObject.page); // Update the current page
+    const handleFilterChange = (filterObject: filtersType) => {
+        setFilterObject(filterObject);
+        setCurrentPage(filterObject.page);
     };
 
     const viewEmployee = (id: number) => {
@@ -100,6 +102,7 @@ export const EmployeeList = () => {
                 </div>
                 <Table
                     columns={columns}
+                    total={total}
                     data={employees}
                     isLoading={loading}
                     totalPage={totalPages}

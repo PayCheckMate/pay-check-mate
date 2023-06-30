@@ -32,8 +32,8 @@ const is_variable = [
 
 export const SalaryHeadList = () => {
     const dispatch = useDispatch();
-    const per_page = '2';
-    const {salaryHeads, loading, totalPages, filters} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
+    const per_page = '10';
+    const {salaryHeads, loading, totalPages, filters, total} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
 
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
@@ -428,6 +428,7 @@ export const SalaryHeadList = () => {
                     isLoading={loading}
                     totalPage={totalPages}
                     per_page={parseInt(per_page)}
+                    total={total}
                     currentPage={currentPage}
                     onFilterChange={handleFilterChange}
                 />
