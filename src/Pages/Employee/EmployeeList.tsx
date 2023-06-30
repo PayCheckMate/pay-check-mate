@@ -107,6 +107,7 @@ export const EmployeeList = () => {
                     isLoading={loading}
                     totalPage={totalPages}
                     per_page={per_page}
+                    filters={filterObject as filtersType}
                     currentPage={currentPage}
                     onFilterChange={handleFilterChange}
                 />

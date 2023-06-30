@@ -430,7 +430,8 @@ export const SalaryHeadList = () => {
                     per_page={parseInt(per_page)}
                     total={total}
                     currentPage={currentPage}
-                    onFilterChange={handleFilterChange}
+                    filters={filters}
+                    onFilterChange={(filter) => handleFilterChange(filter)}
                 />
             </div>
         </>

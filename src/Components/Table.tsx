@@ -27,18 +27,10 @@ type TableProps = {
     per_page?: string | number;
     currentPage?: number;
     onFilterChange?: (defaultFilterObject: filtersType) => void;
+    filters: filtersType;
 };
 
-export const Table = ({
-                          columns = [],
-                          data = [],
-                          isLoading = true,
-                          totalPage = 1,
-                          per_page = 10,
-                          currentPage = 1,
-                          total,
-                          onFilterChange = () => void 0,
-                      }: TableProps) => {
+export const Table = ({columns = [], data = [], isLoading = true, filters, totalPage = 1, per_page = 10, currentPage = 1, total, onFilterChange = () => void 0}: TableProps) => {
     per_page = parseInt(String(per_page));
     if (!data.length && !isLoading) {
         return (
@@ -69,14 +61,7 @@ export const Table = ({
     const [sortDirection, setSortDirection] = useState<SortDirection>("");
     const [searchText, setSearchText] = useState("");
 
-    const defaultFilterObject: filtersType = {
-        page: currentPage,
-        per_page: per_page,
-        search: searchText,
-        order_by: sortColumn,
-        order: sortDirection,
-    }
-    const [filterObject, setFilterObject] = useState(defaultFilterObject);
+    const [filterObject, setFilterObject] = useState(filters);
 
     const handleSort = (column: Column) => {
         if (column.sortable) {
@@ -98,6 +83,12 @@ export const Table = ({
                 order_by: column.dataIndex,
                 order: sortDirection === "asc" ? "asc" : "desc",
             }));
+
+            onFilterChange({
+                ...filterObject,
+                order_by: column.dataIndex,
+                order: sortDirection === "asc" ? "asc" : "desc",
+            });
         }
     };
 
@@ -110,6 +101,11 @@ export const Table = ({
             ...prevState,
             page,
         }));
+
+        onFilterChange({
+            ...filterObject,
+            page,
+        });
     };
 
     const perPageOptions: SelectBoxType[] = [
@@ -136,12 +132,13 @@ export const Table = ({
             ...prevState,
             per_page: String(value.id),
         }));
+
+        onFilterChange({
+            ...filterObject,
+            per_page: String(value.id),
+        });
     }
 
-
-    useEffect(() => {
-        onFilterChange(filterObject);
-    }, [filterObject])
     return (
         <>
             {isLoading ? (

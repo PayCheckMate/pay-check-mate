@@ -193,6 +193,7 @@ export const DepartmentList = () => {
                     columns={columns}
                     total={total}
                     data={departments}
+                    filters={filters}
                     isLoading={loading}
                     totalPage={totalPages}
                     per_page={parseInt(per_page)}

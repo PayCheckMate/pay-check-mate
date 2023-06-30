@@ -11,6 +11,7 @@ export const filter: filtersType={
 
 const selectors = {
     getSalaryHeads: ( state: SalaryHeadState, filters: filtersType = filter ) => {
+        console.log(state)
         return state;
     },
     getFilters: ( state: SalaryHeadState ) => {

@@ -194,6 +194,7 @@ export const DesignationList = () => {
                     total={total}
                     data={designations}
                     isLoading={loading}
+                    filters={filters}
                     totalPage={totalPages}
                     per_page={parseInt(per_page)}
                     currentPage={currentPage}
