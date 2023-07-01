@@ -1,7 +1,8 @@
 import {DepartmentState} from "./reducer";
 import {filtersType} from "../Store";
+import {DepartmentType} from "../../Types/DepartmentType";
 
-export const filter: filtersType={
+export const defaultFilters: filtersType={
     per_page: '10',
     page: 1,
     order_by: 'id',
@@ -10,7 +11,7 @@ export const filter: filtersType={
 }
 
 const selectors = {
-    getDepartments: ( state: DepartmentState, filters: filtersType = filter ) => {
+    getDepartments: ( state: DepartmentState, filters: filtersType = defaultFilters ) => {
         return state;
     },
     getFilters: ( state: DepartmentState ) => {

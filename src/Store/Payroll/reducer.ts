@@ -1,17 +1,17 @@
-import {DepartmentType} from "../../Types/DepartmentType";
+import {PayrollType} from "../../Types/PayrollType";
 import {filtersType} from "../Store";
 import {defaultFilters} from "./selectors";
 
-export interface DepartmentState {
-    departments: DepartmentType[],
+export interface PayrollState {
+    payrolls: PayrollType[],
     loading: boolean,
     total: number,
     totalPages: number,
     filters: filtersType
 }
 
-const DefaultState: DepartmentState = {
-    departments: [] as DepartmentType[],
+const DefaultState: PayrollState = {
+    payrolls: [] as PayrollType[],
     loading: false,
     total: 0,
     totalPages: 1,
@@ -20,15 +20,15 @@ const DefaultState: DepartmentState = {
 
 const reducer = (state = DefaultState, action: any) => {
     switch (action.type) {
-        case "SET_DEPARTMENTS":
+        case "SET_PAYROLLS":
             return {
                 ...state,
-                departments: action.payload.data,
+                payrolls: action.payload.data,
                 total: action.payload.headers['X-WP-Total'],
                 totalPages: action.payload.headers['X-WP-TotalPages'],
                 loading: false,
             }
-        case "GET_DEPARTMENTS":
+        case "GET_PAYROLLS":
             return state;
         case "SET_LOADING":
             return {
@@ -40,22 +40,22 @@ const reducer = (state = DefaultState, action: any) => {
                 ...state,
                 filters: action.payload,
             };
-        case "UPDATE_DEPARTMENT":
-            // Check if the department is new or not. If new then add it to the top of the list
+        case "UPDATE_PAYROLL":
+            // Check if the payroll is new or not. If new, then add it to the top of the list
             if (action.create) {
                 return {
                     ...state,
-                    departments: [action.payload, ...state.departments],
+                    payrolls: [action.payload, ...state.payrolls],
                     loading: false,
                 }
             } else {
                 return {
                     ...state,
-                    departments: state.departments.map((department: DepartmentType) => {
-                        if (department.id === action.payload.id) {
+                    payrolls: state.payrolls.map((payroll: PayrollType) => {
+                        if (payroll.id === action.payload.id) {
                             return action.payload;
                         }
-                        return department;
+                        return payroll;
                     }),
                     loading: false,
                 }

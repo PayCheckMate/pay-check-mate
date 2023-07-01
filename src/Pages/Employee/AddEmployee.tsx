@@ -26,7 +26,7 @@ export const AddEmployee = () => {
     let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
     // @ts-ignore
     let savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
-    const {makePostRequest} = useFetchApi('/pay-check-mate/v1/payroll', {}, false);
+    const {makePostRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);

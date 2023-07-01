@@ -43,7 +43,7 @@ trait CrudTrait {
      *                                            // Add more relations if needed
      *                                            ],
      * @param string[]             $fields
-     * @param array<string, mixed>        $additional_logical_data
+     * @param array<string, mixed> $additional_logical_data
      *
      * @return object
      */
@@ -54,7 +54,7 @@ trait CrudTrait {
                 'limit'           => 10,
                 'offset'          => 0,
                 'order'           => 'DESC',
-                'order_by'         => 'id',
+                'order_by'        => 'id',
                 'status'          => 'all',
                 'search'          => '',
                 'groupby'         => '',

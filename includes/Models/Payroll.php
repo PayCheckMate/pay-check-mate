@@ -52,4 +52,17 @@ class Payroll extends Model {
     public function get_created_on( string $date ): string {
         return get_date_from_gmt( $date, 'd M Y' );
     }
+
+    /**
+     * Get payroll date mutated date.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $date
+     *
+     * @return string
+     */
+    public function get_payroll_date( string $date ): string {
+        return get_date_from_gmt( $date, 'd M Y' );
+    }
 }

@@ -110,10 +110,6 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, total
 
     const perPageOptions: SelectBoxType[] = [
         {
-            id: 5,
-            name: "5",
-        },
-        {
             id: 10,
             name: "10",
         },
@@ -221,11 +217,11 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, total
                     >
                         Previous
                     </button>
+                    {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
+                    {/*    Page {currentPage} of {totalPages}*/}
+                    {/*</span>*/}
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        | Go to page
+                        Go to page
                     </span>
                     <FormInput
                         type="number"

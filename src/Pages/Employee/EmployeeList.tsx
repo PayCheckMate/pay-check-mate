@@ -31,7 +31,7 @@ export const EmployeeList = () => {
 
     const handleFilterChange = (filterObject: filtersType) => {
         setFilterObject(filterObject);
-        setCurrentPage(filterObject.page);
+        setCurrentPage(filterObject.page || 1);
     };
 
     const viewEmployee = (id: number) => {

@@ -1,5 +1,6 @@
 import {SalaryHeadType} from "../../Types/SalaryHeadType";
 import {filtersType} from "../Store";
+import {defaultFilters} from "./selectors";
 
 export interface SalaryHeadState {
     salaryHeads: SalaryHeadType[],
@@ -14,7 +15,7 @@ const DefaultState: SalaryHeadState = {
     loading: false,
     total: 0,
     totalPages: 1,
-    filters: {} as filtersType
+    filters: defaultFilters as filtersType
 }
 
 const reducer = (state = DefaultState, action: any) => {

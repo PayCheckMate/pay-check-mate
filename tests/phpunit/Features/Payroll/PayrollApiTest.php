@@ -40,16 +40,16 @@ class PayrollApiTest extends WP_UnitTestCase
         $this->payroll_api->register_api_routes();
 
         $routes = $wp_rest_server->get_routes();
-        $this->assertArrayHasKey('/pay-check-mate/v1/payroll', $routes);
-        $this->assertArrayHasKey('POST', $routes['/pay-check-mate/v1/payroll'][1]['methods']);
-        $this->assertEquals([$this->payroll_api, 'create_payroll'], $routes['/pay-check-mate/v1/payroll'][1]['callback']);
-        $this->assertEquals([$this->payroll_api, 'create_payroll_permissions_check'], $routes['/pay-check-mate/v1/payroll'][1]['permission_callback']);
-        $this->assertArrayHasKey('date', $routes['/pay-check-mate/v1/payroll'][1]['args']);
+        $this->assertArrayHasKey('/pay-check-mate/v1/payrolls', $routes);
+        $this->assertArrayHasKey('POST', $routes['/pay-check-mate/v1/payrolls'][1]['methods']);
+        $this->assertEquals([$this->payroll_api, 'create_payroll'], $routes['/pay-check-mate/v1/payrolls'][1]['callback']);
+        $this->assertEquals([$this->payroll_api, 'create_payroll_permissions_check'], $routes['/pay-check-mate/v1/payrolls'][1]['permission_callback']);
+        $this->assertArrayHasKey('date', $routes['/pay-check-mate/v1/payrolls'][1]['args']);
     }
 
     public function test_create_payroll_permissions_check()
     {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payroll');
+        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
         $response = $this->payroll_api->create_payroll_permissions_check($request);
 
         $this->assertTrue($response);
@@ -57,7 +57,7 @@ class PayrollApiTest extends WP_UnitTestCase
 
     public function test_create_payroll_with_valid_date()
     {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payroll');
+        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
         $request->set_param('date', '2023-05-31');
 
         $response = $this->payroll_api->create_payroll($request);
@@ -75,7 +75,7 @@ class PayrollApiTest extends WP_UnitTestCase
 
     public function test_create_payroll_without_date()
     {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payroll');
+        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
 
         $response = $this->payroll_api->create_payroll($request);
         $data = $response->get_data();

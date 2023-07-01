@@ -20,8 +20,10 @@ import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import {Button} from "../../Components/Button";
 import {Spinner} from "../../Components/Spinner";
+import {useNavigate} from "react-router-dom";
 
 const CreatePayroll = () => {
+    const navigate = useNavigate();
     const {loading, makePostRequest,} = useFetchApi('');
     // Get initial table data from local storage
     let PayrollTableData = localStorage.getItem('Payroll.TableData');
@@ -51,7 +53,7 @@ const CreatePayroll = () => {
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
-            makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payroll', data, false).then((response) => {
+            makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payrolls', data, false).then((response) => {
                 const salary_heads = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
@@ -147,7 +149,7 @@ const CreatePayroll = () => {
         try {
             // @ts-ignore
             const _wpnonce = payCheckMate.pay_check_mate_nonce;
-            apiFetchUnparsed('pay-check-mate/v1/payroll/save-payroll', {
+            apiFetchUnparsed('pay-check-mate/v1/payrolls/save-payroll', {
                 method: 'POST',
                 parse: true,
                 body: JSON.stringify({
@@ -171,6 +173,7 @@ const CreatePayroll = () => {
                 setIsSubmitting(false);
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
+                navigate('/payroll');
                 toast.success(__('Payroll saved successfully', 'pcm'));
             }).catch((e: unknown) => {
                 console.log(e);

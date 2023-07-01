@@ -10,7 +10,7 @@ const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
     {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('Payroll', 'pcm'), href: 'create-payroll', icon: CurrencyDollarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
@@ -20,7 +20,7 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     },
     {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
-            {title: __('Payroll', 'pcm'), href: 'payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Payroll', 'pcm'), href: 'payroll-report', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('P.F report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Gratuity report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Loan report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},

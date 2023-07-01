@@ -1,7 +1,7 @@
-import {SalaryHeadState} from "./reducer";
+import {PayrollState} from "./reducer";
 import {filtersType} from "../Store";
 
-export const defaultFilters: filtersType = {
+export const defaultFilters: filtersType={
     per_page: '10',
     page: 1,
     order_by: 'id',
@@ -10,13 +10,13 @@ export const defaultFilters: filtersType = {
 }
 
 const selectors = {
-    getSalaryHeads: ( state: SalaryHeadState, filters: filtersType = defaultFilters ) => {
+    getPayrolls: ( state: PayrollState, filters: filtersType = defaultFilters ) => {
         return state;
     },
-    getFilters: ( state: SalaryHeadState ) => {
+    getFilters: ( state: PayrollState ) => {
         return state.filters;
     },
-    getLoading: ( state: SalaryHeadState ) => {
+    getLoading: ( state: PayrollState ) => {
         return state.loading;
     }
 
