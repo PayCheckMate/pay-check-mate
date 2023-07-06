@@ -121,25 +121,25 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param string               $salary_head_details
+     * @param string               $salary_details
      * @param array<array<string>> $salary_head_types
      *
      * @return array<array<string, mixed>>
      */
-    public function get_salary_head_details( string $salary_head_details, array $salary_head_types ): array {
-        $salary_head_details = json_decode( $salary_head_details, true );
+    public function get_salary_details( string $salary_details, array $salary_head_types ): array {
+        $salary_details = json_decode( $salary_details, true );
         $salary              = [
-            'salary_head_details' => [
+            'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
                 'non_taxable' => [],
             ],
         ];
 
-        foreach ( $salary_head_details as $key => $amount ) {
+        foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
                 if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
-                    $salary['salary_head_details'][$type][$key] = $amount;
+                    $salary['salary_details'][$type][$key] = $amount;
                 }
             }
         }

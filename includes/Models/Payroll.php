@@ -10,6 +10,7 @@ class Payroll extends Model {
         'department_id'       => '%d',
         'designation_id'      => '%d',
         'payroll_date'        => '%s',
+        'total_salary'        => '%d',
         'remarks'             => '%s',
         'status'              => '%d',
         'created_employee_id' => '%s',

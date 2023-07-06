@@ -1,4 +1,4 @@
-import {useEffect, useState} from "@wordpress/element";
+import React, {useEffect, useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
@@ -220,27 +220,33 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, total
                     {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
                     {/*    Page {currentPage} of {totalPages}*/}
                     {/*</span>*/}
+                    {totalPages > 1 && (
+                    <>
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                        {__("Go to page", 'pcm')}
+                        </span>
+                        <FormInput
+                            type="number"
+                            className="px-4 mr-0 ml-0 mt-0 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-20"
+                            value={currentPage}
+                            onChange={(e) => handlePageChange(parseInt(e.target.value))}
+                            min={1}
+                            max={totalPages}
+                            id="page"
+                            name="page"
+                        />
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                            {__("of") + " " + totalPages}
+                        </span>
+                        <span className="mx-2 text-gray-600">|</span>
+                    </>
+                    )}
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        Go to page
+                        {__("Showing") + " " + ((parseInt(String(currentPage)) - 1) * parseInt(String(filterObject.per_page)) + 1) + " " + __("to") + " " + (currentPage * parseInt(String(filterObject.per_page)) > total ? total : currentPage * parseInt(String(filterObject.per_page))) + " " + __("of") + " " + total + " " + __("results")}
                     </span>
-                    <FormInput
-                        type="number"
-                        className="px-4 mr-0 ml-0 mt-0 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-20"
-                        value={currentPage}
-                        onChange={(e) => handlePageChange(parseInt(e.target.value))}
-                        min={1}
-                        max={totalPages}
-                        id="page"
-                        name="page"
-                    />
+                    <span className="mx-2 text-gray-600">|</span>
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("of") + " " + totalPages}
-                    </span>
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        | {__("Showing") + " " + ((parseInt(String(currentPage)) - 1) * parseInt(String(filterObject.per_page)) + 1) + " " + __("to") + " " + (currentPage * parseInt(String(filterObject.per_page)) > total ? total : currentPage * parseInt(String(filterObject.per_page))) + " " + __("of") + " " + total + " " + __("results")}
-                    </span>
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        | {__("Showing per page", "pcm")}
+                        {__("Showing per page", "pcm")}
                     </span>
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
                         <SelectBox

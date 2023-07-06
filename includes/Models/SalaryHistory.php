@@ -12,7 +12,7 @@ class SalaryHistory extends Model {
     protected static array $columns = [
         'employee_id'         => '%d',
         'basic_salary'        => '%d',
-        'salary_head_details' => '%s',
+        'salary_details' => '%s',
         'status'              => '%d',
         'active_from'         => '%s',
         'remarks'             => '%s',

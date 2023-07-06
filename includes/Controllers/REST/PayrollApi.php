@@ -181,20 +181,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => 'ASC',
             'order_by' => 'priority',
         ];
-        $salary_heads      = new SalaryHead( new SalaryHeadModel() );
-        $salary_heads      = $salary_heads->all( $args );
-        $salary_head_types = [];
-        foreach ( $salary_heads->toArray() as $salary_head ) {
-            if ( $salary_head->is_taxable ) {
-                if ( 1 === absint( $salary_head->head_type ) ) {
-                    $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
-                } else {
-                    $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
-                }
-            } else {
-                $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
-            }
-        }
+        $salary_head_types = $this->get_salary_head( $args );
 
         $department_args = [
             'table'       => 'pay_check_mate_departments',
@@ -285,7 +272,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     ],
                     'fields'      => [
                         'basic_salary',
-                        'salary_head_details',
+                        'salary_details',
                         'active_from',
                     ],
                 ],
@@ -356,7 +343,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $data['basic_salary'] = $detail['basic_salary'];
             $merged_array         = [];
             array_walk_recursive(
-                $detail['salary_head_details'], function ( $value, $key ) use ( &$merged_array ) {
+                $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
 					$merged_array[ $key ] = $value;
 				}
             );
@@ -383,6 +370,87 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'message' => __( 'Payroll saved successfully.', 'pcm' ),
             ], 200
         );
+    }
+
+    /**
+     * Gets the payroll.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request
+     *
+     * @return WP_REST_Response Response object.
+     */
+    public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
+        $payroll_id = $request->get_param( 'id' );
+        $payroll    = new Payroll( new PayrollModel() );
+        $payroll    = $payroll->find( $payroll_id );
+
+        $args            = [
+            'status'   => 1,
+            'limit'    => '-1',
+            'order'    => 'ASC',
+            'order_by' => 'priority',
+        ];
+        $salary_head_types = $this->get_salary_head( $args );
+
+        $payroll_details = new PayrollDetails( new PayrollDetailsModel() );
+        $args = [
+            'status'   => 1,
+            'limit'    => '-1',
+            'where'    => [
+                'payroll_id' => [
+                    'operator' => '=',
+                    'value'    => $payroll_id,
+                    'type'     => 'AND',
+                ],
+            ],
+        ];
+        $payroll_details = $payroll_details->all( $args, [ '*' ], $salary_head_types );
+
+        return new WP_REST_Response(
+            [
+                'payroll'                 => $payroll,
+                'employee_salary_history' => $payroll_details->toArray(),
+                'salary_head_types'       => $salary_head_types,
+            ], 200
+        );
+    }
+
+    /**
+     * Gets the salary head.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, string> $args
+     *
+     * @return array<string, array<string, string>> Salary head types.
+     */
+    public function get_salary_head( array $args ): array {
+        $args              = wp_parse_args(
+            $args, [
+                'status'   => 1,
+                'limit'    => '-1',
+                'order'    => 'ASC',
+                'order_by' => 'priority',
+            ]
+        );
+        $salary_heads      = new SalaryHead( new SalaryHeadModel() );
+        $salary_heads      = $salary_heads->all( $args );
+        $salary_head_types = [];
+        foreach ( $salary_heads->toArray() as $salary_head ) {
+            if ( $salary_head->is_taxable ) {
+                if ( 1 === absint( $salary_head->head_type ) ) {
+                    $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
+                } else {
+                    $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
+                }
+            } else {
+                $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
+            }
+        }
+
+        return $salary_head_types;
     }
 
     /**

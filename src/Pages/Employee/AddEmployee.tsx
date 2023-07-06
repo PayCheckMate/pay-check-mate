@@ -116,7 +116,7 @@ export const AddEmployee = () => {
                 ...salaryInformation,
                 'basic_salary': salaryInformation.basic_salary,
                 'remarks': salaryInformation.remarks,
-                'salary_head_details': salaryInformation.salary_head_details,
+                'salary_details': salaryInformation.salary_details,
             },
         }
 

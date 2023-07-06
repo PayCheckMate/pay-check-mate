@@ -64,7 +64,7 @@ class Model implements ModelInterface {
                 'limit'     => 20,
                 'offset'    => 0,
                 'order'     => 'DESC',
-                'order_by'   => 'id',
+                'order_by'  => 'id',
                 'search'    => '',
                 'status'    => 'all',
                 'groupby'   => '',
@@ -277,9 +277,13 @@ class Model implements ModelInterface {
         $query   = $wpdb->prepare( "SELECT $fields FROM {$this->get_table()} WHERE id = %d", $id );
         $results = $wpdb->get_row( $query );
 
+        if ( empty( $results ) ) {
+            return (object) [];
+        }
+
         $this->result = $this->process_item( $results );
 
-        return $this;
+        return $this->result;
     }
 
     /**

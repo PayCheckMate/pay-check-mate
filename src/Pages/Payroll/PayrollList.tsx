@@ -11,6 +11,7 @@ import designation from "../../Store/Designation";
 import {PayrollStatus, PayrollType} from "../../Types/PayrollType";
 import useNotify from "../../Helpers/useNotify";
 import {toast} from "react-toastify";
+import {Link} from "react-router-dom";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export const PayrollList = () => {
         {
             title: __('Department', 'pcm'), dataIndex: 'department_id',
             render: (text: string, record: PayrollType) => {
-                if (parseInt(String(record.designation_id)) === 0) return <span>{__('All', 'pcm')}</span>
+                if (parseInt(String(record.department_id)) === 0) return <span>{__('All', 'pcm')}</span>
                 const departmentData = departments?.find((department) => department.id === record.department_id);
                 return (
                     <span>{departmentData?.name}</span>
@@ -73,16 +74,17 @@ export const PayrollList = () => {
             render: (text: string, record: PayrollType) => {
                 return (
                     <div className="flex">
-                        <button
+                        <Link
+                            to={`/payroll/${record.id}`}
                             className="text-indigo-600 hover:text-indigo-900"
                         >
                             {__('View', 'pcm')}
-                        </button>
+                        </Link>
                         {parseInt(String(record.status)) === PayrollStatus.NotApproved && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
                                 <button
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className="text-orange-400 hover:text-orange-600"
                                     // onClick={() => handleModal(record)}
                                 >
                                     {__('Edit', 'pcm')}

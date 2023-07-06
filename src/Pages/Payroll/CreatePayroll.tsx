@@ -101,21 +101,21 @@ const CreatePayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + sumValues(data.salary_head_details.earnings) - sumValues(data.salary_head_details.deductions);
+        return data.basic_salary + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
     }
 
     const rowTotalPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + (sumValues(data.salary_head_details.earnings) + sumValues(data.salary_head_details.non_taxable)) - sumValues(data.salary_head_details.deductions);
+        return data.basic_salary + (sumValues(data.salary_details.earnings) + sumValues(data.salary_details.non_taxable)) - sumValues(data.salary_details.deductions);
     }
 
     const totalAllowance: number = Number(tableData.reduce(
-            (total, data) => total + sumValues(data.salary_head_details.earnings),
+            (total, data) => total + sumValues(data.salary_details.earnings),
             0
         ).toFixed(2)
     );
 
     const totalDeductions: number = Number(tableData.reduce(
-            (total, data) => total + sumValues(data.salary_head_details.deductions),
+            (total, data) => total + sumValues(data.salary_details.deductions),
             0
         ).toFixed(2)
     );
@@ -137,7 +137,7 @@ const CreatePayroll = () => {
         setTableData((prevTableData: EmployeeSalary[]) => {
             const newTableData = [...prevTableData];
             // @ts-ignore
-            newTableData[tableDataIndex].salary_head_details[head_type][salary_head_id] = value;
+            newTableData[tableDataIndex].salary_details[head_type][salary_head_id] = value;
             localStorage.setItem('Payroll.TableData', JSON.stringify(newTableData));
             return newTableData;
         })
@@ -339,18 +339,18 @@ const CreatePayroll = () => {
                                                 key={earning.id}
                                                 type="number"
                                                 name={`earnings[${data.id}][${earning.id}]`}
-                                                value={data.salary_head_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_head_details.earnings[earning.id]) || 0}
+                                                value={data.salary_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_details.earnings[earning.id]) || 0}
                                                 onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
                                             />
                                         ) : (
-                                            data.salary_head_details.earnings[earning.id] || 0
+                                            data.salary_details.earnings[earning.id] || 0
                                         )}
                                         </td>
                                     ))}
                                     <td
                                         className="text-right total_salary"
                                         key={`total_earnings${tableDataIndex}`}
-                                    >{sumValues(data.salary_head_details.earnings)}</td>
+                                    >{sumValues(data.salary_details.earnings)}</td>
                                     {salaryHeads.deductions.map((deduction) => (
                                         <td
                                             className="text-right"
@@ -361,18 +361,18 @@ const CreatePayroll = () => {
                                                 type="number"
                                                 key={deduction.id}
                                                 name={`deductions[${data.id}][${deduction.id}]`}
-                                                value={data.salary_head_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_head_details.deductions[deduction.id]) || 0}
+                                                value={data.salary_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_details.deductions[deduction.id]) || 0}
                                                 onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                             />
                                         ) : (
-                                            data.salary_head_details.deductions[deduction.id] || 0
+                                            data.salary_details.deductions[deduction.id] || 0
                                         )}
                                         </td>
                                     ))}
                                     <td
                                         className="total_deduction text-right"
                                         key={`total_deductions${tableDataIndex}`}
-                                    >{sumValues(data.salary_head_details.deductions)}</td>
+                                    >{sumValues(data.salary_details.deductions)}</td>
                                     <td
                                         className="net_payable text-right"
                                         key={`net_payable${tableDataIndex}`}
@@ -387,11 +387,11 @@ const CreatePayroll = () => {
                                                 type="number"
                                                 key={non_taxable.id}
                                                 name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                value={data.salary_head_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_head_details.non_taxable[non_taxable.id]) || 0}
+                                                value={data.salary_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id]) || 0}
                                                 onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
                                             />
                                         ) : (
-                                            data.salary_head_details.non_taxable[non_taxable.id] || 0
+                                            data.salary_details.non_taxable[non_taxable.id] || 0
                                         )}
                                         </td>
                                     ))}
@@ -417,7 +417,7 @@ const CreatePayroll = () => {
                                     <td
                                         className="text-right"
                                         key={`total_${earning.id}`}
-                                    >{sumValues(tableData.map((data) => data.salary_head_details.earnings[earning.id] || 0))}</td>
+                                    >{sumValues(tableData.map((data) => data.salary_details.earnings[earning.id] || 0))}</td>
                                 ))}
                                 <td
                                     className="total_salary text-right"
@@ -427,7 +427,7 @@ const CreatePayroll = () => {
                                     <td
                                         className="text-right"
                                         key={deduction.id}
-                                    >{sumValues(tableData.map((data) => data.salary_head_details.deductions[deduction.id] || 0))}</td>
+                                    >{sumValues(tableData.map((data) => data.salary_details.deductions[deduction.id] || 0))}</td>
                                 ))}
                                 <td
                                     className="text-right"
@@ -441,7 +441,7 @@ const CreatePayroll = () => {
                                     <td
                                         className="text-right"
                                         key={non_taxable.id}
-                                    >{sumValues(tableData.map((data) => data.salary_head_details.non_taxable[non_taxable.id] || 0))}</td>
+                                    >{sumValues(tableData.map((data) => data.salary_details.non_taxable[non_taxable.id] || 0))}</td>
                                 ))}
                                 <td
                                     className="text-right"

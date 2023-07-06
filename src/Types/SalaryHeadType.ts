@@ -68,7 +68,7 @@ export interface EmployeeSalary {
     designation_name: string;
     department_name: string;
     basic_salary: number;
-    salary_head_details: {
+    salary_details: {
         earnings: {
             [id: number]: number;
         }

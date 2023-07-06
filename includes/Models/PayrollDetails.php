@@ -4,6 +4,17 @@ namespace PayCheckMate\Models;
 
 class PayrollDetails extends Model {
 
+    /**
+     * @var mixed
+     */
+    private $payroll_id = null;
+
+    public function __construct( $payroll_id = null ) {
+        if ($payroll_id){
+            $this->payroll_id = $payroll_id;
+        }
+    }
+
     protected static string $table = 'payroll_details';
 
     protected static array $columns = [
@@ -49,5 +60,36 @@ class PayrollDetails extends Model {
      */
     public function get_created_on( string $date ): string {
         return get_date_from_gmt( $date, 'd M Y' );
+    }
+
+    /**
+     * Get employee salary heads
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string               $salary_details
+     * @param array<array<string>> $salary_head_types
+     *
+     * @return array<array<string, mixed>>
+     */
+    public function get_salary_details( string $salary_details, array $salary_head_types ): array {
+        $salary_details = json_decode( $salary_details, true );
+        $salary              = [
+            'salary_details' => [
+                'earnings'    => [],
+                'deductions'  => [],
+                'non_taxable' => [],
+            ],
+        ];
+
+        foreach ( $salary_details as $key => $amount ) {
+            foreach ( array_keys( $salary_head_types ) as $type ) {
+                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
+                    $salary['salary_details'][$type][$key] = $amount;
+                }
+            }
+        }
+
+        return $salary;
     }
 }
