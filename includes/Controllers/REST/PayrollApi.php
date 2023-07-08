@@ -398,11 +398,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $args = [
             'status'   => 1,
             'limit'    => '-1',
+            'order_by' => 'employee_id',
+            'order'    => 'ASC',
             'where'    => [
                 'payroll_id' => [
                     'operator' => '=',
                     'value'    => $payroll_id,
                     'type'     => 'AND',
+                ],
+            ],
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_employees',
+                    'local_key'   => 'employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'left',
                 ],
             ],
         ];

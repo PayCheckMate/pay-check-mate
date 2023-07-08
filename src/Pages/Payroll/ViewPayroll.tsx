@@ -18,7 +18,6 @@ import designation from "../../Store/Designation";
 import department from "../../Store/Department";
 import {PrinterIcon} from "@heroicons/react/24/outline";
 import {PayrollType} from "../../Types/PayrollType";
-import {ShieldExclamationIcon} from "@heroicons/react/24/solid";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
@@ -33,7 +32,7 @@ const ViewPayroll = () => {
         deductions: [],
         non_taxable: []
     });
-    // @ts-ignore
+
     useEffect(() => {
         makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
             const salary_heads = {
@@ -41,7 +40,6 @@ const ViewPayroll = () => {
                 deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
                 non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
             };
-            console.log(response)
             setSalaryHeads(salary_heads as SalaryHeadsResponseType);
             setTableData(response.employee_salary_history);
             setPayRoll(response.payroll);
@@ -59,11 +57,11 @@ const ViewPayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
+        return parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
     }
 
     const rowTotalPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + (sumValues(data.salary_details.earnings) + sumValues(data.salary_details.non_taxable)) - sumValues(data.salary_details.deductions);
+        return parseInt(String(data.basic_salary)) + (sumValues(data.salary_details.earnings) + sumValues(data.salary_details.non_taxable)) - sumValues(data.salary_details.deductions);
     }
 
     const totalAllowance: number = Number(tableData.reduce(
@@ -92,12 +90,25 @@ const ViewPayroll = () => {
     );
     const handlePrint = (divID: string) => {
         const divToPrint = document.getElementById(divID);
-        if (divToPrint) {
+        const iframe = document.createElement('iframe')
+        iframe.setAttribute('style', 'height: 0px; width: 0px; position: absolute;')
+        document.body.appendChild(iframe)
+        let print = iframe.contentWindow
+        if (print && divToPrint) {
             let htmlToPrint = `
                 <style type="text/css">
+                    .no-print, .no-print * {
+                        display: none !important;
+                    }
                     .payroll-table th, .payroll-table td {
                       border: 1px solid #000;
                       padding: 4px;
+                    }
+                    .flex {
+                        display: flex;
+                    }
+                    .justify-between {
+                        justify-content: space-between;
                     }
                     h4 {
                       font-size: 20px;
@@ -113,9 +124,11 @@ const ViewPayroll = () => {
                 </style>
                 `;
             htmlToPrint += divToPrint.outerHTML;
-            document.write(htmlToPrint);
-            window.print();
-            window.location.reload();
+            print.document.open()
+            print.document.write(htmlToPrint)
+            print.document.close()
+            print.focus()
+            print.print()
         }
     }
     return (
@@ -125,7 +138,7 @@ const ViewPayroll = () => {
                     {loading ? (
                         <Loading />
                     ) : (
-                        <>
+                        <div id='printable'>
                             <div className="flex justify-between">
                                 <div>
                                     <div className="sm:flex-auto">
@@ -145,24 +158,36 @@ const ViewPayroll = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex items-center">
+                                <div className="flex items-center no-print">
                                     <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
                                     {/*Excel Download*/}
                                 </div>
                             </div>
-                            <div id='printable' className="payroll-table-container">
+                            <div className="payroll-table-container">
                                 <table className="payroll-table">
                                     <thead>
                                     <tr>
-                                        <th rowSpan={2}>{__('Sl. No.', 'pcm')}</th>
-                                        <th rowSpan={2}>{__('Employee ID', 'pcm')}</th>
+                                        <th rowSpan={2}>
+                                            {__('Sl. No.', 'pcm')}
+                                        </th>
+                                        <th rowSpan={2}>
+                                            {__('Employee ID', 'pcm')}
+                                        </th>
                                         <th
                                             rowSpan={2}
                                             className="fixed-column"
-                                        >{__('Employee Name', 'pcm')}</th>
-                                        <th rowSpan={2}>{__('Designation', 'pcm')}</th>
-                                        <th rowSpan={2}>{__('Department', 'pcm')}</th>
-                                        <th rowSpan={3}>{__('Basic Salary', 'pcm')}</th>
+                                        >
+                                            {__('Employee Name', 'pcm')}
+                                        </th>
+                                        <th rowSpan={2}>
+                                            {__('Designation', 'pcm')}
+                                        </th>
+                                        <th rowSpan={2}>
+                                            {__('Department', 'pcm')}
+                                        </th>
+                                        <th rowSpan={3}>
+                                            {__('Basic Salary', 'pcm')}
+                                        </th>
                                         {salaryHeads.earnings.length > 0 && (
                                             <th
                                                 className="salary"
@@ -172,47 +197,65 @@ const ViewPayroll = () => {
                                         <th
                                             className="total_salary"
                                             rowSpan={2}
-                                        >{__('Total Earnings', 'pcm')}</th>
+                                        >
+                                            {__('Total Earnings', 'pcm')}
+                                        </th>
                                         {salaryHeads.deductions.length > 0 && (
                                             <th
                                                 className="deduction"
                                                 colSpan={salaryHeads.deductions.length}
-                                            >{__('Deductions', 'pcm')}</th>
+                                            >
+                                                {__('Deductions', 'pcm')}
+                                            </th>
                                         )}
                                         <th
                                             className="total_deduction"
                                             rowSpan={2}
-                                        >{__('Total Deductions', 'pcm')}</th>
+                                        >
+                                            {__('Total Deductions', 'pcm')}
+                                        </th>
                                         <th
                                             className="net_payable"
                                             rowSpan={2}
-                                        >{__('Net Payable', 'pcm')}</th>
+                                        >
+                                            {__('Net Payable', 'pcm')}
+                                        </th>
                                         {salaryHeads.non_taxable.length > 0 && (
                                             <th
                                                 className="non_taxable"
                                                 colSpan={salaryHeads.non_taxable.length}
-                                            >{__('Non Taxable', 'pcm')}</th>
+                                            >
+                                                {__('Non Taxable', 'pcm')}
+                                            </th>
                                         )}
                                         <th
                                             className="total_payable"
                                             rowSpan={2}
-                                        >{__('Total Payable', 'pcm')}</th>
+                                        >
+                                            {__('Total Payable', 'pcm')}
+                                        </th>
                                     </tr>
                                     <tr className="second-row">
                                         {salaryHeads.earnings.map((earning) => (
                                             <th
                                                 className="salary"
                                                 key={earning.id}
-                                            >{earning.head_name}</th>
+                                            >
+                                                {earning.head_name}
+                                            </th>
                                         ))}
                                         {salaryHeads.deductions.map((deduction) => (
                                             <th
                                                 className="deduction"
                                                 key={deduction.id}
-                                            >{deduction.head_name}</th>
+                                            >
+                                                {deduction.head_name}
+                                            </th>
                                         ))}
                                         {salaryHeads.non_taxable.map((deduction) => (
-                                            <th key={deduction.id}>{deduction.head_name}</th>
+                                            <th key={deduction.id}>
+                                                {deduction.head_name}
+                                            </th>
                                         ))}
                                     </tr>
                                     </thead>
@@ -223,27 +266,39 @@ const ViewPayroll = () => {
                                             <td
                                                 className="text-right"
                                                 key={`sl${tableDataIndex}`}
-                                            >{tableDataIndex + 1}</td>
+                                            >
+                                                {tableDataIndex + 1}
+                                            </td>
                                             <td
                                                 className="text-right"
                                                 key={`employee_id${tableDataIndex}`}
-                                            >{data.employee_id}</td>
+                                            >
+                                                {data.employee_id}
+                                            </td>
                                             <td
                                                 className="text-left fixed-column"
                                                 key={`employee_name${tableDataIndex}`}
-                                            >{data.full_name}</td>
+                                            >
+                                                {data.first_name + ' ' + data.last_name}
+                                            </td>
                                             <td
                                                 className="text-left"
                                                 key={`designation${tableDataIndex}`}
-                                            >{data.designation_name}</td>
+                                            >
+                                                {departments.find((department: any) => department.id === data.department_id)?.name || ''}
+                                            </td>
                                             <td
                                                 className="text-left"
                                                 key={`department${tableDataIndex}`}
-                                            >{data.department_name}</td>
+                                            >
+                                                {designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
+                                            </td>
                                             <td
                                                 className="text-right"
                                                 key={`basic_salary${tableDataIndex}`}
-                                            >{data.basic_salary}</td>
+                                            >
+                                                {data.basic_salary}
+                                            </td>
                                             {salaryHeads.earnings.map((earning) => (
                                                 <td
                                                     className="text-right"
@@ -255,7 +310,9 @@ const ViewPayroll = () => {
                                             <td
                                                 className="text-right total_salary"
                                                 key={`total_earnings${tableDataIndex}`}
-                                            >{sumValues(data.salary_details.earnings)}</td>
+                                            >
+                                                {sumValues(data.salary_details.earnings)}
+                                            </td>
                                             {salaryHeads.deductions.map((deduction) => (
                                                 <td
                                                     className="text-right"
@@ -267,11 +324,15 @@ const ViewPayroll = () => {
                                             <td
                                                 className="total_deduction text-right"
                                                 key={`total_deductions${tableDataIndex}`}
-                                            >{sumValues(data.salary_details.deductions)}</td>
+                                            >
+                                                {sumValues(data.salary_details.deductions)}
+                                            </td>
                                             <td
                                                 className="net_payable text-right"
                                                 key={`net_payable${tableDataIndex}`}
-                                            >{rowNetPayable(data)}</td>
+                                            >
+                                                {rowNetPayable(data)}
+                                            </td>
                                             {salaryHeads.non_taxable.map((non_taxable) => (
                                                 <td
                                                     className="text-right"
@@ -283,7 +344,9 @@ const ViewPayroll = () => {
                                             <td
                                                 className="total_payable text-right"
                                                 key={`total_payable${tableDataIndex}`}
-                                            >{rowTotalPayable(data)}</td>
+                                            >
+                                                {rowTotalPayable(data)}
+                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
@@ -293,45 +356,63 @@ const ViewPayroll = () => {
                                             key={`total`}
                                             className="fixed-column text-right font-bold text-xl"
                                             colSpan={5}
-                                        >{__('Total', 'pcm')}</td>
+                                        >
+                                            {__('Total', 'pcm')}
+                                        </td>
                                         <td
                                             className="text-right"
                                             key={`total_basic_salary`}
-                                        >{sumValues(tableData.map((data) => data.basic_salary))}</td>
+                                        >
+                                            {sumValues(tableData.map((data) => data.basic_salary))}
+                                        </td>
                                         {salaryHeads.earnings.map((earning) => (
                                             <td
                                                 className="text-right"
                                                 key={`total_${earning.id}`}
-                                            >{sumValues(tableData.map((data) => data.salary_details.earnings[earning.id] || 0))}</td>
+                                            >
+                                                {sumValues(tableData.map((data) => data.salary_details.earnings[earning.id] || 0))}
+                                            </td>
                                         ))}
                                         <td
                                             className="total_salary text-right"
                                             key={`total_earnings`}
-                                        >{totalAllowance}</td>
+                                        >
+                                            {totalAllowance}
+                                        </td>
                                         {salaryHeads.deductions.map((deduction) => (
                                             <td
                                                 className="text-right"
                                                 key={deduction.id}
-                                            >{sumValues(tableData.map((data) => data.salary_details.deductions[deduction.id] || 0))}</td>
+                                            >
+                                                {sumValues(tableData.map((data) => data.salary_details.deductions[deduction.id] || 0))}
+                                            </td>
                                         ))}
                                         <td
                                             className="text-right"
                                             key={`total_deductions`}
-                                        >{totalDeductions}</td>
+                                        >
+                                            {totalDeductions}
+                                        </td>
                                         <td
                                             className="text-right"
                                             key={`non_taxable`}
-                                        >{netPayable}</td>
+                                        >
+                                            {netPayable}
+                                        </td>
                                         {salaryHeads.non_taxable.map((non_taxable) => (
                                             <td
                                                 className="text-right"
                                                 key={non_taxable.id}
-                                            >{sumValues(tableData.map((data) => data.salary_details.non_taxable[non_taxable.id] || 0))}</td>
+                                            >
+                                                {sumValues(tableData.map((data) => data.salary_details.non_taxable[non_taxable.id] || 0))}
+                                            </td>
                                         ))}
                                         <td
                                             className="text-right"
                                             key={`total_net_payable`}
-                                        >{totalNetPayable}</td>
+                                        >
+                                            {totalNetPayable}
+                                        </td>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -340,7 +421,7 @@ const ViewPayroll = () => {
                                     <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
                                 </div>
                             </div>
-                        </>
+                        </div>
                     )}
                 </>
             ) : (

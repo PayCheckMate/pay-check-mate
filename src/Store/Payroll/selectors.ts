@@ -13,6 +13,9 @@ const selectors = {
     getPayrolls: ( state: PayrollState, filters: filtersType = defaultFilters ) => {
         return state;
     },
+    getPayroll: ( state: PayrollState, id: number ) => {
+        return state.payrolls.find( payroll => payroll.id === id );
+    },
     getFilters: ( state: PayrollState ) => {
         return state.filters;
     },
