@@ -87,7 +87,7 @@ export const DepartmentList = () => {
         dispatch(department).updateDepartment(data).then((response: any) => {
             useNotify(response, __('Department status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while updating department', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -131,7 +131,7 @@ export const DepartmentList = () => {
                 console.log(response)
                 useNotify(response, __('Department updated successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating department', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -143,7 +143,7 @@ export const DepartmentList = () => {
             dispatch(department).createDepartment(data).then((response: any) => {
                 useNotify(response, __('Department created successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating department', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000

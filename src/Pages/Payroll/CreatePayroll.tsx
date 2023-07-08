@@ -25,7 +25,7 @@ import {useNavigate, useParams} from "react-router-dom";
 const CreatePayroll = () => {
     const payrollId = useParams().id;
     const navigate = useNavigate();
-    const {loading, makePostRequest,} = useFetchApi('');
+    const {loading, makePostRequest, makeGetRequest} = useFetchApi('');
     // Get initial table data from local storage
     let PayrollTableData = localStorage.getItem('Payroll.TableData');
     // @ts-ignore
@@ -40,8 +40,38 @@ const CreatePayroll = () => {
     const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
     const [remarks, setRemarks] = useState<string>('');
 
-    // @ts-ignore
-    const handleFilter = (e) => {
+    useEffect(() => {
+        // Check if this is an edit page.
+        if(payrollId) {
+            makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
+                const salary_heads = {
+                    earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
+                    deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
+                    non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
+                };
+                setSalaryHeads(salary_heads as SalaryHeadsResponseType);
+                setTableData(response.employee_salary_history);
+                setSelectedDepartment({
+                    id: response.payroll.department_id,
+                    name: departments.find((department: any) => department.id === response.payroll.department_id)?.name
+                });
+                setSelectedDesignation({
+                    id: response.payroll.designation_id,
+                    name: designations.find((designation: any) => designation.id === response.payroll.designation_id)?.name
+                });
+                setRemarks(response.payroll.remarks);
+                setPayDate(response.payroll.payroll_date);
+            }).catch((error: any) => {
+                console.log(error, 'error')
+                toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+            })
+        }
+    }, [designations, departments, payrollId]);
+
+    const handleFilter = (e: any) => {
         e.preventDefault();
         setIsSubmitting(false)
         try {
@@ -67,7 +97,7 @@ const CreatePayroll = () => {
                 console.log(e);
             })
         } catch (error) {
-            console.log(error); // Handle the error accordingly
+            console.log(error, 'error'); // Handle the error accordingly
         }
     };
 
@@ -102,11 +132,11 @@ const CreatePayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
+        return parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
     }
 
     const rowTotalPayable = (data: EmployeeSalary): number => {
-        return data.basic_salary + (sumValues(data.salary_details.earnings) + sumValues(data.salary_details.non_taxable)) - sumValues(data.salary_details.deductions);
+        return parseInt(String(data.basic_salary)) + (sumValues(data.salary_details.earnings) + sumValues(data.salary_details.non_taxable)) - sumValues(data.salary_details.deductions);
     }
 
     const totalAllowance: number = Number(tableData.reduce(
@@ -135,6 +165,9 @@ const CreatePayroll = () => {
     );
 
     const handleVariableSalary = (value: number, tableDataIndex: number, salary_head_id: number, head_type: string) => {
+        if (value < 0) {
+            return;
+        }
         setTableData((prevTableData: EmployeeSalary[]) => {
             const newTableData = [...prevTableData];
             // @ts-ignore
@@ -147,10 +180,17 @@ const CreatePayroll = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsSubmitting(true);
+        console.log(payDate, 'payDate')
+        console.log(selectedDepartment, 'selectedDepartment')
+        console.log(selectedDesignation, 'selectedDesignation')
         try {
             // @ts-ignore
             const _wpnonce = payCheckMate.pay_check_mate_nonce;
-            apiFetchUnparsed('pay-check-mate/v1/payrolls/save-payroll', {
+            let url = 'pay-check-mate/v1/payrolls/save-payroll';
+            if (payrollId) {
+                url = `pay-check-mate/v1/payrolls/${payrollId}/update-payroll`;
+            }
+            apiFetchUnparsed(url, {
                 method: 'POST',
                 parse: true,
                 body: JSON.stringify({
@@ -355,19 +395,19 @@ const CreatePayroll = () => {
                                         className="text-left fixed-column"
                                         key={`employee_name${tableDataIndex}`}
                                     >
-                                        {data.full_name}
-                                    </td>
-                                    <td
-                                        className="text-left"
-                                        key={`designation${tableDataIndex}`}
-                                    >
-                                        {data.designation_name}
+                                        {data.full_name || data.first_name + ' ' + data.last_name}
                                     </td>
                                     <td
                                         className="text-left"
                                         key={`department${tableDataIndex}`}
                                     >
-                                        {data.department_name}
+                                        {data.department_name || designations.find((designation: any) => designation.id === data.designation_id)?.name || '' }
+                                    </td>
+                                    <td
+                                        className="text-left"
+                                        key={`designation${tableDataIndex}`}
+                                    >
+                                        {data.designation_name || departments.find((department: any) => department.id === data.department_id)?.name || '' }
                                     </td>
                                     <td
                                         className="text-right"

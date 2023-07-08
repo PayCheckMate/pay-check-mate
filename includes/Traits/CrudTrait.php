@@ -108,9 +108,9 @@ trait CrudTrait {
      * @param Request $data
      * @param int     $id
      *
-     * @return bool
+     * @return object
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( int $id, Request $data ): object {
         return $this->model->update( $id, $data );
     }
 

@@ -172,7 +172,7 @@ export const SalaryHeadList = () => {
         dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
             useNotify(response, __('Salary head status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while creating salary head', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -228,7 +228,7 @@ export const SalaryHeadList = () => {
             dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
                 useNotify(response, __('Successfully updated salary head', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating salary head', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -247,7 +247,7 @@ export const SalaryHeadList = () => {
             dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
                 useNotify(response, __('Successfully created salary head', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating salary head', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000

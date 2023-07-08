@@ -61,10 +61,13 @@ class Payroll extends Model {
      *
      * @param string $date
      *
-     * @return string
+     * @return array
      */
-    public function get_payroll_date( string $date ): string {
-        return get_date_from_gmt( $date, 'd M, Y' );
+    public function get_payroll_date( string $date ): array {
+        return [
+            'payroll_date' => $date,
+            'payroll_date_string' => get_date_from_gmt( $date, 'd M Y' ),
+        ];
     }
 
     /**
@@ -73,18 +76,25 @@ class Payroll extends Model {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param string $date
+     * @param array<string, mixed> $except
      *
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public function get_payroll_by_date( string $date ): array {
+    public function get_payroll_by_date( string $date, array $except = [] ): array {
         global $wpdb;
 
         $date              = gmdate( 'Y-m-d', strtotime( $date ) );
         $month             = gmdate( 'm', strtotime( $date ) );
         $year              = gmdate( 'Y', strtotime( $date ) );
 
-        $sql = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d", $month, $year);
+        if( ! empty( $except ) ) {
+            $except = implode( ' AND ', array_map( function( $value, $key ) {
+                return "{$key} != {$value}";
+            }, $except, array_keys( $except ) ) );
+        }
+
+        $sql = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d AND {$except}", $month, $year );
 
         return $wpdb->get_results( $sql, ARRAY_A );
     }

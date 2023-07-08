@@ -65,6 +65,18 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         );
         register_rest_route(
             $this->namespace,
+            '/' . $this->rest_base . '/(?P<id>[\d]+)/update-payroll', [
+                [
+                    'methods'             => WP_REST_Server::EDITABLE,
+                    'callback'            => [ $this, 'update_payroll_sheet' ],
+                    'permission_callback' => [ $this, 'update_payroll_sheet_permissions_check' ],
+                    'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE ),
+                ],
+                'schema' => [ $this, 'get_public_item_schema' ],
+            ]
+        );
+        register_rest_route(
+            $this->namespace,
             '/' . $this->rest_base . '/(?P<id>[\d]+)', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
@@ -98,6 +110,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     }
 
     public function save_payroll_permissions_check(): bool {
+        return true;
+    }
+
+    public function update_payroll_sheet_permissions_check(): bool {
         return true;
     }
 
@@ -313,6 +329,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
         $parameters                        = $request->get_params();
+        // TODO: Make the employee id from current user.
         $parameters['created_employee_id'] = get_current_user_id();
 
         $validated_data = new PayrollRequest( $parameters );
@@ -359,17 +376,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
             $data['salary_details'] = wp_json_encode( $merged_array );
 
-            $validated_data = new PayrollDetailsRequest( $data );
-            if ( $validated_data->error ) {
+            $validated_details_data = new PayrollDetailsRequest( $data );
+            if ( $validated_details_data->error ) {
                 return new WP_Error(
-                    400, implode( ', ', $validated_data->error ), [
+                    400, implode( ', ', $validated_details_data->error ), [
                         'status' => 400,
-                        'error'  => $validated_data->error,
+                        'error'  => $validated_details_data->error,
                     ]
                 );
             }
 
-            $inserted_payroll_details = $payroll_details->create( $validated_data );
+            $payroll_details->create( $validated_details_data );
         }
 
         // If everything is fine, then commit the data.
@@ -378,6 +395,109 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'message' => __( 'Payroll saved successfully.', 'pcm' ),
+            ], 200
+        );
+    }
+
+    /**
+     * Updates the payroll and payroll details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function update_payroll_sheet( WP_REST_Request $request ) {
+        global $wpdb;
+        $parameters = $request->get_params();
+        $payroll_id = $parameters['id'];
+        if ( ! $payroll_id ) {
+            return new WP_Error(
+                400, __( 'Payroll ID is required.', 'pcm' ), [
+                    'status' => 400,
+                    'error'  => __( 'Payroll ID is required.', 'pcm' ),
+                ]
+            );
+        }
+
+        // TODO: Make the employee id from current user.
+        $parameters['created_employee_id'] = get_current_user_id();
+
+        $validated_data = new PayrollRequest( $parameters );
+
+        if ( $validated_data->error ) {
+            return new WP_Error(
+                400, implode( ', ', $validated_data->error ), [
+                    'status' => 400,
+                    'error'  => $validated_data->error,
+                ]
+            );
+        }
+
+        // Start the transaction.
+        $wpdb->query( 'START TRANSACTION' );
+
+        $payroll = new Payroll( new PayrollModel() );
+        // @phpstan-ignore-next-line
+        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'id' => $payroll_id ] );
+        if ( $previous_payroll ) {
+            return new WP_Error(
+                400, __( 'Payroll already exists for this Month.', 'pcm' ), [
+                    'status' => 400,
+                    'error'  => __( 'Payroll already exists for this Month.', 'pcm' ),
+                ]
+            );
+        }
+        $inserted_payroll = $payroll->update( $payroll_id, $validated_data );
+        if ( is_wp_error( $inserted_payroll ) ) {
+            return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
+        }
+
+        $payroll_details    = new PayrollDetails( new PayrollDetailsModel() );
+        $details_parameters = $parameters['employee_salary_history'];
+        $data['_wpnonce']   = $parameters['_wpnonce'];
+        $data['payroll_id'] = $payroll_id;
+        foreach ( $details_parameters as $detail ) {
+            $payroll_details_id = $detail['payroll_details_id'];
+            if ( ! $payroll_details_id ) {
+                return new WP_Error(
+                    400, __( 'Payroll Details ID is required.', 'pcm' ), [
+                        'status' => 400,
+                        'error'  => __( 'Payroll Details ID is required.', 'pcm' ),
+                    ]
+                );
+            }
+            $data['employee_id']  = $detail['employee_id'];
+            $data['basic_salary'] = $detail['basic_salary'];
+            $merged_array         = [];
+            array_walk_recursive(
+                $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
+					$merged_array[ $key ] = $value;
+				}
+            );
+            $data['salary_details'] = wp_json_encode( $merged_array );
+
+            $validated_details_data = new PayrollDetailsRequest( $data );
+            if ( $validated_details_data->error ) {
+                return new WP_Error(
+                    400, implode( ', ', $validated_details_data->error ), [
+                        'status' => 400,
+                        'error'  => $validated_details_data->error,
+                    ]
+                );
+            }
+
+            $payroll_details->update( $payroll_details_id, $validated_details_data );
+        }
+
+        // If everything is fine, then commit the data.
+        $wpdb->query( 'COMMIT' );
+
+        return new WP_REST_Response(
+            [
+                'message' => __( 'Payroll updated successfully.', 'pcm' ),
             ], 200
         );
     }
@@ -395,8 +515,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $payroll_id   = $request->get_param( 'id' );
         $payroll      = new Payroll( new PayrollModel() );
         $payroll_args = [
-            'order'    => 'DESC',
-            'order_by' => 'id',
+            'order'     => 'DESC',
+            'order_by'  => 'id',
             'relations' => [
                 [
                     'table'       => 'pay_check_mate_employees',
@@ -444,7 +564,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 ],
             ],
         ];
-        $payroll_details = $payroll_details->all( $args, [ '*' ], $salary_head_types );
+        $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
 
         return new WP_REST_Response(
             [
@@ -544,6 +664,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 ],
                 'payroll_date'         => [
                     'description' => __( 'The date of the payroll', 'pcm' ),
+                    'type'        => 'string',
+                    'format'      => 'Y-m-d',
+                    'required'    => true,
+                    'readonly'    => true,
+                    'context'     => [ 'view', 'embed' ],
+                ],
+                'payroll_date_string' => [
+                    'description' => __( 'The date of the payroll in string format', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
                     'required'    => true,

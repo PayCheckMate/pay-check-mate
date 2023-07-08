@@ -47,9 +47,9 @@ interface ModelInterface {
      * @param int     $id
      * @param Request $data
      *
-     * @return bool
+     * @return object
      */
-    public function update( int $id, Request $data ): bool;
+    public function update( int $id, Request $data ): object;
 
     /**
      * Delete an item.

@@ -33,7 +33,7 @@ export const PayrollList = () => {
         dispatch(payroll).updatePayroll(data).then((response: any) => {
             useNotify(response, __('Payroll updated successfully', 'pcm'), __('Something went wrong while updating payroll', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while updating payroll', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -41,7 +41,7 @@ export const PayrollList = () => {
         })
     }
     const columns = [
-        {title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date', sortable: true},
+        {title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date_string', sortable: true},
         {
             title: __('Department', 'pcm'), dataIndex: 'department_id',
             render: (text: string, record: PayrollType) => {

@@ -87,7 +87,7 @@ export const DesignationList = () => {
         dispatch(designation).updateDesignation(data).then((response: any) => {
             useNotify(response, __('Designation status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while updating designation', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -131,7 +131,7 @@ export const DesignationList = () => {
                 console.log(response)
                 useNotify(response, __('Designation updated successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating designation', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -143,7 +143,7 @@ export const DesignationList = () => {
             dispatch(designation).createDesignation(data).then((response: any) => {
                 useNotify(response, __('Designation created successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating designation', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000

@@ -44,7 +44,7 @@ const ViewPayroll = () => {
             setTableData(response.employee_salary_history);
             setPayRoll(response.payroll);
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000

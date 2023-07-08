@@ -131,7 +131,7 @@ export const AddEmployee = () => {
                 console.log(response)
             }
         }).catch(error => {
-            console.log(error);
+            console.log(error, 'error');
         })
     }
     return (

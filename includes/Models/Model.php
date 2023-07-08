@@ -108,13 +108,17 @@ class Model implements ModelInterface {
         }
 
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
-        if ( in_array( 'id', $fields, true ) ) {
-            $fields = array_map(
-                function ( $field ) {
-                    return $this->get_table() . '.' . esc_sql( $field );
-                }, $fields
-            );
-        }
+        $fields = array_map( function ( $field ) {
+            // E.g., id as something_id
+            if ( strpos( $field, 'id' ) !== false ) {
+                $field = $this->get_table() . '.' . esc_sql( $field );
+            }
+            if('id' === $field) {
+                $field = $this->get_table() . '.' . esc_sql( $field );
+            }
+
+            return $field;
+        }, $fields );
 
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
@@ -316,7 +320,7 @@ class Model implements ModelInterface {
      * @param Request $data
      *
      * @throws Exception
-     * @return object|WP_Error The number of rows inserted, or false on error.
+     * @return object|WP_Error Returns the created item, or error if not created.
      */
     public function create( Request $data ): object {
         global $wpdb;
@@ -348,15 +352,15 @@ class Model implements ModelInterface {
      * @param Request $data
      *
      * @throws Exception
-     * @return bool
+     * @return object|WP_Error Returns the updated item, or error if the item was not updated.
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( int $id, Request $data ): object {
         global $wpdb;
 
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
 
-        return $wpdb->update(
+        if ($wpdb->update(
             $this->get_table(),
             $filteredData,
             [
@@ -366,7 +370,11 @@ class Model implements ModelInterface {
             [
                 '%d',
             ],
-        );
+        )){
+            return $this->find( $id );
+        }
+
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pcm' ) );
     }
 
     /**
