@@ -1,5 +1,5 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XCircleIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {__} from "@wordpress/i18n";
 import {useDispatch, useSelect} from "@wordpress/data";
 import payroll from "../../Store/Payroll";
@@ -12,11 +12,12 @@ import {PayrollStatus, PayrollType} from "../../Types/PayrollType";
 import useNotify from "../../Helpers/useNotify";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
+import {CheckIcon} from "@heroicons/react/20/solid";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {payrolls, loading, totalPages, filters, total} = useSelect((select) => select(payroll).getPayrolls({per_page: per_page, page: 1}), []);
+    const {payrolls, loading, totalPages, filters, total} = useSelect((select) => select(payroll).getPayrolls({per_page: per_page, page: 1, order_by: 'payroll_date', order: 'DESC'}), []);
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1'}), []);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1'}), []);
 
@@ -69,6 +70,41 @@ export const PayrollList = () => {
                 )
             }
         },
+        {title: __('Total salary', 'pcm'), dataIndex: 'total_salary', sortable: true},
+        {
+            title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
+            render: (text: string, record: PayrollType) => {
+                if (parseInt(String(record.status)) === PayrollStatus.Approved) {
+                    return (
+                        <span className="flex items-center text-green-500">
+                            <CheckIcon className="h-5 w-5 mr-1"/>
+                            {__('Approved', 'pcm')}
+                        </span>
+                    )
+                } else if (parseInt(String(record.status)) === PayrollStatus.Rejected) {
+                    return (
+                        <span className="flex items-center text-red-500">
+                            <XMarkIcon className="h-5 w-5 mr-1"/>
+                            {__('Rejected', 'pcm')}
+                        </span>
+                    )
+                } else if (parseInt(String(record.status)) === PayrollStatus.Cancelled) {
+                    return (
+                        <span className="flex items-center text-gray-500">
+                            <ExclamationTriangleIcon className="h-5 w-5 mr-1"/>
+                            {__('Cancelled', 'pcm')}
+                        </span>
+                    )
+                } else {
+                    return (
+                        <span className="flex items-center text-orange-500">
+                            <PencilSquareIcon className="h-5 w-5 mr-1"/>
+                            {__('Pending', 'pcm')}
+                        </span>
+                    )
+                }
+            }
+        },
         {
             title: __('Action', 'pcm'), dataIndex: 'action',
             render: (text: string, record: PayrollType) => {
@@ -83,12 +119,13 @@ export const PayrollList = () => {
                         {parseInt(String(record.status)) === PayrollStatus.NotApproved && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
-                                <button
+                                <Link
+                                    to={`/payroll/edit/${record.id}`}
                                     className="text-orange-400 hover:text-orange-600"
                                     // onClick={() => handleModal(record)}
                                 >
                                     {__('Edit', 'pcm')}
-                                </button>
+                                </Link>
                                 <span className="mx-2 text-gray-300">|</span>
                                 <button
                                     onClick={() => handleStatus(record, 1)}
@@ -103,6 +140,13 @@ export const PayrollList = () => {
                                 >
                                     {__('Reject', 'pcm')}
                                 </button>
+                                <span className="mx-2 text-gray-300">|</span>
+                                <button
+                                    onClick={() => handleStatus(record, 3)}
+                                    className="text-gray-400 hover:text-gray-700"
+                                >
+                                    {__('Cancel', 'pcm')}
+                                </button>
                             </>
                         )}
                     </div>
@@ -111,6 +155,8 @@ export const PayrollList = () => {
         }
     ]
     const handleFilterChange = (filterObject: filtersType) => {
+        // Remove status, cause we want to show all status
+        delete filterObject.status;
         dispatch(payroll).getPayrolls(filterObject)
         setCurrentPage(filterObject.page);
     };

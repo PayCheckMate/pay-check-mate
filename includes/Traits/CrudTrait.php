@@ -73,7 +73,7 @@ trait CrudTrait {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int $id
-     * @param array<string> $args
+     * @param array<string, mixed> $args
      *
      * @return object
      */
@@ -83,6 +83,7 @@ trait CrudTrait {
                 'fields' => [ '*' ],
             ]
         );
+
         return $this->model->find( $id, $args );
     }
 

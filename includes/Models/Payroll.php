@@ -66,4 +66,26 @@ class Payroll extends Model {
     public function get_payroll_date( string $date ): string {
         return get_date_from_gmt( $date, 'd M, Y' );
     }
+
+    /**
+     * Get payroll by date
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $date
+     *
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
+    public function get_payroll_by_date( string $date ): array {
+        global $wpdb;
+
+        $date              = gmdate( 'Y-m-d', strtotime( $date ) );
+        $month             = gmdate( 'm', strtotime( $date ) );
+        $year              = gmdate( 'Y', strtotime( $date ) );
+
+        $sql = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d", $month, $year);
+
+        return $wpdb->get_results( $sql, ARRAY_A );
+    }
 }

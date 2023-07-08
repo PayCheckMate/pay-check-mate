@@ -20,9 +20,10 @@ import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import {Button} from "../../Components/Button";
 import {Spinner} from "../../Components/Spinner";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const CreatePayroll = () => {
+    const payrollId = useParams().id;
     const navigate = useNavigate();
     const {loading, makePostRequest,} = useFetchApi('');
     // Get initial table data from local storage
@@ -101,7 +102,6 @@ const CreatePayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        console.log(data.basic_salary + sumValues(data.salary_details.earnings), 'row')
         return data.basic_salary + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
     }
 
@@ -158,6 +158,7 @@ const CreatePayroll = () => {
                     'remarks': remarks,
                     'department_id': selectedDepartment.id,
                     'designation_id': selectedDesignation.id,
+                    'total_salary': totalNetPayable,
                     'employee_salary_history': tableData,
                     '_wpnonce': _wpnonce,
                 }),
@@ -165,7 +166,7 @@ const CreatePayroll = () => {
                     'Content-Type': 'application/json',
                 }
             }).then((response: any) => {
-                if (response.data.code === 400){
+                if (response.data.code === 400) {
                     toast.error(response.data.message);
                     setIsSubmitting(false);
                     return;
@@ -180,7 +181,7 @@ const CreatePayroll = () => {
                 console.log(e);
                 setIsSubmitting(false);
             });
-        }catch (e) {
+        } catch (e) {
             console.log(e);
             setIsSubmitting(false);
         }
@@ -221,12 +222,14 @@ const CreatePayroll = () => {
                         </div>
                         <div className="flex items-end">
                             {/*This button should flat and small*/}
-                            <Button
-                                type="submit"
-                                className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
-                            >
-                                {__('Generate', 'pcm')}
-                            </Button>
+                            {!payrollId && (
+                                <Button
+                                    type="submit"
+                                    className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
+                                >
+                                    {__('Generate', 'pcm')}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </form>
@@ -378,17 +381,17 @@ const CreatePayroll = () => {
                                             key={earning.id}
                                         >
                                             {(parseInt(String(earning.is_variable)) === 1) ? (
-                                            <FormInput
-                                                id={`earnings[${data.id}][${earning.id}]`}
-                                                key={earning.id}
-                                                type="number"
-                                                name={`earnings[${data.id}][${earning.id}]`}
-                                                value={data.salary_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_details.earnings[earning.id]) || 0}
-                                                onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
-                                            />
-                                        ) : (
-                                            data.salary_details.earnings[earning.id] || 0
-                                        )}
+                                                <FormInput
+                                                    id={`earnings[${data.id}][${earning.id}]`}
+                                                    key={earning.id}
+                                                    type="number"
+                                                    name={`earnings[${data.id}][${earning.id}]`}
+                                                    value={data.salary_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_details.earnings[earning.id]) || 0}
+                                                    onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
+                                                />
+                                            ) : (
+                                                data.salary_details.earnings[earning.id] || 0
+                                            )}
                                         </td>
                                     ))}
                                     <td
@@ -403,17 +406,17 @@ const CreatePayroll = () => {
                                             key={deduction.id}
                                         >
                                             {(parseInt(String(deduction.is_variable)) === 1) ? (
-                                            <FormInput
-                                                id={`deductions[${data.id}][${deduction.id}]`}
-                                                type="number"
-                                                key={deduction.id}
-                                                name={`deductions[${data.id}][${deduction.id}]`}
-                                                value={data.salary_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_details.deductions[deduction.id]) || 0}
-                                                onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
-                                            />
-                                        ) : (
-                                            data.salary_details.deductions[deduction.id] || 0
-                                        )}
+                                                <FormInput
+                                                    id={`deductions[${data.id}][${deduction.id}]`}
+                                                    type="number"
+                                                    key={deduction.id}
+                                                    name={`deductions[${data.id}][${deduction.id}]`}
+                                                    value={data.salary_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_details.deductions[deduction.id]) || 0}
+                                                    onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
+                                                />
+                                            ) : (
+                                                data.salary_details.deductions[deduction.id] || 0
+                                            )}
                                         </td>
                                     ))}
                                     <td
@@ -434,17 +437,17 @@ const CreatePayroll = () => {
                                             key={non_taxable.id}
                                         >
                                             {(parseInt(String(non_taxable.is_variable)) === 1) ? (
-                                            <FormInput
-                                                id={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                type="number"
-                                                key={non_taxable.id}
-                                                name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                value={data.salary_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id]) || 0}
-                                                onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
-                                            />
-                                        ) : (
-                                            data.salary_details.non_taxable[non_taxable.id] || 0
-                                        )}
+                                                <FormInput
+                                                    id={`non_taxable[${data.id}][${non_taxable.id}]`}
+                                                    type="number"
+                                                    key={non_taxable.id}
+                                                    name={`non_taxable[${data.id}][${non_taxable.id}]`}
+                                                    value={data.salary_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id]) || 0}
+                                                    onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
+                                                />
+                                            ) : (
+                                                data.salary_details.non_taxable[non_taxable.id] || 0
+                                            )}
                                         </td>
                                     ))}
                                     <td

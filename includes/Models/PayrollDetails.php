@@ -9,7 +9,7 @@ class PayrollDetails extends Model {
      */
     private $payroll_id = null;
 
-    public function __construct( $payroll_id = null ) {
+    public function __construct( int $payroll_id = null ) {
         if ($payroll_id){
             $this->payroll_id = $payroll_id;
         }

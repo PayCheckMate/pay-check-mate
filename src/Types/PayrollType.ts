@@ -17,7 +17,8 @@ export interface PayrollType {
 export enum PayrollStatus {
     NotApproved = 0,
     Approved = 1,
-    Rejected = 2
+    Rejected = 2,
+    Cancelled = 3,
 }
 
 export interface PayrollDetails{
