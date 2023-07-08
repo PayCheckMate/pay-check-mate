@@ -9,6 +9,9 @@ export interface PayrollType {
     approved_employee_id: number;
     created_on: string;
     updated_at: string;
+    prepared_by_first_name: string;
+    prepared_by_last_name: string;
+    prepared_by_employee_id: number;
 }
 
 export enum PayrollStatus {

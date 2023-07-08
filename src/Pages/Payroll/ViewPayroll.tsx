@@ -100,6 +100,23 @@ const ViewPayroll = () => {
                     .no-print, .no-print * {
                         display: none !important;
                     }
+                    .remarks{
+                        width: 66.666667%;
+                        margin-top: 1rem;
+                    }
+                    .prepared_by{
+                        width: 20%;
+                        margin-top: 1rem;
+                    }
+                    .text-right {
+                        text-align: right;
+                    }
+                    .text-left {
+                        text-align: left;
+                    }
+                    .payroll-table {
+                        margin-top: 1rem;
+                    }
                     .payroll-table th, .payroll-table td {
                       border: 1px solid #000;
                       padding: 4px;
@@ -416,9 +433,28 @@ const ViewPayroll = () => {
                                     </tr>
                                     </tfoot>
                                 </table>
-                                <div className="mt-4">
-                                    {__('Remarks', 'pcm')}:&nbsp;
-                                    <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
+                                {/*Give remarks 75% and prepared by 25%*/}
+                                <div className="flex justify-between mt-4">
+                                    <div className="w-4/6 remarks">
+                                        <div className="flex">
+                                                <div className="flex">
+                                                    <div className="mt-4">
+                                                        <strong>
+                                                            {__('Remarks', 'pcm')}
+                                                        </strong>:&nbsp;
+                                                        <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div className="w-1/6 prepared_by">
+                                        <div className="flex">
+                                                <strong className="font-bold">
+                                                    {__('Prepared By: ', 'pcm')}&nbsp;
+                                                </strong>
+                                                {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

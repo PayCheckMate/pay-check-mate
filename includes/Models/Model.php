@@ -264,18 +264,40 @@ class Model implements ModelInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int           $id
-     * @param array<string> $fields
+     * @param array<string> $args
      *
      *
      * @throws \Exception
      * @return object
      */
-    public function find( int $id, array $fields = [ '*' ] ): object {
+    public function find( int $id, array $args = [] ): object {
         global $wpdb;
 
-        $fields  = implode( ',', esc_sql( $fields ) );
-        $query   = $wpdb->prepare( "SELECT $fields FROM {$this->get_table()} WHERE id = %d", $id );
-        $results = $wpdb->get_row( $query );
+        $args = wp_parse_args(
+            $args, [
+                'fields' => [ '*' ],
+            ]
+        );
+
+        if( $args['fields'][0] === '*' ) {
+            $args['fields'] = [$this->get_table() . '.*'];
+        }
+        $fields            = $args['fields'];
+        $relational_fields = [];
+        $relations         = '';
+        $where             = 'WHERE 1=1';
+        if ( ! empty( $args['relations'] ) ) {
+            // Get relational and where clause from get_relations() method.
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
+            $relational_fields = $relational->fields;
+        }
+        $relational_fields = array_merge( ...$relational_fields );
+        $fields            = array_merge( $fields, $relational_fields );
+        $fields            = implode( ', ', esc_sql( $fields ) );
+        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.id = %d", $id );
+        $results           = $wpdb->get_row( $query );
 
         if ( empty( $results ) ) {
             return (object) [];

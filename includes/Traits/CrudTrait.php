@@ -73,11 +73,17 @@ trait CrudTrait {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int $id
+     * @param array<string> $args
      *
      * @return object
      */
-    public function find( int $id ): object {
-        return $this->model->find( $id );
+    public function find( int $id, array $args = [] ): object {
+        $args = wp_parse_args(
+            $args, [
+                'fields' => [ '*' ],
+            ]
+        );
+        return $this->model->find( $id, $args );
     }
 
     /**

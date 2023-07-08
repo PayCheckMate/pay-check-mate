@@ -282,13 +282,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $employees = new Employee( new EmployeeModel() );
         $employees = $employees->all(
             $args, [
-				'id',
-				'employee_id',
-				'first_name',
-				'last_name',
-				'designation_id',
-				'department_id',
-			], $salary_head_types
+            'id',
+            'employee_id',
+            'first_name',
+            'last_name',
+            'designation_id',
+            'department_id',
+        ], $salary_head_types
         );
 
         return new WP_REST_Response(
@@ -344,8 +344,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $merged_array         = [];
             array_walk_recursive(
                 $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
-					$merged_array[ $key ] = $value;
-				}
+                $merged_array[$key] = $value;
+            }
             );
             $data['salary_details'] = wp_json_encode( $merged_array );
 
@@ -382,11 +382,27 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object.
      */
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
-        $payroll_id = $request->get_param( 'id' );
-        $payroll    = new Payroll( new PayrollModel() );
-        $payroll    = $payroll->find( $payroll_id );
+        $payroll_id   = $request->get_param( 'id' );
+        $payroll      = new Payroll( new PayrollModel() );
+        $payroll_args = [
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_employees',
+                    'local_key'   => 'created_employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'left',
+                    'fields'      => [
+                        'employee_id as prepared_by_employee_id',
+                        'first_name as prepared_by_first_name',
+                        'last_name as prepared_by_last_name',
+                    ],
+                ],
+            ],
+        ];
 
-        $args            = [
+        $payroll = $payroll->find( $payroll_id, $payroll_args );
+
+        $args              = [
             'status'   => 1,
             'limit'    => '-1',
             'order'    => 'ASC',
@@ -395,12 +411,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_head_types = $this->get_salary_head( $args );
 
         $payroll_details = new PayrollDetails( new PayrollDetailsModel() );
-        $args = [
-            'status'   => 1,
-            'limit'    => '-1',
-            'order_by' => 'employee_id',
-            'order'    => 'ASC',
-            'where'    => [
+        $args            = [
+            'status'    => 1,
+            'limit'     => '-1',
+            'order_by'  => 'employee_id',
+            'order'     => 'ASC',
+            'where'     => [
                 'payroll_id' => [
                     'operator' => '=',
                     'value'    => $payroll_id,
@@ -451,12 +467,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         foreach ( $salary_heads->toArray() as $salary_head ) {
             if ( $salary_head->is_taxable ) {
                 if ( 1 === absint( $salary_head->head_type ) ) {
-                    $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
+                    $salary_head_types['earnings'][$salary_head->id] = $salary_head;
                 } else {
-                    $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
+                    $salary_head_types['deductions'][$salary_head->id] = $salary_head;
                 }
             } else {
-                $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
+                $salary_head_types['non_taxable'][$salary_head->id] = $salary_head;
             }
         }
 
