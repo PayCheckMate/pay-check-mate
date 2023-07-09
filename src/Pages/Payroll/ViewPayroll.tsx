@@ -160,7 +160,7 @@ const ViewPayroll = () => {
                                 <div>
                                     <div className="sm:flex-auto">
                                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                            {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date}
+                                            {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date_string}
                                         </h1>
                                     </div>
                                     <div className="flex justify-between mt-2 mb-4">

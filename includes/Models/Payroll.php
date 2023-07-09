@@ -66,7 +66,7 @@ class Payroll extends Model {
     public function get_payroll_date( string $date ): array {
         return [
             'payroll_date' => $date,
-            'payroll_date_string' => get_date_from_gmt( $date, 'd M Y' ),
+            'payroll_date_string' => get_date_from_gmt( $date, 'd M, Y' ),
         ];
     }
 

@@ -11,12 +11,11 @@ import {filtersType} from "../../Store/Store";
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const per_page = 20;
+    const per_page = 10;
     const {
         loading,
         models,
-        totalPage,
+        totalPages,
         setFilterObject,
         filterObject,
         total
@@ -25,7 +24,6 @@ export const EmployeeList = () => {
     useEffect(() => {
         if (models) {
             setEmployees(models);
-            setTotalPages(totalPage as number);
         }
     },[models, filterObject])
 
@@ -69,10 +67,6 @@ export const EmployeeList = () => {
                         <span className="mx-2 text-gray-300">|</span>
                         <button className="text-indigo-600 hover:text-indigo-900">
                             {__('Edit info', 'pcm')}
-                        </button>
-                        <span className="mx-2 text-gray-300">|</span>
-                        <button className="text-red-600 hover:text-red-900">
-                            {__('Terminate', 'pcm')}
                         </button>
                     </div>
                 );
