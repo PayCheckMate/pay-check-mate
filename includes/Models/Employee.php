@@ -2,6 +2,8 @@
 
 namespace PayCheckMate\Models;
 
+use PayCheckMate\Classes\Helper;
+
 class Employee extends Model {
 
     protected static string $table = 'employees';
@@ -85,11 +87,12 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param string $date
+     *
      * @return string
      */
-    public function get_joining_date(): string {
-        // @phpstan-ignore-next-line
-        return get_date_from_gmt( $this->joining_date, 'd M Y' );
+    public function get_joining_date( string $date ): string {
+        return get_date_from_gmt( $date, 'd M Y' );
     }
 
     /**
@@ -97,11 +100,15 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param string|null $date
+     *
      * @return string
      */
-    public function get_regine_date(): string {
-        // @phpstan-ignore-next-line
-        return get_date_from_gmt( $this->regine_date, 'd M Y' );
+    public function get_regine_date( ?string $date ): string {
+        if ( ! $date ) {
+            return 'N/A';
+        }
+        return get_date_from_gmt( $date, 'd M Y' );
     }
 
     /**
@@ -127,8 +134,18 @@ class Employee extends Model {
      * @return array<array<string, mixed>>
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
+        if(empty( $salary_head_types ) ){
+            $args              = [
+                'status'   => 1,
+                'limit'    => '-1',
+                'order'    => 'ASC',
+                'order_by' => 'priority',
+            ];
+            $salary_head_types = Helper::get_salary_head( $args );
+        }
+
         $salary_details = json_decode( $salary_details, true );
-        $salary              = [
+        $salary         = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],

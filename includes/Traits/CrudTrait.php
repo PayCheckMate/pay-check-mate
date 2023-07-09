@@ -88,6 +88,34 @@ trait CrudTrait {
     }
 
     /**
+     * Get the items from the database by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array $find_by
+     * @param array $args
+     * @param array $fields
+     *
+     * @throws \Exception
+     * @return object
+     */
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+        if ( empty( $find_by ) ) {
+            throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
+        }
+
+        $args = wp_parse_args(
+            $args, [
+                'order_by' => 'id',
+                'order'    => 'DESC',
+                'limit'    => 1,
+                'offset'   => 0,
+            ]
+        );
+        return $this->model->find_by( $find_by, $args, $fields );
+    }
+
+    /**
      * Create a new item.
      *
      * @since PAY_CHECK_MATE_SINCE

@@ -22,4 +22,6 @@ export enum EmployeeStatus {
 
 export interface EmployeeResponseType {
     data: EmployeeType[];
+    headers: any;
+    status: number;
 }

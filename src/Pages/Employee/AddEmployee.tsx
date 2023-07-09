@@ -1,10 +1,10 @@
-import {useState} from "@wordpress/element";
-import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "@wordpress/element";
+import {useNavigate, useParams} from "react-router-dom";
 import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
 import {__} from "@wordpress/i18n";
-import {EmployeeType} from "../../Types/EmployeeType";
+import {EmployeeResponseType, EmployeeType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
@@ -16,6 +16,20 @@ type ResponseType = {
     status: number,
 }
 export const AddEmployee = () => {
+    const employeeId = useParams().id;
+    const {makePostRequest, makeGetRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
+    useEffect(() => {
+        if (employeeId){
+            makeGetRequest('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response: EmployeeResponseType) => {
+                console.log(response)
+                if (response.status === 200) {
+                    setPersonalInformation(response.data);
+                } else {
+                    toast.error(__('Something went wrong', 'pcm'));
+                }
+            });
+        }
+    }, [employeeId])
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     // Get initial personal information from local storage
@@ -26,7 +40,6 @@ export const AddEmployee = () => {
     let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
     // @ts-ignore
     let savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
-    const {makePostRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);

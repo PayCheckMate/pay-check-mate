@@ -175,8 +175,8 @@ class Model implements ModelInterface {
 
             if ( ! empty( $relation['select_max'] ) ) {
                 foreach ( $relation['select_max'] as $key => $value ) {
-                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}", $value['value'] );
-                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})", $value['value'] );
+                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}",  );
+                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})",  );
                 }
             }
 
@@ -310,6 +310,73 @@ class Model implements ModelInterface {
         $this->result = $this->process_item( $results );
 
         return $this->result;
+    }
+
+    /**
+     * Get the items from the database by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, string> $find_by
+     * @param array<string>         $args
+     * @param array                $fields
+     *
+     * @throws \Exception
+     * @return object
+     */
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+        global $wpdb;
+        if( empty( $find_by ) ) {
+            throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
+        }
+
+        $args = wp_parse_args(
+            $args, [
+                'order_by' => 'id',
+                'order'    => 'DESC',
+                'limit'    => 1,
+                'offset'   => 0,
+            ]
+        );
+
+        if ( ! empty( $args['order_by'] ) ) {
+            $args['order_by'] = $this->get_table() . '.' . $args['order_by'];
+        }
+
+        $where = 'WHERE 1=1';
+
+        $relational_fields = [];
+        $relations         = '';
+        if ( ! empty( $args['relations'] ) ) {
+            // Get relational and where clause from get_relations() method.
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
+            $relational_fields = $relational->fields;
+        }
+
+        foreach ( $find_by as $key => $value ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.{$key} = %s", $value );
+        }
+
+        $relational_fields = array_merge( ...$relational_fields );
+        $fields = array_map( function ( $field ) {
+            return $this->get_table() . '.' . esc_sql( $field );
+        }, $fields );
+        $fields            = array_merge( $fields, $relational_fields );
+        $fields            = implode( ', ', esc_sql( $fields ) );
+
+        $query  = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+        $results = $wpdb->get_results( $query );
+
+        if ( empty( $results ) ) {
+            return (object) [];
+        }
+
+
+        $this->results = $this->process_items( $results );
+
+        return $this;
     }
 
     /**

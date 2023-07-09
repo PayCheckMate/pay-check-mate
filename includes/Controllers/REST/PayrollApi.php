@@ -3,6 +3,7 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\Helper;
 use PayCheckMate\Classes\Payroll;
 use PayCheckMate\Classes\PayrollDetails;
 use PayCheckMate\Models\Payroll as PayrollModel;
@@ -197,7 +198,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => 'ASC',
             'order_by' => 'priority',
         ];
-        $salary_head_types = $this->get_salary_head( $args );
+        $salary_head_types = Helper::get_salary_head( $args );
 
         $department_args = [
             'table'       => 'pay_check_mate_departments',
@@ -540,7 +541,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => 'ASC',
             'order_by' => 'priority',
         ];
-        $salary_head_types = $this->get_salary_head( $args );
+        $salary_head_types = Helper::get_salary_head( $args );
 
         $payroll_details = new PayrollDetails( new PayrollDetailsModel() );
         $args            = [
@@ -573,42 +574,6 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'salary_head_types'       => $salary_head_types,
             ], 200
         );
-    }
-
-    /**
-     * Gets the salary head.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param array<string, string> $args
-     *
-     * @return array<string, array<string, string>> Salary head types.
-     */
-    public function get_salary_head( array $args ): array {
-        $args              = wp_parse_args(
-            $args, [
-                'status'   => 1,
-                'limit'    => '-1',
-                'order'    => 'ASC',
-                'order_by' => 'priority',
-            ]
-        );
-        $salary_heads      = new SalaryHead( new SalaryHeadModel() );
-        $salary_heads      = $salary_heads->all( $args );
-        $salary_head_types = [];
-        foreach ( $salary_heads->toArray() as $salary_head ) {
-            if ( $salary_head->is_taxable ) {
-                if ( 1 === absint( $salary_head->head_type ) ) {
-                    $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;
-                } else {
-                    $salary_head_types['deductions'][ $salary_head->id ] = $salary_head;
-                }
-            } else {
-                $salary_head_types['non_taxable'][ $salary_head->id ] = $salary_head;
-            }
-        }
-
-        return $salary_head_types;
     }
 
     /**

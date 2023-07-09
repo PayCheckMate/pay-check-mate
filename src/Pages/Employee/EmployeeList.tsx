@@ -7,6 +7,7 @@ import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
+import {Link} from "react-router-dom";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -65,9 +66,11 @@ export const EmployeeList = () => {
                             {__('Salary increment', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
-                        <button className="text-indigo-600 hover:text-indigo-900">
+                        <Link
+                            to={`/employee/edit/${record.employee_id}`}
+                            className="text-indigo-600 hover:text-indigo-900">
                             {__('Edit info', 'pcm')}
-                        </button>
+                        </Link>
                     </div>
                 );
             },
@@ -85,7 +88,7 @@ export const EmployeeList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button className="hover:text-white" path='/add-user'>
+                        <Button className="hover:text-white" path='/add-employee'>
                             <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true"/>
                             {__('Add Employee', 'pcm')}
                         </Button>
