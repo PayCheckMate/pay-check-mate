@@ -128,7 +128,6 @@ export const DesignationList = () => {
 
         if (formData.id) {
             dispatch(designation).updateDesignation(data).then((response: any) => {
-                console.log(response)
                 useNotify(response, __('Designation updated successfully', 'pcm'));
             }).catch((error: any) => {
                 console.log(error, 'error')

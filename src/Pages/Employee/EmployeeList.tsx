@@ -26,7 +26,7 @@ export const EmployeeList = () => {
         if (models) {
             setEmployees(models);
         }
-    },[models, filterObject])
+    }, [models, filterObject])
 
     const handleFilterChange = (filterObject: filtersType) => {
         setFilterObject(filterObject);
@@ -44,31 +44,52 @@ export const EmployeeList = () => {
             sortable: true,
         },
         {
-            title: 'Name',
+            title: __('Joining Date', 'pcm'), dataIndex: 'joining_date', sortable: true,
+            render: (text: string, record: any) => {
+                return (
+                    <span>
+                        {new Date(text).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })}
+                    </span>
+                )
+            }
+        },
+        {
+            title: __('Name', 'pcm'),
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
                 return (
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                    <a
+                        href="#"
+                        className="text-indigo-600 hover:text-indigo-900"
+                    >
                         {text}
                     </a>
                 )
             }
         },
-        {title: 'Email', dataIndex: 'email'},
+        {title: __('Email', 'pcm'), dataIndex: 'email'},
         {
-            title: 'Action',
+            title: __('Action', 'pcm'),
             dataIndex: 'action',
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        <button onClick={() => viewEmployee(record.id)} className="text-green-600 hover:text-green-900">
+                        <button
+                            onClick={() => viewEmployee(record.id)}
+                            className="text-green-600 hover:text-green-900"
+                        >
                             {__('Salary increment', 'pcm')}
                         </button>
                         <span className="mx-2 text-gray-300">|</span>
                         <Link
                             to={`/employee/edit/${record.employee_id}`}
-                            className="text-indigo-600 hover:text-indigo-900">
+                            className="text-indigo-600 hover:text-indigo-900"
+                        >
                             {__('Edit info', 'pcm')}
                         </Link>
                     </div>
@@ -79,7 +100,7 @@ export const EmployeeList = () => {
     const [showModal, setShowModal] = useState(false);
     return (
         <>
-            {showViewModal && <Modal setShowModal={setShowViewModal}/>}
+            {showViewModal && <Modal setShowModal={setShowViewModal} />}
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -88,12 +109,18 @@ export const EmployeeList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button className="hover:text-white" path='/add-employee'>
-                            <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true"/>
+                        <Button
+                            className="hover:text-white"
+                            path="/add-employee"
+                        >
+                            <CheckCircleIcon
+                                className="w-5 h-5 mr-2 -ml-1 text-white"
+                                aria-hidden="true"
+                            />
                             {__('Add Employee', 'pcm')}
                         </Button>
                         {showModal && (
-                            <Modal setShowModal={setShowModal}/>
+                            <Modal setShowModal={setShowModal} />
                         )}
                     </div>
                 </div>

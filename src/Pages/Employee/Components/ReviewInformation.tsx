@@ -23,7 +23,6 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
     }, [models]);
 
     useEffect(() => {
-        console.log(personalInformation.department_id)
         if (personalInformation.department_id === null) {
             return;
         }

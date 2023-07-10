@@ -4,7 +4,7 @@ import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
 import {__} from "@wordpress/i18n";
-import {EmployeeResponseType, EmployeeType} from "../../Types/EmployeeType";
+import {EmployeeResponseType, EmployeeType, SingleEmployeeResponseType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
@@ -18,18 +18,7 @@ type ResponseType = {
 export const AddEmployee = () => {
     const employeeId = useParams().id;
     const {makePostRequest, makeGetRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
-    useEffect(() => {
-        if (employeeId){
-            makeGetRequest('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response: EmployeeResponseType) => {
-                console.log(response)
-                if (response.status === 200) {
-                    setPersonalInformation(response.data);
-                } else {
-                    toast.error(__('Something went wrong', 'pcm'));
-                }
-            });
-        }
-    }, [employeeId])
+
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     // Get initial personal information from local storage
@@ -43,8 +32,41 @@ export const AddEmployee = () => {
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);
-    const handlePersonalInformation = (personalInformation: EmployeeType) => {
-        setPersonalInformation(personalInformation);
+
+    useEffect(() => {
+        if (employeeId){
+            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response) => {
+                if (response.status === 200) {
+                    const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
+                    employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
+                    const salaryInformation = response.data.salaryInformation;
+                    // Loop through salary information and make it one dimensional
+                    Object.keys(salaryInformation.salary_details).forEach((key) => {
+                        const salaryDetail = salaryInformation.salary_details[key];
+                        delete salaryInformation.salary_details[key];
+                        Object.keys(salaryDetail).forEach((detailKey) => {
+                            salaryInformation.salary_details[detailKey] = salaryDetail[detailKey];
+                        })
+
+                    })
+                    console.log(salaryInformation)
+                    delete response.data.salaryInformation;
+                    setPersonalInformation(response.data);
+                    setSalaryInformation(salaryInformation as SalaryInformationType);
+                } else {
+                    toast.error(__('Something went wrong', 'pcm'));
+                }
+            });
+        }
+    }, [employeeId])
+
+    const handlePersonalInformation = (information: EmployeeType) => {
+        setPersonalInformation((prevState) => {
+            return {
+                ...prevState,
+                ...information
+            }
+        })
         localStorage.setItem('Employee.personalInformation', JSON.stringify(personalInformation));
     };
     const handleSalaryInformation = (salary: string) => {
@@ -164,7 +186,7 @@ export const AddEmployee = () => {
                                 </h2>
                                 <div className="mx-auto w-3/4">
                                     <PersonalInformation
-                                        initialValues={savedPersonalInformation}
+                                        initialValues={personalInformation}
                                         setFormData={(personalInformation: EmployeeType) => handlePersonalInformation(personalInformation)}
                                         nextStep={() => setStep(2)}
                                     />
@@ -179,7 +201,7 @@ export const AddEmployee = () => {
                                 </h2>
                                 <div className="mx-auto w-3/4">
                                     <SalaryInformation
-                                        initialValues={savedSalaryInformation}
+                                        initialValues={salaryInformation}
                                         setSalaryData={(salary: string) => handleSalaryInformation(salary)}
                                     />
                                     <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
@@ -203,8 +225,8 @@ export const AddEmployee = () => {
                         {step === 3 && (
                             <>
                                 <ReviewInformation
-                                    personalInformation={savedPersonalInformation}
-                                    salaryInformation={savedSalaryInformation}
+                                    personalInformation={personalInformation}
+                                    salaryInformation={salaryInformation}
                                     setError={setError}
                                 />
                                 {!error && (

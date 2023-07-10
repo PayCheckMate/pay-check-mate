@@ -1,4 +1,3 @@
-import {UserCircleIcon} from "@heroicons/react/24/outline";
 import {FormInput} from "../../../Components/FormInput";
 import {__} from "@wordpress/i18n";
 import {SelectBox} from "../../../Components/SelectBox";
@@ -14,8 +13,10 @@ import {validateRequiredFields} from "../../../Helpers/Helpers";
 import {useSelect} from "@wordpress/data";
 import department from "../../../Store/Department";
 import designation from "../../../Store/Designation";
-
+import {useParams} from "react-router-dom";
 export const PersonalInformation = ({setFormData, initialValues = {}, children, nextStep}: any) => {
+    const employeeId = useParams().id;
+
     if (initialValues === null) {
         initialValues = {} as EmployeeType;
     }
@@ -28,21 +29,23 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
 
-    const {models, makeGetRequest} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'order_by': 'employee_id', 'order': 'desc'});
+    // If this is new employee then set employee id.
+    if (!employeeId) {
+        const {models} = useFetchApi<EmployeeType>('/pay-check-mate/v1/employees', {'per_page': '1', 'order_by': 'employee_id', 'order': 'desc'});
 
-    // Get last employee id and set next employee id.
-    useEffect(() => {
-        if (models.length > 0) {
-            const employeeId = String(parseInt(models[0].employee_id) + 1);
-            setFormValues((prevState: EmployeeType) => ({
-                ...prevState,
-                employee_id: employeeId,
-            }));
+        // Get last employee id and set next employee id.
+        useEffect(() => {
+            if (models.length > 0) {
+                const employeeId = String(parseInt(models[0].employee_id) + 1);
+                setFormValues((prevState: EmployeeType) => ({
+                    ...prevState,
+                    employee_id: employeeId,
+                }));
 
-            setFormData({...formValues, employee_id: employeeId});
-        }
-    }, [models]);
-
+                setFormData({...formValues, employee_id: employeeId});
+            }
+        }, [models]);
+    }
 
     useEffect(() => {
         if (designations.length <= 0) return;
@@ -113,7 +116,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('First name', 'pcm')}
                                     name="first_name"
                                     id="first_name"
-                                    value={formValues.first_name}
+                                    value={formValues.first_name || initialValues.first_name}
                                     onChange={handleFormInputChange}
                                     error={formError.first_name}
                                 />
@@ -125,7 +128,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Last name', 'pcm')}
                                     name="last_name"
                                     id="last_name"
-                                    value={formValues.last_name}
+                                    value={formValues.last_name || initialValues.last_name}
                                     onChange={handleFormInputChange}
                                     error={formError.last_name}
                                 />
@@ -162,7 +165,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     required={true}
                                     name="employee_id"
                                     id="employee_id"
-                                    value={formValues.employee_id}
+                                    value={formValues.employee_id || initialValues.employee_id}
                                     onChange={handleFormInputChange}
                                     error={formError.employee_id}
                                 />
@@ -173,7 +176,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Email address', 'pcm')}
                                     name="email"
                                     id="email"
-                                    value={formValues.email}
+                                    value={formValues.email || initialValues.email}
                                     onChange={handleFormInputChange}
                                     error={formError.email}
                                 />
@@ -185,7 +188,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Joining date', 'pcm')}
                                     name="joining_date"
                                     id="joining_date"
-                                    value={formValues.joining_date}
+                                    value={formValues.joining_date || initialValues.joining_date}
                                     onChange={handleFormInputChange}
                                     error={formError.joining_date}
                                 />
@@ -195,7 +198,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__("Address", 'pcm')}
                                     name="address"
                                     id="address"
-                                    value={formValues.address}
+                                    value={formValues.address || initialValues.address}
                                     onChange={handleFormInputChange}
                                 />
                             </div>

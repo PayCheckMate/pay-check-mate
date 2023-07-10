@@ -128,7 +128,6 @@ export const DepartmentList = () => {
 
         if (formData.id) {
             dispatch(department).updateDepartment(data).then((response: any) => {
-                console.log(response)
                 useNotify(response, __('Department updated successfully', 'pcm'));
             }).catch((error: any) => {
                 console.log(error, 'error')

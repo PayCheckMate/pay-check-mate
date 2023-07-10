@@ -5,8 +5,11 @@ import {HeadType, SalaryHeadType} from "../../../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../../Store/SalaryHead";
+import {useParams} from "react-router-dom";
 
 export const SalaryInformation = ({setSalaryData, initialValues = {}, children}: any) => {
+    const employeeId = useParams().id;
+    console.log(initialValues, 'initialValues')
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }

@@ -180,9 +180,6 @@ const CreatePayroll = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsSubmitting(true);
-        console.log(payDate, 'payDate')
-        console.log(selectedDepartment, 'selectedDepartment')
-        console.log(selectedDesignation, 'selectedDesignation')
         try {
             // @ts-ignore
             const _wpnonce = payCheckMate.pay_check_mate_nonce;

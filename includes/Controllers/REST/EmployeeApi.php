@@ -352,6 +352,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'format'      => 'date',
                     'required'    => true,
                 ],
+                'joining_date_string'   => [
+                    'description' => __( 'Employee Joining Date String', 'pcm' ),
+                    'type'        => 'string',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'readonly'    => true,
+                ],
                 'regine_date'    => [
                     'description' => __( 'Employee Regine Date', 'pcm' ),
                     'type'        => 'string',

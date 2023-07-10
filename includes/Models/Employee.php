@@ -92,7 +92,20 @@ class Employee extends Model {
      * @return string
      */
     public function get_joining_date( string $date ): string {
-        return get_date_from_gmt( $date, 'd M Y' );
+        return $date;
+    }
+
+    /**
+     * Get employee joining date
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $date
+     *
+     * @return string
+     */
+    public function get_joining_date_string( string $date ): string {
+        return get_date_from_gmt( $date, 'd M, Y' );
     }
 
     /**
