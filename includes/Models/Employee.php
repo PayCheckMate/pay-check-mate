@@ -140,7 +140,6 @@ class Employee extends Model {
      * @return string
      */
 //    public function get_status(): string {
-//        // @phpstan-ignore-next-line
 //        return $this->status ? 'Active' : 'Inactive';
 //    }
 

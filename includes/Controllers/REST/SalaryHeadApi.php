@@ -309,8 +309,9 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        if ( ! $salary_head->update( $request->get_param( 'id' ), $validated_data ) ) {
-            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
+        $updated = $salary_head->update( $request->get_param( 'id' ), $validated_data );
+        if ( is_wp_error( $updated ) ) {
+            return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );
         }
 
         $salary_head = $salary_head->find( $request->get_param( 'id' ) );

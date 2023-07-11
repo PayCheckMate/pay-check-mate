@@ -61,7 +61,7 @@ class Payroll extends Model {
      *
      * @param string $date
      *
-     * @return array
+     * @return array<string, string>
      */
     public function get_payroll_date( string $date ): array {
         return [

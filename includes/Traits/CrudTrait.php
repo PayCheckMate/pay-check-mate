@@ -92,9 +92,9 @@ trait CrudTrait {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param array $find_by
-     * @param array $args
-     * @param array $fields
+     * @param array<string, mixed> $find_by
+     * @param array<string, mixed> $args
+     * @param array<string> $fields
      *
      * @throws \Exception
      * @return object

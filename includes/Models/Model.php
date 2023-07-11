@@ -319,7 +319,7 @@ class Model implements ModelInterface {
      *
      * @param array<string, string> $find_by
      * @param array<string>         $args
-     * @param array                $fields
+     * @param array<string>         $fields
      *
      * @throws \Exception
      * @return object

@@ -11,9 +11,9 @@ class Helper {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param array $args
+     * @param array<string, mixed> $args
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public static function get_salary_head( array $args ): array {
         $args              = wp_parse_args(

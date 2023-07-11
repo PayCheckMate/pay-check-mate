@@ -598,8 +598,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         // Do not update the payroll date.
         unset( $validated_data->payroll_date );
         $payroll = new Payroll( new PayrollModel() );
-        if ( ! $payroll->update( $request->get_param( 'id' ), $validated_data ) ) {
-            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
+        $updated = $payroll->update( $request->get_param( 'id' ), $validated_data );
+        if ( is_wp_error( $updated ) ) {
+            return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );
         }
 
         $payroll  = $payroll->find( $request->get_param( 'id' ) );

@@ -5,7 +5,7 @@ import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
 import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
-import {EmployeeType} from "../../Types/EmployeeType";
+import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 
@@ -67,12 +67,30 @@ export const EmployeeList = () => {
                         href="#"
                         className="text-indigo-600 hover:text-indigo-900"
                     >
-                        {text}
+                        {record.first_name + ' ' + record.last_name}
                     </a>
                 )
             }
         },
         {title: __('Email', 'pcm'), dataIndex: 'email'},
+        {
+            title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
+            render: (text: string, record: any) => {
+                if (parseInt(String(record.status)) === EmployeeStatus.Active) {
+                    return (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            {__('Active', 'pcm')}
+                        </span>
+                    )
+                }else {
+                    return (
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            {__('Inactive', 'pcm')}
+                        </span>
+                    )
+                }
+            }
+        },
         {
             title: __('Action', 'pcm'),
             dataIndex: 'action',

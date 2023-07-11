@@ -7,6 +7,7 @@ class PayrollDetails extends Model {
     /**
      * @var mixed
      */
+    // @phpstan-ignore-next-line
     private $payroll_id = null;
 
     public function __construct( int $payroll_id = null ) {
