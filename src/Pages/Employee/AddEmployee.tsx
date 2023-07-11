@@ -4,12 +4,13 @@ import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
 import {__} from "@wordpress/i18n";
-import {EmployeeResponseType, EmployeeType, SingleEmployeeResponseType} from "../../Types/EmployeeType";
+import {EmployeeStatus, EmployeeType, SingleEmployeeResponseType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {toast} from "react-toastify";
+
 type ResponseType = {
     data: EmployeeType,
     headers: any,
@@ -39,17 +40,13 @@ export const AddEmployee = () => {
                 if (response.status === 200) {
                     const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                     employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
-                    const salaryInformation = response.data.salaryInformation;
-                    // Loop through salary information and make it one dimensional
-                    Object.keys(salaryInformation.salary_details).forEach((key) => {
-                        const salaryDetail = salaryInformation.salary_details[key];
-                        delete salaryInformation.salary_details[key];
-                        Object.keys(salaryDetail).forEach((detailKey) => {
-                            salaryInformation.salary_details[detailKey] = salaryDetail[detailKey];
-                        })
-
-                    })
-                    console.log(salaryInformation)
+                    const salaryInformation = {
+                        ...response.data.salaryInformation,
+                        // @ts-ignore
+                        ...JSON.parse(response.data.salaryInformation.salary_details),
+                    };
+                    console.log(salaryInformation, 'salaryInformation')
+                    delete salaryInformation.salary_details;
                     delete response.data.salaryInformation;
                     setPersonalInformation(response.data);
                     setSalaryInformation(salaryInformation as SalaryInformationType);
@@ -139,28 +136,37 @@ export const AddEmployee = () => {
             return false;
         }
 
-        savedPersonalInformation.status = 1;
         // Save data to database
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        delete salaryInformation.gross_salary;
         const data = {
             '_wpnonce': _wpnonce,
             ...personalInformation,
+            status: parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0,
             'salaryInformation': {
                 ...salaryInformation,
                 'basic_salary': salaryInformation.basic_salary,
+                'gross_salary': salaryInformation.gross_salary,
                 'remarks': salaryInformation.remarks,
                 'salary_details': salaryInformation.salary_details,
             },
         }
 
-        makePostRequest<ResponseType>('/pay-check-mate/v1/employees', data).then((response) => {
+        let url = '/pay-check-mate/v1/employees';
+        if (employeeId) {
+            url = '/pay-check-mate/v1/employees/' + employeeId;
+        }
+        makePostRequest<ResponseType>(url, data).then((response) => {
             if (response.status=== 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 // Push to employee list page
                 navigate('/employees');
+                if (employeeId){
+                    toast.success(__('Employee updated successfully', 'pcm'));
+                    return;
+                }
+
                 toast.success(__('Employee added successfully', 'pcm'));
             } else {
                 console.log(response)

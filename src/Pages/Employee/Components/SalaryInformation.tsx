@@ -8,8 +8,7 @@ import salaryHead from "../../../Store/SalaryHead";
 import {useParams} from "react-router-dom";
 
 export const SalaryInformation = ({setSalaryData, initialValues = {}, children}: any) => {
-    const employeeId = useParams().id;
-    console.log(initialValues, 'initialValues')
+    // const employeeId = useParams().id;
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
     }

@@ -172,7 +172,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $wpdb->query( 'START TRANSACTION' );
-        $employee = $employee_model->create( $validated_data );
+        if ( ! empty( $data['id'] ) ) {
+            $employee = $employee_model->update( $data['id'], $validated_data );
+        } else {
+            $employee = $employee_model->create( $validated_data );
+        }
 
         if ( is_wp_error( $employee ) ) {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
@@ -180,19 +184,21 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
 
         $salary_information['employee_id'] = $data['employee_id'];
         $salary_data                       = [
+            'salary_history_id',
             'employee_id',
             'basic_salary',
+            'gross_salary',
             'active_from',
             'remarks',
             '_wpnonce',
         ];
         $head_details                      = $salary_information;
         $salary_information                = array_intersect_key( $salary_information, array_flip( $salary_data ) );
-        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id' ];
+        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details                    = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-            return ! in_array( $key, $keys_to_remove, true );
-        }, ARRAY_FILTER_USE_KEY
+				return ! in_array( $key, $keys_to_remove, true );
+			}, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
@@ -207,7 +213,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $salary_history_model = new Salary( new SalaryHistoryModel() );
-        $salary_history       = $salary_history_model->create( $validate_salary_data );
+        if ( ! empty( $salary_information['salary_history_id'] ) ) {
+            $salary_history = $salary_history_model->update( $salary_information['salary_history_id'], $validate_salary_data );
+        } else {
+            $salary_history = $salary_history_model->create( $validate_salary_data );
+        }
 
         if ( is_wp_error( $salary_history ) ) {
             return new WP_Error( 'rest_invalid_data', $salary_history->get_error_message(), [ 'status' => 400 ] );
@@ -229,7 +239,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request $request
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -247,7 +257,9 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
                     'fields'      => [
+                        'id as salary_history_id',
                         'basic_salary',
+                        'gross_salary',
                         'active_from',
                         'remarks',
                         'salary_details',
@@ -280,13 +292,29 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
 
         $item                      = $this->prepare_item_for_response( $employee, $request );
         $data                      = $this->prepare_response_for_collection( $item );
+        $data['salaryInformation']['salary_history_id'] = $employee->salary_history_id;
         $data['salaryInformation']['salary_details'] = $employee->salary_details;
         $data['salaryInformation']['basic_salary']   = $employee->basic_salary;
+        $data['salaryInformation']['gross_salary']   = $employee->gross_salary;
         $data['salaryInformation']['active_from']    = $employee->active_from;
         $data['salaryInformation']['remarks']        = $employee->remarks;
         $response                  = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
+    }
+
+    /**
+     * Update an employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function update_employee( WP_REST_Request $request ) {
+        return $this->create_employee( $request );
     }
 
     /**

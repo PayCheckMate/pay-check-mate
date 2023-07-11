@@ -83,6 +83,14 @@ class Employee extends Model {
     }
 
     /**
+     * Get gross salary
+     */
+    public function get_gross_salary(): float {
+        // @phpstan-ignore-next-line
+        return doubleval( $this->gross_salary );
+    }
+
+    /**
      * Get employee joining date
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -131,10 +139,10 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_status(): string {
-        // @phpstan-ignore-next-line
-        return $this->status ? 'Active' : 'Inactive';
-    }
+//    public function get_status(): string {
+//        // @phpstan-ignore-next-line
+//        return $this->status ? 'Active' : 'Inactive';
+//    }
 
     /**
      * Get employee salary heads
@@ -147,17 +155,11 @@ class Employee extends Model {
      * @return array<array<string, mixed>>
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
+        $salary_details = json_decode( $salary_details, true );
         if(empty( $salary_head_types ) ){
-            $args              = [
-                'status'   => 1,
-                'limit'    => '-1',
-                'order'    => 'ASC',
-                'order_by' => 'priority',
-            ];
-            $salary_head_types = Helper::get_salary_head( $args );
+            return $salary_details;
         }
 
-        $salary_details = json_decode( $salary_details, true );
         $salary         = [
             'salary_details' => [
                 'earnings'    => [],

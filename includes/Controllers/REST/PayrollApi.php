@@ -289,6 +289,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     ],
                     'fields'      => [
                         'basic_salary',
+                        'gross_salary',
                         'salary_details',
                         'active_from',
                     ],
@@ -329,7 +330,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
-        $parameters                        = $request->get_params();
+        $parameters = $request->get_params();
         // TODO: Make the employee id from current user.
         $parameters['created_employee_id'] = get_current_user_id();
 
@@ -369,6 +370,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         foreach ( $details_parameters as $detail ) {
             $data['employee_id']  = $detail['employee_id'];
             $data['basic_salary'] = $detail['basic_salary'];
+            $data['gross_salary'] = $detail['gross_salary'];
             $merged_array         = [];
             array_walk_recursive(
                 $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
@@ -472,6 +474,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             }
             $data['employee_id']  = $detail['employee_id'];
             $data['basic_salary'] = $detail['basic_salary'];
+            $data['gross_salary'] = $detail['gross_salary'];
             $merged_array         = [];
             array_walk_recursive(
                 $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {

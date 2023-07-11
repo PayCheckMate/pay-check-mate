@@ -167,6 +167,7 @@ class Databases {
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `employee_id` bigint(20) unsigned NOT NULL,
                 `basic_salary` decimal(10,2) NOT NULL,
+                `gross_salary` decimal(10,2) NOT NULL,
                 `salary_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,

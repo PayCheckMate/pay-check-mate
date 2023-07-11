@@ -433,7 +433,7 @@ class Model implements ModelInterface {
             [
                 'id' => $id,
             ],
-            $this->get_where_format( $data ),
+            $this->get_where_format( $filteredData ),
             [
                 '%d',
             ],

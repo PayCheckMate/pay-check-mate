@@ -10,14 +10,15 @@ class SalaryHistory extends Model {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'employee_id'         => '%d',
-        'basic_salary'        => '%d',
+        'employee_id'    => '%d',
+        'basic_salary'   => '%d',
+        'gross_salary'   => '%d',
         'salary_details' => '%s',
-        'status'              => '%d',
-        'active_from'         => '%s',
-        'remarks'             => '%s',
-        'created_on'          => '%s',
-        'updated_at'          => '%s',
+        'status'         => '%d',
+        'active_from'    => '%s',
+        'remarks'        => '%s',
+        'created_on'     => '%s',
+        'updated_at'     => '%s',
     ];
 
     /**
