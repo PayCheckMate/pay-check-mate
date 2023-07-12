@@ -2,9 +2,11 @@
 
 namespace PayCheckMate\Models;
 
+use PayCheckMate\Classes\Helper;
+
 class Employee extends Model {
 
-    protected static string $table = 'pay_check_mate_employees';
+    protected static string $table = 'employees';
 
     /**
      * @var array|string[] $columns
@@ -81,15 +83,37 @@ class Employee extends Model {
     }
 
     /**
+     * Get gross salary
+     */
+    public function get_gross_salary(): float {
+        // @phpstan-ignore-next-line
+        return doubleval( $this->gross_salary );
+    }
+
+    /**
      * Get employee joining date
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param string $date
+     *
      * @return string
      */
-    public function get_joining_date(): string {
-        // @phpstan-ignore-next-line
-        return get_date_from_gmt( $this->joining_date, 'd M Y' );
+    public function get_joining_date( string $date ): string {
+        return $date;
+    }
+
+    /**
+     * Get employee joining date
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $date
+     *
+     * @return string
+     */
+    public function get_joining_date_string( string $date ): string {
+        return get_date_from_gmt( $date, 'd M, Y' );
     }
 
     /**
@@ -97,11 +121,15 @@ class Employee extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param string|null $date
+     *
      * @return string
      */
-    public function get_regine_date(): string {
-        // @phpstan-ignore-next-line
-        return get_date_from_gmt( $this->regine_date, 'd M Y' );
+    public function get_regine_date( ?string $date ): string {
+        if ( ! $date ) {
+            return 'N/A';
+        }
+        return get_date_from_gmt( $date, 'd M Y' );
     }
 
     /**
@@ -111,35 +139,38 @@ class Employee extends Model {
      *
      * @return string
      */
-    public function get_status(): string {
-        // @phpstan-ignore-next-line
-        return $this->status ? 'Active' : 'Inactive';
-    }
+//    public function get_status(): string {
+//        return $this->status ? 'Active' : 'Inactive';
+//    }
 
     /**
      * Get employee salary heads
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param string               $salary_head_details
+     * @param string               $salary_details
      * @param array<array<string>> $salary_head_types
      *
      * @return array<array<string, mixed>>
      */
-    public function get_salary_head_details( string $salary_head_details, array $salary_head_types ): array {
-        $salary_head_details = json_decode( $salary_head_details, true );
-        $salary              = [
-            'salary_head_details' => [
+    public function get_salary_details( string $salary_details, array $salary_head_types ): array {
+        $salary_details = json_decode( $salary_details, true );
+        if(empty( $salary_head_types ) ){
+            return $salary_details;
+        }
+
+        $salary         = [
+            'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
                 'non_taxable' => [],
             ],
         ];
 
-        foreach ( $salary_head_details as $key => $amount ) {
+        foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
                 if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
-                    $salary['salary_head_details'][$type][$key] = $amount;
+                    $salary['salary_details'][$type][$key] = $amount;
                 }
             }
         }

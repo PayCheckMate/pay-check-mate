@@ -283,7 +283,7 @@ msgid "Reports"
 msgstr ""
 
 #: dist/index.js:5764
-msgid "Payroll"
+msgid "PayrollType"
 msgstr ""
 
 #: dist/index.js:5769

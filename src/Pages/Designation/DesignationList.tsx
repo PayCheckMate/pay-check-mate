@@ -11,11 +11,12 @@ import designation from "../../Store/Designation";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {designations, loading, totalPages, filters} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
+    const {designations, loading, totalPages, filters, total} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [formError, setFormError] = useState({} as { [key: string]: string });
     const [showModal, setShowModal] = useState(false);
@@ -23,7 +24,7 @@ export const DesignationList = () => {
 
 
     const columns = [
-        {title: 'Designation name', dataIndex: 'name'},
+        {title: 'Designation name', dataIndex: 'name', sortable: true},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DesignationType) => {
@@ -86,7 +87,7 @@ export const DesignationList = () => {
         dispatch(designation).updateDesignation(data).then((response: any) => {
             useNotify(response, __('Designation status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while updating designation', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -102,9 +103,9 @@ export const DesignationList = () => {
         setFormError({})
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(designation).getDesignations({per_page: per_page, page: page});
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(designation).getDesignations(filterObject)
+        setCurrentPage(filterObject.page);
     };
 
 
@@ -127,10 +128,9 @@ export const DesignationList = () => {
 
         if (formData.id) {
             dispatch(designation).updateDesignation(data).then((response: any) => {
-                console.log(response)
                 useNotify(response, __('Designation updated successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating designation', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -142,7 +142,7 @@ export const DesignationList = () => {
             dispatch(designation).createDesignation(data).then((response: any) => {
                 useNotify(response, __('Designation created successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating designation', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -190,12 +190,14 @@ export const DesignationList = () => {
                 </div>
                 <Table
                     columns={columns}
+                    total={total}
                     data={designations}
                     isLoading={loading}
+                    filters={filters}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

@@ -43,6 +43,8 @@ class Databases {
         $this->create_table_salary_head();
         $this->create_table_employees();
         $this->create_table_employee_salary_history();
+        $this->create_table_employee_payroll();
+        $this->create_table_employee_payroll_details();
     }
 
     /**
@@ -165,7 +167,8 @@ class Databases {
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                 `employee_id` bigint(20) unsigned NOT NULL,
                 `basic_salary` decimal(10,2) NOT NULL,
-                `salary_head_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
+                `gross_salary` decimal(10,2) NOT NULL,
+                `salary_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,
                 `remarks` text NULL,
@@ -176,6 +179,59 @@ class Databases {
 
         dbDelta( $sql );
 	}
+
+    /**
+     * Create table employee payroll.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employee_payroll() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}payroll` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `department_id` bigint(20) unsigned NOT NULL,
+                `designation_id` bigint(20) unsigned NOT NULL,
+                `payroll_date` DATE NOT NULL,
+                `total_salary` decimal(10,2) NOT NULL,
+                `remarks` text NULL,
+                `status` tinyint(1) NOT NULL DEFAULT 0,
+                `created_employee_id` bigint(20) unsigned NOT NULL,
+                `approved_employee_id` bigint(20) unsigned NULL,
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
+
+    /**
+     * Create table employee payroll details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function create_table_employee_payroll_details() {
+        $this->include_db_delta();
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$this->table_prefix}payroll_details` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `payroll_id` bigint(20) unsigned NOT NULL,
+                `employee_id` bigint(20) unsigned NOT NULL,
+                `basic_salary` decimal(10,2) NOT NULL,
+                `salary_details` text NOT NULL, /*JSON Format. key value pair, key = salary head id, value = amount*/
+                `status` tinyint(1) NOT NULL DEFAULT 1, /*1 = Current, 2 = Arear*/
+                `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+            ) {$this->charset_collate};";
+
+        dbDelta( $sql );
+    }
 
 
     /**

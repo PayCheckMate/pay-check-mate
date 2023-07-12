@@ -27,7 +27,7 @@ export enum SalaryHeadStatus {
 
 export interface SelectBoxType {
     id: number|null,
-    name: string
+    name: string|null|undefined
 }
 
 // export interface SalaryHeadTypeForPayroll {
@@ -64,11 +64,15 @@ export interface NonTaxableAllowance {
 export interface EmployeeSalary {
     id: number;
     employee_id: string | number;
+    first_name: string;
+    last_name: string;
     full_name: string;
+    designation_id: number;
     designation_name: string;
+    department_id: number;
     department_name: string;
     basic_salary: number;
-    salary_head_details: {
+    salary_details: {
         earnings: {
             [id: number]: number;
         }

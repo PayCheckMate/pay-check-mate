@@ -1,7 +1,7 @@
 export interface SalaryHistoryType {
     employee_id: string | number;
     basic_salary: number|string;
-    salary_head_details: {
+    salary_details: {
         [id: number]: number|string;
     }
     status: number;

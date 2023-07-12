@@ -3,7 +3,7 @@
   <HTMLCodeStyleSettings>
     <option name="HTML_UNIFORM_INDENT" value="true" />
     <option name="HTML_KEEP_WHITESPACES" value="true" />
-    <option name="HTML_ATTRIBUTE_WRAP" value="0" />
+    <option name="HTML_ATTRIBUTE_WRAP" value="2" />
     <option name="HTML_TEXT_WRAP" value="0" />
     <option name="HTML_ALIGN_TEXT" value="true" />
     <option name="HTML_SPACE_INSIDE_EMPTY_TAG" value="true" />
@@ -36,10 +36,10 @@
     <option name="PHPDOC_WRAP_LONG_LINES" value="true" />
     <option name="THROWS_WEIGHT" value="3" />
     <option name="PARAM_WEIGHT" value="2" />
-    <option name="RETURN_WEIGHT" value="3" />
+    <option name="RETURN_WEIGHT" value="7" />
     <option name="DEPRECATED_WEIGHT" value="4" />
     <option name="SEE_WEIGHT" value="5" />
-    <option name="SINCE_WEIGHT" value="1" />
+    <option name="SINCE_WEIGHT" value="0" />
     <option name="TODO_WEIGHT" value="6" />
     <option name="VAR_WEIGHT" value="1" />
     <option name="GROUP_USE_WRAP" value="0" />
@@ -111,7 +111,7 @@
     <option name="RIGHT_MARGIN" value="600" />
     <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
     <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
-    <option name="BLANK_LINES_BEFORE_PACKAGE" value="0" />
+    <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
     <option name="BLANK_LINES_AFTER_PACKAGE" value="1" />
     <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
     <option name="CLASS_BRACE_STYLE" value="1" />
@@ -132,6 +132,7 @@
     <option name="SPACE_WITHIN_FOR_PARENTHESES" value="true" />
     <option name="SPACE_WITHIN_CATCH_PARENTHESES" value="true" />
     <option name="SPACE_WITHIN_SWITCH_PARENTHESES" value="true" />
+    <option name="SPACE_WITHIN_BRACKETS" value="true" />
     <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
     <option name="SPACE_AFTER_TYPE_CAST" value="true" />
     <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />

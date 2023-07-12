@@ -22,11 +22,25 @@ interface ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int $id
+     * @param int   $id
+     * @param array<string, mixed> $args
      *
      * @return object
      */
-    public function find( int $id ): object;
+    public function find( int $id, array $args = [] ): object;
+
+    /**
+     * Get the items from the database by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $find_by
+     * @param array<string, mixed> $args
+     * @param array<string> $fields
+     *
+     * @return object
+     */
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object;
 
     /**
      * Create a new item.
@@ -47,9 +61,9 @@ interface ModelInterface {
      * @param int     $id
      * @param Request $data
      *
-     * @return bool
+     * @return object
      */
-    public function update( int $id, Request $data ): bool;
+    public function update( int $id, Request $data ): object;
 
     /**
      * Delete an item.

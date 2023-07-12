@@ -4,7 +4,7 @@
 
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center gap-x-1.5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;
+        @apply inline-flex items-center gap-x-1.5 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 hover:text-white;
     }
     .btn-cancel {
         @apply p-2 pl-5 pr-5 text-sm border border-white hover:border-gray-300 text-gray-600 rounded focus:border-4 mr-2;

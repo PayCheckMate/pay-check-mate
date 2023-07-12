@@ -63,55 +63,55 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 					'callback'            => [ $this, 'update_item' ],
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
-						'id'              => [
+						'id'                  => [
 							'description' => __( 'Unique identifier for the object.', 'pcm' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
-						'head_name' => [
+						'head_name'           => [
 							'description' => __( 'Salary head name.', 'pcm' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
-                        'head_type' => [
-                            'description' => __( 'Salary head type.', 'pcm' ),
-                            'type'        => 'integer',
-                            'required'    => true,
-                        ],
-                        'head_amount' => [
-                            'description' => __( 'Salary head amount.', 'pcm' ),
-                            'type'        => 'number',
-                            'required'    => true,
-                        ],
-                        'is_percentage' => [
-                            'description' => __( 'Salary head is percentage.', 'pcm' ),
-                            'type'        => 'boolean',
-                            'required'    => true,
-                        ],
-                        'is_variable' => [
-                            'description' => __( 'Is Changeable in every month?', 'pcm' ),
-                            'type'        => 'boolean',
-                            'required'    => true,
-                        ],
-                        'is_taxable' => [
-                            'description' => __( 'Salary head is taxable.', 'pcm' ),
-                            'type'        => 'boolean',
-                            'required'    => true,
-                        ],
-                        'is_personal_savings' => [
-                            'description' => __( 'Salary head is personal savings.', 'pcm' ),
-                            'type'        => 'boolean',
-                            'required'    => true,
-                        ],
-                        'priority' => [
-                            'description' => __( 'Salary head priority.', 'pcm' ),
-                            'type'        => 'integer',
-                            'required'    => true,
-                        ],
-						'status'          => [
+						'head_type'           => [
+							'description' => __( 'Salary head type.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+						'head_amount'         => [
+							'description' => __( 'Salary head amount.', 'pcm' ),
+							'type'        => 'number',
+							'required'    => true,
+						],
+						'is_percentage'       => [
+							'description' => __( 'Salary head is percentage.', 'pcm' ),
+							'type'        => 'boolean',
+							'required'    => true,
+						],
+						'is_variable'         => [
+							'description' => __( 'Is Changeable in every month?', 'pcm' ),
+							'type'        => 'boolean',
+							'required'    => true,
+						],
+						'is_taxable'          => [
+							'description' => __( 'Salary head is taxable.', 'pcm' ),
+							'type'        => 'boolean',
+							'required'    => true,
+						],
+						'is_personal_savings' => [
+							'description' => __( 'Salary head is personal savings.', 'pcm' ),
+							'type'        => 'boolean',
+							'required'    => true,
+						],
+						'priority'            => [
+							'description' => __( 'Salary head priority.', 'pcm' ),
+							'type'        => 'integer',
+							'required'    => true,
+						],
+						'status'              => [
 							'description' => __( 'Department status.', 'pcm' ),
 							'type'        => 'boolean',
-                            'required'    => true,
+							'required'    => true,
 						],
 					],
 				],
@@ -209,11 +209,12 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
     public function get_items( $request ): WP_REST_Response {
         $salary_head = new SalaryHead( new SalaryHeadModel() );
         $args        = [
-            'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
-            'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
-            'orderby' => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
+            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
+            'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
         ];
 
         $salary_heads = $salary_head->all( $args );
@@ -247,7 +248,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $salary_head = new SalaryHead( new SalaryHeadModel() );
+        $salary_head    = new SalaryHead( new SalaryHeadModel() );
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -259,8 +260,8 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, __( 'Could not create salary head.', 'pcm' ) );
         }
 
-        $item   = $this->prepare_item_for_response( $head, $request );
-        $data = $this->prepare_response_for_collection( $item );
+        $item     = $this->prepare_item_for_response( $head, $request );
+        $data     = $this->prepare_response_for_collection( $item );
         $response = new WP_REST_Response( $data );
         $response->set_status( 201 );
 
@@ -302,20 +303,21 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item( $request ) {
-        $salary_head     = new SalaryHead( new SalaryHeadModel() );
+        $salary_head    = new SalaryHead( new SalaryHeadModel() );
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
         }
 
-        if ( ! $salary_head->update( $request->get_param( 'id' ), $validated_data ) ) {
-            return new WP_Error( 500, __( 'Could not update designation.', 'pcm' ) );
+        $updated = $salary_head->update( $request->get_param( 'id' ), $validated_data );
+        if ( is_wp_error( $updated ) ) {
+            return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );
         }
 
         $salary_head = $salary_head->find( $request->get_param( 'id' ) );
         $item        = $this->prepare_item_for_response( $salary_head, $request );
         $data        = $this->prepare_response_for_collection( $item );
-        $response = new WP_REST_Response( $data );
+        $response    = new WP_REST_Response( $data );
         $response->set_status( 201 );
 
         return new WP_REST_Response( $response, 201 );
@@ -354,72 +356,72 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'title'      => 'designation',
             'type'       => 'object',
             'properties' => [
-                'id'             => [
+                'id'                  => [
                     'description' => __( 'Unique identifier for the object.', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'head_name'      => [
+                'head_name'           => [
                     'description' => __( 'Salary Head Name', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
-                'head_type'      => [
+                'head_type'           => [
                     'description' => __( 'Salary Head Type', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'head_type_text' => [
+                'head_type_text'      => [
                     'description' => __( 'Salary Head Type in Text', 'pcm' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
                     'readonly'    => true,
                 ],
-                'head_amount'    => [
+                'head_amount'         => [
                     'description' => __( 'Salary Head Amount', 'pcm' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
-                'is_percentage'  => [
+                'is_percentage'       => [
                     'description' => __( 'Salary Head is Percentage', 'pcm' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
-                'is_variable'  => [
+                'is_variable'         => [
                     'description' => __( 'Is Changeable in every month?', 'pcm' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
-                'is_taxable'     => [
+                'is_taxable'          => [
                     'description' => __( 'Salary Head is Taxable', 'pcm' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
-                'is_personal_savings'     => [
+                'is_personal_savings' => [
                     'description' => __( 'Salary Head is Personal Savings', 'pcm' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
-                'priority'       => [
+                'priority'            => [
                     'description' => __( 'Salary Head Priority', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'status'         => [
+                'status'              => [
                     'description' => __( 'Salary Head Status', 'pcm' ),
                     'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'created_on'     => [
+                'created_on'          => [
                     'description' => __( 'The date the object was created.', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'updated_at'     => [
+                'updated_at'          => [
                     'description' => __( 'The date the object was last updated.', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date',

@@ -1,10 +1,10 @@
 import actions from "./actions";
 import {DepartmentType} from "../../Types/DepartmentType";
-import {filter} from "./selectors";
+import {defaultFilters} from "./selectors";
 import {filtersType} from "../Store";
 
 const resolvers = {
-    *getDepartments(filters: filtersType=filter) {
+    *getDepartments(filters: filtersType=defaultFilters) {
         const path: string = '/pay-check-mate/v1/departments'
         yield actions.setLoading(true);
         const departments: DepartmentType[] = yield actions.fetchFromAPI(path, filters);

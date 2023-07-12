@@ -4,20 +4,21 @@ namespace PayCheckMate\Models;
 
 class SalaryHistory extends Model {
 
-    protected static string $table = 'pay_check_mate_employee_salary_history';
+    protected static string $table = 'employee_salary_history';
 
     /**
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'employee_id'         => '%d',
-        'basic_salary'        => '%d',
-        'salary_head_details' => '%s',
-        'status'              => '%d',
-        'active_from'         => '%s',
-        'remarks'             => '%s',
-        'created_on'          => '%s',
-        'updated_at'          => '%s',
+        'employee_id'    => '%d',
+        'basic_salary'   => '%d',
+        'gross_salary'   => '%d',
+        'salary_details' => '%s',
+        'status'         => '%d',
+        'active_from'    => '%s',
+        'remarks'        => '%s',
+        'created_on'     => '%s',
+        'updated_at'     => '%s',
     ];
 
     /**

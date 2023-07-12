@@ -22,7 +22,7 @@ trait CrudTrait {
      *                                            - 'status'    => int,
      *                                            - 'limit'     => string|int,
      *                                            - 'order'     => 'ASC',
-     *                                            - 'orderby'   => string,
+     *                                            - 'order_by'   => string,
      *                                            - 'mutation_fields' => ['string'], this will call get_{field_name} method
      *                                            - 'relations' => [
      *                                            [
@@ -43,7 +43,7 @@ trait CrudTrait {
      *                                            // Add more relations if needed
      *                                            ],
      * @param string[]             $fields
-     * @param array<string, mixed>        $additional_logical_data
+     * @param array<string, mixed> $additional_logical_data
      *
      * @return object
      */
@@ -54,8 +54,9 @@ trait CrudTrait {
                 'limit'           => 10,
                 'offset'          => 0,
                 'order'           => 'DESC',
-                'orderby'         => 'id',
+                'order_by'        => 'id',
                 'status'          => 'all',
+                'search'          => '',
                 'groupby'         => '',
                 'relations'       => [],
                 'mutation_fields' => [],
@@ -72,11 +73,46 @@ trait CrudTrait {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int $id
+     * @param array<string, mixed> $args
      *
      * @return object
      */
-    public function find( int $id ): object {
-        return $this->model->find( $id );
+    public function find( int $id, array $args = [] ): object {
+        $args = wp_parse_args(
+            $args, [
+                'fields' => [ '*' ],
+            ]
+        );
+
+        return $this->model->find( $id, $args );
+    }
+
+    /**
+     * Get the items from the database by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $find_by
+     * @param array<string, mixed> $args
+     * @param array<string> $fields
+     *
+     * @throws \Exception
+     * @return object
+     */
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+        if ( empty( $find_by ) ) {
+            throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
+        }
+
+        $args = wp_parse_args(
+            $args, [
+                'order_by' => 'id',
+                'order'    => 'DESC',
+                'limit'    => 1,
+                'offset'   => 0,
+            ]
+        );
+        return $this->model->find_by( $find_by, $args, $fields );
     }
 
     /**
@@ -100,9 +136,9 @@ trait CrudTrait {
      * @param Request $data
      * @param int     $id
      *
-     * @return bool
+     * @return object
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( int $id, Request $data ): object {
         return $this->model->update( $id, $data );
     }
 

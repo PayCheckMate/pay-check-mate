@@ -1,6 +1,6 @@
 import {Fragment, useState} from '@wordpress/element'
 import {createHooks} from '@wordpress/hooks';
-import {Bars3Icon, CalendarIcon, ChartPieIcon, CogIcon, HomeIcon, UsersIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {BanknotesIcon, Bars3Icon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, UserGroupIcon, UserIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "../Components/NavbarLink";
@@ -9,8 +9,10 @@ import {__} from "@wordpress/i18n";
 const Hooks = createHooks();
 let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
     {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-    {title: __('Employees', 'pcm'), href: 'employees', icon: UsersIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('Create Payroll', 'pcm'), href: 'create-payroll', icon: CalendarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
+    {title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: BanknotesIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']},
+    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+    {title: __('Final Settlement (Pro)', 'pcm'), href: 'final-settlement', icon: UserIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
@@ -20,7 +22,7 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     },
     {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
-            {title: __('Payroll', 'pcm'), href: 'payroll', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
+            {title: __('Payroll', 'pcm'), href: 'payroll-report', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('P.F report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Gratuity report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
             {title: __('Loan report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
@@ -40,7 +42,7 @@ export const Sidebar = () => {
     return (
         <>
             <Transition.Root show={sidebarOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+                <Dialog as="div" className="relative lg:hidden z-[99999]" onClose={setSidebarOpen}>
                     <Transition.Child
                         as={Fragment}
                         enter="transition-opacity ease-linear duration-300"
@@ -75,17 +77,16 @@ export const Sidebar = () => {
                                 >
                                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                                         <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
-                                            <span className="sr-only">Close sidebar</span>
+                                            <span className="sr-only">
+                                                {__('Close sidebar', 'pcm')}
+                                            </span>
                                             <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                                         </button>
                                     </div>
                                 </Transition.Child>
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
-                                    <div className="flex h-16 shrink-0 items-center">
-                                        <h3 className="text-white">PayCheckMate</h3>
-                                    </div>
-                                    <nav className="flex flex-1 flex-col">
+                                    <nav className="flex mt-16 flex-1 flex-col">
                                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                             <li>
                                                 <ul role="list" className="-mx-2 space-y-1">
@@ -104,13 +105,10 @@ export const Sidebar = () => {
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+            <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col z-[9999]">
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 mt-10">
-                    <div className="flex h-16 shrink-0 items-center">
-                        <h1 className="text-white">PayCheckMate</h1>
-                    </div>
-                    <nav className="flex flex-1 flex-col">
+                    <nav className="flex mt-16 flex-1 flex-col">
                         <ul role="list" className="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" className="-mx-2 space-y-1 mt-2.5">
@@ -126,14 +124,11 @@ export const Sidebar = () => {
 
             <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 lg:hidden" onClick={() => setSidebarOpen(true)}>
-                    <span className="sr-only">Open sidebar</span>
+                    <span className="sr-only">
+                        {__('Open sidebar', 'pcm')}
+                    </span>
                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
-                <a href="#">
-                    <span className="sr-only">Your profile</span>
-                    <h1 className="text-white">PayCheckMate</h1>
-                </a>
             </div>
         </>
     )

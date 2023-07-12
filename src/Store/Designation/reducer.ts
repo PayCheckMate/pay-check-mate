@@ -1,4 +1,6 @@
-import {DesignationType, filtersType} from "../../Types/DesignationType";
+import {DesignationType} from "../../Types/DesignationType";
+import {filtersType} from "../Store";
+import {defaultFilters} from "./selectors";
 
 export interface DesignationState {
     designations: DesignationType[],
@@ -13,7 +15,7 @@ const DefaultState: DesignationState = {
     loading: false,
     total: 0,
     totalPages: 1,
-    filters: {} as filtersType
+    filters: defaultFilters as filtersType
 }
 
 const reducer = (state = DefaultState, action: any) => {

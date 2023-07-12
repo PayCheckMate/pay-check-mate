@@ -1,12 +1,21 @@
-import {useState} from "@wordpress/element";
+import React, {useEffect, useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
+import {ArrowDownIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
+import {FormInput} from "./FormInput";
+import {filtersType} from "../Store/Store";
+import {SelectBox} from "./SelectBox";
+import {SelectBoxType} from "../Types/SalaryHeadType";
+import {__} from "@wordpress/i18n";
+
+type SortDirection = "asc" | "desc" | "";
 
 type Column = {
     title: string;
     dataIndex: string;
     render?: (text: string, record: any) => JSX.Element;
+    sortable?: boolean;
 };
 
 type TableProps = {
@@ -14,12 +23,15 @@ type TableProps = {
     data: any[];
     isLoading?: boolean;
     totalPage?: number;
-    pageSize?: number;
+    total: number;
+    per_page?: string | number;
     currentPage?: number;
-    onPageChange?: (page: number) => void;
+    onFilterChange?: (defaultFilterObject: filtersType) => void;
+    filters: filtersType;
 };
 
-export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1, pageSize = 10, currentPage = 1, onPageChange = (page: number) => {}}: TableProps) => {
+export const Table = ({columns = [], data = [], isLoading = true, filters, totalPage = 1, per_page = 10, currentPage = 1, total, onFilterChange = () => void 0}: TableProps) => {
+    per_page = parseInt(String(per_page));
     if (!data.length && !isLoading) {
         return (
             <>
@@ -32,7 +44,7 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
 
     const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
-    let dataIndex = pageSize * (currentPage -1) + 1;
+    let dataIndex = per_page * (currentPage - 1) + 1;
 
     if (!hasIdColumn) {
         columns = [
@@ -45,12 +57,83 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
         ];
     }
 
+    const [sortColumn, setSortColumn] = useState("");
+    const [sortDirection, setSortDirection] = useState<SortDirection>("");
+    const [searchText, setSearchText] = useState("");
+
+    const [filterObject, setFilterObject] = useState(filters);
+
+    const handleSort = (column: Column) => {
+        if (column.sortable) {
+            if (sortColumn === column.dataIndex) {
+                // Reverse the sort direction if already sorted by the same column
+                if (sortDirection === "asc") {
+                    setSortDirection("desc");
+                } else {
+                    setSortDirection("asc");
+                }
+            } else {
+                // Set the new sort column and direction
+                setSortColumn(column.dataIndex);
+                setSortDirection("asc");
+            }
+
+            setFilterObject((prevState) => ({
+                ...prevState,
+                order_by: column.dataIndex,
+                order: sortDirection === "asc" ? "asc" : "desc",
+            }));
+
+            onFilterChange({
+                ...filterObject,
+                order_by: column.dataIndex,
+                order: sortDirection === "asc" ? "asc" : "desc",
+            });
+        }
+    };
+
+
     // Pagination logic
-    const totalPages = totalPage || Math.ceil(data.length / pageSize);
+    const totalPages = totalPage || Math.ceil(data.length / per_page);
 
     const handlePageChange = (page: number) => {
-        onPageChange(page);
+        setFilterObject((prevState) => ({
+            ...prevState,
+            page,
+        }));
+
+        onFilterChange({
+            ...filterObject,
+            page,
+        });
     };
+
+    const perPageOptions: SelectBoxType[] = [
+        {
+            id: 10,
+            name: "10",
+        },
+        {
+            id: 20,
+            name: "20",
+        },
+        {
+            id: 50,
+            name: "50",
+        },
+    ];
+    const selectedPerPageOption: SelectBoxType = filterObject.per_page ? perPageOptions.find((option) => option.id === parseInt(String(filterObject.per_page))) || perPageOptions[0] : perPageOptions[0];
+    const handlePerPageChange = (value: SelectBoxType) => {
+        setFilterObject((prevState) => ({
+            ...prevState,
+            per_page: String(value.id),
+        }));
+
+        onFilterChange({
+            ...filterObject,
+            per_page: String(value.id),
+        });
+    }
 
     return (
         <>
@@ -58,6 +141,23 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                 <Loading />
             ) : (
                 <div className="overflow-x-auto">
+                    <div className="mb-4 flex items-center justify-end">
+                        <label
+                            htmlFor="search"
+                            className="sr-only"
+                        >
+                          Search
+                        </label>
+                        <FormInput
+                            type="text"
+                            id="search"
+                            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-48 sm:w-auto"
+                            placeholder="Search..."
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            name="search"
+                        />
+                    </div>
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                         <tr>
@@ -65,9 +165,25 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                                 <th
                                     scope="col"
                                     key={column.dataIndex}
-                                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                    className={"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 " + (column.sortable ? "cursor-pointer" : "")}
+                                    onClick={() => handleSort(column)}
                                 >
-                                    {column.title}
+                                    <span className="flex items-center">
+                                        {column.title}
+                                        {column.sortable && (
+                                            <span className="ml-1">
+                                            {sortColumn === column.dataIndex ? (
+                                                sortDirection === "asc" ? (
+                                                    <ArrowDownIcon className="w-4 h-4 text-gray-400" />
+                                                ) : (
+                                                    <ArrowUpIcon className="w-4 h-4 text-gray-400" />
+                                                )
+                                            ) : (
+                                                <ArrowDownIcon className="w-4 h-4 text-gray-400 opacity-30" />
+                                            )}
+                                        </span>
+                                        )}
+                                        </span>
                                 </th>
                             ))}
                         </tr>
@@ -89,29 +205,67 @@ export const Table = ({columns = [], data = [], isLoading = true, totalPage = 1,
                         ))}
                         </tbody>
                     </table>
-
-                    {/* Pagination */}
-                    <div className="flex justify-center mt-4">
-                        <nav className="flex items-center">
-                            <button
-                                onClick={() => handlePageChange(currentPage -1)}
-                                disabled={currentPage === 1}
-                                className="px-2 py-1 text-sm rounded-md bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
-                            >
-                                Previous
-                            </button>
-                            <span className="px-2 py-1 text-sm font-medium text-gray-900">Page {currentPage} of {totalPages}</span>
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === parseInt(String(totalPages))}
-                                className="px-2 py-1 text-sm bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none"
-                            >
-                                Next
-                            </button>
-                        </nav>
-                    </div>
                 </div>
             )}
+            {/* Pagination */}
+            <div className="flex justify-center mt-4">
+                <nav className="flex items-center">
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={"px-4 py-1 mr-6 text-sm bg-indigo-400 text-white hover:bg-indigo-500 focus:outline-none " + (currentPage === 1 ? "cursor-not-allowed" : "")}
+                    >
+                        Previous
+                    </button>
+                    {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
+                    {/*    Page {currentPage} of {totalPages}*/}
+                    {/*</span>*/}
+                    {totalPages > 1 && (
+                    <>
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                        {__("Go to page", 'pcm')}
+                        </span>
+                        <FormInput
+                            type="number"
+                            className="px-4 mr-0 ml-0 mt-0 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-20"
+                            value={currentPage}
+                            onChange={(e) => handlePageChange(parseInt(e.target.value))}
+                            min={1}
+                            max={totalPages}
+                            id="page"
+                            name="page"
+                        />
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                            {__("of") + " " + totalPages}
+                        </span>
+                        <span className="mx-2 text-gray-600">|</span>
+                    </>
+                    )}
+                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                        {__("Showing") + " " + ((parseInt(String(currentPage)) - 1) * parseInt(String(filterObject.per_page)) + 1) + " " + __("to") + " " + (currentPage * parseInt(String(filterObject.per_page)) > total ? total : currentPage * parseInt(String(filterObject.per_page))) + " " + __("of") + " " + total + " " + __("results")}
+                    </span>
+                    <span className="mx-2 text-gray-600">|</span>
+                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                        {__("Showing per page", "pcm")}
+                    </span>
+                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                        <SelectBox
+                            title=""
+                            className="w-20 h-10"
+                            options={perPageOptions}
+                            selected={selectedPerPageOption}
+                            setSelected={(value) => handlePerPageChange(value)}
+                        />
+                    </span>
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === parseInt(String(totalPages))}
+                        className={"px-4 py-1 ml-6 text-sm bg-indigo-400 text-white hover:bg-indigo-500 focus:outline-none " + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
+                    >
+                    Next
+                    </button>
+                </nav>
+            </div>
         </>
     );
 };

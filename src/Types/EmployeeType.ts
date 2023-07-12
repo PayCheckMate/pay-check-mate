@@ -1,3 +1,5 @@
+import {SalaryInformationType} from "../Pages/Employee/Components/ReviewInformation";
+
 export interface EmployeeType {
     id: number;
     employee_id: string;
@@ -13,6 +15,7 @@ export interface EmployeeType {
     status: EmployeeStatus;
     created_on: string;
     updated_at: string;
+    salaryInformation?: SalaryInformationType;
 }
 
 export enum EmployeeStatus {
@@ -22,4 +25,12 @@ export enum EmployeeStatus {
 
 export interface EmployeeResponseType {
     data: EmployeeType[];
+    headers: any;
+    status: number;
+}
+
+export interface SingleEmployeeResponseType {
+    data: EmployeeType;
+    headers: any;
+    status: number;
 }

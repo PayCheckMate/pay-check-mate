@@ -37,7 +37,7 @@ export const apiFetchUnparsed = async <Model>(path: string, options?: APIFetchOp
 const useFetchApi = <Model extends object>(url: string, initialFilters?: object, run = true): {
     models: Model[];
     total: number;
-    totalPage: number;
+    totalPages: number;
     filterObject: object;
     setFilterObject: <FilterType>(newFilterObj: FilterType) => void;
     loading: boolean;
@@ -50,7 +50,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
     const [models, setModels] = useState<Model[]>([]);
     const [filterObject, setFilter] = useState<object>(initialFilters || {});
     const [total, setTotal] = useState<number>(0);
-    const [totalPage, setTotalPage] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
     const setFilterObject = <FilterType>(newFilterObj: FilterType): void => {
         setFilter((prevFilter) => ({...prevFilter, ...newFilterObj}));
@@ -106,7 +106,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
             if (response.data.status === 200 && response.data) {
                 setModels(response.data.data);
                 setTotal(response.data.headers['X-WP-Total']);
-                setTotalPage(response.data.headers['X-WP-TotalPages']);
+                setTotalPages(response.data.headers['X-WP-TotalPages']);
             }
 
             setLoading(false);
@@ -116,7 +116,7 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
     return {
         models,
         total,
-        totalPage,
+        totalPages,
         loading,
         filterObject,
         setFilterObject,

@@ -11,11 +11,12 @@ import department from "../../Store/Department";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {departments, loading, totalPages, filters} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
+    const {departments, loading, totalPages, filters, total} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
     const [showModal, setShowModal] = useState(false);
@@ -23,7 +24,7 @@ export const DepartmentList = () => {
 
 
     const columns = [
-        {title: 'Department name', dataIndex: 'name'},
+        {title: 'Department name', dataIndex: 'name', sortable: true},
         {
             title: 'Status', dataIndex: 'status',
             render: (text: string, record: DepartmentType) => {
@@ -86,7 +87,7 @@ export const DepartmentList = () => {
         dispatch(department).updateDepartment(data).then((response: any) => {
             useNotify(response, __('Department status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while updating department', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -102,9 +103,9 @@ export const DepartmentList = () => {
         setFormError({})
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(department).getDepartments({per_page: per_page, page: page});
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(department).getDepartments(filterObject);
+        setCurrentPage(filterObject.page);
     };
 
 
@@ -127,10 +128,9 @@ export const DepartmentList = () => {
 
         if (formData.id) {
             dispatch(department).updateDepartment(data).then((response: any) => {
-                console.log(response)
                 useNotify(response, __('Department updated successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating department', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -142,7 +142,7 @@ export const DepartmentList = () => {
             dispatch(department).createDepartment(data).then((response: any) => {
                 useNotify(response, __('Department created successfully', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating department', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -190,12 +190,14 @@ export const DepartmentList = () => {
                 </div>
                 <Table
                     columns={columns}
+                    total={total}
                     data={departments}
+                    filters={filters}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    onFilterChange={handleFilterChange}
                 />
             </div>
         </>

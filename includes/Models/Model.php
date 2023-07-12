@@ -13,6 +13,8 @@ use WP_Error;
  */
 class Model implements ModelInterface {
 
+    protected static string $table_prefix = 'pay_check_mate_';
+
     /**
      * The table associated with the model.
      *
@@ -62,7 +64,8 @@ class Model implements ModelInterface {
                 'limit'     => 20,
                 'offset'    => 0,
                 'order'     => 'DESC',
-                'orderby'   => 'id',
+                'order_by'  => 'id',
+                'search'    => '',
                 'status'    => 'all',
                 'groupby'   => '',
                 'relations' => [],
@@ -91,7 +94,7 @@ class Model implements ModelInterface {
 
         if ( ! empty( $args['where'] ) ) {
             foreach ( $args['where'] as $key => $value ) {
-                $type = !empty( $value['type'] ) ? $value['type'] : 'AND';
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
                 $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
             }
         }
@@ -105,24 +108,28 @@ class Model implements ModelInterface {
         }
 
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
-        if ( in_array( 'id', $fields, true ) ) {
-            $fields = array_map(
-                function ( $field ) {
-                    return $this->get_table() . '.' . esc_sql( $field );
-                }, $fields
-            );
-        }
+        $fields = array_map( function ( $field ) {
+            // E.g., id as something_id
+            if ( strpos( $field, 'id' ) !== false ) {
+                $field = $this->get_table() . '.' . esc_sql( $field );
+            }
+            if('id' === $field) {
+                $field = $this->get_table() . '.' . esc_sql( $field );
+            }
+
+            return $field;
+        }, $fields );
 
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']}",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
                 $args['limit'],
                 $args['offset']
             );
@@ -141,8 +148,8 @@ class Model implements ModelInterface {
      *
      * @param array<array<string, mixed>> $args
      *
-     * @return object
      * @throws \Exception
+     * @return object
      */
     public function get_relational( array $args = [] ): object {
         global $wpdb;
@@ -168,8 +175,8 @@ class Model implements ModelInterface {
 
             if ( ! empty( $relation['select_max'] ) ) {
                 foreach ( $relation['select_max'] as $key => $value ) {
-                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}", $value['value'] );
-                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})", $value['value'] );
+                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}",  );
+                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})",  );
                 }
             }
 
@@ -261,20 +268,113 @@ class Model implements ModelInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param int           $id
-     * @param array<string> $fields
+     * @param array<string> $args
      *
      *
      * @throws \Exception
      * @return object
      */
-    public function find( int $id, array $fields = [ '*' ] ): object {
+    public function find( int $id, array $args = [] ): object {
         global $wpdb;
 
-        $fields  = implode( ',', esc_sql( $fields ) );
-        $query   = $wpdb->prepare( "SELECT $fields FROM {$this->get_table()} WHERE id = %d", $id );
-        $results = $wpdb->get_row( $query );
+        $args = wp_parse_args(
+            $args, [
+                'fields' => [ '*' ],
+            ]
+        );
+
+        if( $args['fields'][0] === '*' ) {
+            $args['fields'] = [$this->get_table() . '.*'];
+        }
+        $fields            = $args['fields'];
+        $relational_fields = [];
+        $relations         = '';
+        $where             = 'WHERE 1=1';
+        if ( ! empty( $args['relations'] ) ) {
+            // Get relational and where clause from get_relations() method.
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
+            $relational_fields = $relational->fields;
+        }
+        $relational_fields = array_merge( ...$relational_fields );
+        $fields            = array_merge( $fields, $relational_fields );
+        $fields            = implode( ', ', esc_sql( $fields ) );
+        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.id = %d", $id );
+        $results           = $wpdb->get_row( $query );
+
+        if ( empty( $results ) ) {
+            return (object) [];
+        }
 
         $this->result = $this->process_item( $results );
+
+        return $this->result;
+    }
+
+    /**
+     * Get the items from the database by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, string> $find_by
+     * @param array<string>         $args
+     * @param array<string>         $fields
+     *
+     * @throws \Exception
+     * @return object
+     */
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+        global $wpdb;
+        if( empty( $find_by ) ) {
+            throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
+        }
+
+        $args = wp_parse_args(
+            $args, [
+                'order_by' => 'id',
+                'order'    => 'DESC',
+                'limit'    => 1,
+                'offset'   => 0,
+            ]
+        );
+
+        if ( ! empty( $args['order_by'] ) ) {
+            $args['order_by'] = $this->get_table() . '.' . $args['order_by'];
+        }
+
+        $where = 'WHERE 1=1';
+
+        $relational_fields = [];
+        $relations         = '';
+        if ( ! empty( $args['relations'] ) ) {
+            // Get relational and where clause from get_relations() method.
+            $relational        = $this->get_relational( $args );
+            $relations         = $relational->relations;
+            $where             = $relational->where;
+            $relational_fields = $relational->fields;
+        }
+
+        foreach ( $find_by as $key => $value ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.{$key} = %s", $value );
+        }
+
+        $relational_fields = array_merge( ...$relational_fields );
+        $fields = array_map( function ( $field ) {
+            return $this->get_table() . '.' . esc_sql( $field );
+        }, $fields );
+        $fields            = array_merge( $fields, $relational_fields );
+        $fields            = implode( ', ', esc_sql( $fields ) );
+
+        $query  = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+        $results = $wpdb->get_results( $query );
+
+        if ( empty( $results ) ) {
+            return (object) [];
+        }
+
+
+        $this->results = $this->process_items( $results );
 
         return $this;
     }
@@ -287,7 +387,7 @@ class Model implements ModelInterface {
      * @param Request $data
      *
      * @throws Exception
-     * @return object|WP_Error The number of rows inserted, or false on error.
+     * @return object|WP_Error Returns the created item, or error if not created.
      */
     public function create( Request $data ): object {
         global $wpdb;
@@ -319,25 +419,29 @@ class Model implements ModelInterface {
      * @param Request $data
      *
      * @throws Exception
-     * @return bool
+     * @return object|WP_Error Returns the updated item, or error if the item was not updated.
      */
-    public function update( int $id, Request $data ): bool {
+    public function update( int $id, Request $data ): object {
         global $wpdb;
 
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
 
-        return $wpdb->update(
+        if ($wpdb->update(
             $this->get_table(),
             $filteredData,
             [
                 'id' => $id,
             ],
-            $this->get_where_format( $data ),
+            $this->get_where_format( $filteredData ),
             [
                 '%d',
             ],
-        );
+        )){
+            return $this->find( $id );
+        }
+
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pcm' ) );
     }
 
     /**
@@ -378,7 +482,7 @@ class Model implements ModelInterface {
             throw new Exception( 'Table name is not defined' );
         }
 
-        return $wpdb->prefix . static::$table;
+        return $wpdb->prefix . static::$table_prefix . static::$table;
     }
 
     /**

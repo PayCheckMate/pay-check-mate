@@ -13,7 +13,7 @@ class SalaryHead extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'pay_check_mate_salary_heads';
+    protected static string $table = 'salary_heads';
 
     /**
      * @var array|string[] $columns

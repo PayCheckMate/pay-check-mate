@@ -40,6 +40,25 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 'schema' => [ $this, 'get_public_item_schema' ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_employee' ],
+                    'permission_callback' => [ $this, 'get_employee_permissions_check' ],
+                    'args'                => [
+                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
+                    ],
+                ],
+                [
+                    'methods'             => WP_REST_Server::EDITABLE,
+                    'callback'            => [ $this, 'update_employee' ],
+                    'permission_callback' => [ $this, 'update_employee_permissions_check' ],
+                    'args'                => $this->get_endpoint_args_for_item_schema( \WP_REST_Server::EDITABLE ),
+                ],
+                'schema' => [ $this, 'get_public_item_schema' ],
+            ]
+        );
     }
 
     /**
@@ -67,6 +86,30 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Get the employee permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employee_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_accountant' );
+    }
+
+    /**
+     * Update employee permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function update_employee_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_accountant' );
+    }
+
+    /**
      * Get a collection of items
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -77,29 +120,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function get_employees( WP_REST_Request $request ): WP_REST_Response {
         $args           = [
-            'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
-            'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'     => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
-            'orderby'   => $request->get_param( 'orderby' ) ? $request->get_param( 'orderby' ) : 'id',
-            'status'    => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : '1',
-            'relations' => [
-                [
-                    'table'       => 'pay_check_mate_departments',
-                    'local_key'   => 'department_id',
-                    'foreign_key' => 'id',
-                    'fields'      => [
-                        'name as department_name',
-                    ],
-                ],
-                [
-                    'table'       => 'pay_check_mate_designations',
-                    'local_key'   => 'designation_id',
-                    'foreign_key' => 'id',
-                    'fields'      => [
-                        'name as designation_name',
-                    ],
-                ],
-            ],
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
+            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
+            'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
         ];
         $employees      = [];
         $employee_model = new Employee( new EmployeeModel() );
@@ -133,7 +158,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data                              = $request->get_params();
         $salary_information                = $data['salaryInformation'];
         $salary_information['_wpnonce']    = $data['_wpnonce'];
-        $salary_information['active_from'] = $salary_information['active_from'] ? $data['joining_date'] : gmdate( 'Y-m-d' );
+        $salary_information['active_from'] = $salary_information['active_from'] ?? $data['joining_date'];
         unset( $data['salaryInformation'] );
         $employee_model = new Employee( new EmployeeModel() );
         $validated_data = new EmployeeRequest( $data );
@@ -147,7 +172,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $wpdb->query( 'START TRANSACTION' );
-        $employee = $employee_model->create( $validated_data );
+        if ( ! empty( $data['id'] ) ) {
+            $employee = $employee_model->update( $data['id'], $validated_data );
+        } else {
+            $employee = $employee_model->create( $validated_data );
+        }
 
         if ( is_wp_error( $employee ) ) {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
@@ -155,23 +184,25 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
 
         $salary_information['employee_id'] = $data['employee_id'];
         $salary_data                       = [
+            'salary_history_id',
             'employee_id',
             'basic_salary',
+            'gross_salary',
             'active_from',
             'remarks',
             '_wpnonce',
         ];
         $head_details                      = $salary_information;
         $salary_information                = array_intersect_key( $salary_information, array_flip( $salary_data ) );
-        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id' ];
-        $salary_head_details               = array_filter(
+        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
+        $salary_details                    = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
 				return ! in_array( $key, $keys_to_remove, true );
 			}, ARRAY_FILTER_USE_KEY
         );
 
-        $salary_information['salary_head_details'] = wp_json_encode( $salary_head_details );
-        $validate_salary_data                      = new SalaryHistoryRequest( $salary_information );
+        $salary_information['salary_details'] = wp_json_encode( $salary_details );
+        $validate_salary_data                 = new SalaryHistoryRequest( $salary_information );
         if ( $validate_salary_data->error ) {
             return new WP_Error(
                 'rest_invalid_salary_data', __( 'Invalid salary data', 'pcm' ), [
@@ -182,21 +213,108 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $salary_history_model = new Salary( new SalaryHistoryModel() );
-        $salary_history       = $salary_history_model->create( $validate_salary_data );
+        if ( ! empty( $salary_information['salary_history_id'] ) ) {
+            $salary_history = $salary_history_model->update( $salary_information['salary_history_id'], $validate_salary_data );
+        } else {
+            $salary_history = $salary_history_model->create( $validate_salary_data );
+        }
 
         if ( is_wp_error( $salary_history ) ) {
-            return new WP_REST_Response( $salary_history, 400 );
+            return new WP_Error( 'rest_invalid_data', $salary_history->get_error_message(), [ 'status' => 400 ] );
         }
 
         // If everything is fine, then commit the data.
         $wpdb->query( 'COMMIT' );
 
-        $item   = $this->prepare_item_for_response( $employee, $request );
-        $data = $this->prepare_response_for_collection( $item );
+        $item     = $this->prepare_item_for_response( $employee, $request );
+        $data     = $this->prepare_response_for_collection( $item );
         $response = new WP_REST_Response( $data );
         $response->set_status( 201 );
 
         return new WP_REST_Response( $response, 201 );
+    }
+
+    /**
+     * Get a single employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function get_employee( WP_REST_Request $request ) {
+        $employee_id   = $request->get_param( 'id' );
+        $employee      = new Employee( new EmployeeModel() );
+        $employee_args = [
+            'order_by'  => 'employee_id',
+            'order'     => 'DESC',
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_employee_salary_history',
+                    'local_key'   => 'employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'left',
+                    'fields'      => [
+                        'id as salary_history_id',
+                        'basic_salary',
+                        'gross_salary',
+                        'active_from',
+                        'remarks',
+                        'salary_details',
+                    ],
+                    'select_max'  => [
+                        'active_from' => [
+                            'operator' => '=',
+                            'compare'  => [
+                                'key'      => 'employee_id',
+                                'operator' => '=',
+                                'value'    => $employee_id,
+                            ],
+                        ],
+                    ],
+                    'where'       => [
+                        'employee_id' => [
+                            'operator' => '=',
+                            'value'    => $employee_id,
+                            'type'     => 'AND',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $employee = $employee->find_by( [ 'employee_id' => $employee_id ], $employee_args );
+        if ( is_wp_error( $employee ) ) {
+            return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
+        }
+
+        $item                      = $this->prepare_item_for_response( $employee, $request );
+        $data                      = $this->prepare_response_for_collection( $item );
+        $data['salaryInformation']['salary_history_id'] = $employee->salary_history_id;
+        $data['salaryInformation']['salary_details'] = $employee->salary_details;
+        $data['salaryInformation']['basic_salary']   = $employee->basic_salary;
+        $data['salaryInformation']['gross_salary']   = $employee->gross_salary;
+        $data['salaryInformation']['active_from']    = $employee->active_from;
+        $data['salaryInformation']['remarks']        = $employee->remarks;
+        $response                  = new WP_REST_Response( $data );
+
+        return new WP_REST_Response( $response, 200 );
+    }
+
+    /**
+     * Update an employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function update_employee( WP_REST_Request $request ) {
+        return $this->create_employee( $request );
     }
 
     /**
@@ -261,6 +379,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'string',
                     'format'      => 'date',
                     'required'    => true,
+                ],
+                'joining_date_string'   => [
+                    'description' => __( 'Employee Joining Date String', 'pcm' ),
+                    'type'        => 'string',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'readonly'    => true,
                 ],
                 'regine_date'    => [
                     'description' => __( 'Employee Regine Date', 'pcm' ),

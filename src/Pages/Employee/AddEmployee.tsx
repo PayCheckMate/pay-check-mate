@@ -1,21 +1,25 @@
-import {useState} from "@wordpress/element";
-import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "@wordpress/element";
+import {useNavigate, useParams} from "react-router-dom";
 import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
 import {__} from "@wordpress/i18n";
-import {EmployeeType} from "../../Types/EmployeeType";
+import {EmployeeStatus, EmployeeType, SingleEmployeeResponseType} from "../../Types/EmployeeType";
 import {Button} from "../../Components/Button";
 import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {toast} from "react-toastify";
+
 type ResponseType = {
     data: EmployeeType,
     headers: any,
     status: number,
 }
 export const AddEmployee = () => {
+    const employeeId = useParams().id;
+    const {makePostRequest, makeGetRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
+
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     // Get initial personal information from local storage
@@ -26,12 +30,39 @@ export const AddEmployee = () => {
     let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
     // @ts-ignore
     let savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
-    const {makePostRequest} = useFetchApi('/pay-check-mate/v1/payroll', {}, false);
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);
-    const handlePersonalInformation = (personalInformation: EmployeeType) => {
-        setPersonalInformation(personalInformation);
+
+    useEffect(() => {
+        if (employeeId){
+            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response) => {
+                if (response.status === 200) {
+                    const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
+                    employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
+                    const salaryInformation = {
+                        ...response.data.salaryInformation,
+                        // @ts-ignore
+                        ...JSON.parse(response.data.salaryInformation.salary_details),
+                    };
+                    delete salaryInformation.salary_details;
+                    delete response.data.salaryInformation;
+                    setPersonalInformation(response.data);
+                    setSalaryInformation(salaryInformation as SalaryInformationType);
+                } else {
+                    toast.error(__('Something went wrong', 'pcm'));
+                }
+            });
+        }
+    }, [employeeId])
+
+    const handlePersonalInformation = (information: EmployeeType) => {
+        setPersonalInformation((prevState) => {
+            return {
+                ...prevState,
+                ...information
+            }
+        })
         localStorage.setItem('Employee.personalInformation', JSON.stringify(personalInformation));
     };
     const handleSalaryInformation = (salary: string) => {
@@ -104,34 +135,44 @@ export const AddEmployee = () => {
             return false;
         }
 
-        savedPersonalInformation.status = 1;
         // Save data to database
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        delete salaryInformation.gross_salary;
         const data = {
             '_wpnonce': _wpnonce,
             ...personalInformation,
+            status: parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0,
             'salaryInformation': {
                 ...salaryInformation,
                 'basic_salary': salaryInformation.basic_salary,
+                'gross_salary': salaryInformation.gross_salary,
                 'remarks': salaryInformation.remarks,
-                'salary_head_details': salaryInformation.salary_head_details,
+                'salary_details': salaryInformation.salary_details,
+                'active_from': salaryInformation.active_from,
             },
         }
 
-        makePostRequest<ResponseType>('/pay-check-mate/v1/employees', data).then((response) => {
+        let url = '/pay-check-mate/v1/employees';
+        if (employeeId) {
+            url = '/pay-check-mate/v1/employees/' + employeeId;
+        }
+        makePostRequest<ResponseType>(url, data).then((response) => {
             if (response.status=== 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 // Push to employee list page
                 navigate('/employees');
+                if (employeeId){
+                    toast.success(__('Employee updated successfully', 'pcm'));
+                    return;
+                }
+
                 toast.success(__('Employee added successfully', 'pcm'));
             } else {
                 console.log(response)
             }
         }).catch(error => {
-            console.log(error);
+            console.log(error, 'error');
         })
     }
     return (
@@ -151,7 +192,7 @@ export const AddEmployee = () => {
                                 </h2>
                                 <div className="mx-auto w-3/4">
                                     <PersonalInformation
-                                        initialValues={savedPersonalInformation}
+                                        initialValues={personalInformation}
                                         setFormData={(personalInformation: EmployeeType) => handlePersonalInformation(personalInformation)}
                                         nextStep={() => setStep(2)}
                                     />
@@ -166,7 +207,7 @@ export const AddEmployee = () => {
                                 </h2>
                                 <div className="mx-auto w-3/4">
                                     <SalaryInformation
-                                        initialValues={savedSalaryInformation}
+                                        initialValues={salaryInformation}
                                         setSalaryData={(salary: string) => handleSalaryInformation(salary)}
                                     />
                                     <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
@@ -190,8 +231,8 @@ export const AddEmployee = () => {
                         {step === 3 && (
                             <>
                                 <ReviewInformation
-                                    personalInformation={savedPersonalInformation}
-                                    salaryInformation={savedSalaryInformation}
+                                    personalInformation={personalInformation}
+                                    salaryInformation={salaryInformation}
                                     setError={setError}
                                 />
                                 {!error && (

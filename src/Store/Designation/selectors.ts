@@ -1,7 +1,7 @@
-import {filtersType} from "../../Types/DesignationType";
 import {DesignationState} from "./reducer";
+import {filtersType} from "../Store";
 
-export const filter: filtersType={
+export const defaultFilters: filtersType={
     per_page: '10',
     page: 1,
     order_by: 'id',
@@ -10,7 +10,7 @@ export const filter: filtersType={
 }
 
 const selectors = {
-    getDesignations: ( state: DesignationState, filters: filtersType = filter ) => {
+    getDesignations: ( state: DesignationState, filters: filtersType = defaultFilters ) => {
         return state;
     },
     getFilters: ( state: DesignationState ) => {
@@ -18,6 +18,9 @@ const selectors = {
     },
     getLoading: ( state: DesignationState ) => {
         return state.loading;
+    },
+    getDesignation: ( state: DesignationState, id: number ) => {
+        return state.designations.find( ( designation: any ) => designation.id === id );
     }
 
 }

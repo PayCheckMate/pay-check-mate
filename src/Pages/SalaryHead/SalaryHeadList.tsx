@@ -13,6 +13,7 @@ import salaryHead from "../../Store/SalaryHead";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import {filtersType} from "../../Store/Store";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -32,7 +33,7 @@ const is_variable = [
 export const SalaryHeadList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
-    const {salaryHeads, loading, totalPages, filters} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
+    const {salaryHeads, loading, totalPages, filters, total} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
 
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
@@ -44,9 +45,9 @@ export const SalaryHeadList = () => {
 
 
     const columns = [
-        {title: __('Salary Head', 'pcm'), dataIndex: 'head_name'},
+        {title: __('Salary Head', 'pcm'), dataIndex: 'head_name', sortable: true},
         {
-            title: __('Head Type', 'pcm'), dataIndex: 'head_type',
+            title: __('Head Type', 'pcm'), dataIndex: 'head_type', sortable: true,
             render: (text: string, record: SalaryHeadType) => {
                 const headType = parseInt(String(record.head_type))
                 return (
@@ -91,7 +92,7 @@ export const SalaryHeadList = () => {
                 )
             }
         },
-        {title: __('Priority', 'pcm'), dataIndex: 'priority'},
+        {title: __('Priority', 'pcm'), dataIndex: 'priority', sortable: true},
         {
             title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
@@ -171,7 +172,7 @@ export const SalaryHeadList = () => {
         dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
             useNotify(response, __('Salary head status updated successfully', 'pcm'));
         }).catch((error: any) => {
-            console.log(error)
+            console.log(error, 'error')
             toast.error(__('Something went wrong while creating salary head', 'pcm'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
@@ -197,9 +198,9 @@ export const SalaryHeadList = () => {
         setShowModal(true)
     };
 
-    const handlePageChange = (page: number) => {
-        dispatch(salaryHead).getSalaryHeads({per_page: per_page, page})
-        setCurrentPage(page);
+    const handleFilterChange = (filterObject: filtersType) => {
+        dispatch(salaryHead).getSalaryHeads(filterObject)
+        setCurrentPage(filterObject.page);
     };
 
     const handleHeadType = (data: SelectBoxType) => {
@@ -227,7 +228,7 @@ export const SalaryHeadList = () => {
             dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
                 useNotify(response, __('Successfully updated salary head', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while updating salary head', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -246,7 +247,7 @@ export const SalaryHeadList = () => {
             dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
                 useNotify(response, __('Successfully created salary head', 'pcm'));
             }).catch((error: any) => {
-                console.log(error)
+                console.log(error, 'error')
                 toast.error(__('Something went wrong while creating salary head', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -426,9 +427,11 @@ export const SalaryHeadList = () => {
                     data={salaryHeads}
                     isLoading={loading}
                     totalPage={totalPages}
-                    pageSize={parseInt(per_page)}
+                    per_page={parseInt(per_page)}
+                    total={total}
                     currentPage={currentPage}
-                    onPageChange={handlePageChange}
+                    filters={filters}
+                    onFilterChange={(filter) => handleFilterChange(filter)}
                 />
             </div>
         </>
