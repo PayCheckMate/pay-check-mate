@@ -46,7 +46,7 @@ const ViewPayroll = () => {
         }).catch((error: any) => {
             console.log(error, 'error')
             toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
+                position: toast.POSITION.BOTTOM_RIGHT,
                 autoClose: 3000
             });
         })

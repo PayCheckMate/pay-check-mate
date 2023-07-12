@@ -76,6 +76,7 @@ class PayCheckMateUserRoles {
             'pay_check_mate_manage_menu' => true,
             'pay_check_mate_employee_list' => true,
             'pay_check_mate_add_employee' => true,
+            'pay_check_mate_view_employee_details' => true,
             'pay_check_mate_edit_employee' => true,
             'pay_check_mate_salary_increment' => true,
             'pay_check_mate_payroll_list' => true,

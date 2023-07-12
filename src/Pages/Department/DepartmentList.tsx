@@ -89,7 +89,7 @@ export const DepartmentList = () => {
         }).catch((error: any) => {
             console.log(error, 'error')
             toast.error(__('Something went wrong while updating department', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
+                position: toast.POSITION.BOTTOM_RIGHT,
                 autoClose: 3000
             });
         })
@@ -119,7 +119,7 @@ export const DepartmentList = () => {
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
+                position: toast.POSITION.BOTTOM_RIGHT,
                 autoClose: false
             });
 
@@ -132,7 +132,7 @@ export const DepartmentList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while updating department', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
+                    position: toast.POSITION.BOTTOM_RIGHT,
                     autoClose: 3000
                 });
             })
@@ -144,7 +144,7 @@ export const DepartmentList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while creating department', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
+                    position: toast.POSITION.BOTTOM_RIGHT,
                     autoClose: 3000
                 });
             })

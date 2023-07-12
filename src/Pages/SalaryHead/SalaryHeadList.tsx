@@ -174,7 +174,7 @@ export const SalaryHeadList = () => {
         }).catch((error: any) => {
             console.log(error, 'error')
             toast.error(__('Something went wrong while creating salary head', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
+                position: toast.POSITION.BOTTOM_RIGHT,
                 autoClose: 3000
             });
         })
@@ -217,7 +217,7 @@ export const SalaryHeadList = () => {
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
+                position: toast.POSITION.BOTTOM_RIGHT,
                 autoClose: 3000
             });
 
@@ -230,7 +230,7 @@ export const SalaryHeadList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while updating salary head', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
+                    position: toast.POSITION.BOTTOM_RIGHT,
                     autoClose: 3000
                 });
             })
@@ -249,7 +249,7 @@ export const SalaryHeadList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while creating salary head', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
+                    position: toast.POSITION.BOTTOM_RIGHT,
                     autoClose: 3000
                 });
             });
@@ -362,7 +362,10 @@ export const SalaryHeadList = () => {
                                             title={__('Head type', 'pcm')}
                                             options={headType}
                                             selected={selectedHeadType}
-                                            setSelected={handleHeadType}
+                                            setSelected={(value: any) => {
+                                                setSelectedHeadType(value);
+                                                setFormData({...formData, head_type: value.id})
+                                            }}
                                             required={true}
                                             error={formError.head_type}
                                         />

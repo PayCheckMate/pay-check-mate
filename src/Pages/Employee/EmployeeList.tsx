@@ -8,6 +8,7 @@ import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
+import {userCan} from "../../Helpers/User";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -62,14 +63,20 @@ export const EmployeeList = () => {
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
-                return (
-                    <Link
-                        to={`/employee/${record.employee_id}`}
-                        className="text-indigo-600 hover:text-indigo-900"
-                    >
+                if (userCan('pay_check_mate_view_employee_details')) {
+                    return (
+                        <Link
+                            to={`/employee/${record.employee_id}`}
+                            className="text-indigo-600 hover:text-indigo-900"
+                        >
                         {record.first_name + ' ' + record.last_name}
                     </Link>
-                )
+                    )
+                } else {
+                    return (
+                        <span>{record.first_name + ' ' + record.last_name}</span>
+                    )
+                }
             }
         },
         {title: __('Email', 'pcm'), dataIndex: 'email'},
@@ -82,7 +89,7 @@ export const EmployeeList = () => {
                             {__('Active', 'pcm')}
                         </span>
                     )
-                }else {
+                } else {
                     return (
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                             {__('Inactive', 'pcm')}
@@ -97,19 +104,26 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        <button
-                            onClick={() => viewEmployee(record.id)}
-                            className="text-green-600 hover:text-green-900"
-                        >
-                            {__('Salary increment', 'pcm')}
-                        </button>
-                        <span className="mx-2 text-gray-300">|</span>
-                        <Link
-                            to={`/employee/edit/${record.employee_id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
-                        >
-                            {__('Edit info', 'pcm')}
-                        </Link>
+                        {userCan('pay_check_mate_salary_increment') && (
+                            <button
+                                onClick={() => viewEmployee(record.id)}
+                                className="text-green-600 hover:text-green-900"
+                            >
+                                {__('Salary increment', 'pcm')}
+                            </button>
+                        )
+                        }
+                        {userCan('pay_check_mate_edit_employee') && (
+                            <>
+                                <span className="mx-2 text-gray-300">|</span>
+                                <Link
+                                    to={`/employee/edit/${record.employee_id}`}
+                                    className="text-indigo-600 hover:text-indigo-900"
+                                >
+                                    {__('Edit info', 'pcm')}
+                                </Link>
+                            </>
+                        )}
                     </div>
                 );
             },
@@ -127,18 +141,22 @@ export const EmployeeList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button
-                            className="hover:text-white"
-                            path="/add-employee"
-                        >
-                            <CheckCircleIcon
-                                className="w-5 h-5 mr-2 -ml-1 text-white"
-                                aria-hidden="true"
-                            />
-                            {__('Add Employee', 'pcm')}
-                        </Button>
-                        {showModal && (
-                            <Modal setShowModal={setShowModal} />
+                        {userCan('pay_check_mate_add_employee') && (
+                            <>
+                                <Button
+                                    className="hover:text-white"
+                                    path="/add-employee"
+                                >
+                                    <CheckCircleIcon
+                                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                                        aria-hidden="true"
+                                    />
+                                    {__('Add Employee', 'pcm')}
+                                </Button>
+                                {showModal && (
+                                    <Modal setShowModal={setShowModal} />
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

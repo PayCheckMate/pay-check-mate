@@ -141,7 +141,7 @@ export const AddEmployee = () => {
         const data = {
             '_wpnonce': _wpnonce,
             ...personalInformation,
-            status: parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0,
+            status: 1,
             'salaryInformation': {
                 ...salaryInformation,
                 'basic_salary': salaryInformation.basic_salary,
@@ -155,6 +155,7 @@ export const AddEmployee = () => {
         let url = '/pay-check-mate/v1/employees';
         if (employeeId) {
             url = '/pay-check-mate/v1/employees/' + employeeId;
+            data.status = parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0;
         }
         makePostRequest<ResponseType>(url, data).then((response) => {
             if (response.status=== 201) {

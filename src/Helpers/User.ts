@@ -13,7 +13,8 @@ export const userCan = (permission: string): boolean => {
 
 export const userIs = (role: string|string[]): boolean => {
     if (Array.isArray(role)) {
-        return role.some((r) => currentUser.roles.includes(r));
+        return role.some((r) => Object.values(currentUser.roles).includes(r));
     }
-    return currentUser.roles.includes(role);
+
+    return Object.values(currentUser.roles).includes(role);
 }

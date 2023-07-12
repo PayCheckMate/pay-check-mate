@@ -11,20 +11,20 @@ const useNotify = (response?: response, successMessage?: string, errorMessage?: 
     if (!response) return;
     if (response.status === 201) {
         toast.success(successMessage, {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.BOTTOM_RIGHT,
             autoClose: 3000
         });
     }
     if (response.data.status === 400) {
         toast.error(response.message, {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.BOTTOM_RIGHT,
             autoClose: false
         });
     }
 
     if (response.code === 500) {
         toast.error(response.message, {
-            position: toast.POSITION.TOP_RIGHT,
+            position: toast.POSITION.BOTTOM_RIGHT,
             autoClose: 10000
         });
     }
