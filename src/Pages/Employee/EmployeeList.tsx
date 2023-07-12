@@ -63,12 +63,12 @@ export const EmployeeList = () => {
             sortable: true,
             render: (text: string, record: any) => {
                 return (
-                    <a
-                        href="#"
+                    <Link
+                        to={`/employee/${record.employee_id}`}
                         className="text-indigo-600 hover:text-indigo-900"
                     >
                         {record.first_name + ' ' + record.last_name}
-                    </a>
+                    </Link>
                 )
             }
         },

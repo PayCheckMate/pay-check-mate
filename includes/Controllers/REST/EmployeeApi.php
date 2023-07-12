@@ -158,7 +158,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data                              = $request->get_params();
         $salary_information                = $data['salaryInformation'];
         $salary_information['_wpnonce']    = $data['_wpnonce'];
-        $salary_information['active_from'] = $salary_information['active_from'] ? $data['joining_date'] : gmdate( 'Y-m-d' );
+        $salary_information['active_from'] = $salary_information['active_from'] ?? $data['joining_date'];
         unset( $data['salaryInformation'] );
         $employee_model = new Employee( new EmployeeModel() );
         $validated_data = new EmployeeRequest( $data );

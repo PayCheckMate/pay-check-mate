@@ -86,6 +86,14 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
         setSalaryData(formValues);
     }, [formValues]);
 
+    const handleActiveFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const {name, value} = e.target;
+        setFormValues((prevState: SalaryHeadType) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
+
     return (
         <div className="space-y-12">
             <div className="bg-white sm:rounded-xl md:col-span-2">
@@ -126,6 +134,16 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
 
                             </div>
                         ))}
+                        <div className="sm:col-span-3">
+                            <FormInput
+                                type={'date'}
+                                label={__('Active from', 'pcm')}
+                                name="active_from"
+                                id="active_from"
+                                value={formValues.active_from}
+                                onChange={handleActiveFormChange}
+                            />
+                        </div>
                         <div className="col-span-full">
                             <div>
                                 <h3 className="font-bold text-2xl leading-6 text-gray-600">{__('Salary in hand', 'pcm')}</h3>

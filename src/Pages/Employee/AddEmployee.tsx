@@ -45,7 +45,6 @@ export const AddEmployee = () => {
                         // @ts-ignore
                         ...JSON.parse(response.data.salaryInformation.salary_details),
                     };
-                    console.log(salaryInformation, 'salaryInformation')
                     delete salaryInformation.salary_details;
                     delete response.data.salaryInformation;
                     setPersonalInformation(response.data);
@@ -149,6 +148,7 @@ export const AddEmployee = () => {
                 'gross_salary': salaryInformation.gross_salary,
                 'remarks': salaryInformation.remarks,
                 'salary_details': salaryInformation.salary_details,
+                'active_from': salaryInformation.active_from,
             },
         }
 
