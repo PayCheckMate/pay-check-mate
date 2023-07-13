@@ -16,6 +16,7 @@ import {PayrollList} from "./Payroll/PayrollList";
 import CreatePayroll from "./Payroll/CreatePayroll";
 import ViewPayroll from "./Payroll/ViewPayroll";
 import {EmployeeDetails} from "./Employee/EmployeeDetails";
+import {NotFound} from "../Components/404";
 
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');
@@ -39,7 +40,9 @@ export default function Main() {
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='payroll/:id' element={<ViewPayroll />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='payroll/edit/:id' element={<CreatePayroll />}/>)}
                                 {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='generate-payroll' element={<CreatePayroll />}/>)}
-                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><EmptyState /></Card>} />)}
+                                {userIs(['administrator', 'pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><NotFound /></Card>} />)}
+                                {/*Permission Denied*/}
+                                {userIs(['pay_check_mate_employee']) && (<Route path="*" element={<Card><EmptyState /></Card>} />)}
                             </Routes>
                             <div>
                                 <ToastContainer

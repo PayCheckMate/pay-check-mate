@@ -1,5 +1,5 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XCircleIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {__} from "@wordpress/i18n";
 import {useDispatch, useSelect} from "@wordpress/data";
 import payroll from "../../Store/Payroll";
@@ -13,6 +13,8 @@ import useNotify from "../../Helpers/useNotify";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {CheckIcon} from "@heroicons/react/20/solid";
+import {UserCapNames} from "../../Types/UserType";
+import {userCan} from "../../Helpers/User";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
@@ -110,43 +112,60 @@ export const PayrollList = () => {
             render: (text: string, record: PayrollType) => {
                 return (
                     <div className="flex">
+                        {userCan(UserCapNames.pay_check_mate_view_payroll_details) && (
                         <Link
                             to={`/payroll/${record.id}`}
                             className="text-indigo-600 hover:text-indigo-900"
                         >
                             {__('View', 'pcm')}
                         </Link>
+                        )}
                         {parseInt(String(record.status)) === PayrollStatus.NotApproved && (
                             <>
-                                <span className="mx-2 text-gray-300">|</span>
-                                <Link
-                                    to={`/payroll/edit/${record.id}`}
-                                    className="text-orange-400 hover:text-orange-600"
-                                    // onClick={() => handleModal(record)}
-                                >
-                                    {__('Edit', 'pcm')}
-                                </Link>
-                                <span className="mx-2 text-gray-300">|</span>
-                                <button
-                                    onClick={() => handleStatus(record, 1)}
-                                    className="text-green-600 hover:text-green-900"
-                                >
-                                    {__('Approve', 'pcm')}
-                                </button>
-                                <span className="mx-2 text-gray-300">|</span>
-                                <button
-                                    onClick={() => handleStatus(record, 2)}
-                                    className="text-red-600 hover:text-red-900"
-                                >
-                                    {__('Reject', 'pcm')}
-                                </button>
-                                <span className="mx-2 text-gray-300">|</span>
-                                <button
-                                    onClick={() => handleStatus(record, 3)}
-                                    className="text-gray-400 hover:text-gray-700"
-                                >
-                                    {__('Cancel', 'pcm')}
-                                </button>
+                                {userCan(UserCapNames.pay_check_mate_edit_payroll) && (
+                                    <>
+                                        <span className="mx-2 text-gray-300">|</span>
+                                        <Link
+                                            to={`/payroll/edit/${record.id}`}
+                                            className="text-orange-400 hover:text-orange-600"
+                                        >
+                                            {__('Edit', 'pcm')}
+                                        </Link>
+                                    </>
+                                )}
+                                {userCan(UserCapNames.pay_check_mate_approve_payroll) && (
+                                    <>
+                                        <span className="mx-2 text-gray-300">|</span>
+                                        <button
+                                            onClick={() => handleStatus(record, 1)}
+                                            className="text-green-600 hover:text-green-900"
+                                        >
+                                            {__('Approve', 'pcm')}
+                                        </button>
+                                    </>
+                                )}
+                                {userCan(UserCapNames.pay_check_mate_reject_payroll) && (
+                                    <>
+                                        <span className="mx-2 text-gray-300">|</span>
+                                        <button
+                                            onClick={() => handleStatus(record, 2)}
+                                            className="text-red-600 hover:text-red-900"
+                                        >
+                                            {__('Reject', 'pcm')}
+                                        </button>
+                                    </>
+                                )}
+                                {userCan(UserCapNames.pay_check_mate_cancel_payroll) && (
+                                    <>
+                                        <span className="mx-2 text-gray-300">|</span>
+                                        <button
+                                            onClick={() => handleStatus(record, 3)}
+                                            className="text-gray-400 hover:text-gray-700"
+                                        >
+                                            {__('Cancel', 'pcm')}
+                                        </button>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>
@@ -155,7 +174,7 @@ export const PayrollList = () => {
         }
     ]
     const handleFilterChange = (filterObject: filtersType) => {
-        // Remove status, cause we want to show all status
+        // Remove status, because we want to show all statuses
         delete filterObject.status;
         dispatch(payroll).getPayrolls(filterObject)
         setCurrentPage(filterObject.page);
@@ -170,19 +189,24 @@ export const PayrollList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button
-                            className="hover:text-white"
-                            path="/generate-payroll"
-                        >
-                            <CheckCircleIcon
-                                className="w-5 h-5 mr-2 -ml-1 text-white"
-                                aria-hidden="true"
-                            />
-                            {__('Generate Payroll', 'pcm')}
-                        </Button>
+                        {userCan(UserCapNames.pay_check_mate_add_payroll) && (
+                            <>
+                                <Button
+                                    className="hover:text-white"
+                                    path="/generate-payroll"
+                                >
+                                    <CheckCircleIcon
+                                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                                        aria-hidden="true"
+                                    />
+                                            {__('Generate Payroll', 'pcm')}
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_payroll_list}
                     columns={columns}
                     data={payrolls}
                     isLoading={loading}

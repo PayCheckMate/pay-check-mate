@@ -12,6 +12,8 @@ import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
+import {UserCapNames} from "../../Types/UserType";
+import {userCan} from "../../Helpers/User";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
@@ -51,23 +53,29 @@ export const DesignationList = () => {
             dataIndex: 'action',
             render: (text: string, record: DesignationType) => (
                 <div className="flex">
-                    <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
+                    {userCan(UserCapNames.pay_check_mate_edit_designation) && (
+                        <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
-                    {parseInt(String(record.status)) === DesignationStatus.Active && (
-                        <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
-                                {__('Inactive', 'pcm')}
-                            </button>
-                        </>
                     )}
-                    {parseInt(String(record.status)) === DesignationStatus.Inactive && (
+                    {userCan(UserCapNames.pay_check_mate_change_designation_status) && (
                         <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
-                                {__('Active', 'pcm')}
-                            </button>
+                            {parseInt(String(record.status)) === DesignationStatus.Active && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
+                                        {__('Inactive', 'pcm')}
+                                    </button>
+                                </>
+                            )}
+                            {parseInt(String(record.status)) === DesignationStatus.Inactive && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
+                                        {__('Active', 'pcm')}
+                                    </button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
@@ -189,6 +197,7 @@ export const DesignationList = () => {
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_designation_list}
                     columns={columns}
                     total={total}
                     data={designations}

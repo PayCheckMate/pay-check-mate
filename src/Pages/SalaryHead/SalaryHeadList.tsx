@@ -14,6 +14,8 @@ import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
+import {UserCapNames} from "../../Types/UserType";
+import {userCan} from "../../Helpers/User";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -119,32 +121,38 @@ export const SalaryHeadList = () => {
             dataIndex: 'action',
             render: (text: string, record: SalaryHeadType) => (
                 <div className="flex">
+                    {userCan(UserCapNames.pay_check_mate_edit_salary_head) && (
                     <button
                         className="text-indigo-600 hover:text-indigo-900"
                         onClick={() => handleModal(record)}
                     >
                         {__('Edit', 'pcm')}
                     </button>
-                    {parseInt(String(record.status)) === SalaryHeadStatus.Active && (
-                        <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button
-                                onClick={() => handleStatus(record.id, 0)}
-                                className="text-red-600 hover:text-red-900"
-                            >
-                                {__('Inactive', 'pcm')}
-                            </button>
-                        </>
                     )}
-                    {parseInt(String(record.status)) === SalaryHeadStatus.Inactive && (
+                    {userCan(UserCapNames.pay_check_mate_change_salary_head_status) && (
                         <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button
-                                onClick={() => handleStatus(record.id, 1)}
-                                className="text-green-600 hover:text-green-900"
-                            >
-                                {__('Active', 'pcm')}
-                            </button>
+                            {parseInt(String(record.status)) === SalaryHeadStatus.Active && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button
+                                        onClick={() => handleStatus(record.id, 0)}
+                                        className="text-red-600 hover:text-red-900"
+                                    >
+                                        {__('Inactive', 'pcm')}
+                                    </button>
+                                </>
+                            )}
+                            {parseInt(String(record.status)) === SalaryHeadStatus.Inactive && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button
+                                        onClick={() => handleStatus(record.id, 1)}
+                                        className="text-green-600 hover:text-green-900"
+                                    >
+                                        {__('Active', 'pcm')}
+                                    </button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
@@ -362,7 +370,10 @@ export const SalaryHeadList = () => {
                                             title={__('Head type', 'pcm')}
                                             options={headType}
                                             selected={selectedHeadType}
-                                            setSelected={handleHeadType}
+                                            setSelected={(value: any) => {
+                                                setSelectedHeadType(value);
+                                                setFormData({...formData, head_type: value.id})
+                                            }}
                                             required={true}
                                             error={formError.head_type}
                                         />
@@ -423,6 +434,7 @@ export const SalaryHeadList = () => {
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_salary_head_list}
                     columns={columns}
                     data={salaryHeads}
                     isLoading={loading}
