@@ -30,6 +30,7 @@ export enum UserCapNames {
     pay_check_mate_reject_payroll = "pay_check_mate_reject_payroll",
     pay_check_mate_cancel_payroll = "pay_check_mate_cancel_payroll",
     pay_check_mate_view_payroll_list = "pay_check_mate_view_payroll_list",
+    pay_check_mate_view_payroll_details = "pay_check_mate_view_payroll_details",
     pay_check_mate_view_department_list = "pay_check_mate_view_department_list",
     pay_check_mate_add_department = "pay_check_mate_add_department",
     pay_check_mate_edit_department = "pay_check_mate_edit_department",

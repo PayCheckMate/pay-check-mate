@@ -87,6 +87,7 @@ class PayCheckMateUserRoles {
             'pay_check_mate_reject_payroll'            => true,
             'pay_check_mate_cancel_payroll'            => true,
             'pay_check_mate_view_payroll_list'         => true,
+            'pay_check_mate_view_payroll_details'      => true,
 
             'pay_check_mate_view_department_list'      => true,
             'pay_check_mate_add_department'            => true,

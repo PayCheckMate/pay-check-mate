@@ -92,6 +92,8 @@ class Payroll extends Model {
             $except = implode( ' AND ', array_map( function( $value, $key ) {
                 return "{$key} != {$value}";
             }, $except, array_keys( $except ) ) );
+        } else {
+            $except = '1=1';
         }
 
         $sql = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d AND {$except}", $month, $year );
