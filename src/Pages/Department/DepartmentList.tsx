@@ -12,6 +12,8 @@ import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
+import {UserCapNames} from "../../Types/UserType";
+import {userCan} from "../../Helpers/User";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
@@ -51,23 +53,29 @@ export const DepartmentList = () => {
             dataIndex: 'action',
             render: (text: string, record: DepartmentType) => (
                 <div className="flex">
+                    {userCan(UserCapNames.pay_check_mate_edit_department) && (
                     <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
                         {__('Edit', 'pcm')}
                     </button>
-                    {parseInt(String(record.status)) === DepartmentStatus.Active && (
-                        <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
-                                {__('Inactive', 'pcm')}
-                            </button>
-                        </>
                     )}
-                    {parseInt(String(record.status)) === DepartmentStatus.Inactive && (
+                    {userCan(UserCapNames.pay_check_mate_change_department_status) && (
                         <>
-                            <span className="mx-2 text-gray-300">|</span>
-                            <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
-                                {__('Active', 'pcm')}
-                            </button>
+                            {parseInt(String(record.status)) === DepartmentStatus.Active && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
+                                        {__('Inactive', 'pcm')}
+                                    </button>
+                                </>
+                            )}
+                            {parseInt(String(record.status)) === DepartmentStatus.Inactive && (
+                                <>
+                                    <span className="mx-2 text-gray-300">|</span>
+                                    <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
+                                        {__('Active', 'pcm')}
+                                    </button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
@@ -89,7 +97,7 @@ export const DepartmentList = () => {
         }).catch((error: any) => {
             console.log(error, 'error')
             toast.error(__('Something went wrong while updating department', 'pcm'), {
-                position: toast.POSITION.BOTTOM_RIGHT,
+                position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
         })
@@ -119,7 +127,7 @@ export const DepartmentList = () => {
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
             toast.error(__('Please fill all required fields', 'pcm'), {
-                position: toast.POSITION.BOTTOM_RIGHT,
+                position: toast.POSITION.TOP_RIGHT,
                 autoClose: false
             });
 
@@ -132,7 +140,7 @@ export const DepartmentList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while updating department', 'pcm'), {
-                    position: toast.POSITION.BOTTOM_RIGHT,
+                    position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
             })
@@ -144,7 +152,7 @@ export const DepartmentList = () => {
             }).catch((error: any) => {
                 console.log(error, 'error')
                 toast.error(__('Something went wrong while creating department', 'pcm'), {
-                    position: toast.POSITION.BOTTOM_RIGHT,
+                    position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
             })
@@ -161,10 +169,12 @@ export const DepartmentList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={() => handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
-                            <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
-                            {__('Add department', 'pcm')}
-                        </Button>
+                        {userCan(UserCapNames.pay_check_mate_add_department) && (
+                            <Button onClick={() => handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
+                                <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
+                                {__('Add department', 'pcm')}
+                            </Button>
+                        )}
                         {showModal && (
                             <Modal setShowModal={setShowModal} header={__('Add department', 'pcm')}>
                                 {/*Create a form to save department*/}
@@ -189,6 +199,7 @@ export const DepartmentList = () => {
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_department}
                     columns={columns}
                     total={total}
                     data={departments}

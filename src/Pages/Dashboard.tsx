@@ -16,7 +16,7 @@ function classNames(...classes) {
 export const Dashboard = () => {
     const showToastMessage = () => {
         toast.success(__('🦄 Wow so easy!', 'pcm'), {
-            position: toast.POSITION.BOTTOM_RIGHT,
+            position: toast.POSITION.TOP_RIGHT,
             autoClose: 2000,
             className: 'toast-message'
         });

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "@wordpress/element";
+import React, {useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
@@ -8,6 +8,9 @@ import {filtersType} from "../Store/Store";
 import {SelectBox} from "./SelectBox";
 import {SelectBoxType} from "../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
+import {UserCapNames, UserCaps} from "../Types/UserType";
+import {NotFound} from "./404";
+import {userCan} from "../Helpers/User";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -28,9 +31,19 @@ type TableProps = {
     currentPage?: number;
     onFilterChange?: (defaultFilterObject: filtersType) => void;
     filters: filtersType;
+    permissions: UserCapNames
 };
 
-export const Table = ({columns = [], data = [], isLoading = true, filters, totalPage = 1, per_page = 10, currentPage = 1, total, onFilterChange = () => void 0}: TableProps) => {
+export const Table = ({columns = [], data = [], isLoading = true, filters, permissions, totalPage = 1, per_page = 10, currentPage = 1, total, onFilterChange = () => void 0}: TableProps) => {
+    if (!userCan(UserCapNames[permissions])){
+        return (
+            <>
+                <Card>
+                    <NotFound />
+                </Card>
+            </>
+        )
+    }
     per_page = parseInt(String(per_page));
     if (!data.length && !isLoading) {
         return (

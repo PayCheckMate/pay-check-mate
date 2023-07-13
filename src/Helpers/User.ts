@@ -1,10 +1,10 @@
-import {UserType} from "../Types/UserType";
+import {UserCapNames, UserType} from "../Types/UserType";
 import {useSelect} from "@wordpress/data";
 import {store as coreData} from "@wordpress/core-data";
 // @ts-ignore
 const currentUser = payCheckMate.currentUser as UserType;
 
-export const userCan = (permission: string): boolean => {
+export const userCan = (permission: UserCapNames): boolean => {
     // useSelect((select) => {
     //     console.log(select(coreData).getCurrentUser())
     // }, [])

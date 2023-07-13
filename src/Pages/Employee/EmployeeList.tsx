@@ -9,6 +9,7 @@ import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
+import {UserCapNames} from "../../Types/UserType";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -63,7 +64,7 @@ export const EmployeeList = () => {
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
-                if (userCan('pay_check_mate_view_employee_details')) {
+                if (userCan(UserCapNames.pay_check_mate_view_employee_details)) {
                     return (
                         <Link
                             to={`/employee/${record.employee_id}`}
@@ -104,7 +105,7 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        {userCan('pay_check_mate_salary_increment') && (
+                        {userCan(UserCapNames.pay_check_mate_salary_increment) && (
                             <button
                                 onClick={() => viewEmployee(record.id)}
                                 className="text-green-600 hover:text-green-900"
@@ -113,7 +114,7 @@ export const EmployeeList = () => {
                             </button>
                         )
                         }
-                        {userCan('pay_check_mate_edit_employee') && (
+                        {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
                                 <Link
@@ -141,7 +142,7 @@ export const EmployeeList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        {userCan('pay_check_mate_add_employee') && (
+                        {userCan(UserCapNames.pay_check_mate_add_employee) && (
                             <>
                                 <Button
                                     className="hover:text-white"
