@@ -10,6 +10,9 @@ import {SalaryInformation} from "./Components/SalaryInformation";
 import {ReviewInformation, SalaryInformationType} from "./Components/ReviewInformation";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {toast} from "react-toastify";
+import {userCan} from "../../Helpers/User";
+import {UserCapNames} from "../../Types/UserType";
+import {NotFound, PermissionDenied} from "../../Components/404";
 
 type ResponseType = {
     data: EmployeeType,
@@ -35,7 +38,7 @@ export const AddEmployee = () => {
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);
 
     useEffect(() => {
-        if (employeeId){
+        if (employeeId) {
             makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response) => {
                 if (response.status === 200) {
                     const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
@@ -158,12 +161,12 @@ export const AddEmployee = () => {
             data.status = parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0;
         }
         makePostRequest<ResponseType>(url, data).then((response) => {
-            if (response.status=== 201) {
+            if (response.status === 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 // Push to employee list page
                 navigate('/employees');
-                if (employeeId){
+                if (employeeId) {
                     toast.success(__('Employee updated successfully', 'pcm'));
                     return;
                 }
@@ -178,82 +181,88 @@ export const AddEmployee = () => {
     }
     return (
         <>
-            <div>
-                <Steps
-                    steps={steps}
-                    currentStep={step}
-                    setStep={(step: number) => setStep(step)}
-                />
+            {!userCan(UserCapNames.pay_check_mate_add_employee) ? (
                 <Card>
-                    <form onSubmit={handleSubmit}>
-                        {step === 1 && (
-                            <>
-                                <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
-                                    {__('Personal Information', 'pcm')}
-                                </h2>
-                                <div className="mx-auto w-3/4">
-                                    <PersonalInformation
-                                        initialValues={personalInformation}
-                                        setFormData={(personalInformation: EmployeeType) => handlePersonalInformation(personalInformation)}
-                                        nextStep={() => setStep(2)}
-                                    />
-                                </div>
-                            </>
-                        )}
-
-                        {step === 2 && (
-                            <div>
-                                <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
-                                    {__('Salary Information', 'pcm')}
-                                </h2>
-                                <div className="mx-auto w-3/4">
-                                    <SalaryInformation
-                                        initialValues={salaryInformation}
-                                        setSalaryData={(salary: string) => handleSalaryInformation(salary)}
-                                    />
-                                    <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                        <button
-                                            type="button"
-                                            onClick={() => setStep(1)}
-                                            className="text-sm font-semibold leading-6 text-gray-900"
-                                        >
-                                            {__('Back', 'pcm')}
-                                        </button>
-                                        <Button
-                                            onClick={() => setStep(3)}
-                                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        >
-                                            {__('Save & Continue', 'pcm')}
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        {step === 3 && (
-                            <>
-                                <ReviewInformation
-                                    personalInformation={personalInformation}
-                                    salaryInformation={salaryInformation}
-                                    setError={setError}
-                                />
-                                {!error && (
-                                    <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                        <Button
-                                            type="submit"
-                                            onClick={() => {
-                                            }}
-                                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        >
-                                            {__('Submit', 'pcm')}
-                                        </Button>
-                                    </div>
-                                )
-                                }
-                            </>
-                        )}
-                    </form>
+                    <PermissionDenied />
                 </Card>
-            </div>
+            ) : (
+                <div>
+                    <Steps
+                        steps={steps}
+                        currentStep={step}
+                        setStep={(step: number) => setStep(step)}
+                    />
+                    <Card>
+                        <form onSubmit={handleSubmit}>
+                            {step === 1 && (
+                                <>
+                                    <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
+                                        {__('Personal Information', 'pcm')}
+                                    </h2>
+                                    <div className="mx-auto w-3/4">
+                                        <PersonalInformation
+                                            initialValues={personalInformation}
+                                            setFormData={(personalInformation: EmployeeType) => handlePersonalInformation(personalInformation)}
+                                            nextStep={() => setStep(2)}
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            {step === 2 && (
+                                <div>
+                                    <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
+                                        {__('Salary Information', 'pcm')}
+                                    </h2>
+                                    <div className="mx-auto w-3/4">
+                                        <SalaryInformation
+                                            initialValues={salaryInformation}
+                                            setSalaryData={(salary: string) => handleSalaryInformation(salary)}
+                                        />
+                                        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+                                            <button
+                                                type="button"
+                                                onClick={() => setStep(1)}
+                                                className="text-sm font-semibold leading-6 text-gray-900"
+                                            >
+                                                {__('Back', 'pcm')}
+                                            </button>
+                                            <Button
+                                                onClick={() => setStep(3)}
+                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            >
+                                                {__('Save & Continue', 'pcm')}
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            {step === 3 && (
+                                <>
+                                    <ReviewInformation
+                                        personalInformation={personalInformation}
+                                        salaryInformation={salaryInformation}
+                                        setError={setError}
+                                    />
+                                    {!error && (
+                                        <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+                                            <Button
+                                                type="submit"
+                                                onClick={() => {
+                                                }}
+                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            >
+                                                {__('Submit', 'pcm')}
+                                            </Button>
+                                        </div>
+                                    )
+                                    }
+                                </>
+                            )}
+                        </form>
+                    </Card>
+                </div>
+            )}
         </>
     )
 };

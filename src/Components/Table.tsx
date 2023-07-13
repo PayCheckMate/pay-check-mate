@@ -8,8 +8,8 @@ import {filtersType} from "../Store/Store";
 import {SelectBox} from "./SelectBox";
 import {SelectBoxType} from "../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
-import {UserCapNames, UserCaps} from "../Types/UserType";
-import {NotFound} from "./404";
+import {UserCapNames} from "../Types/UserType";
+import {PermissionDenied} from "./404";
 import {userCan} from "../Helpers/User";
 
 type SortDirection = "asc" | "desc" | "";
@@ -39,7 +39,7 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
         return (
             <>
                 <Card>
-                    <NotFound />
+                    <PermissionDenied />
                 </Card>
             </>
         )

@@ -121,7 +121,7 @@ export const EmployeeList = () => {
                                     to={`/employee/edit/${record.employee_id}`}
                                     className="text-indigo-600 hover:text-indigo-900"
                                 >
-                                    {__('Edit info', 'pcm')}
+                                    {__('Edit', 'pcm')}
                                 </Link>
                             </>
                         )}
@@ -162,6 +162,7 @@ export const EmployeeList = () => {
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_employee_list}
                     columns={columns}
                     total={total}
                     data={employees}

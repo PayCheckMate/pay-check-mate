@@ -18,7 +18,7 @@ export interface UserCaps {
 
 export enum UserCapNames {
     pay_check_mate_manage_menu = "pay_check_mate_manage_menu",
-    pay_check_mate_employee_list = "pay_check_mate_employee_list",
+    pay_check_mate_view_employee_list = "pay_check_mate_view_employee_list",
     pay_check_mate_add_employee = "pay_check_mate_add_employee",
     pay_check_mate_edit_employee = "pay_check_mate_edit_employee",
     pay_check_mate_view_employee_details = "pay_check_mate_view_employee_details",

@@ -166,7 +166,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                         }
                                     });
                                     return (
-                                      head!=='active_from' &&
+                                      (head!=='active_from' && head !== 'salary_history_id') &&
                                         <div key={head} className="flex items-center justify-between mt-2">
                                             <span className="text-sm text-gray-500">{salaryHead?.head_name ? salaryHead?.head_name : head.replace(/_/g, ' ').toUpperCase()}</span>
                                             <span className="text-sm text-gray-500">
