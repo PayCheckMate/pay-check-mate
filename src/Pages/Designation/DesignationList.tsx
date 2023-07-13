@@ -197,7 +197,7 @@ export const DesignationList = () => {
                     </div>
                 </div>
                 <Table
-                    permissions={UserCapNames.pay_check_mate_view_designation}
+                    permissions={UserCapNames.pay_check_mate_view_designation_list}
                     columns={columns}
                     total={total}
                     data={designations}

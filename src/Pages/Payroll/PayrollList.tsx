@@ -1,5 +1,5 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XCircleIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {__} from "@wordpress/i18n";
 import {useDispatch, useSelect} from "@wordpress/data";
 import payroll from "../../Store/Payroll";
@@ -13,6 +13,7 @@ import useNotify from "../../Helpers/useNotify";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {CheckIcon} from "@heroicons/react/20/solid";
+import {UserCapNames} from "../../Types/UserType";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
@@ -183,6 +184,7 @@ export const PayrollList = () => {
                     </div>
                 </div>
                 <Table
+                    permissions={UserCapNames.pay_check_mate_view_payroll_list}
                     columns={columns}
                     data={payrolls}
                     isLoading={loading}

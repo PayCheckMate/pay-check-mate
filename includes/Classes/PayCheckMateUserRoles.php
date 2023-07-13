@@ -74,26 +74,34 @@ class PayCheckMateUserRoles {
             'pay_check_mate_accountant'                => true,
             'pay_check_mate_employee'                  => true,
             'pay_check_mate_manage_menu'               => true,
+
             'pay_check_mate_view_employee_list'        => true,
             'pay_check_mate_add_employee'              => true,
             'pay_check_mate_edit_employee'             => true,
             'pay_check_mate_view_employee_details'     => true,
             'pay_check_mate_salary_increment'          => true,
-            'pay_check_mate_payroll_list'              => true,
+
             'pay_check_mate_add_payroll'               => true,
             'pay_check_mate_edit_payroll'              => true,
             'pay_check_mate_approve_payroll'           => true,
             'pay_check_mate_reject_payroll'            => true,
             'pay_check_mate_cancel_payroll'            => true,
-            'pay_check_mate_view_payroll'              => true,
-            'pay_check_mate_view_department'           => true,
+            'pay_check_mate_view_payroll_list'         => true,
+
+            'pay_check_mate_view_department_list'      => true,
             'pay_check_mate_add_department'            => true,
             'pay_check_mate_edit_department'           => true,
             'pay_check_mate_change_department_status'  => true,
-            'pay_check_mate_view_designation'          => true,
+
+            'pay_check_mate_view_designation_list'     => true,
             'pay_check_mate_add_designation'           => true,
             'pay_check_mate_edit_designation'          => true,
             'pay_check_mate_change_designation_status' => true,
+
+            'pay_check_mate_view_salary_head_list'     => true,
+            'pay_check_mate_add_salary_head'           => true,
+            'pay_check_mate_edit_salary_head'          => true,
+            'pay_check_mate_change_salary_head_status' => true,
         ];
     }
 }

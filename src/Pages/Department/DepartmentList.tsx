@@ -199,7 +199,7 @@ export const DepartmentList = () => {
                     </div>
                 </div>
                 <Table
-                    permissions={UserCapNames.pay_check_mate_view_department}
+                    permissions={UserCapNames.pay_check_mate_view_department_list}
                     columns={columns}
                     total={total}
                     data={departments}
