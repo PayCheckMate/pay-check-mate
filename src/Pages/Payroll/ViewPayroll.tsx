@@ -149,7 +149,7 @@ const ViewPayroll = () => {
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_payroll_details) ? (
-                    <Card>
+                <Card>
                     <PermissionDenied />
                 </Card>
             ) : (
