@@ -172,6 +172,7 @@ class Databases {
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `active_from` DATE NOT NULL,
                 `remarks` text NULL,
+                `salary_purpose` tinyint(1) NOT NULL DEFAULT '1', /*'1 = Initial, 2 = Increment, 3 = Promotion' */
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)

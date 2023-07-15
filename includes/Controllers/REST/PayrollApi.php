@@ -4,6 +4,7 @@ namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
+use PayCheckMate\Classes\Manager;
 use PayCheckMate\Classes\Payroll;
 use PayCheckMate\Classes\PayrollDetails;
 use PayCheckMate\Models\Payroll as PayrollModel;
@@ -297,7 +298,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        $employees = new Employee( new EmployeeModel() );
+        $employees = new Manager( new EmployeeModel() );
         $employees = $employees->all(
             $args, [
 				'id',

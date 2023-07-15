@@ -2,9 +2,9 @@
 
 namespace PayCheckMate\Models;
 
-use PayCheckMate\Classes\Helper;
+use PayCheckMate\Contracts\EmployeeInterface;
 
-class Employee extends Model {
+class Employee extends Model implements EmployeeInterface{
 
     protected static string $table = 'employees';
 
@@ -178,4 +178,7 @@ class Employee extends Model {
         return $salary;
     }
 
+    public function get_employee_id(): int {
+        return $this->employee_id;
+    }
 }

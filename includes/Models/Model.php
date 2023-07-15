@@ -366,7 +366,12 @@ class Model implements ModelInterface {
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
 
-        $query  = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+        if ( '-1' === "$args[limit]" ) {
+            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} ");
+        } else {
+            $query  = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+        }
+
         $results = $wpdb->get_results( $query );
 
         if ( empty( $results ) ) {
