@@ -3,5 +3,5 @@
 namespace PayCheckMate\Classes;
 
 class SalaryHead {
-//    use CrudTrait;
+	//    use CrudTrait;
 }

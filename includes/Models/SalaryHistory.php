@@ -65,10 +65,18 @@ class SalaryHistory extends Model {
         return doubleval( $this->basic_salary );
     }
 
+    /**
+     * Get salary details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed>
+     */
     public function get_salary_details(): array {
         return [
-            'salary_details' => json_decode( $this->salary_details, true )
-            ];
+            // @phpstan-ignore-next-line
+            'salary_details' => json_decode( $this->salary_details, true ),
+        ];
     }
 
 }

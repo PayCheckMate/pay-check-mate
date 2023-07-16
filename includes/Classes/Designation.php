@@ -3,5 +3,5 @@
 namespace PayCheckMate\Classes;
 
 class Designation {
-//    use CrudTrait;
+	//    use CrudTrait;
 }

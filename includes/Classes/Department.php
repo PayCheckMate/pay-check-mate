@@ -3,5 +3,5 @@
 namespace PayCheckMate\Classes;
 
 class Department {
-//    use CrudTrait;
+	//    use CrudTrait;
 }

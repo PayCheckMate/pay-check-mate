@@ -34,6 +34,17 @@ class Employee extends Model implements EmployeeInterface{
     }
 
     /**
+     * Get employee data.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed>
+     */
+    public function get_data(): array {
+        return $this->data;
+    }
+
+    /**
      * Make crated on mutation
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -86,7 +97,7 @@ class Employee extends Model implements EmployeeInterface{
      *
      * @param string $date
      *
-     * @return array
+     * @return array<string, string>
      */
     public function get_joining_date( string $date ): array {
         return [
@@ -148,10 +159,12 @@ class Employee extends Model implements EmployeeInterface{
     }
 
     public function get_employee_id(): int {
+        // @phpstan-ignore-next-line
         return $this->employee_id;
     }
 
     public function get_user_id(): string {
+        // @phpstan-ignore-next-line
         return $this->user_id;
     }
 }

@@ -3,5 +3,5 @@
 namespace PayCheckMate\Classes;
 
 class PayrollDetails {
-//    use CrudTrait;
+	//    use CrudTrait;
 }

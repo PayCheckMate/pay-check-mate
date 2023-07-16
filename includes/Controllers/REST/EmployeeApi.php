@@ -320,13 +320,20 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Get a single employee salary details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
      * @throws \Exception
+     * @return \WP_REST_Response
      */
-    public function get_employee_salary_details( WP_REST_Request $request ) {
+    public function get_employee_salary_details( WP_REST_Request $request ): WP_REST_Response {
         $employee_id    = $request->get_param( 'employee_id' );
         $employee       = new Employee( $employee_id );
         $salary_details = $employee->get_salary_history();
-        $item           = $this->prepare_item_for_response( $employee->get_employee(), $request );
+        $item           = $this->prepare_item_for_response( (object) $employee->get_employee(), $request );
         $data           = $this->prepare_response_for_collection( $item );
 
         $data['salaryInformation'] = $salary_details;

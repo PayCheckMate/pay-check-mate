@@ -30,19 +30,26 @@ class Employee {
         }
     }
 
-    public function get_employee() {
-        return $this->employee->data;
+    /**
+     * Get employee data.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed>
+     */
+    public function get_employee(): array {
+        return $this->employee->get_data();
     }
+
 
     /**
-     * @throws \Exception
+     * Get employee salary history.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed>
      */
-    public function get_last_salary() {
-        $salary = new Salary( $this->employee );
-        $salary->get_last_salary();
-    }
-
-    public function get_salary_history() {
+    public function get_salary_history(): array {
         $salary = new Salary( $this->employee );
         return $salary->get_salary_history()->toArray();
     }
