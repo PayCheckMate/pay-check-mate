@@ -56,4 +56,19 @@ class SalaryHistory extends Model {
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
+
+    /**
+     * Get basic salary
+     */
+    public function get_basic_salary(): float {
+        // @phpstan-ignore-next-line
+        return doubleval( $this->basic_salary );
+    }
+
+    public function get_salary_details(): array {
+        return [
+            'salary_details' => json_decode( $this->salary_details, true )
+            ];
+    }
+
 }

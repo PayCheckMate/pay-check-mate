@@ -1,4 +1,4 @@
-import {SalaryInformationType} from "../Pages/Employee/Components/ReviewInformation";
+import {SalaryHistoryType} from "./SalaryHistoryType";
 
 export interface EmployeeType {
     id: number;
@@ -15,7 +15,7 @@ export interface EmployeeType {
     status: EmployeeStatus;
     created_on: string;
     updated_at: string;
-    salaryInformation?: SalaryInformationType;
+    salaryInformation?: SalaryHistoryType | SalaryHistoryType[];
 }
 
 export enum EmployeeStatus {

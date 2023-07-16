@@ -2,16 +2,12 @@
 
 namespace PayCheckMate\Controllers\REST;
 
-use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
-use PayCheckMate\Classes\Manager;
 use PayCheckMate\Classes\Payroll;
 use PayCheckMate\Classes\PayrollDetails;
 use PayCheckMate\Models\Payroll as PayrollModel;
 use PayCheckMate\Models\PayrollDetails as PayrollDetailsModel;
 use PayCheckMate\Models\Employee as EmployeeModel;
-use PayCheckMate\Classes\SalaryHead;
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
@@ -150,7 +146,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'search'   => $request->get_param( 'search' ) ? sanitize_text_field( $request->get_param( 'search' ) ) : '',
         ];
 
-        $payrolls = new Payroll( new PayrollModel() );
+        $payrolls = new PayrollModel();
         $payrolls = $payrolls->all( $args );
 
         $data = [];
@@ -298,7 +294,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        $employees = new Manager( new EmployeeModel() );
+        $employees = new EmployeeModel();
         $employees = $employees->all(
             $args, [
 				'id',
@@ -348,7 +344,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         // Start the transaction.
         $wpdb->query( 'START TRANSACTION' );
 
-        $payroll = new Payroll( new PayrollModel() );
+        $payroll = new PayrollModel();
         // @phpstan-ignore-next-line
         $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date );
         if ( $previous_payroll ) {
@@ -364,7 +360,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $payroll_details    = new PayrollDetails( new PayrollDetailsModel() );
+        $payroll_details    = new PayrollDetailsModel();
         $details_parameters = $parameters['employee_salary_history'];
         $data['_wpnonce']   = $parameters['_wpnonce'];
         $data['payroll_id'] = $inserted_payroll->id;
@@ -443,7 +439,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         // Start the transaction.
         $wpdb->query( 'START TRANSACTION' );
 
-        $payroll = new Payroll( new PayrollModel() );
+        $payroll = new PayrollModel();
         // @phpstan-ignore-next-line
         $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'id' => $payroll_id ] );
         if ( $previous_payroll ) {
@@ -459,7 +455,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $payroll_details    = new PayrollDetails( new PayrollDetailsModel() );
+        $payroll_details    = new PayrollDetailsModel();
         $details_parameters = $parameters['employee_salary_history'];
         $data['_wpnonce']   = $parameters['_wpnonce'];
         $data['payroll_id'] = $payroll_id;
@@ -518,7 +514,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
         $payroll_id   = $request->get_param( 'id' );
-        $payroll      = new Payroll( new PayrollModel() );
+        $payroll      = new PayrollModel();
         $payroll_args = [
             'order'     => 'DESC',
             'order_by'  => 'id',
@@ -547,7 +543,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
         $salary_head_types = Helper::get_salary_head( $args );
 
-        $payroll_details = new PayrollDetails( new PayrollDetailsModel() );
+        $payroll_details = new PayrollDetailsModel();
         $args            = [
             'status'    => 1,
             'limit'     => '-1',
@@ -598,7 +594,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         // Do not update the payroll date.
         unset( $validated_data->payroll_date );
-        $payroll = new Payroll( new PayrollModel() );
+        $payroll = new PayrollModel();
         $updated = $payroll->update( $request->get_param( 'id' ), $validated_data );
         if ( is_wp_error( $updated ) ) {
             return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );

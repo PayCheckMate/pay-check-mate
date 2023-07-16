@@ -33,17 +33,17 @@ class Model implements ModelInterface {
     protected static array $columns;
 
     protected object $results;
-    protected object $result;
+    protected static string $find_key = 'id';
 
     // @phpstan-ignore-next-line
-    protected array $mutation_fields = [];
+    protected static array $mutation_fields = [];
     // @phpstan-ignore-next-line
-    protected array $additional_logical_data = [];
+    protected static array $additional_logical_data = [];
 
     /**
      * @var mixed
      */
-    private $data;
+    public $data;
 
     /**
      * Get all the items.
@@ -51,11 +51,34 @@ class Model implements ModelInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param array<string, mixed> $args
-     * @param array<string>        $fields
+     *                                            - 'status'    => int,
+     *                                            - 'limit'     => string|int,
+     *                                            - 'order'     => 'ASC',
+     *                                            - 'order_by'   => string,
+     *                                            - 'mutation_fields' => ['string'], this will call get_{field_name} method
+     *                                            - 'relations' => [
+     *                                            [
+     *                                            'table'       => '{RELATION_TABLE_NAME}',
+     *                                            'local_key'   => '{{RELATION_TABLE_LOCAL_KEY}',
+     *                                            'foreign_key' => '{CURRENT_TABLE_FOREIGN_KEY}',
+     *                                            'join_type'   => '{JOIN_TYPE}',
+     *                                            'where'       => [
+     *                                            '{FIELD}' => [
+     *                                            'operator' => '{OPERATOR}',
+     *                                            'value'    => {VALUE},
+     *                                            ],
+     *                                            ],
+     *                                            'fields'      => [
+     *                                            '{FIELD_NAME}',
+     *                                            ],
+     *                                            ],
+     *                                            // Add more relations if needed
+     *                                            ],
+     * @param string[]             $fields
      * @param array<string, mixed> $additional_logical_data
      *
      * @throws \Exception
-     * @return object Array of stdClass objects or null if no results.
+     * @return object
      */
     public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
         global $wpdb;
@@ -73,12 +96,12 @@ class Model implements ModelInterface {
         );
 
         if ( ! empty( $args['mutation_fields'] ) ) {
-            $this->mutation_fields = $args['mutation_fields'];
+            static::$mutation_fields = $args['mutation_fields'];
             unset( $args['mutation_fields'] );
         }
 
         if ( ! empty( $additional_logical_data ) ) {
-            $this->additional_logical_data = $additional_logical_data;
+            static::$additional_logical_data = $additional_logical_data;
         }
 
         $relations         = '';
@@ -300,16 +323,14 @@ class Model implements ModelInterface {
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
-        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.id = %d", $id );
+        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.{$this->get_find_key()} = %d", $id );
         $results           = $wpdb->get_row( $query );
 
         if ( empty( $results ) ) {
             return (object) [];
         }
 
-        $this->result = $this->process_item( $results );
-
-        return $this->result;
+        return $this->process_item( $results );
     }
 
     /**
@@ -490,6 +511,10 @@ class Model implements ModelInterface {
         return $wpdb->prefix . static::$table_prefix . static::$table;
     }
 
+    public static function get_find_key(): string {
+        return static::$find_key;
+    }
+
     /**
      * Get the table column names.
      *
@@ -586,7 +611,7 @@ class Model implements ModelInterface {
             $method = "get_$column";
             if ( method_exists( $this, $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
-                $value = call_user_func( [ $this, $method ], $item->$column, $this->additional_logical_data );
+                $value = call_user_func( [ $this, $method ], $item->$column, static::$additional_logical_data );
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key => $val ) {
                         $item->$key = $val;
@@ -598,12 +623,12 @@ class Model implements ModelInterface {
             }
         }
 
-        if ( ! empty( $this->mutation_fields ) ) {
-            foreach ( $this->mutation_fields as $mutation_field ) {
+        if ( ! empty( static::$mutation_fields ) ) {
+            foreach ( static::$mutation_fields as $mutation_field ) {
                 $method = "get_$mutation_field";
                 if ( method_exists( $this, $method ) ) {
                     // Check if the column has any mutation like, get_created_on, get_updated_at etc.
-                    $value = call_user_func( [ $this, $method ], $this->additional_logical_data );
+                    $value = call_user_func( [ $this, $method ], static::$additional_logical_data );
                     if ( is_array( $value ) ) {
                         foreach ( $value as $key => $val ) {
                             $item->$key = $val;

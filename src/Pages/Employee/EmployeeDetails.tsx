@@ -1,7 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "@wordpress/element";
 import {EmployeeType, SingleEmployeeResponseType} from "../../Types/EmployeeType";
-import {SalaryInformationType} from "./Components/ReviewInformation";
 import {toast} from "react-toastify";
 import {__} from "@wordpress/i18n";
 import useFetchApi from "../../Helpers/useFetchApi";
@@ -13,29 +12,24 @@ import {Card} from "../../Components/Card";
 import {PermissionDenied} from "../../Components/404";
 import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
+import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryType";
+import {HeadType} from "../../Types/SalaryHeadType";
 
 export const EmployeeDetails = () => {
     const {makeGetRequest} = useFetchApi('', {}, false);
     const employeeId = useParams().id;
     const [personalInformation, setPersonalInformation] = useState({} as EmployeeType);
-    const [salaryInformation, setSalaryInformation] = useState({} as SalaryInformationType);
-    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads(), []);
+    const [salaryInformation, setSalaryInformation] = useState([] as SalaryHistoryType[]);
+    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
 
     useEffect(() => {
         if (employeeId) {
-            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response) => {
+            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId + '/salary-details', {}, true).then((response) => {
                 if (response.status === 200) {
                     const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                     employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
-                    const salaryInformation = {
-                        ...response.data.salaryInformation,
-                        // @ts-ignore
-                        ...JSON.parse(response.data.salaryInformation.salary_details),
-                    };
-                    delete salaryInformation.salary_details;
-                    delete response.data.salaryInformation;
                     setPersonalInformation(response.data);
-                    setSalaryInformation(salaryInformation as SalaryInformationType);
+                    setSalaryInformation(response.data.salaryInformation as SalaryHistoryType[]);
                 } else {
                     toast.error(__('Something went wrong', 'pcm'));
                 }
@@ -47,10 +41,11 @@ export const EmployeeDetails = () => {
 
     const handleToggleCollapse = (id: number) => {
         setIsOpen({
+            ...isOpen,
             [id]: !isOpen[id]
         });
     };
-    console.log(isOpen)
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_employee_details) ? (
@@ -68,7 +63,7 @@ export const EmployeeDetails = () => {
                         <div className="text-base">
                             <Card>
                                 <div>
-                                  <div className="px-4 sm:px-0">
+                                    <div className="px-4 sm:px-0">
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">
                                         {__('Personal Information', 'pcm')}
                                     </h3>
@@ -175,24 +170,96 @@ export const EmployeeDetails = () => {
                                     </h3>
                                 </div>
                                 <ol className="relative border-l border-gray-300 mt-10">
-                                    {salaryHeads && salaryHeads.map((salaryHead) => {
+                                    {salaryInformation && salaryInformation.map((salary) => {
                                         return (
-                                            <li onClick={()=>handleToggleCollapse(salaryHead.id)} key={salaryHead.id} className="mb-10 ml-6 cursor-pointer">
-                                              <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                            <li
+                                                onClick={() => handleToggleCollapse(salary.id)}
+                                                key={salary.id}
+                                                className="mb-10 ml-6 cursor-pointer"
+                                            >
+                                                <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
                                                 <CurrencyDollarIcon className="w-4 h-4 text-blue-500" />
-                                              </span>
-                                              <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
-                                                  Title
-                                                  {/*View Details*/}
+                                                </span>
+                                                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
+                                                    {SalaryPurposeType.Initial === parseInt(String(salary.salary_purpose)) &&
+                                                        (
+                                                            <>
+                                                                <span className="ml-2 font-normal text-gray-600">
+                                                                    {__('Initial salary', 'pcm')}
+                                                                </span>
+                                                            </>
+                                                        )
+                                                    }
+                                                    {SalaryPurposeType.Increment === parseInt(String(salary.salary_purpose)) && (
+                                                        <>
+                                                            <span className="ml-2 font-normal text-gray-600">
+                                                                {__('Increment', 'pcm')}
+                                                            </span>
+                                                      </>
+                                                    )}
+                                                    {SalaryPurposeType.Promotion === parseInt(String(salary.salary_purpose)) && (
+                                                        <>
+                                                            <span className="ml-2 font-normal text-gray-600">
+                                                                {__('Promotion', 'pcm')}
+                                                            </span>
+                                                      </>
+                                                    )}
                                                     <ChevronDownIcon className="w-4 h-4 ml-1 text-gray-500" />
-                                              </h3>
-                                              <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-                                                Active from 06 Jan 2021
-                                              </time>
-                                                {isOpen[salaryHead.id] && (
-                                                    <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                                                  Get access to over 20+ pages including a dashboard layout, charts, kanban board, calendar, and pre-order E-commerce & Marketing pages.
-                                                </p>
+                                                </h3>
+                                                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+                                                    {
+                                                        __('Active from: ', 'pcm') + new Date(salary.active_from).toLocaleDateString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric'
+                                                        })
+                                                    }
+                                                </time>
+                                                {isOpen[salary.id] && (
+                                                    <>
+                                                        <div className="mt-6 border-b border-gray-100">
+                                                            <dl className="flex flex-col sm:flex-row sm:justify-between">
+                                                                <dt className="text-sm font-medium leading-6 text-gray-900">
+                                                                    {__('Basic Salary', 'pcm')}
+                                                                </dt>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                    + {salary.basic_salary}
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                        {salaryHeads && salaryHeads.map((salaryHead) => {
+                                                                return (
+                                                                    <div className="mt-1 border-b border-gray-100">
+                                                                        <dl key={salaryHead.id} className="flex flex-col sm:flex-row sm:justify-between">
+                                                                            <dt className="text-sm font-medium leading-6 text-gray-900">
+                                                                                {salaryHead.head_name}
+                                                                            </dt>
+                                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                                {parseInt(String(salaryHead.head_type)) === HeadType.Earning ? '+' : '-'} {salary.salary_details[salaryHead.id]}
+                                                                            </dd>
+                                                                        </dl>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        )}
+                                                        <div className="mt-4 border-b border-gray-100">
+                                                            <dl className="flex flex-col sm:flex-row sm:justify-between">
+                                                                <dt className="text-sm font-medium leading-6 text-gray-900">
+                                                                    {__('Gross Salary', 'pcm')}
+                                                                </dt>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                    {salary.gross_salary}
+                                                                </dd>
+                                                            </dl>
+                                                        </div>
+                                                        {/*Remarks*/}
+                                                        <div className="mt-6">
+                                                            <h3 className="text-base font-semibold leading-7 text-gray-900">
+                                                                {__('Remarks', 'pcm')}
+                                                            </h3>
+                                                            <p dangerouslySetInnerHTML={{__html: salary.remarks}} />
+                                                        </div>
+                                                    </>
                                                 )}
                                             </li>
                                         )

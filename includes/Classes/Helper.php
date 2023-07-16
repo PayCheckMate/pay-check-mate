@@ -24,7 +24,7 @@ class Helper {
                 'order_by' => 'priority',
             ]
         );
-        $salary_heads      = new SalaryHead( new SalaryHeadModel() );
+        $salary_heads      = new SalaryHeadModel();
         $salary_heads      = $salary_heads->all( $args );
         $salary_head_types = [];
         foreach ( $salary_heads->toArray() as $salary_head ) {

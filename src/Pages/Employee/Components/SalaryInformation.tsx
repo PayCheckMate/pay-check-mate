@@ -152,15 +152,15 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                                         return;
                                     }
                                     if (head === 'basic_salary') {
-                                        TotalSalaryInHand += formValues[head];
+                                        TotalSalaryInHand += parseInt(String(formValues[head]));
                                     }
                                     const salaryHead = salaryHeads.find((salaryHead) => {
                                         if (parseInt(String(salaryHead.id)) === parseInt(head)){
                                             if (parseInt(String(salaryHead?.head_type)) === HeadType.Deduction){
-                                                TotalSalaryInHand -= formValues[head];
+                                                TotalSalaryInHand -= parseInt(String(formValues[head]));
                                             }
                                             if (parseInt(String(salaryHead?.head_type)) === HeadType.Earning){
-                                                TotalSalaryInHand += formValues[head];
+                                                TotalSalaryInHand += parseInt(String(formValues[head]));
                                             }
                                             return salaryHead;
                                         }

@@ -29,10 +29,14 @@ const CreatePayroll = () => {
     const payrollId = useParams().id;
     const navigate = useNavigate();
     const {loading, makePostRequest, makeGetRequest} = useFetchApi('');
-    // Get initial table data from local storage
-    let PayrollTableData = localStorage.getItem('Payroll.TableData');
-    // @ts-ignore
-    let TableData = JSON.parse(PayrollTableData) as EmployeeSalary[];
+    let PayrollTableData = null;
+    let TableData: EmployeeSalary[] = [];
+    if (payrollId) {
+        // Get initial table data from local storage
+        PayrollTableData = localStorage.getItem('Payroll.TableData');
+        // @ts-ignore
+        TableData = JSON.parse(PayrollTableData) as EmployeeSalary[];
+    }
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
@@ -432,7 +436,7 @@ const CreatePayroll = () => {
                                                             key={earning.id}
                                                             type="number"
                                                             name={`earnings[${data.id}][${earning.id}]`}
-                                                            value={data.salary_details.earnings[earning.id] || (TableData && TableData[tableDataIndex].salary_details.earnings[earning.id]) || 0}
+                                                            value={data.salary_details.earnings[earning.id] || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[earning.id] : 0)}
                                                             onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
                                                         />
                                                     ) : (
@@ -457,7 +461,7 @@ const CreatePayroll = () => {
                                                             type="number"
                                                             key={deduction.id}
                                                             name={`deductions[${data.id}][${deduction.id}]`}
-                                                            value={data.salary_details.deductions[deduction.id] || (TableData && TableData[tableDataIndex].salary_details.deductions[deduction.id]) || 0}
+                                                            value={data.salary_details.deductions[deduction.id] || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[deduction.id] : 0)}
                                                             onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                                         />
                                                     ) : (
@@ -488,7 +492,7 @@ const CreatePayroll = () => {
                                                             type="number"
                                                             key={non_taxable.id}
                                                             name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                            value={data.salary_details.non_taxable[non_taxable.id] || (TableData && TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id]) || 0}
+                                                            value={data.salary_details.non_taxable[non_taxable.id] || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id] : 0)}
                                                             onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
                                                         />
                                                     ) : (
