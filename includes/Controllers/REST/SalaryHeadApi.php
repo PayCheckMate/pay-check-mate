@@ -207,7 +207,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
-        $salary_head = new SalaryHead( new SalaryHeadModel() );
+        $salary_head = new SalaryHeadModel();
         $args        = [
             'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
@@ -248,7 +248,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $salary_head    = new SalaryHead( new SalaryHeadModel() );
+        $salary_head    = new SalaryHeadModel();
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -278,7 +278,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
-        $department = new SalaryHead( new SalaryHeadModel() );
+        $department = new SalaryHeadModel();
         $department = $department->find( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
@@ -303,7 +303,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item( $request ) {
-        $salary_head    = new SalaryHead( new SalaryHeadModel() );
+        $salary_head    = new SalaryHeadModel();
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -333,7 +333,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function delete_item( $request ) {
-        $department = new SalaryHead( new SalaryHeadModel() );
+        $department = new SalaryHeadModel();
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {

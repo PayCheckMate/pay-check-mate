@@ -2,9 +2,10 @@
 
 namespace PayCheckMate\Models;
 
-use PayCheckMate\Classes\Helper;
+use PayCheckMate\Contracts\EmployeeInterface;
 
-class Employee extends Model {
+class Employee extends Model implements EmployeeInterface{
+    protected static string $find_key = 'employee_id';
 
     protected static string $table = 'employees';
 
@@ -26,6 +27,22 @@ class Employee extends Model {
         'created_on'     => '%s',
         'updated_at'     => '%s',
     ];
+    public function find_employee( int $employee_id ): Employee {
+        $this->find( $employee_id, [] );
+
+        return $this;
+    }
+
+    /**
+     * Get employee data.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, mixed>
+     */
+    public function get_data(): array {
+        return $this->data;
+    }
 
     /**
      * Make crated on mutation
@@ -73,23 +90,6 @@ class Employee extends Model {
         // @phpstan-ignore-next-line
         return $this->first_name . ' ' . $this->last_name;
     }
-
-    /**
-     * Get basic salary
-     */
-    public function get_basic_salary(): float {
-        // @phpstan-ignore-next-line
-        return doubleval( $this->basic_salary );
-    }
-
-    /**
-     * Get gross salary
-     */
-    public function get_gross_salary(): float {
-        // @phpstan-ignore-next-line
-        return doubleval( $this->gross_salary );
-    }
-
     /**
      * Get employee joining date
      *
@@ -97,23 +97,13 @@ class Employee extends Model {
      *
      * @param string $date
      *
-     * @return string
+     * @return array<string, string>
      */
-    public function get_joining_date( string $date ): string {
-        return $date;
-    }
-
-    /**
-     * Get employee joining date
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param string $date
-     *
-     * @return string
-     */
-    public function get_joining_date_string( string $date ): string {
-        return get_date_from_gmt( $date, 'd M, Y' );
+    public function get_joining_date( string $date ): array {
+        return [
+            'joining_date' => $date,
+            'joining_date_string' => get_date_from_gmt( $date, 'd M, Y' ),
+        ];
     }
 
     /**
@@ -132,16 +122,6 @@ class Employee extends Model {
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
-    /**
-     * Get employee status
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return string
-     */
-//    public function get_status(): string {
-//        return $this->status ? 'Active' : 'Inactive';
-//    }
 
     /**
      * Get employee salary heads
@@ -178,4 +158,13 @@ class Employee extends Model {
         return $salary;
     }
 
+    public function get_employee_id(): int {
+        // @phpstan-ignore-next-line
+        return $this->employee_id;
+    }
+
+    public function get_user_id(): string {
+        // @phpstan-ignore-next-line
+        return $this->user_id;
+    }
 }

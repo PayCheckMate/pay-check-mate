@@ -177,7 +177,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_items( $request ): WP_REST_Response {
-        $department = new Department( new DepartmentModel() );
+        $department = new DepartmentModel();
         $args        = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
@@ -217,7 +217,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function create_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
+        $department     = new DepartmentModel();
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -247,7 +247,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
-        $department = new Department( new DepartmentModel() );
+        $department = new DepartmentModel();
         $department = $department->find( $request->get_param( 'id' ) );
 
         if ( is_wp_error( $department ) ) {
@@ -272,7 +272,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function update_item( $request ) {
-        $department     = new Department( new DepartmentModel() );
+        $department     = new DepartmentModel();
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
@@ -302,7 +302,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function delete_item( $request ) {
-        $department = new Department( new DepartmentModel() );
+        $department = new DepartmentModel();
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {
