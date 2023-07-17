@@ -3,7 +3,7 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
-use PayCheckMate\Classes\Salary;
+use PayCheckMate\Classes\PayrollDetails;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -65,7 +65,20 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 [
                     'methods'             => WP_REST_Server::READABLE,
                     'callback'            => [ $this, 'get_employee_salary_details' ],
-                    'permission_callback' => [ $this, 'get_employee_permissions_check' ],
+                    'permission_callback' => [ $this, 'get_employee_salary_details_permissions_check' ],
+                    'args'                => [
+                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
+                    ],
+                ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/payslip', [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_employee_payslip' ],
+                    'permission_callback' => [ $this, 'get_employee_payslip_permissions_check' ],
                     'args'                => [
                         'context' => $this->get_context_param( [ 'default' => 'view' ] ),
                     ],
@@ -123,6 +136,30 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Get the employee salary details permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employee_salary_details_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_accountant' );
+    }
+
+    /**
+     * Get the employee payslip permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employee_payslip_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_employee' );
+    }
+
+    /**
      * Get a collection of items
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -149,7 +186,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $total     = $employee_data->count();
-        $max_pages = ceil( $total / (int) $args['limit'] );
+        $max_pages = ceil( $total / (int) $args[ 'limit' ] );
 
         $response = new WP_REST_Response( $employees );
 
@@ -170,10 +207,10 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     public function create_employee( WP_REST_Request $request ) {
         global $wpdb;
         $data                                = $request->get_params();
-        $salary_information                  = $data['salaryInformation'];
-        $salary_information['_wpnonce']    = $data['_wpnonce'];
-        $salary_information['active_from'] = $salary_information['active_from'] ?? $data['joining_date'];
-        unset( $data['salaryInformation'] );
+        $salary_information                  = $data[ 'salaryInformation' ];
+        $salary_information[ '_wpnonce' ]    = $data[ '_wpnonce' ];
+        $salary_information[ 'active_from' ] = $salary_information[ 'active_from' ] ?? $data[ 'joining_date' ];
+        unset( $data[ 'salaryInformation' ] );
         $employee_model = new EmployeeModel();
         $validated_data = new EmployeeRequest( $data );
         if ( $validated_data->error ) {
@@ -186,8 +223,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $wpdb->query( 'START TRANSACTION' );
-        if ( ! empty( $data['id'] ) ) {
-            $employee = $employee_model->update( $data['id'], $validated_data );
+        if ( ! empty( $data[ 'id' ] ) ) {
+            $employee = $employee_model->update( $data[ 'id' ], $validated_data );
         } else {
             $employee = $employee_model->create( $validated_data );
         }
@@ -196,7 +233,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $salary_information['employee_id'] = $data['employee_id'];
+        $salary_information[ 'employee_id' ] = $data[ 'employee_id' ];
         $salary_data                         = [
             'salary_history_id',
             'employee_id',
@@ -211,11 +248,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $keys_to_remove                      = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details                      = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-				return ! in_array( $key, $keys_to_remove, true );
-			}, ARRAY_FILTER_USE_KEY
+            return ! in_array( $key, $keys_to_remove, true );
+        }, ARRAY_FILTER_USE_KEY
         );
 
-        $salary_information['salary_details'] = wp_json_encode( $salary_details );
+        $salary_information[ 'salary_details' ] = wp_json_encode( $salary_details );
         $validate_salary_data                   = new SalaryHistoryRequest( $salary_information );
         if ( $validate_salary_data->error ) {
             return new WP_Error(
@@ -227,8 +264,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $salary_history_model = new SalaryHistoryModel();
-        if ( ! empty( $salary_information['salary_history_id'] ) ) {
-            $salary_history = $salary_history_model->update( $salary_information['salary_history_id'], $validate_salary_data );
+        if ( ! empty( $salary_information[ 'salary_history_id' ] ) ) {
+            $salary_history = $salary_history_model->update( $salary_information[ 'salary_history_id' ], $validate_salary_data );
         } else {
             $salary_history = $salary_history_model->create( $validate_salary_data );
         }
@@ -306,15 +343,15 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $item                                           = $this->prepare_item_for_response( $employee, $request );
-        $data                                           = $this->prepare_response_for_collection( $item );
-        $data['salaryInformation']['salary_history_id'] = $employee->salary_history_id;
-        $data['salaryInformation']['salary_details']    = $employee->salary_details;
-        $data['salaryInformation']['basic_salary']      = $employee->basic_salary;
-        $data['salaryInformation']['gross_salary']      = $employee->gross_salary;
-        $data['salaryInformation']['active_from']       = $employee->active_from;
-        $data['salaryInformation']['remarks']           = $employee->remarks;
-        $response = new WP_REST_Response( $data );
+        $item                                               = $this->prepare_item_for_response( $employee, $request );
+        $data                                               = $this->prepare_response_for_collection( $item );
+        $data[ 'salaryInformation' ][ 'salary_history_id' ] = $employee->salary_history_id;
+        $data[ 'salaryInformation' ][ 'salary_details' ]    = $employee->salary_details;
+        $data[ 'salaryInformation' ][ 'basic_salary' ]      = $employee->basic_salary;
+        $data[ 'salaryInformation' ][ 'gross_salary' ]      = $employee->gross_salary;
+        $data[ 'salaryInformation' ][ 'active_from' ]       = $employee->active_from;
+        $data[ 'salaryInformation' ][ 'remarks' ]           = $employee->remarks;
+        $response                                           = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
     }
@@ -336,8 +373,30 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $item           = $this->prepare_item_for_response( (object) $employee->get_employee(), $request );
         $data           = $this->prepare_response_for_collection( $item );
 
-        $data['salaryInformation'] = $salary_details;
-        $response = new WP_REST_Response( $data );
+        $data[ 'salaryInformation' ] = $salary_details;
+        $response                    = new WP_REST_Response( $data );
+
+        return new WP_REST_Response( $response, 200 );
+    }
+
+    /**
+     * Get a single employee payslip.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
+     * @return \WP_REST_Response
+     */
+    public function get_employee_payslip( WP_REST_Request $request ): WP_REST_Response {
+        $user_id        = get_current_user_id();
+        $employee       = new Employee();
+        $emp            = $employee->get_employee_by_user_id( $user_id );
+        $payroll_detail = new PayrollDetails( $emp );
+        $payroll_detail = $payroll_detail->get_payroll_details();
+
+        $response = new WP_REST_Response( $payroll_detail->data );
 
         return new WP_REST_Response( $response, 200 );
     }

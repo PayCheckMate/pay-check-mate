@@ -41,7 +41,7 @@ class Employee extends Model implements EmployeeInterface{
      * @return array<string, mixed>
      */
     public function get_data(): array {
-        return $this->data;
+        return (array) $this->data;
     }
 
     /**
@@ -158,7 +158,7 @@ class Employee extends Model implements EmployeeInterface{
         return $salary;
     }
 
-    public function get_employee_id(): int {
+    public function get_employee_id(): string {
         // @phpstan-ignore-next-line
         return $this->employee_id;
     }
@@ -166,5 +166,24 @@ class Employee extends Model implements EmployeeInterface{
     public function get_user_id(): string {
         // @phpstan-ignore-next-line
         return $this->user_id;
+    }
+
+    /**
+     * Get employee by user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int $user_id
+     *
+     * @throws \Exception
+     * @return EmployeeInterface
+     */
+    public function get_employee_by_user_id( int $user_id ): EmployeeInterface {
+        $new_find_key = self::$find_key;
+        self::$find_key = 'user_id';
+        $data = $this->find( $user_id );
+        self::$find_key = $new_find_key;
+
+        return $data;
     }
 }

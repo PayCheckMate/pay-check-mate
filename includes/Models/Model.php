@@ -330,7 +330,9 @@ class Model implements ModelInterface {
             return (object) [];
         }
 
-        return $this->process_item( $results );
+        $this->process_item( $results );
+
+        return $this;
     }
 
     /**

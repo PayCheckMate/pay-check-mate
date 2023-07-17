@@ -75,7 +75,13 @@ class PayrollDetails extends Model {
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
-        $salary              = [
+        if(empty( $salary_head_types ) ){
+            return [
+                'salary_details' => $salary_details
+            ];
+        }
+
+        $salary         = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
