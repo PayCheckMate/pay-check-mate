@@ -99,4 +99,28 @@ class PayrollDetailsModel extends Model {
 
         return $salary;
     }
+
+
+    /**
+     * Count employee payroll details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $employee_id
+     *
+     * @throws \Exception
+     * @return int
+     */
+    public function count_payroll_details( string $employee_id = '' ): int {
+        global $wpdb;
+
+        $where = "employee_id = $employee_id";
+        if ( empty( $employee_id ) ){
+            $where = '';
+        }
+
+        $sql = "SELECT COUNT(*) FROM {$this->get_table()} WHERE $where";
+
+        return (int) $wpdb->get_var( $sql );
+    }
 }
