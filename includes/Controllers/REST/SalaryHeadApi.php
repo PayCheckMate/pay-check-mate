@@ -218,7 +218,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
         $salary_heads = $salary_head->all( $args );
         $data         = [];
-        foreach ( $salary_heads->toArray() as $value ) {
+        foreach ( $salary_heads as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }

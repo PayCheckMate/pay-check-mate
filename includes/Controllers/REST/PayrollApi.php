@@ -132,6 +132,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
+     * @throws \Exception
+     *
      * @return \WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_payrolls( WP_REST_Request $request ): WP_REST_Response {
@@ -144,16 +146,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'search'   => $request->get_param( 'search' ) ? sanitize_text_field( $request->get_param( 'search' ) ) : '',
         ];
 
-        $payrolls = new PayrollModel();
-        $payrolls = $payrolls->all( $args );
+        $payroll_model = new PayrollModel();
+        $payrolls = $payroll_model->all( $args );
 
         $data = [];
-        foreach ( $payrolls->toArray() as $payroll ) {
+        foreach ( $payrolls as $payroll ) {
             $item   = $this->prepare_item_for_response( $payroll, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $payrolls->count();
+        $total     = $payroll_model->count();
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
@@ -170,6 +172,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
      *
      * @return \WP_REST_Response
      */
@@ -307,7 +311,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'salary_head_types'       => $salary_head_types,
-                'employee_salary_history' => $employees->toArray(),
+                'employee_salary_history' => $employees,
             ], 200
         );
     }
@@ -568,7 +572,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'payroll'                 => $payroll,
-                'employee_salary_history' => $payroll_details->toArray(),
+                'employee_salary_history' => $payroll_details,
                 'salary_head_types'       => $salary_head_types,
             ], 200
         );
