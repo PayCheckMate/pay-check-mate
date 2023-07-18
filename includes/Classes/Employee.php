@@ -33,12 +33,12 @@ class Employee {
      */
     public function set_employee( $employee = null ) {
         if ( is_numeric( $employee ) ) {
-            $model          = new \PayCheckMate\Models\Employee();
+            $model          = new \PayCheckMate\Models\EmployeeModel();
             $this->employee = $model->find_employee( $employee );
         } elseif ( $employee instanceof EmployeeInterface ) {
             $this->employee = $employee;
         } else {
-            $this->employee = new \PayCheckMate\Models\Employee();
+            $this->employee = new \PayCheckMate\Models\EmployeeModel();
         }
     }
 

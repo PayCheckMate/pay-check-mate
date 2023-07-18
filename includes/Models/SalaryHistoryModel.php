@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class SalaryHistory extends Model {
+class SalaryHistoryModel extends Model {
 
     protected static string $table = 'employee_salary_history';
 

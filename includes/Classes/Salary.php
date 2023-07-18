@@ -3,20 +3,20 @@
 namespace PayCheckMate\Classes;
 
 use PayCheckMate\Contracts\EmployeeInterface;
-use PayCheckMate\Models\SalaryHistory;
+use PayCheckMate\Models\SalaryHistoryModel;
 
 class Salary {
 
     private EmployeeInterface $employee;
 
     /**
-     * @var \PayCheckMate\Models\SalaryHistory
+     * @var \PayCheckMate\Models\SalaryHistoryModel
      */
-    private SalaryHistory $model;
+    private SalaryHistoryModel $model;
 
 
     public function __construct( EmployeeInterface $employee ) {
-        $this->model = new SalaryHistory();
+        $this->model = new SalaryHistoryModel();
         $this->employee = $employee;
     }
 
@@ -69,7 +69,7 @@ class Salary {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @throws \Exception
-     * @return object|\PayCheckMate\Models\SalaryHistory
+     * @return object|\PayCheckMate\Models\SalaryHistoryModel
      */
     public function get_salary_history() {
         $args = [

@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Payroll extends Model {
+class PayrollModel extends Model {
 
     protected static string $table = 'payroll';
 

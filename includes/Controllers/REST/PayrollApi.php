@@ -3,11 +3,9 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Helper;
-use PayCheckMate\Classes\Payroll;
-use PayCheckMate\Classes\PayrollDetails;
-use PayCheckMate\Models\Payroll as PayrollModel;
-use PayCheckMate\Models\PayrollDetails as PayrollDetailsModel;
-use PayCheckMate\Models\Employee as EmployeeModel;
+use PayCheckMate\Models\PayrollModel;
+use PayCheckMate\Models\PayrollDetailsModel;
+use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;

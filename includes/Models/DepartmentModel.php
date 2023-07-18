@@ -2,8 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Designation extends Model {
-
+class DepartmentModel extends Model {
 
     /**
      * The table associated with the model.
@@ -14,8 +13,11 @@ class Designation extends Model {
      *
      * @access protected
      */
-    protected static string $table = 'designations';
+    protected static string $table = 'departments';
 
+    /**
+     * @var array|string[] $columns
+     */
     protected static array $columns = [
         'name'       => '%s',
         'status'     => '%d',

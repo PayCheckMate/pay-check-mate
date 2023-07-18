@@ -6,10 +6,9 @@ use WP_Error;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\Department;
 use PayCheckMate\Requests\DepartmentRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department as DepartmentModel;
+use PayCheckMate\Models\DepartmentModel;
 
 class DepartmentApi extends RestController implements HookAbleApiInterface {
 
@@ -174,6 +173,8 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
+     * @throws \Exception
+     *
      * @return WP_REST_Response
      */
     public function get_items( $request ): WP_REST_Response {
@@ -189,7 +190,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $departments = $department->all( $args );
         $data        = [];
 
-        foreach ( $departments->toArray() as $item ) {
+        foreach ( $departments as $item ) {
             $item   = $this->prepare_item_for_response( $item, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
@@ -244,6 +245,8 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
+     * @throws \Exception
+     *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
@@ -254,8 +257,12 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );
         }
 
-        $item = $this->prepare_item_for_response( $department, $request );
-        $data = $this->prepare_response_for_collection( $item );
+        if ( ! empty( (array) $department ) ) {
+            $item = $this->prepare_item_for_response( $department, $request );
+            $data = $this->prepare_response_for_collection( $item );
+        } else {
+            $data = [];
+        }
 
         return new WP_REST_Response( $data, 200 );
     }

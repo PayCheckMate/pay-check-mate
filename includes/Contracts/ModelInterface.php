@@ -13,9 +13,9 @@ interface ModelInterface {
      *
      * @param array<string, mixed> $args
      *
-     * @return object
+     * @return array<object>
      */
-    public function all( array $args ): object;
+    public function all( array $args ): array;
 
     /**
      * Get a single item.

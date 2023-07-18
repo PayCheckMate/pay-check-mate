@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class SalaryHead extends Model {
+class SalaryHeadModel extends Model {
 
     /**
      * The table associated with the model.

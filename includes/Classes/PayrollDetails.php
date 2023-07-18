@@ -11,7 +11,7 @@ class PayrollDetails {
      */
     protected EmployeeInterface $employee;
     /**
-     * @var array|object|\PayCheckMate\Models\PayrollDetails
+     * @var array|object|\PayCheckMate\Models\PayrollDetailsModel
      */
 
     public array $data;
@@ -45,7 +45,7 @@ class PayrollDetails {
      * @return PayrollDetails
      */
     public function get_payroll_details(): PayrollDetails {
-        $payroll_details = new \PayCheckMate\Models\PayrollDetails();
+        $payroll_details = new \PayCheckMate\Models\PayrollDetailsModel();
         $details = $payroll_details->find_by( [ 'employee_id' => $this->employee->get_employee_id() ], [ 'limit' => '-1' ] );
         if ( empty( $details ) ) {
             $this->data = [];

@@ -6,10 +6,9 @@ use WP_Error;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\Designation;
 use PayCheckMate\Requests\DesignationRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Designation as DesignationModel;
+use PayCheckMate\Models\DesignationModel;
 
 class DesignationApi extends RestController implements HookAbleApiInterface {
 
@@ -234,6 +233,8 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
      *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */

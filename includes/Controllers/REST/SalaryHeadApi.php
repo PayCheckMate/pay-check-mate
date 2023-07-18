@@ -6,10 +6,9 @@ use Exception;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Requests\SalaryHeadRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
+use PayCheckMate\Models\SalaryHeadModel;
 
 class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 

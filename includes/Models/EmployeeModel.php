@@ -4,7 +4,7 @@ namespace PayCheckMate\Models;
 
 use PayCheckMate\Contracts\EmployeeInterface;
 
-class Employee extends Model implements EmployeeInterface{
+class EmployeeModel extends Model implements EmployeeInterface{
     protected static string $find_key = 'employee_id';
 
     protected static string $table = 'employees';
@@ -27,7 +27,7 @@ class Employee extends Model implements EmployeeInterface{
         'created_on'     => '%s',
         'updated_at'     => '%s',
     ];
-    public function find_employee( int $employee_id ): Employee {
+    public function find_employee( int $employee_id ): EmployeeModel {
         $this->find( $employee_id, [] );
 
         return $this;

@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Classes;
 
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
+use PayCheckMate\Models\SalaryHeadModel;
 
 class Helper {
 

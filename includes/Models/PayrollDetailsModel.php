@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class PayrollDetails extends Model {
+class PayrollDetailsModel extends Model {
 
     /**
      * @var mixed

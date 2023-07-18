@@ -32,7 +32,6 @@ class Model implements ModelInterface {
      */
     protected static array $columns;
 
-    protected object $results;
     protected static string $find_key = 'id';
 
     // @phpstan-ignore-next-line
@@ -43,7 +42,7 @@ class Model implements ModelInterface {
     /**
      * @var mixed
      */
-    public $data;
+    public $data = [];
 
     /**
      * Get all the items.
@@ -78,9 +77,9 @@ class Model implements ModelInterface {
      * @param array<string, mixed> $additional_logical_data
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
+    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): array {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -159,9 +158,9 @@ class Model implements ModelInterface {
         }
 
         $results       = $wpdb->get_results( $query );
-        $this->results = $this->process_items( $results );
+        $this->data = $this->process_items( $results );
 
-        return $this;
+        return $this->data;
     }
 
     /**
@@ -330,9 +329,9 @@ class Model implements ModelInterface {
             return (object) [];
         }
 
-        $this->process_item( $results );
+        $this->data = $this->process_item( $results );
 
-        return $this;
+        return $this->data;
     }
 
     /**
@@ -402,7 +401,7 @@ class Model implements ModelInterface {
         }
 
 
-        $this->results = $this->process_items( $results );
+        $this->data = $this->process_items( $results );
 
         return $this;
     }
@@ -583,18 +582,18 @@ class Model implements ModelInterface {
      * @param array<object> $data
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function process_items( array $data ): object {
+    public function process_items( array $data ): array {
         if ( empty( $data ) ) {
-            return (object) [];
+            return [];
         }
 
         foreach ( $data as &$item ) {
             $item = $this->process_item( $item );
         }
 
-        return (object) $data;
+        return $data;
     }
 
     /**
@@ -675,29 +674,6 @@ class Model implements ModelInterface {
      */
     public function __set( string $name, $value ) {
         $this->data[$name] = $value;
-    }
-
-
-    /**
-     * Convert the object to an array.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return array<array<string>>
-     */
-    public function toArray(): array {
-        return (array) $this->results;
-    }
-
-    /**
-     * Convert the object to a json string.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return string
-     */
-    public function toJson(): string {
-        return json_encode( $this->results );
     }
 
 }
