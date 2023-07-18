@@ -295,7 +295,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     public function delete_item( $request ) {
         $designation = new DesignationModel();
         try {
-            $designation = $designation->delete( $request[ 'id' ] );
+            $designation = $designation->delete( $request['id'] );
         } catch ( Exception $e ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
         }
