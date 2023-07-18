@@ -11,6 +11,7 @@ Fixes #
 
 ## Checklist
 - [ ] tested locally
-- [ ] added new dependencies
-- [ ] updated the docs
-- [ ] added a test
+- [ ] php-cs-fixer passed
+- [ ] phpstan passed
+- [ ] phpunit passed
+- [ ] e2e tested
