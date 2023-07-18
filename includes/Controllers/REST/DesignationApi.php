@@ -181,7 +181,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 
         $designations = $designation->all( $args );
         $data         = [];
-        foreach ( $designations->toArray() as $value ) {
+        foreach ( $designations as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
@@ -294,7 +294,11 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      */
     public function delete_item( $request ) {
         $designation = new DesignationModel();
-        $designation = $designation->delete( $request['id'] );
+        try {
+            $designation = $designation->delete( $request[ 'id' ] );
+        } catch ( Exception $e ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
 
         if ( ! $designation ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );

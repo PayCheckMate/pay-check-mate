@@ -310,13 +310,17 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      */
     public function delete_item( $request ) {
         $department = new DepartmentModel();
-        $department = $department->delete( $request->get_param( 'id' ) );
+        try {
+            $department = $department->delete( $request->get_param( 'id' ) );
+        } catch ( Exception $e ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
 
         if ( ! $department ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
+        return new WP_REST_Response( $department, 200 );
     }
 
     /**
