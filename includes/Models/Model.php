@@ -344,9 +344,9 @@ class Model implements ModelInterface {
      * @param array<string>         $fields
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): array {
         global $wpdb;
         if( empty( $find_by ) ) {
             throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
@@ -403,7 +403,7 @@ class Model implements ModelInterface {
 
         $this->data = $this->process_items( $results );
 
-        return $this;
+        return $this->data;
     }
 
     /**

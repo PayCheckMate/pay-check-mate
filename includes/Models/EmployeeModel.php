@@ -185,6 +185,8 @@ class EmployeeModel extends Model implements EmployeeInterface{
         $data = $this->find( $user_id );
         self::$find_key = $new_find_key;
 
-        return $data;
+        $this->data = $data;
+
+        return $this;
     }
 }

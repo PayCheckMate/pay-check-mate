@@ -3,6 +3,7 @@
 namespace PayCheckMate\Classes;
 
 use PayCheckMate\Contracts\EmployeeInterface;
+use PayCheckMate\Models\PayrollDetailsModel;
 
 class PayrollDetails {
 
@@ -45,14 +46,14 @@ class PayrollDetails {
      * @return PayrollDetails
      */
     public function get_payroll_details(): PayrollDetails {
-        $payroll_details = new \PayCheckMate\Models\PayrollDetailsModel();
+        $payroll_details = new PayrollDetailsModel();
         $details = $payroll_details->find_by( [ 'employee_id' => $this->employee->get_employee_id() ], [ 'limit' => '-1' ] );
         if ( empty( $details ) ) {
             $this->data = [];
             return $this;
         }
 
-        $this->data = $details->toArray();
+        $this->data = $details;
 
         return $this;
     }

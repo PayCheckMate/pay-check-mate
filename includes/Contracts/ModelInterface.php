@@ -38,9 +38,9 @@ interface ModelInterface {
      * @param array<string, mixed> $args
      * @param array<string> $fields
      *
-     * @return object
+     * @return array<object>
      */
-    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object;
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): array;
 
     /**
      * Create a new item.
