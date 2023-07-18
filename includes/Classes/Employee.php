@@ -65,7 +65,7 @@ class Employee {
     public function get_salary_history(): array {
         $salary = new Salary( $this->employee );
 
-        return $salary->get_salary_history()->toArray();
+        return $salary->get_salary_history();
     }
 
     /**

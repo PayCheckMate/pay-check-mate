@@ -171,7 +171,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function get_employees( WP_REST_Request $request ): WP_REST_Response {
         $args           = [
-            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
             'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
@@ -180,12 +180,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employees      = [];
         $employee_model = new EmployeeModel();
         $employee_data  = $employee_model->all( $args );
-        foreach ( $employee_data->toArray() as $employee ) {
+        foreach ( $employee_data as $employee ) {
             $item        = $this->prepare_item_for_response( $employee, $request );
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $employee_data->count();
+        $total     = $employee_model->count();
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $employees );
@@ -338,7 +338,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        $employee = $employee->find_by( [ 'employee_id' => $employee_id ], $employee_args );
+        $employee = $employee->find( $employee_id, $employee_args );
         if ( is_wp_error( $employee ) ) {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
         }

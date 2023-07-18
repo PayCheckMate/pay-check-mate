@@ -69,9 +69,9 @@ class Salary {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @throws \Exception
-     * @return object|\PayCheckMate\Models\SalaryHistoryModel
+     * @return array<object>
      */
-    public function get_salary_history() {
+    public function get_salary_history(): array {
         $args = [
             'where' => [
                 'employee_id' => [

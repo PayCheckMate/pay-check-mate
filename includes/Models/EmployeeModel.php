@@ -136,7 +136,8 @@ class EmployeeModel extends Model implements EmployeeInterface{
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
         if(empty( $salary_head_types ) ){
-            return $salary_details;
+            return [
+                'salary_details' => $salary_details];
         }
 
         $salary         = [
