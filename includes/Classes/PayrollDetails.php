@@ -11,10 +11,10 @@ class PayrollDetails {
      * @var \PayCheckMate\Contracts\EmployeeInterface
      */
     protected EmployeeInterface $employee;
-    /**
-     * @var array|object|\PayCheckMate\Models\PayrollDetailsModel
-     */
 
+    /**
+     * @var array<object>
+     */
     public array $data;
 
     public function __construct( EmployeeInterface $employee ) {

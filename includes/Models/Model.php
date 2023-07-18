@@ -397,7 +397,7 @@ class Model implements ModelInterface {
         $results = $wpdb->get_results( $query );
 
         if ( empty( $results ) ) {
-            return (object) [];
+            return [];
         }
 
 

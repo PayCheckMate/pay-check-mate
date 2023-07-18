@@ -20,7 +20,7 @@ class Salary {
         $this->employee = $employee;
     }
 
-    public function get_employee_id(): int {
+    public function get_employee_id(): string {
         return $this->employee->get_employee_id();
     }
 
