@@ -1,5 +1,7 @@
 import React from 'react';
 import {Card} from "../../../Components/Card";
+import {PrinterIcon} from "@heroicons/react/24/outline";
+import {handlePrint} from "../../../Helpers/Helpers";
 
 export const PaySlipDetails = () => {
     // Sample data for demonstration
@@ -12,7 +14,10 @@ export const PaySlipDetails = () => {
 
     return (
         <Card>
-            <div className="p-8">
+            <div className="flex justify-end no-print">
+                <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
+            </div>
+            <div className="p-8" id='printable'>
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center">
                           <img
@@ -40,7 +45,7 @@ export const PaySlipDetails = () => {
                     <tbody>
                       <tr>
                         <td className="border px-4 py-2">Basic Salary</td>
-                        <td className="border px-4 py-2">${salary}</td>
+                        <td className="border px-4 py-2 text-right">${salary}</td>
                       </tr>
                     </tbody>
                   </table>
