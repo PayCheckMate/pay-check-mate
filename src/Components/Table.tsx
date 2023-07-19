@@ -141,11 +141,9 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         });
     }
 
-
     const handleSearch = useMemo(() => debounce((e: any) => {
         e.preventDefault();
-        // if (e.target.value === '') return;
-
+        if (e.target.value.length > 1 && e.target.value.length < 3) return;
         onFilterChange({
             ...filterObject,
             search: e.target.value,
@@ -262,7 +260,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                         </span>
                         <FormInput
                             type="number"
-                            className="px-4 mr-0 ml-0 mt-0 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-20"
+                            className="px-4 mr-0 ml-0 mt-0 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-14"
                             value={currentPage}
                             onChange={(e) => handlePageChange(parseInt(e.target.value))}
                             min={1}

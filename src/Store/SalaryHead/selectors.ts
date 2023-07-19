@@ -6,7 +6,7 @@ export const defaultFilters: filtersType = {
     page: 1,
     order_by: 'id',
     order: 'desc',
-    status: '1',
+    status: 'all',
 }
 
 const selectors = {

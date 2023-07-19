@@ -203,6 +203,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
+     * @throws \Exception
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
@@ -223,7 +224,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $salary_head->count();
+        $total     = $salary_head->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
