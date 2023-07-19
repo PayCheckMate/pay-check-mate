@@ -6,6 +6,11 @@ class PayrollModel extends Model {
 
     protected static string $table = 'payroll';
 
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary' ];
+
     protected static array $columns = [
         'department_id'       => '%d',
         'designation_id'      => '%d',

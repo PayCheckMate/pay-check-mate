@@ -11,3 +11,12 @@ export const validateRequiredFields = (data: any, requiredFields: string[], setF
     setFormError(errors);
     return errors;
 }
+
+// export const debounce = (callback: any, wait: number) => {
+//     let timeout: any = null;
+//     return (...args: any) => {
+//         const next = () => callback(...args);
+//         clearTimeout(timeout);
+//         timeout = setTimeout(next, wait);
+//     };
+// }

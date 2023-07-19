@@ -4,8 +4,14 @@ namespace PayCheckMate\Models;
 
 use PayCheckMate\Contracts\EmployeeInterface;
 
-class EmployeeModel extends Model implements EmployeeInterface{
+class EmployeeModel extends Model implements EmployeeInterface {
+
     protected static string $find_key = 'employee_id';
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'employee_id', 'first_name', 'last_name', 'email' ];
 
     protected static string $table = 'employees';
 
@@ -27,6 +33,7 @@ class EmployeeModel extends Model implements EmployeeInterface{
         'created_on'     => '%s',
         'updated_at'     => '%s',
     ];
+
     public function find_employee( int $employee_id ): EmployeeModel {
         $this->find( $employee_id, [] );
 
@@ -90,6 +97,7 @@ class EmployeeModel extends Model implements EmployeeInterface{
         // @phpstan-ignore-next-line
         return $this->first_name . ' ' . $this->last_name;
     }
+
     /**
      * Get employee joining date
      *
@@ -101,7 +109,7 @@ class EmployeeModel extends Model implements EmployeeInterface{
      */
     public function get_joining_date( string $date ): array {
         return [
-            'joining_date' => $date,
+            'joining_date'        => $date,
             'joining_date_string' => get_date_from_gmt( $date, 'd M, Y' ),
         ];
     }
@@ -119,6 +127,7 @@ class EmployeeModel extends Model implements EmployeeInterface{
         if ( ! $date ) {
             return 'N/A';
         }
+
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
@@ -135,12 +144,13 @@ class EmployeeModel extends Model implements EmployeeInterface{
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
-        if(empty( $salary_head_types ) ){
+        if ( empty( $salary_head_types ) ) {
             return [
-                'salary_details' => $salary_details];
+                'salary_details' => $salary_details,
+            ];
         }
 
-        $salary         = [
+        $salary = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
@@ -150,8 +160,8 @@ class EmployeeModel extends Model implements EmployeeInterface{
 
         foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
-                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
-                    $salary['salary_details'][$type][$key] = $amount;
+                if ( array_key_exists( $key, $salary_head_types[ $type ] ) ) {
+                    $salary[ 'salary_details' ][ $type ][ $key ] = $amount;
                 }
             }
         }
@@ -180,9 +190,9 @@ class EmployeeModel extends Model implements EmployeeInterface{
      * @return EmployeeInterface
      */
     public function get_employee_by_user_id( int $user_id ): EmployeeInterface {
-        $new_find_key = self::$find_key;
+        $new_find_key   = self::$find_key;
         self::$find_key = 'user_id';
-        $data = $this->find( $user_id );
+        $data           = $this->find( $user_id );
         self::$find_key = $new_find_key;
 
         $this->data = $data;

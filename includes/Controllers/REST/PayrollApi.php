@@ -330,8 +330,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
         $parameters = $request->get_params();
-        // TODO: Make the employee id from current user.
-        $parameters['created_employee_id'] = get_current_user_id();
+        $employee = new EmployeeModel();
+        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
@@ -424,8 +424,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        // TODO: Make the employee id from current user.
-        $parameters['created_employee_id'] = get_current_user_id();
+        $employee = new EmployeeModel();
+        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
 

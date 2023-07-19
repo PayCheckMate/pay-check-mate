@@ -172,6 +172,7 @@ export const EmployeeList = () => {
                     filters={filterObject as filtersType}
                     currentPage={currentPage}
                     onFilterChange={handleFilterChange}
+                    search={true}
                 />
             </div>
         </>

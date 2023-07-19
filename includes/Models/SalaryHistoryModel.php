@@ -7,6 +7,11 @@ class SalaryHistoryModel extends Model {
     protected static string $table = 'employee_salary_history';
 
     /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'employee_id', 'active_from' ];
+
+    /**
      * @var array|string[] $columns
      */
     protected static array $columns = [

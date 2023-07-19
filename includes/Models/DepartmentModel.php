@@ -16,6 +16,11 @@ class DepartmentModel extends Model {
     protected static string $table = 'departments';
 
     /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'name' ];
+
+    /**
      * @var array|string[] $columns
      */
     protected static array $columns = [

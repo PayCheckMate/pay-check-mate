@@ -75,7 +75,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 						],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
-							'type'        => 'number',
+							'type'        => 'integer',
 						],
 					],
 				],
@@ -178,15 +178,16 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_items( $request ): WP_REST_Response {
-        $department = new DepartmentModel();
-        $args        = [
+        $args = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
+        $department = new DepartmentModel();
         $departments = $department->all( $args );
         $data        = [];
 
@@ -195,7 +196,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $department->count();
+        $total     = $department->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );

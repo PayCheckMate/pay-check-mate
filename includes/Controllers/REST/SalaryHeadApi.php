@@ -211,9 +211,9 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
-            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
         $salary_heads = $salary_head->all( $args );

@@ -1,4 +1,4 @@
-import React, {useState} from "@wordpress/element";
+import React, {useMemo, useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
@@ -11,6 +11,7 @@ import {__} from "@wordpress/i18n";
 import {UserCapNames} from "../Types/UserType";
 import {PermissionDenied} from "./404";
 import {userCan} from "../Helpers/User";
+import {debounce} from "lodash";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -24,18 +25,20 @@ type Column = {
 type TableProps = {
     columns: Column[];
     data: any[];
+    total: number;
+    filters: filtersType;
+    permissions: UserCapNames
     isLoading?: boolean;
     totalPage?: number;
-    total: number;
     per_page?: string | number;
     currentPage?: number;
     onFilterChange?: (defaultFilterObject: filtersType) => void;
-    filters: filtersType;
-    permissions: UserCapNames
+    search?: boolean;
+    searchPlaceholder?: string;
 };
 
-export const Table = ({columns = [], data = [], isLoading = true, filters, permissions, totalPage = 1, per_page = 10, currentPage = 1, total, onFilterChange = () => void 0}: TableProps) => {
-    if (!userCan(UserCapNames[permissions])){
+export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = true, searchPlaceholder = "Search by name..."}: TableProps) => {
+    if (!userCan(UserCapNames[permissions])) {
         return (
             <>
                 <Card>
@@ -45,15 +48,6 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
         )
     }
     per_page = parseInt(String(per_page));
-    if (!data.length && !isLoading) {
-        return (
-            <>
-                <Card>
-                    <EmptyState />
-                </Card>
-            </>
-        );
-    }
 
     const hasIdColumn = columns.some((column) => column.dataIndex === "#");
 
@@ -72,7 +66,6 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
 
     const [sortColumn, setSortColumn] = useState("");
     const [sortDirection, setSortDirection] = useState<SortDirection>("");
-    const [searchText, setSearchText] = useState("");
 
     const [filterObject, setFilterObject] = useState(filters);
 
@@ -148,29 +141,49 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
         });
     }
 
+
+    const handleSearch = useMemo(() => debounce((e: any) => {
+        e.preventDefault();
+        // if (e.target.value === '') return;
+
+        onFilterChange({
+            ...filterObject,
+            search: e.target.value,
+        });
+    }, 1000), []);
+
     return (
         <>
             {isLoading ? (
                 <Loading />
             ) : (
                 <div className="overflow-x-auto">
-                    <div className="mb-4 flex items-center justify-end">
-                        <label
-                            htmlFor="search"
-                            className="sr-only"
-                        >
-                          Search
-                        </label>
-                        <FormInput
-                            type="text"
-                            id="search"
-                            className="py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 w-48 sm:w-auto"
-                            placeholder="Search..."
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            name="search"
-                        />
-                    </div>
+                    {search && (
+                        <div className="mb-4 flex items-center justify-end">
+                            <label
+                                htmlFor="search"
+                                className="sr-only"
+                            >
+                              Search
+                            </label>
+                            <FormInput
+                                type="search"
+                                autoComplete="off"
+                                id="search"
+                                placeholder={searchPlaceholder}
+                                value={filterObject.search || ''}
+                                onChange={(e) => {
+                                    setFilterObject((prevState) => ({
+                                        ...prevState,
+                                        search: e.target.value,
+                                    }));
+                                    handleSearch(e)
+                                }}
+                                name="search"
+                                autoFocus={!!filterObject.search}
+                            />
+                        </div>
+                    )}
                     <table className="min-w-full divide-y divide-gray-300">
                         <thead className="bg-gray-50">
                         <tr>
@@ -202,6 +215,15 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
                         </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
+                        {!data.length && !isLoading && (
+                            <>
+                                <tr>
+                                    <td colSpan={columns.length} className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
+                                        <EmptyState />
+                                    </td>
+                                </tr>
+                            </>
+                        )}
                         {data.map((item, rowIndex) => (
                             <tr key={rowIndex}>
                                 {columns.map((column, colIndex) => (
@@ -234,7 +256,7 @@ export const Table = ({columns = [], data = [], isLoading = true, filters, permi
                     {/*    Page {currentPage} of {totalPages}*/}
                     {/*</span>*/}
                     {totalPages > 1 && (
-                    <>
+                        <>
                         <span className="px-1 py-1 text-sm font-medium text-gray-900">
                         {__("Go to page", 'pcm')}
                         </span>

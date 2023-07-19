@@ -209,6 +209,7 @@ export const DepartmentList = () => {
                     per_page={parseInt(per_page)}
                     currentPage={currentPage}
                     onFilterChange={handleFilterChange}
+                    search={true}
                 />
             </div>
         </>

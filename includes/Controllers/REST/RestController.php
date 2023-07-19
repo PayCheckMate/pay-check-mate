@@ -146,7 +146,7 @@ class RestController extends WP_REST_Controller {
             ],
             'status'   => [
                 'description'       => __( 'Limit result set to items with a specific status.', 'pcm' ),
-                'type'              => 'integer',
+                'type'              => 'string',
                 'sanitize_callback' => 'absint',
                 'validate_callback' => 'rest_validate_request_arg',
             ],

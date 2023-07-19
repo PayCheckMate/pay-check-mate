@@ -43,7 +43,14 @@ export const PayrollList = () => {
         })
     }
     const columns = [
-        {title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date_string', sortable: true},
+        {
+            title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date', sortable: true,
+            render: (text: string, record: PayrollType) => {
+                return (
+                    <span>{record.payroll_date_string}</span>
+                )
+            }
+        },
         {
             title: __('Department', 'pcm'), dataIndex: 'department_id',
             render: (text: string, record: PayrollType) => {
@@ -216,6 +223,7 @@ export const PayrollList = () => {
                     currentPage={currentPage}
                     filters={filters}
                     onFilterChange={(filter) => handleFilterChange(filter)}
+                    search={true}
                 />
             </div>
         </>

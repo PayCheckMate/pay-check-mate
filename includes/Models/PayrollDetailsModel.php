@@ -4,18 +4,6 @@ namespace PayCheckMate\Models;
 
 class PayrollDetailsModel extends Model {
 
-    /**
-     * @var mixed
-     */
-    // @phpstan-ignore-next-line
-    private $payroll_id = null;
-
-    public function __construct( int $payroll_id = null ) {
-        if ($payroll_id){
-            $this->payroll_id = $payroll_id;
-        }
-    }
-
     protected static string $table = 'payroll_details';
 
     protected static array $columns = [
@@ -27,6 +15,23 @@ class PayrollDetailsModel extends Model {
         'created_on'          => '%s',
         'updated_at'          => '%s',
     ];
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'employee_id', 'payroll_id', 'basic_salary' ];
+
+    /**
+     * @var mixed
+     */
+    // @phpstan-ignore-next-line
+    private $payroll_id = null;
+
+    public function __construct( int $payroll_id = null ) {
+        if ($payroll_id){
+            $this->payroll_id = $payroll_id;
+        }
+    }
 
     /**
      * Make crated on mutation

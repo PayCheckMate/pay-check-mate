@@ -16,6 +16,11 @@ class DesignationModel extends Model {
      */
     protected static string $table = 'designations';
 
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'name' ];
+
     protected static array $columns = [
         'name'       => '%s',
         'status'     => '%d',

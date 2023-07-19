@@ -7,7 +7,7 @@ import payroll from "./Payroll";
 export interface filtersType {
     per_page: string | number,
     page?: number,
-    search?: string,
+    search?: string | number,
     order_by?: string,
     order?: string,
     status?: string,

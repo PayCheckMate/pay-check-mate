@@ -176,6 +176,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
         $employees      = [];
         $employee_model = new EmployeeModel();
@@ -185,7 +186,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $employee_model->count();
+        $total     = $employee_model->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $employees );
@@ -397,6 +398,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
         $employee       = new Employee();

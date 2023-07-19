@@ -16,6 +16,11 @@ class SalaryHeadModel extends Model {
     protected static string $table = 'salary_heads';
 
     /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'head_name' ];
+
+    /**
      * @var array|string[] $columns
      */
     protected static array $columns = [
