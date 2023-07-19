@@ -40,7 +40,7 @@ class Model implements ModelInterface {
     protected static array $additional_logical_data = [];
 
     // @phpstan-ignore-next-line
-    protected static array $search_by = [ 'id', 'name' ];
+    protected static array $search_by = [];
 
     /**
      * @var mixed
@@ -283,7 +283,7 @@ class Model implements ModelInterface {
 
         $where = 'WHERE 1=1';
         if ( ! empty( $args[ 'status' ] ) && 'all' !== $args[ 'status' ] ) {
-            $where = $wpdb->prepare( ' AND status = %d', $args[ 'status' ] );
+            $where .= $wpdb->prepare( ' AND status = %d', $args[ 'status' ] );
         }
 
         if ( ! empty( $args[ 'search' ] ) ) {
@@ -295,7 +295,21 @@ class Model implements ModelInterface {
         return $wpdb->get_var( $query );
     }
 
-    public function get_search_query( string $search ): string {
+    /**
+     * Get the search query.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $search
+     *
+     * @throws \Exception
+     * @return string|WP_Error
+     */
+    public function get_search_query( string $search ) {
+        if ( empty( static::$search_by ) ) {
+            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pcm' ) );
+        }
+
         global $wpdb;
         $where = ' AND (';
         foreach ( static::$search_by as $key => $value ) {

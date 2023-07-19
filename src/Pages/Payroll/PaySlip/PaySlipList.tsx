@@ -60,6 +60,7 @@ export const PaySlipList = () => {
                     currentPage={currentPage}
                     total={total}
                     onFilterChange={(filter) => handleFilterChange(filter)}
+                    search={false}
                 />
             </div>
         </>

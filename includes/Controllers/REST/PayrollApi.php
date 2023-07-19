@@ -155,7 +155,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $payroll_model->count();
+        $total     = $payroll_model->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
