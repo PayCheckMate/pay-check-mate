@@ -11,7 +11,7 @@ import {EmployeeSalary} from "../../../Types/SalaryHeadType";
 export const PaySlipList = () => {
     let per_page = '10';
     const [paySlipList, setPaySlipList] = useState<EmployeeSalary[]>([]);
-    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/employees/payslip', {per_page: per_page, status: '1'}, true);
+    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/payslip', {per_page: per_page, status: '1'}, true);
     const [currentPage, setCurrentPage] = useState(1);
     useEffect(() => {
         if (models) {
@@ -27,7 +27,11 @@ export const PaySlipList = () => {
             render: (value: any, record: PayrollType) => {
                 return (
                     <>
-                        <Link to={`/pay-slip/view/${record.id}`} className="text-blue-500 hover:text-blue-700 mr-2">
+                        <Link
+                            to={`/pay-slip/view/${record.id}`}
+                            state={{data: record}}
+                            className="text-blue-500 hover:text-blue-700 mr-2"
+                        >
                             {__('View', 'pcm')}
                         </Link>
                     </>

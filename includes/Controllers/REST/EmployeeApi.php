@@ -3,7 +3,6 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
-use PayCheckMate\Classes\PayrollDetails;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -72,19 +71,6 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 ],
             ]
         );
-
-        register_rest_route(
-            $this->namespace, '/' . $this->rest_base . '/payslip', [
-                [
-                    'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [ $this, 'get_employee_payslip' ],
-                    'permission_callback' => [ $this, 'get_employee_payslip_permissions_check' ],
-                    'args'                => [
-                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
-                    ],
-                ],
-            ]
-        );
     }
 
     /**
@@ -145,18 +131,6 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     public function get_employee_salary_details_permissions_check(): bool {
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_accountant' );
-    }
-
-    /**
-     * Get the employee payslip permissions check.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return bool
-     */
-    public function get_employee_payslip_permissions_check(): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_employee' );
     }
 
     /**
@@ -376,43 +350,6 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
 
         $data['salaryInformation'] = $salary_details;
         $response                    = new WP_REST_Response( $data );
-
-        return new WP_REST_Response( $response, 200 );
-    }
-
-    /**
-     * Get a single employee payslip.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @param \WP_REST_Request<array<string>> $request Full details about the request.
-     *
-     * @throws \Exception
-     * @return \WP_REST_Response
-     */
-    public function get_employee_payslip( WP_REST_Request $request ): WP_REST_Response {
-        $user_id = get_current_user_id();
-        $args           = [
-            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : '-1',
-            'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
-            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
-            'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
-            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
-        ];
-
-        $employee       = new Employee();
-        $emp            = $employee->get_employee_by_user_id( $user_id );
-        $payroll_detail = new PayrollDetails( $emp );
-        $payroll_detail = $payroll_detail->get_payroll_details( $args );
-
-        $total     = $payroll_detail->count_payroll_details();
-        $max_pages = ceil( $total / (int) $args['limit'] );
-
-        $response = new WP_REST_Response( $payroll_detail->data );
-
-        $response->header( 'X-WP-Total', (string) $total );
-        $response->header( 'X-WP-TotalPages', (string) $max_pages );
 
         return new WP_REST_Response( $response, 200 );
     }

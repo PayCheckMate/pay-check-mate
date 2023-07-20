@@ -2,15 +2,32 @@ import React from 'react';
 import {Card} from "../../../Components/Card";
 import {PrinterIcon} from "@heroicons/react/24/outline";
 import {handlePrint} from "../../../Helpers/Helpers";
+import {Navigate, useLocation} from "react-router-dom";
+import {useSelect} from "@wordpress/data";
+import salaryHead from "../../../Store/SalaryHead";
+import {HeadType} from "../../../Types/SalaryHeadType";
+import {__} from "@wordpress/i18n";
 
 export const PaySlipDetails = () => {
+    const location = useLocation()
+    const state = location.state
+    if (!state || !state.data) {
+        // Go back to the payslip list page
+        return <Navigate to={'/pay-slip'} />
+    }
+
+    const data = state.data as any
+    const employee = data.employee_information as any
+    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
+    const earnings = salaryHeads.filter((salaryHead: any) => parseInt(String(salaryHead.head_type)) === HeadType.Earning);
+    const deductions = salaryHeads.filter((salaryHead: any) => parseInt(String(salaryHead.head_type)) === HeadType.Deduction);
+    let totalEarning = 0;
+    let totalDeduction = 0;
+
+
     // Sample data for demonstration
     const companyName = 'ABC Company';
     const companyLogo = 'https://picsum.photos/200';
-    const employeeName = 'John Doe';
-    const employeeId = 'EMP001';
-    const salary = 5000;
-    const deductions = 1000;
 
     return (
         <Card>
@@ -28,25 +45,46 @@ export const PaySlipDetails = () => {
                         <h2 className="text-xl font-bold">{companyName}</h2>
                     </div>
                     <div>
-                        <p>Employee Name: {employeeName}</p>
-                        <p>Employee ID: {employeeId}</p>
+                        <p>Employee Name: {employee.first_name} {employee.last_name}</p>
+                        <p>Employee ID: {employee.employee_id}</p>
                     </div>
                   </div>
               <div className="grid grid-cols-2 gap-4">
                   <div>
-                      <h3 className="text-lg font-bold">Earnings</h3>
+                      <h3 className="text-lg font-bold">
+                          {__('Earnings', 'pcm')}
+                      </h3>
                       <table className="table-auto w-full">
                     <thead>
                       <tr>
-                        <th className="px-4 py-2">Description</th>
-                        <th className="px-4 py-2">Amount</th>
+                        <th className="border px-4 py-2">
+                          {__('Description', 'pcm')}
+                        </th>
+                        <th className="border px-4 py-2">
+                          {__('Amount', 'pcm')}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="border px-4 py-2">Basic Salary</td>
-                        <td className="border px-4 py-2 text-right">${salary}</td>
-                      </tr>
+                      {earnings.map((earning: any) => {
+                          totalEarning += data.salary_details[earning.id] ? data.salary_details[earning.id] : 0;
+                          return(
+                              <tr>
+                                <td className="border px-4 py-2">{earning.head_name}</td>
+                                <td className="border px-4 py-2 text-right">
+                                    {data.salary_details[earning.id] ? data.salary_details[earning.id] : 0}
+                                </td>
+                            </tr>
+                          )
+                      })}
+                    <tr>
+                        <td className='border px-4 py-2'>
+                            {__('Total Earning', 'pcm')}
+                        </td>
+                        <td className='border px-4 py-2 text-right'>
+                            {totalEarning}
+                        </td>
+                    </tr>
                     </tbody>
                   </table>
                 </div>
@@ -55,15 +93,30 @@ export const PaySlipDetails = () => {
                   <table className="table-auto w-full">
                     <thead>
                       <tr>
-                        <th className="px-4 py-2">Description</th>
-                        <th className="px-4 py-2">Amount</th>
+                        <th className="border px-4 py-2">Description</th>
+                        <th className="border px-4 py-2">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="border px-4 py-2">Tax</td>
-                        <td className="border px-4 py-2">${deductions}</td>
-                      </tr>
+                        {deductions.map((deduction: any) => {
+                            totalDeduction += data.salary_details[deduction.id] ? data.salary_details[deduction.id] : 0;
+                            return(
+                                <tr>
+                                <td className="border px-4 py-2">{deduction.head_name}</td>
+                                <td className="border px-4 py-2 text-right">
+                                    {data.salary_details[deduction.id] ? data.salary_details[deduction.id] : 0}
+                                </td>
+                            </tr>
+                            )
+                        })}
+                        <tr>
+                            <td className='border px-4 py-2'>
+                                {__('Total Deduction', 'pcm')}
+                            </td>
+                            <td className='border px-4 py-2 text-right'>
+                                {totalDeduction}
+                            </td>
+                        </tr>
                     </tbody>
                   </table>
                 </div>

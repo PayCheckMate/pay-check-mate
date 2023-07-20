@@ -23,11 +23,12 @@ class PayrollDetails {
 
     /**
      * __get.
+     *
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param string $name
      *
-     * @return mixed|null
+     * @return object|null
      */
     public function __get( string $name ) {
         if ( isset( $this->data[ $name ] ) ) {
@@ -54,7 +55,7 @@ class PayrollDetails {
 				'offset'      => '0',
 				'order_by'    => 'id',
 				'order'       => 'DESC',
-				'status'      => 1,
+				'status'      => 'all',
 			]
         );
         $payroll_details = new PayrollDetailsModel();

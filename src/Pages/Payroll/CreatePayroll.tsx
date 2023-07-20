@@ -46,7 +46,11 @@ const CreatePayroll = () => {
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
     const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
     const [remarks, setRemarks] = useState<string>('');
-
+    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
+        earnings: [],
+        deductions: [],
+        non_taxable: []
+    });
     useEffect(() => {
         // Check if this is an edit page.
         if(payrollId) {
@@ -128,11 +132,6 @@ const CreatePayroll = () => {
 
         setSelectedDepartment(defaultDepartment)
     }, [departments]);
-    const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
-        earnings: [],
-        deductions: [],
-        non_taxable: []
-    });
 
     const sumValues = (values: { [key: number]: number }): number => {
         return Object.values(values).reduce((sum, value) => sum + parseFloat(String(value)), 0);
