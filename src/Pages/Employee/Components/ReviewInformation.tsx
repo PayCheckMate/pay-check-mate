@@ -7,39 +7,29 @@ import useFetchApi from "../../../Helpers/useFetchApi";
 import {useEffect} from "@wordpress/element";
 import {DesignationType} from "../../../Types/DesignationType";
 import {DepartmentType} from "../../../Types/DepartmentType";
+import {useSelect} from "@wordpress/data";
+import department from "../../../Store/Department";
+import designation from "../../../Store/Designation";
+import salaryHead from "../../../Store/SalaryHead";
 
 export type SalaryInformationType = {
     [key: string]: number;
 }
 export const ReviewInformation = ({personalInformation, salaryInformation, setError}: { personalInformation: EmployeeType, salaryInformation: SalaryInformationType, setError: any }) => {
+    const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
+    const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
+    const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
+
     const [employeeDesignation, setEmployeeDesignation] = useState<DesignationType>({} as DesignationType);
     const [employeeDepartment, setEmployeeDepartment] = useState<DepartmentType>({} as DepartmentType);
-    const {models, makeGetRequest} = useFetchApi<DesignationType>('/pay-check-mate/v1/designations', {'per_page': '-1'}, true);
-    useEffect(() => {
-        if (models){
-            setEmployeeDesignation(models.find((item: DesignationType) => item.id === personalInformation.designation_id) as DesignationType);
-        }
-
-    }, [models]);
 
     useEffect(() => {
-        if (personalInformation.department_id === null) {
-            return;
-        }
-        makeGetRequest('/pay-check-mate/v1/departments', {'per_page': '-1'}, false).then((data: any) => {
-            if (data) {
-                setEmployeeDepartment(data.data.find((item: DepartmentType) => item.id === personalInformation.department_id) as DepartmentType);
-            }
-        }).catch((e: unknown) => {
-            console.log(e, 'error');
-        })
+        setEmployeeDesignation(designations.find((item: DesignationType) => item.id === personalInformation.designation_id) as DesignationType);
+        setEmployeeDepartment(departments.find((item: DepartmentType) => item.id === personalInformation.department_id) as DepartmentType);
     }, []);
 
-    let salaryHeads = localStorage.getItem('Employee.SalaryHeads');
-    let employeeSalaryHeads = [] as SalaryHeadType[];
     if (salaryHeads != null) {
-        employeeSalaryHeads = JSON.parse(salaryHeads) as SalaryHeadType[];
-        employeeSalaryHeads.forEach((head: SalaryHeadType) => {
+        salaryHeads.forEach((head: SalaryHeadType) => {
             if (salaryInformation.hasOwnProperty(head.id)) {
                 salaryInformation = {
                     ...salaryInformation,
@@ -216,7 +206,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {salaryInformation && Object.keys(salaryInformation).map((key, index) => {
-                                if (key === 'remarks'){
+                                if (key === 'remarks' || key === 'active_from' || key === 'salary_history_id') {
                                     return ;
                                 }
                                 return (

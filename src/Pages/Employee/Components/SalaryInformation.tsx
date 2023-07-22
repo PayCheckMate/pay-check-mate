@@ -7,7 +7,7 @@ import {useSelect} from "@wordpress/data";
 import salaryHead from "../../../Store/SalaryHead";
 import {useParams} from "react-router-dom";
 
-export const SalaryInformation = ({setSalaryData, initialValues = {}, children}: any) => {
+export const SalaryInformation = ({setSalaryData, initialValues = {}, nextStep, children}: any) => {
     // const employeeId = useParams().id;
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
@@ -17,13 +17,6 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
     const [grossSalary, setGrossSalary] = useState<number>(formValues.gross_salary || 0);
 
     const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
-
-    // Set salary heads after fetch data from api.
-    useEffect(() => {
-        if (salaryHeads) {
-            localStorage.setItem('Employee.SalaryHeads', JSON.stringify(salaryHeads));
-        }
-    }, [salaryHeads]);
 
     const handleRemarksChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -148,18 +141,18 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children}:
                             <div>
                                 <h3 className="font-bold text-2xl leading-6 text-gray-600">{__('Salary in hand', 'pcm')}</h3>
                                 {Object.keys(formValues).map((head) => {
-                                    if ( head === 'gross_salary' || head === 'remarks') {
+                                    if (head === 'gross_salary' || head === 'remarks') {
                                         return;
                                     }
                                     if (head === 'basic_salary') {
                                         TotalSalaryInHand += parseInt(String(formValues[head]));
                                     }
                                     const salaryHead = salaryHeads.find((salaryHead) => {
-                                        if (parseInt(String(salaryHead.id)) === parseInt(head)){
-                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Deduction){
+                                        if (parseInt(String(salaryHead.id)) === parseInt(head)) {
+                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Deduction) {
                                                 TotalSalaryInHand -= parseInt(String(formValues[head]));
                                             }
-                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Earning){
+                                            if (parseInt(String(salaryHead?.head_type)) === HeadType.Earning) {
                                                 TotalSalaryInHand += parseInt(String(formValues[head]));
                                             }
                                             return salaryHead;
