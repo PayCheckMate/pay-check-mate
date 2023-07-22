@@ -1,8 +1,8 @@
 import React from 'react';
 import {Card} from "../../../Components/Card";
-import {PrinterIcon} from "@heroicons/react/24/outline";
+import {ArrowLeftIcon, PrinterIcon} from "@heroicons/react/24/outline";
 import {handlePrint} from "../../../Helpers/Helpers";
-import {Navigate, useLocation} from "react-router-dom";
+import {Link, Navigate, useLocation} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../../Store/SalaryHead";
 import {HeadType} from "../../../Types/SalaryHeadType";
@@ -35,10 +35,24 @@ export const PaySlipDetails = () => {
 
     return (
         <Card>
-            <div className="flex justify-end no-print">
-                <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
+            <div className="flex justify-between no-print">
+                <>
+                    <Link to={'/pay-slip'} className="text-blue-500 hover:text-blue-700 mr-2">
+                        {/*Back icon*/}
+                        <ArrowLeftIcon className="h-6 w-6 text-gray-500 cursor-pointer" />
+                    </Link>
+                </>
+                <>
+                    <PrinterIcon
+                        className="h-6 w-6 text-gray-500 cursor-pointer"
+                        onClick={() => handlePrint('printable')}
+                    />
+                </>
             </div>
-            <div className="p-8" id='printable'>
+            <div
+                className="p-8"
+                id="printable"
+            >
                 <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center">
                           <img
@@ -74,7 +88,7 @@ export const PaySlipDetails = () => {
                     <tbody>
                       {earnings.map((earning: any) => {
                           totalEarning += data.salary_details[earning.id] ? data.salary_details[earning.id] : 0;
-                          return(
+                          return (
                               <tr>
                                 <td className="border px-4 py-2">{earning.head_name}</td>
                                 <td className="border px-4 py-2 text-right">
@@ -83,11 +97,11 @@ export const PaySlipDetails = () => {
                             </tr>
                           )
                       })}
-                    <tr>
-                        <td className='border px-4 py-2'>
+                      <tr>
+                        <td className="border px-4 py-2">
                             {__('Total Earning', 'pcm')}
                         </td>
-                        <td className='border px-4 py-2 text-right'>
+                        <td className="border px-4 py-2 text-right">
                             {totalEarning}
                         </td>
                     </tr>
@@ -106,7 +120,7 @@ export const PaySlipDetails = () => {
                     <tbody>
                         {deductions.map((deduction: any) => {
                             totalDeduction += data.salary_details[deduction.id] ? data.salary_details[deduction.id] : 0;
-                            return(
+                            return (
                                 <tr>
                                 <td className="border px-4 py-2">{deduction.head_name}</td>
                                 <td className="border px-4 py-2 text-right">
@@ -116,10 +130,10 @@ export const PaySlipDetails = () => {
                             )
                         })}
                         <tr>
-                            <td className='border px-4 py-2'>
+                            <td className="border px-4 py-2">
                                 {__('Total Deduction', 'pcm')}
                             </td>
-                            <td className='border px-4 py-2 text-right'>
+                            <td className="border px-4 py-2 text-right">
                                 {totalDeduction}
                             </td>
                         </tr>

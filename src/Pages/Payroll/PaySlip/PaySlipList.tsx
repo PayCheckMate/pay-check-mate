@@ -20,8 +20,19 @@ export const PaySlipList = () => {
     }, [models]);
 
     const columns = [
-        {title: __('Employee', 'pcm'), dataIndex: 'employee_id', sortable: true},
-        {title: __('Basic', 'pcm'), dataIndex: 'basic_salary', sortable: true},
+        {
+            title: __('Salary for', 'pcm'), dataIndex: 'payroll_date', sortable: true,
+            render: (text: any, record: PayrollType) => {
+                return (
+                    <>
+                        {new Date(text).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                        })}
+                    </>
+                )
+            }
+        },
         {
             title: __('Action', 'pcm'), dataIndex: 'action', sortable: false,
             render: (value: any, record: PayrollType) => {

@@ -34,19 +34,6 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
                 ],
             ]
         );
-
-        register_rest_route(
-            $this->namespace, '/' . $this->rest_base . '/(?P<payslip_id>[\d]+)', [
-                [
-                    'methods'             => WP_REST_Server::READABLE,
-                    'callback'            => [ $this, 'get_employee_payslip' ],
-                    'permission_callback' => [ $this, 'get_payslip_permissions_check' ],
-                    'args'                => [
-                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
-                    ],
-                ],
-            ]
-        );
     }
 
     /**
@@ -57,18 +44,6 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_payslip_list_permissions_check(): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_view_payslip_list' );
-    }
-
-    /**
-     * Get the employee payslip permissions check.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return bool
-     */
-    public function get_payslip_permissions_check(): bool {
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_view_payslip_list' );
     }
@@ -92,6 +67,17 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
             'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_payroll',
+                    'local_key'   => 'payroll_id',
+                    'foreign_key' => 'id',
+                    'join_type'   => 'left',
+                    'fields'      => [
+                        'payroll_date',
+                    ],
+                ],
+            ],
         ];
 
         $employee       = new Employee();
@@ -116,95 +102,4 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response( $response, 200 );
     }
 
-    /**
-     * Get item schema.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return array<string, mixed> Item schema data.
-     */
-    public function get_item_schema(): array {
-        return [
-            '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'employee',
-            'type'       => 'object',
-            'properties' => [
-                'id'                  => [
-                    'description' => __( 'Unique identifier for the object.', 'pcm' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
-                ],
-                'employee_id'         => [
-                    'description' => __( 'Employee ID', 'pcm' ),
-                    'type'        => 'integer',
-                    'required'    => true,
-                ],
-                'department_id'       => [
-                    'description' => __( 'Department ID', 'pcm' ),
-                    'type'        => 'integer',
-                    'required'    => true,
-                ],
-                'designation_id'      => [
-                    'description' => __( 'Designation ID', 'pcm' ),
-                    'type'        => 'integer',
-                    'required'    => true,
-                ],
-                'first_name'          => [
-                    'description' => __( 'Employee First Name', 'pcm' ),
-                    'type'        => 'string',
-                    'required'    => true,
-                ],
-                'last_name'           => [
-                    'description' => __( 'Employee Last Name', 'pcm' ),
-                    'type'        => 'string',
-                    'required'    => true,
-                ],
-                'email'               => [
-                    'description' => __( 'Employee Email', 'pcm' ),
-                    'type'        => 'string',
-                    'required'    => true,
-                ],
-                'phone'               => [
-                    'description' => __( 'Employee Phone Number', 'pcm' ),
-                    'type'        => 'string',
-                ],
-                'address'             => [
-                    'description' => __( 'Employee Address', 'pcm' ),
-                    'type'        => 'string',
-                ],
-                'joining_date'        => [
-                    'description' => __( 'Employee Joining Date', 'pcm' ),
-                    'type'        => 'string',
-                    'format'      => 'date',
-                    'required'    => true,
-                ],
-                'joining_date_string' => [
-                    'description' => __( 'Employee Joining Date String', 'pcm' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit', 'embed' ],
-                    'readonly'    => true,
-                ],
-                'regine_date'         => [
-                    'description' => __( 'Employee Regine Date', 'pcm' ),
-                    'type'        => 'string',
-                    'format'      => 'date',
-                ],
-                'status'              => [
-                    'description' => __( 'Employee Status', 'pcm' ),
-                    'type'        => 'integer',
-                ],
-                'created_on'          => [
-                    'description' => __( 'Employee Created On', 'pcm' ),
-                    'type'        => 'string',
-                    'format'      => 'date',
-                ],
-                'updated_at'          => [
-                    'description' => __( 'Employee Updated At', 'pcm' ),
-                    'type'        => 'string',
-                    'format'      => 'date',
-                ],
-            ],
-        ];
-    }
 }
