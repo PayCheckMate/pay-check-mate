@@ -101,5 +101,4 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
 
         return new WP_REST_Response( $response, 200 );
     }
-
 }
