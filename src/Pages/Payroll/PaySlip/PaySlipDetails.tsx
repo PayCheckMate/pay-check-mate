@@ -7,6 +7,8 @@ import {useSelect} from "@wordpress/data";
 import salaryHead from "../../../Store/SalaryHead";
 import {HeadType} from "../../../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
+import department from "../../../Store/Department";
+import designation from "../../../Store/Designation";
 
 export const PaySlipDetails = () => {
     const location = useLocation()
@@ -19,6 +21,8 @@ export const PaySlipDetails = () => {
     const data = state.data as any
     const employee = data.employee_information as any
     const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
+    const {departments} = useSelect(select => select(department).getDepartments({per_page: '-1', page: 1, order_by: 'id', order: 'asc'}), []);
+    const {designations} = useSelect(select => select(designation).getDesignations({per_page: '-1', page: 1, order_by: 'id', order: 'asc'}), []);
     const earnings = salaryHeads.filter((salaryHead: any) => parseInt(String(salaryHead.head_type)) === HeadType.Earning);
     const deductions = salaryHeads.filter((salaryHead: any) => parseInt(String(salaryHead.head_type)) === HeadType.Deduction);
     let totalEarning = 0;
@@ -47,6 +51,8 @@ export const PaySlipDetails = () => {
                     <div>
                         <p>Employee Name: {employee.first_name} {employee.last_name}</p>
                         <p>Employee ID: {employee.employee_id}</p>
+                        <p>Department: {departments.find((department: any) => department.id === employee.department_id)?.name}</p>
+                        <p>Designation: {designations.find((designation: any) => designation.id === employee.designation_id)?.name}</p>
                     </div>
                   </div>
               <div className="grid grid-cols-2 gap-4">
