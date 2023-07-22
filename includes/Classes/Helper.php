@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Classes;
 
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
+use PayCheckMate\Models\SalaryHeadModel;
 
 class Helper {
 
@@ -27,7 +27,7 @@ class Helper {
         $salary_heads      = new SalaryHeadModel();
         $salary_heads      = $salary_heads->all( $args );
         $salary_head_types = [];
-        foreach ( $salary_heads->toArray() as $salary_head ) {
+        foreach ( $salary_heads as $salary_head ) {
             if ( $salary_head->is_taxable ) {
                 if ( 1 === absint( $salary_head->head_type ) ) {
                     $salary_head_types['earnings'][ $salary_head->id ] = $salary_head;

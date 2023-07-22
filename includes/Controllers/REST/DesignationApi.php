@@ -6,10 +6,9 @@ use WP_Error;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\Designation;
 use PayCheckMate\Requests\DesignationRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Designation as DesignationModel;
+use PayCheckMate\Models\DesignationModel;
 
 class DesignationApi extends RestController implements HookAbleApiInterface {
 
@@ -168,6 +167,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
+     * @throws \Exception
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
@@ -178,16 +178,17 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'  => $request->get_param( 'status' ) !== null ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
         $designations = $designation->all( $args );
         $data         = [];
-        foreach ( $designations->toArray() as $value ) {
+        foreach ( $designations as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $designation->count();
+        $total     = $designation->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
@@ -234,6 +235,8 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
      *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
@@ -293,7 +296,11 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
      */
     public function delete_item( $request ) {
         $designation = new DesignationModel();
-        $designation = $designation->delete( $request['id'] );
+        try {
+            $designation = $designation->delete( $request['id'] );
+        } catch ( Exception $e ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
 
         if ( ! $designation ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );

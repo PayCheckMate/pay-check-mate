@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class SalaryHead extends Model {
+class SalaryHeadModel extends Model {
 
     /**
      * The table associated with the model.
@@ -14,6 +14,11 @@ class SalaryHead extends Model {
      * @access protected
      */
     protected static string $table = 'salary_heads';
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'head_name' ];
 
     /**
      * @var array|string[] $columns

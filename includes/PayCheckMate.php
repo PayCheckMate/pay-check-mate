@@ -36,6 +36,7 @@ final class PayCheckMate {
             'PayCheckMate\Controllers\REST\SalaryHeadApi',
             'PayCheckMate\Controllers\REST\PayrollApi',
             'PayCheckMate\Controllers\REST\EmployeeApi',
+            'PayCheckMate\Controllers\REST\PaySlipApi',
         ];
 
     /**

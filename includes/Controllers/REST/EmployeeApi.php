@@ -3,7 +3,6 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Employee;
-use PayCheckMate\Classes\Salary;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -11,8 +10,8 @@ use WP_REST_Response;
 use PayCheckMate\Requests\EmployeeRequest;
 use PayCheckMate\Requests\SalaryHistoryRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Employee as EmployeeModel;
-use PayCheckMate\Models\SalaryHistory as SalaryHistoryModel;
+use PayCheckMate\Models\EmployeeModel;
+use PayCheckMate\Models\SalaryHistoryModel;
 
 class EmployeeApi extends RestController implements HookAbleApiInterface {
 
@@ -65,7 +64,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 [
                     'methods'             => WP_REST_Server::READABLE,
                     'callback'            => [ $this, 'get_employee_salary_details' ],
-                    'permission_callback' => [ $this, 'get_employee_permissions_check' ],
+                    'permission_callback' => [ $this, 'get_employee_salary_details_permissions_check' ],
                     'args'                => [
                         'context' => $this->get_context_param( [ 'default' => 'view' ] ),
                     ],
@@ -123,6 +122,18 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
     }
 
     /**
+     * Get the employee salary details permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employee_salary_details_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_accountant' );
+    }
+
+    /**
      * Get a collection of items
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -134,21 +145,22 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function get_employees( WP_REST_Request $request ): WP_REST_Response {
         $args           = [
-            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
             'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
         $employees      = [];
         $employee_model = new EmployeeModel();
         $employee_data  = $employee_model->all( $args );
-        foreach ( $employee_data->toArray() as $employee ) {
+        foreach ( $employee_data as $employee ) {
             $item        = $this->prepare_item_for_response( $employee, $request );
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $employee_data->count();
+        $total     = $employee_model->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $employees );
@@ -301,13 +313,13 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        $employee = $employee->find_by( [ 'employee_id' => $employee_id ], $employee_args );
+        $employee = $employee->find( $employee_id, $employee_args );
         if ( is_wp_error( $employee ) ) {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $item                                           = $this->prepare_item_for_response( $employee, $request );
-        $data                                           = $this->prepare_response_for_collection( $item );
+        $item                                               = $this->prepare_item_for_response( $employee, $request );
+        $data                                               = $this->prepare_response_for_collection( $item );
         $data['salaryInformation']['salary_history_id'] = $employee->salary_history_id;
         $data['salaryInformation']['salary_details']    = $employee->salary_details;
         $data['salaryInformation']['basic_salary']      = $employee->basic_salary;
@@ -337,7 +349,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data           = $this->prepare_response_for_collection( $item );
 
         $data['salaryInformation'] = $salary_details;
-        $response = new WP_REST_Response( $data );
+        $response                    = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
     }

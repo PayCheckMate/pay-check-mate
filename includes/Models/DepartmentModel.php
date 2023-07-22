@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Department extends Model {
+class DepartmentModel extends Model {
 
     /**
      * The table associated with the model.
@@ -14,6 +14,11 @@ class Department extends Model {
      * @access protected
      */
     protected static string $table = 'departments';
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'name' ];
 
     /**
      * @var array|string[] $columns

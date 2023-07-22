@@ -2,19 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class PayrollDetails extends Model {
-
-    /**
-     * @var mixed
-     */
-    // @phpstan-ignore-next-line
-    private $payroll_id = null;
-
-    public function __construct( int $payroll_id = null ) {
-        if ($payroll_id){
-            $this->payroll_id = $payroll_id;
-        }
-    }
+class PayrollDetailsModel extends Model {
 
     protected static string $table = 'payroll_details';
 
@@ -27,6 +15,23 @@ class PayrollDetails extends Model {
         'created_on'          => '%s',
         'updated_at'          => '%s',
     ];
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'employee_id', 'payroll_id', 'basic_salary' ];
+
+    /**
+     * @var mixed
+     */
+    // @phpstan-ignore-next-line
+    private $payroll_id = null;
+
+    public function __construct( int $payroll_id = null ) {
+        if ($payroll_id){
+            $this->payroll_id = $payroll_id;
+        }
+    }
 
     /**
      * Make crated on mutation
@@ -75,7 +80,13 @@ class PayrollDetails extends Model {
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
-        $salary              = [
+        if(empty( $salary_head_types ) ){
+            return [
+                'salary_details' => $salary_details
+            ];
+        }
+
+        $salary         = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
@@ -92,5 +103,29 @@ class PayrollDetails extends Model {
         }
 
         return $salary;
+    }
+
+
+    /**
+     * Count employee payroll details.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $employee_id
+     *
+     * @throws \Exception
+     * @return int
+     */
+    public function count_payroll_details( string $employee_id = '' ): int {
+        global $wpdb;
+
+        $where = "employee_id = $employee_id";
+        if ( empty( $employee_id ) ){
+            $where = '';
+        }
+
+        $sql = "SELECT COUNT(*) FROM {$this->get_table()} WHERE $where";
+
+        return (int) $wpdb->get_var( $sql );
     }
 }

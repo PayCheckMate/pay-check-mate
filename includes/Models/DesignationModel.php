@@ -2,7 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-class Designation extends Model {
+class DesignationModel extends Model {
 
 
     /**
@@ -15,6 +15,11 @@ class Designation extends Model {
      * @access protected
      */
     protected static string $table = 'designations';
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'name' ];
 
     protected static array $columns = [
         'name'       => '%s',

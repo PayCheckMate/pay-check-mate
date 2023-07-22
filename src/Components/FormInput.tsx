@@ -19,9 +19,11 @@ interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     tooltip?: string;
     min?: number; // Added min prop
     max?: number; // Added max prop
+    autoComplete?: string;
+    autoFocus?: boolean;
 }
 
-export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip, min, max,}: NumberInputProps) => {
+export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip, min, max,autoComplete = 'off', autoFocus = false}: NumberInputProps) => {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (type === "number" && (min !== undefined || max !== undefined)) {
             const numericValue = Number(event.target.value);
@@ -47,7 +49,7 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
                 <input
                     type={type}
                     name={name}
-                    // autoComplete="off"
+                    autoComplete={autoComplete}
                     id={id}
                     className={`relative mt-2 w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
                         error ? "border-red-500 !ring-red-500" : ""
@@ -57,6 +59,7 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
                     onChange={handleInput}
                     required={required}
                     disabled={disabled}
+                    autoFocus={autoFocus}
                 />
                 {helpText && (
                     <p className="mt-2 text-sm text-gray-500" id={id}>

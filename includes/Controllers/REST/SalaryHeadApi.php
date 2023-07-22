@@ -6,10 +6,9 @@ use Exception;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\SalaryHead;
 use PayCheckMate\Requests\SalaryHeadRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\SalaryHead as SalaryHeadModel;
+use PayCheckMate\Models\SalaryHeadModel;
 
 class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 
@@ -204,6 +203,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
+     * @throws \Exception
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_items( $request ): WP_REST_Response {
@@ -212,19 +212,19 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'DESC',
-            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
         $salary_heads = $salary_head->all( $args );
         $data         = [];
-        foreach ( $salary_heads->toArray() as $value ) {
+        foreach ( $salary_heads as $value ) {
             $item   = $this->prepare_item_for_response( $value, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $salary_head->count();
+        $total     = $salary_head->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );

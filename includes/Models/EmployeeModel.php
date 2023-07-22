@@ -4,8 +4,14 @@ namespace PayCheckMate\Models;
 
 use PayCheckMate\Contracts\EmployeeInterface;
 
-class Employee extends Model implements EmployeeInterface{
+class EmployeeModel extends Model implements EmployeeInterface {
+
     protected static string $find_key = 'employee_id';
+
+    /**
+     * @var array|string[] $search_by
+     */
+    protected static array $search_by = [ 'employee_id', 'first_name', 'last_name', 'email' ];
 
     protected static string $table = 'employees';
 
@@ -27,7 +33,8 @@ class Employee extends Model implements EmployeeInterface{
         'created_on'     => '%s',
         'updated_at'     => '%s',
     ];
-    public function find_employee( int $employee_id ): Employee {
+
+    public function find_employee( int $employee_id ): EmployeeModel {
         $this->find( $employee_id, [] );
 
         return $this;
@@ -41,7 +48,7 @@ class Employee extends Model implements EmployeeInterface{
      * @return array<string, mixed>
      */
     public function get_data(): array {
-        return $this->data;
+        return (array) $this->data;
     }
 
     /**
@@ -90,6 +97,7 @@ class Employee extends Model implements EmployeeInterface{
         // @phpstan-ignore-next-line
         return $this->first_name . ' ' . $this->last_name;
     }
+
     /**
      * Get employee joining date
      *
@@ -101,7 +109,7 @@ class Employee extends Model implements EmployeeInterface{
      */
     public function get_joining_date( string $date ): array {
         return [
-            'joining_date' => $date,
+            'joining_date'        => $date,
             'joining_date_string' => get_date_from_gmt( $date, 'd M, Y' ),
         ];
     }
@@ -119,6 +127,7 @@ class Employee extends Model implements EmployeeInterface{
         if ( ! $date ) {
             return 'N/A';
         }
+
         return get_date_from_gmt( $date, 'd M Y' );
     }
 
@@ -135,11 +144,13 @@ class Employee extends Model implements EmployeeInterface{
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
-        if(empty( $salary_head_types ) ){
-            return $salary_details;
+        if ( empty( $salary_head_types ) ) {
+            return [
+                'salary_details' => $salary_details,
+            ];
         }
 
-        $salary         = [
+        $salary = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
@@ -149,8 +160,8 @@ class Employee extends Model implements EmployeeInterface{
 
         foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
-                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
-                    $salary['salary_details'][$type][$key] = $amount;
+                if ( array_key_exists( $key, $salary_head_types[ $type ] ) ) {
+                    $salary[ 'salary_details' ][ $type ][ $key ] = $amount;
                 }
             }
         }
@@ -158,7 +169,7 @@ class Employee extends Model implements EmployeeInterface{
         return $salary;
     }
 
-    public function get_employee_id(): int {
+    public function get_employee_id(): string {
         // @phpstan-ignore-next-line
         return $this->employee_id;
     }
@@ -166,5 +177,26 @@ class Employee extends Model implements EmployeeInterface{
     public function get_user_id(): string {
         // @phpstan-ignore-next-line
         return $this->user_id;
+    }
+
+    /**
+     * Get employee by user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int $user_id
+     *
+     * @throws \Exception
+     * @return EmployeeInterface
+     */
+    public function get_employee_by_user_id( int $user_id ): EmployeeInterface {
+        $new_find_key   = self::$find_key;
+        self::$find_key = 'user_id';
+        $data           = $this->find( $user_id );
+        self::$find_key = $new_find_key;
+
+        $this->data = $data;
+
+        return $this;
     }
 }

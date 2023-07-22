@@ -3,11 +3,9 @@
 namespace PayCheckMate\Controllers\REST;
 
 use PayCheckMate\Classes\Helper;
-use PayCheckMate\Classes\Payroll;
-use PayCheckMate\Classes\PayrollDetails;
-use PayCheckMate\Models\Payroll as PayrollModel;
-use PayCheckMate\Models\PayrollDetails as PayrollDetailsModel;
-use PayCheckMate\Models\Employee as EmployeeModel;
+use PayCheckMate\Models\PayrollModel;
+use PayCheckMate\Models\PayrollDetailsModel;
+use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
@@ -134,6 +132,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
+     * @throws \Exception
+     *
      * @return \WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_payrolls( WP_REST_Request $request ): WP_REST_Response {
@@ -146,16 +146,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'search'   => $request->get_param( 'search' ) ? sanitize_text_field( $request->get_param( 'search' ) ) : '',
         ];
 
-        $payrolls = new PayrollModel();
-        $payrolls = $payrolls->all( $args );
+        $payroll_model = new PayrollModel();
+        $payrolls = $payroll_model->all( $args );
 
         $data = [];
-        foreach ( $payrolls->toArray() as $payroll ) {
+        foreach ( $payrolls as $payroll ) {
             $item   = $this->prepare_item_for_response( $payroll, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $payrolls->count();
+        $total     = $payroll_model->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
@@ -172,6 +172,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @since PAY_CHECK_MATE_SINCE
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @throws \Exception
      *
      * @return \WP_REST_Response
      */
@@ -309,7 +311,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'salary_head_types'       => $salary_head_types,
-                'employee_salary_history' => $employees->toArray(),
+                'employee_salary_history' => $employees,
             ], 200
         );
     }
@@ -328,8 +330,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
         $parameters = $request->get_params();
-        // TODO: Make the employee id from current user.
-        $parameters['created_employee_id'] = get_current_user_id();
+        $employee = new EmployeeModel();
+        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
@@ -422,8 +424,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        // TODO: Make the employee id from current user.
-        $parameters['created_employee_id'] = get_current_user_id();
+        $employee = new EmployeeModel();
+        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
 
@@ -570,7 +572,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'payroll'                 => $payroll,
-                'employee_salary_history' => $payroll_details->toArray(),
+                'employee_salary_history' => $payroll_details,
                 'salary_head_types'       => $salary_head_types,
             ], 200
         );

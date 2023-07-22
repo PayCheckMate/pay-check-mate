@@ -25,14 +25,18 @@ export const AddEmployee = () => {
 
     const navigate = useNavigate();
     const [error, setError] = useState(false);
-    // Get initial personal information from local storage
-    let employeePersonalInformation = localStorage.getItem('Employee.personalInformation');
-    // @ts-ignore
-    let savedPersonalInformation = JSON.parse(employeePersonalInformation) as EmployeeType;
+    let savedPersonalInformation = {} as EmployeeType
+    let savedSalaryInformation = {} as SalaryInformationType
+    if (!employeeId) {
+        // Get initial personal information from local storage
+        let employeePersonalInformation = localStorage.getItem('Employee.personalInformation');
+        // @ts-ignore
+        savedPersonalInformation = JSON.parse(employeePersonalInformation) as EmployeeType;
 
-    let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
-    // @ts-ignore
-    let savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
+        let employeeSalaryInformation = localStorage.getItem('Employee.salaryInformation');
+        // @ts-ignore
+        savedSalaryInformation = JSON.parse(employeeSalaryInformation) as SalaryInformationType;
+    }
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);
@@ -46,7 +50,7 @@ export const AddEmployee = () => {
                     const salaryInformation = {
                         ...response.data.salaryInformation,
                         // @ts-ignore
-                        ...JSON.parse(response.data.salaryInformation.salary_details),
+                        ...response.data.salaryInformation.salary_details,
                     };
                     delete salaryInformation.salary_details;
                     delete response.data.salaryInformation;
@@ -55,9 +59,11 @@ export const AddEmployee = () => {
                 } else {
                     toast.error(__('Something went wrong', 'pcm'));
                 }
-            });
+            }).catch(error => {
+                toast.error(error.message);
+            })
         }
-    }, [employeeId])
+    }, [])
 
     const handlePersonalInformation = (information: EmployeeType) => {
         setPersonalInformation((prevState) => {

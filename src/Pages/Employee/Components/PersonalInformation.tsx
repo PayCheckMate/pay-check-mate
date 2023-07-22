@@ -14,17 +14,35 @@ import {useSelect} from "@wordpress/data";
 import department from "../../../Store/Department";
 import designation from "../../../Store/Designation";
 import {useParams} from "react-router-dom";
-export const PersonalInformation = ({setFormData, initialValues = {}, children, nextStep}: any) => {
+
+type PersonalInformationPropTypes = {
+    setFormData: (formData: EmployeeType) => void;
+    initialValues?: EmployeeType;
+    children?: any;
+    nextStep: () => void;
+}
+
+export const PersonalInformation = ({setFormData, initialValues = {} as EmployeeType, children, nextStep}: PersonalInformationPropTypes) => {
     const employeeId = useParams().id;
 
     if (initialValues === null) {
         initialValues = {} as EmployeeType;
     }
+
+    const defaultDesignation = {
+        id: 'select_one',
+        name: __('Select one', 'pcm'),
+    }
+    const defaultDepartment = {
+        id: 'select_one',
+        name: __('Select one', 'pcm'),
+    }
+
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
-    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
+    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>(defaultDesignation as SelectBoxType);
 
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
-    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
+    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>(defaultDepartment as SelectBoxType);
 
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
@@ -47,48 +65,18 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
         }, [models]);
     }
 
-    useEffect(() => {
-        if (designations.length <= 0) return;
-        let selectOptions = designations.map((item: DesignationType) => {
-            return {
-                id: item.id,
-                name: item.name,
-            }
-        })
-        // @ts-ignore
-        selectOptions = [
-            {
-                id: null,
-                name: __('Select one', 'pcm'),
-            }
-            // @ts-ignore
-        ].concat(selectOptions);
-        const designationId = initialValues.designation_id ? initialValues.designation_id : selectOptions[0].id;
-        setSelectedDesignation(selectOptions.find((item: SelectBoxType) => item.id === designationId) as SelectBoxType);
-    }, [designations]);
+        useEffect(() => {
+            setSelectedDepartment(departments.find((department: DepartmentType) => {
+                return department.id === initialValues.department_id
+            }) || defaultDepartment);
+        }, [initialValues.department_id]);
 
-    useEffect(() => {
-        if (departments.length <= 0) return;
+        useEffect(() => {
+            setSelectedDesignation(designations.find((designation: DesignationType) => {
+                return designation.id === initialValues.designation_id
+            }) || defaultDesignation);
+        }, [initialValues.designation_id]);
 
-        let department = departments.map((item: DepartmentType) => {
-            return {
-                id: item.id,
-                name: item.name,
-            }
-        })
-        // @ts-ignore
-
-        department = [
-            {
-                id: null,
-                name: __('Select one', 'pcm'),
-            }
-            // @ts-ignore
-        ].concat(department);
-        const departmentId = initialValues.department_id ? initialValues.department_id : department[0].id;
-        setSelectedDepartment(department.find((item: SelectBoxType) => item.id === departmentId) as SelectBoxType);
-
-    }, [departments]);
 
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;
@@ -116,7 +104,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('First name', 'pcm')}
                                     name="first_name"
                                     id="first_name"
-                                    value={formValues.first_name || initialValues.first_name}
+                                    value={formValues.first_name || initialValues.first_name || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.first_name}
                                 />
@@ -128,7 +116,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Last name', 'pcm')}
                                     name="last_name"
                                     id="last_name"
-                                    value={formValues.last_name || initialValues.last_name}
+                                    value={formValues.last_name || initialValues.last_name || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.last_name}
                                 />
@@ -165,7 +153,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     required={true}
                                     name="employee_id"
                                     id="employee_id"
-                                    value={formValues.employee_id || initialValues.employee_id}
+                                    value={formValues.employee_id || initialValues.employee_id || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.employee_id}
                                 />
@@ -176,7 +164,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Email address', 'pcm')}
                                     name="email"
                                     id="email"
-                                    value={formValues.email || initialValues.email}
+                                    value={formValues.email || initialValues.email || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.email}
                                 />
@@ -188,7 +176,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__('Joining date', 'pcm')}
                                     name="joining_date"
                                     id="joining_date"
-                                    value={formValues.joining_date || initialValues.joining_date}
+                                    value={formValues.joining_date || initialValues.joining_date || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.joining_date}
                                 />
@@ -198,7 +186,7 @@ export const PersonalInformation = ({setFormData, initialValues = {}, children, 
                                     label={__("Address", 'pcm')}
                                     name="address"
                                     id="address"
-                                    value={formValues.address || initialValues.address}
+                                    value={formValues.address || initialValues.address || ''}
                                     onChange={handleFormInputChange}
                                 />
                             </div>

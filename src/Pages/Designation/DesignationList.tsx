@@ -207,6 +207,7 @@ export const DesignationList = () => {
                     per_page={parseInt(per_page)}
                     currentPage={currentPage}
                     onFilterChange={handleFilterChange}
+                    search={true}
                 />
             </div>
         </>

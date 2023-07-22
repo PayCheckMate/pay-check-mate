@@ -16,6 +16,7 @@ import {PayrollType} from "../../Types/PayrollType";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
+import {handlePrint} from "../../Helpers/Helpers";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
@@ -86,66 +87,7 @@ const ViewPayroll = () => {
             0
         ).toFixed(2)
     );
-    const handlePrint = (divID: string) => {
-        const divToPrint = document.getElementById(divID);
-        const iframe = document.createElement('iframe')
-        iframe.setAttribute('style', 'height: 0px; width: 0px; position: absolute;')
-        document.body.appendChild(iframe)
-        let print = iframe.contentWindow
-        if (print && divToPrint) {
-            let htmlToPrint = `
-                <style type="text/css">
-                    .no-print, .no-print * {
-                        display: none !important;
-                    }
-                    .remarks{
-                        width: 66.666667%;
-                        margin-top: 1rem;
-                    }
-                    .prepared_by{
-                        width: 20%;
-                        margin-top: 1rem;
-                    }
-                    .text-right {
-                        text-align: right;
-                    }
-                    .text-left {
-                        text-align: left;
-                    }
-                    .payroll-table {
-                        margin-top: 1rem;
-                    }
-                    .payroll-table th, .payroll-table td {
-                      border: 1px solid #000;
-                      padding: 4px;
-                    }
-                    .flex {
-                        display: flex;
-                    }
-                    .justify-between {
-                        justify-content: space-between;
-                    }
-                    h4 {
-                      font-size: 20px;
-                      font-weight: 400;
-                    }
-                    table {
-                      border-collapse: collapse;
-                      width: 100%;
-                    }
-                    body {
-                      margin-left: 30px;
-                    }
-                </style>
-                `;
-            htmlToPrint += divToPrint.outerHTML;
-            print.document.open()
-            print.document.write(htmlToPrint)
-            print.document.close()
-            print.focus()
-            print.print()
-        }
-    }
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_payroll_details) ? (

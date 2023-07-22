@@ -32,7 +32,6 @@ class Model implements ModelInterface {
      */
     protected static array $columns;
 
-    protected object $results;
     protected static string $find_key = 'id';
 
     // @phpstan-ignore-next-line
@@ -40,10 +39,13 @@ class Model implements ModelInterface {
     // @phpstan-ignore-next-line
     protected static array $additional_logical_data = [];
 
+    // @phpstan-ignore-next-line
+    protected static array $search_by = [];
+
     /**
      * @var mixed
      */
-    public $data;
+    public $data = [];
 
     /**
      * Get all the items.
@@ -78,9 +80,9 @@ class Model implements ModelInterface {
      * @param array<string, mixed> $additional_logical_data
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): object {
+    public function all( array $args, array $fields = [ '*' ], array $additional_logical_data = [] ): array {
         global $wpdb;
         $args = wp_parse_args(
             $args, [
@@ -95,9 +97,9 @@ class Model implements ModelInterface {
             ]
         );
 
-        if ( ! empty( $args['mutation_fields'] ) ) {
-            static::$mutation_fields = $args['mutation_fields'];
-            unset( $args['mutation_fields'] );
+        if ( ! empty( $args[ 'mutation_fields' ] ) ) {
+            static::$mutation_fields = $args[ 'mutation_fields' ];
+            unset( $args[ 'mutation_fields' ] );
         }
 
         if ( ! empty( $additional_logical_data ) ) {
@@ -107,7 +109,7 @@ class Model implements ModelInterface {
         $relations         = '';
         $where             = 'WHERE 1=1';
         $relational_fields = [];
-        if ( ! empty( $args['relations'] ) ) {
+        if ( ! empty( $args[ 'relations' ] ) ) {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
@@ -115,19 +117,23 @@ class Model implements ModelInterface {
             $relational_fields = $relational->fields;
         }
 
-        if ( ! empty( $args['where'] ) ) {
-            foreach ( $args['where'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+        if ( ! empty( $args[ 'where' ] ) ) {
+            foreach ( $args[ 'where' ] as $key => $value ) {
+                $type  = ! empty( $value[ 'type' ] ) ? $value[ 'type' ] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value[ 'value' ] );
             }
         }
-        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+        if ( ! empty( $args[ 'status' ] ) && 'all' !== $args[ 'status' ] ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args[ 'status' ] );
+        }
+
+        if ( ! empty( $args[ 'search' ] ) ) {
+            $where .= $this->get_search_query( $args[ 'search' ] );
         }
 
         $groupby = '';
-        if ( ! empty( $args['groupby'] ) ) {
-            $groupby = $wpdb->prepare( 'GROUP BY %s', $args['groupby'] );
+        if ( ! empty( $args[ 'groupby' ] ) ) {
+            $groupby = $wpdb->prepare( 'GROUP BY %s', $args[ 'groupby' ] );
         }
 
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
@@ -136,7 +142,7 @@ class Model implements ModelInterface {
             if ( strpos( $field, 'id' ) !== false ) {
                 $field = $this->get_table() . '.' . esc_sql( $field );
             }
-            if('id' === $field) {
+            if ( 'id' === $field ) {
                 $field = $this->get_table() . '.' . esc_sql( $field );
             }
 
@@ -153,15 +159,15 @@ class Model implements ModelInterface {
         } else {
             $query = $wpdb->prepare(
                 "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
-                $args['limit'],
-                $args['offset']
+                $args[ 'limit' ],
+                $args[ 'offset' ]
             );
         }
 
-        $results       = $wpdb->get_results( $query );
-        $this->results = $this->process_items( $results );
+        $results    = $wpdb->get_results( $query );
+        $this->data = $this->process_items( $results );
 
-        return $this;
+        return $this->data;
     }
 
     /**
@@ -181,69 +187,69 @@ class Model implements ModelInterface {
         $relations         = '';
         $relational_fields = [];
 
-        foreach ( $args['relations'] as $relation ) {
-            if ( empty( $relation['join_type'] ) ) {
-                $relation['join_type'] = 'INNER';
+        foreach ( $args[ 'relations' ] as $relation ) {
+            if ( empty( $relation[ 'join_type' ] ) ) {
+                $relation[ 'join_type' ] = 'INNER';
             }
 
             // Add table prefix on the table name.
-            $relation['table'] = $wpdb->prefix . $relation['table'];
-            $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
+            $relation[ 'table' ] = $wpdb->prefix . $relation[ 'table' ];
+            $relations           .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
 
-            if ( ! empty( $relation['where'] ) ) {
-                foreach ( $relation['where'] as $key => $value ) {
-                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} {$value['operator']} %s", $value['value'] );
+            if ( ! empty( $relation[ 'where' ] ) ) {
+                foreach ( $relation[ 'where' ] as $key => $value ) {
+                    $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} {$value['operator']} %s", $value[ 'value' ] );
                 }
             }
 
-            if ( ! empty( $relation['select_max'] ) ) {
-                foreach ( $relation['select_max'] as $key => $value ) {
-                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}",  );
-                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})",  );
+            if ( ! empty( $relation[ 'select_max' ] ) ) {
+                foreach ( $relation[ 'select_max' ] as $key => $value ) {
+                    $subquery = $wpdb->prepare( "SELECT MAX({$key}) FROM {$relation['table']} WHERE {$value['compare']['key']} {$value['compare']['operator']} '{$value['compare']['value']}' AND {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}", );
+                    $where    .= $wpdb->prepare( " AND {$relation['table']}.{$key} = ({$subquery})", );
                 }
             }
 
-            if ( ! empty( $relation['where_in'] ) ) {
-                foreach ( $relation['where_in'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_in' ] ) ) {
+                foreach ( $relation[ 'where_in' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} IN (%s)", $value );
                 }
             }
 
-            if ( ! empty( $relation['where_not_in'] ) ) {
-                foreach ( $relation['where_not_in'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_not_in' ] ) ) {
+                foreach ( $relation[ 'where_not_in' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT IN (%s)", $value );
                 }
             }
 
-            if ( ! empty( $relation['where_like'] ) ) {
-                foreach ( $relation['where_like'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_like' ] ) ) {
+                foreach ( $relation[ 'where_like' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} LIKE %s", $value );
                 }
             }
 
-            if ( ! empty( $relation['where_not_like'] ) ) {
-                foreach ( $relation['where_not_like'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_not_like' ] ) ) {
+                foreach ( $relation[ 'where_not_like' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT LIKE %s", $value );
                 }
             }
 
-            if ( ! empty( $relation['where_between'] ) ) {
-                foreach ( $relation['where_between'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_between' ] ) ) {
+                foreach ( $relation[ 'where_between' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} BETWEEN %s AND %s", $value );
                 }
             }
 
-            if ( ! empty( $relation['where_not_between'] ) ) {
-                foreach ( $relation['where_not_between'] as $key => $value ) {
+            if ( ! empty( $relation[ 'where_not_between' ] ) ) {
+                foreach ( $relation[ 'where_not_between' ] as $key => $value ) {
                     $where .= $wpdb->prepare( " AND {$relation['table']}.{$key} NOT BETWEEN %s AND %s", $value );
                 }
             }
 
-            if ( ! empty( $relation['fields'] ) ) {
+            if ( ! empty( $relation[ 'fields' ] ) ) {
                 $relational_fields[] = array_map(
                     function ( $field ) use ( $relation ) {
-                        return $relation['table'] . '.' . esc_sql( $field );
-                    }, $relation['fields']
+                        return $relation[ 'table' ] . '.' . esc_sql( $field );
+                    }, $relation[ 'fields' ]
                 );
             }
         }
@@ -271,12 +277,17 @@ class Model implements ModelInterface {
         $args = wp_parse_args(
             $args, [
                 'status' => '',
+                'search' => '',
             ]
         );
 
-        $where = '';
-        if ( ! empty( $args['status'] ) ) {
-            $where = $wpdb->prepare( 'WHERE status = %d', $args['status'] );
+        $where = 'WHERE 1=1';
+        if ( ! empty( $args[ 'status' ] ) && 'all' !== $args[ 'status' ] ) {
+            $where .= $wpdb->prepare( ' AND status = %d', $args[ 'status' ] );
+        }
+
+        if ( ! empty( $args[ 'search' ] ) ) {
+            $where .= $this->get_search_query( $args[ 'search' ] );
         }
 
         $query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->get_table()} {$where}", );
@@ -284,6 +295,34 @@ class Model implements ModelInterface {
         return $wpdb->get_var( $query );
     }
 
+    /**
+     * Get the search query.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $search
+     *
+     * @throws \Exception
+     * @return string|WP_Error
+     */
+    public function get_search_query( string $search ) {
+        if ( empty( static::$search_by ) ) {
+            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pcm' ) );
+        }
+
+        global $wpdb;
+        $where = ' AND (';
+        foreach ( static::$search_by as $key => $value ) {
+            if ( $key === 0 ) {
+                $where .= $wpdb->prepare( "{$this->get_table()}.{$value} LIKE %s", '%' . $search . '%' );
+            } else {
+                $where .= $wpdb->prepare( " OR {$this->get_table()}.{$value} LIKE %s", '%' . $search . '%' );
+            }
+        }
+        $where .= ')';
+
+        return $where;
+    }
 
     /**
      * Get the item from the database.
@@ -306,14 +345,14 @@ class Model implements ModelInterface {
             ]
         );
 
-        if( $args['fields'][0] === '*' ) {
-            $args['fields'] = [$this->get_table() . '.*'];
+        if ( $args[ 'fields' ][ 0 ] === '*' ) {
+            $args[ 'fields' ] = [ $this->get_table() . '.*' ];
         }
-        $fields            = $args['fields'];
+        $fields            = $args[ 'fields' ];
         $relational_fields = [];
         $relations         = '';
         $where             = 'WHERE 1=1';
-        if ( ! empty( $args['relations'] ) ) {
+        if ( ! empty( $args[ 'relations' ] ) ) {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
@@ -330,7 +369,9 @@ class Model implements ModelInterface {
             return (object) [];
         }
 
-        return $this->process_item( $results );
+        $this->data = $this->process_item( $results );
+
+        return $this->data;
     }
 
     /**
@@ -343,11 +384,11 @@ class Model implements ModelInterface {
      * @param array<string>         $fields
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): object {
+    public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): array {
         global $wpdb;
-        if( empty( $find_by ) ) {
+        if ( empty( $find_by ) ) {
             throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
         }
 
@@ -360,15 +401,15 @@ class Model implements ModelInterface {
             ]
         );
 
-        if ( ! empty( $args['order_by'] ) ) {
-            $args['order_by'] = $this->get_table() . '.' . $args['order_by'];
+        if ( ! empty( $args[ 'order_by' ] ) ) {
+            $args[ 'order_by' ] = $this->get_table() . '.' . $args[ 'order_by' ];
         }
 
         $where = 'WHERE 1=1';
 
         $relational_fields = [];
         $relations         = '';
-        if ( ! empty( $args['relations'] ) ) {
+        if ( ! empty( $args[ 'relations' ] ) ) {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
@@ -381,28 +422,28 @@ class Model implements ModelInterface {
         }
 
         $relational_fields = array_merge( ...$relational_fields );
-        $fields = array_map( function ( $field ) {
+        $fields            = array_map( function ( $field ) {
             return $this->get_table() . '.' . esc_sql( $field );
         }, $fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
 
         if ( '-1' === "$args[limit]" ) {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} ");
+            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} " );
         } else {
-            $query  = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args[ 'limit' ], $args[ 'offset' ] );
         }
 
         $results = $wpdb->get_results( $query );
 
         if ( empty( $results ) ) {
-            return (object) [];
+            return [];
         }
 
 
-        $this->results = $this->process_items( $results );
+        $this->data = $this->process_items( $results );
 
-        return $this;
+        return $this->data;
     }
 
     /**
@@ -453,7 +494,7 @@ class Model implements ModelInterface {
         $data         = $data->to_array();
         $filteredData = $this->filter_data( $data );
 
-        if ($wpdb->update(
+        if ( $wpdb->update(
             $this->get_table(),
             $filteredData,
             [
@@ -463,7 +504,8 @@ class Model implements ModelInterface {
             [
                 '%d',
             ],
-        )){
+        )
+        ) {
             return $this->find( $id );
         }
 
@@ -543,8 +585,8 @@ class Model implements ModelInterface {
     private function get_where_format( $data ): array {
         $format = [];
         foreach ( $data as $key => $value ) {
-            if ( isset( static::$columns[$key] ) ) {
-                $format[] = static::$columns[$key];
+            if ( isset( static::$columns[ $key ] ) ) {
+                $format[] = static::$columns[ $key ];
             }
         }
 
@@ -566,7 +608,7 @@ class Model implements ModelInterface {
         // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
             if ( method_exists( $this, "set_$key" ) ) {
-                $data["$key"] = call_user_func( [ $this, "set_$key" ] );
+                $data[ "$key" ] = call_user_func( [ $this, "set_$key" ] );
             }
         }
 
@@ -581,18 +623,18 @@ class Model implements ModelInterface {
      * @param array<object> $data
      *
      * @throws \Exception
-     * @return object
+     * @return array<object>
      */
-    public function process_items( array $data ): object {
+    public function process_items( array $data ): array {
         if ( empty( $data ) ) {
-            return (object) [];
+            return [];
         }
 
         foreach ( $data as &$item ) {
             $item = $this->process_item( $item );
         }
 
-        return (object) $data;
+        return $data;
     }
 
     /**
@@ -672,30 +714,7 @@ class Model implements ModelInterface {
      * @return void
      */
     public function __set( string $name, $value ) {
-        $this->data[$name] = $value;
-    }
-
-
-    /**
-     * Convert the object to an array.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return array<array<string>>
-     */
-    public function toArray(): array {
-        return (array) $this->results;
-    }
-
-    /**
-     * Convert the object to a json string.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @return string
-     */
-    public function toJson(): string {
-        return json_encode( $this->results );
+        $this->data[ $name ] = $value;
     }
 
 }

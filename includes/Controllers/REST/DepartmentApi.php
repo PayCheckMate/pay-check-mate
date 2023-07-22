@@ -6,10 +6,9 @@ use WP_Error;
 use Exception;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Classes\Department;
 use PayCheckMate\Requests\DepartmentRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\Department as DepartmentModel;
+use PayCheckMate\Models\DepartmentModel;
 
 class DepartmentApi extends RestController implements HookAbleApiInterface {
 
@@ -76,7 +75,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 						],
 						'status'          => [
 							'description' => __( 'Department status.', 'pcm' ),
-							'type'        => 'number',
+							'type'        => 'integer',
 						],
 					],
 				],
@@ -174,27 +173,30 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
+     * @throws \Exception
+     *
      * @return WP_REST_Response
      */
     public function get_items( $request ): WP_REST_Response {
-        $department = new DepartmentModel();
-        $args        = [
+        $args = [
             'limit'   => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'  => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'   => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'  => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
+        $department = new DepartmentModel();
         $departments = $department->all( $args );
         $data        = [];
 
-        foreach ( $departments->toArray() as $item ) {
+        foreach ( $departments as $item ) {
             $item   = $this->prepare_item_for_response( $item, $request );
             $data[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $department->count();
+        $total     = $department->count( $args );
         $max_pages = ceil( $total / (int) $args['limit'] );
 
         $response = new WP_REST_Response( $data );
@@ -244,6 +246,8 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
+     * @throws \Exception
+     *
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_item( $request ) {
@@ -254,8 +258,12 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 404, $department->get_error_message(), [ 'status' => 404 ] );
         }
 
-        $item = $this->prepare_item_for_response( $department, $request );
-        $data = $this->prepare_response_for_collection( $item );
+        if ( ! empty( (array) $department ) ) {
+            $item = $this->prepare_item_for_response( $department, $request );
+            $data = $this->prepare_response_for_collection( $item );
+        } else {
+            $data = [];
+        }
 
         return new WP_REST_Response( $data, 200 );
     }
@@ -303,13 +311,17 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      */
     public function delete_item( $request ) {
         $department = new DepartmentModel();
-        $department = $department->delete( $request->get_param( 'id' ) );
+        try {
+            $department = $department->delete( $request->get_param( 'id' ) );
+        } catch ( Exception $e ) {
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+        }
 
         if ( ! $department ) {
             return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
         }
 
-        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
+        return new WP_REST_Response( $department, 200 );
     }
 
     /**
