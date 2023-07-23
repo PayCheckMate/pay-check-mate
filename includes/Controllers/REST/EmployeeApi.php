@@ -60,6 +60,19 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         );
 
         register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/user/(?P<user_id>[\d]+)', [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_user' ],
+                    'permission_callback' => [ $this, 'get_employee_from_user_permissions_check' ],
+                    'args'                => [
+                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
+                    ],
+                ],
+            ]
+        );
+
+        register_rest_route(
             $this->namespace, '/' . $this->rest_base . '/(?P<employee_id>[\d]+)/salary-details', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
@@ -117,6 +130,18 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function update_employee_permissions_check(): bool {
+        // phpcs:ignore
+        return current_user_can( 'pay_check_mate_accountant' );
+    }
+
+    /**
+     * Get the employee salary details permissions check.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return bool
+     */
+    public function get_employee_from_user_permissions_check(): bool {
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_accountant' );
     }
@@ -201,6 +226,35 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         if ( ! empty( $data['id'] ) ) {
             $employee = $employee_model->update( $data['id'], $validated_data );
         } else {
+            if ( empty( $validated_data->user_id ) ) {
+                // Check if the user exists.
+                $user = get_user_by( 'email', $data['email'] );
+                if ( ! $user ) {
+                    $user_id = wp_insert_user(
+                        [
+                            'user_login' => $data['email'],
+                            'user_email' => $data['email'],
+                            'first_name' => $data['first_name'],
+                            'last_name'  => $data['last_name'],
+                            'role'       => 'pay_check_mate_employee',
+                        ]
+                    );
+
+                    if ( is_wp_error( $user_id ) ) {
+                        return new WP_Error( 'rest_invalid_data', $user_id->get_error_message(), [ 'status' => 400 ] );
+                    }
+
+                    // Update the user meta.
+                    update_user_meta( $user_id, 'phone', $data['phone'] );
+                    update_user_meta( $user_id, 'address', $data['address'] );
+                } else {
+                    $user_id = $user->ID;
+                }
+
+                // @phpstan-ignore-next-line
+                $validated_data->user_id = $user_id;
+            }
+
             $employee = $employee_model->create( $validated_data );
         }
 
@@ -329,6 +383,30 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $response = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
+    }
+
+    /**
+     * Get a single user.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param WP_REST_Request<array<string>> $request Full details about the request.
+     *
+     * @return WP_REST_Response
+     */
+    public function get_user( WP_REST_Request $request ): WP_REST_Response {
+        $user_id  = $request->get_param( 'user_id' );
+        $user = new \WP_User( $user_id );
+
+        $data['user_id'] = $user->ID;
+        $data['first_name'] = $user->first_name;
+        $data['last_name']  = $user->last_name;
+        $data['email']      = $user->user_email;
+        $data['phone']      = get_user_meta( $user_id, 'phone', true );
+        $data['address']    = get_user_meta( $user_id, 'address', true );
+        $data = new WP_REST_Response( $data, 200 );
+
+        return new WP_REST_Response( $data, 200 );
     }
 
     /**

@@ -97,14 +97,6 @@ export const PaySlipDetails = () => {
                             </tr>
                           )
                       })}
-                      <tr>
-                        <td className="border px-4 py-2">
-                            {__('Total Earning', 'pcm')}
-                        </td>
-                        <td className="border px-4 py-2 text-right">
-                            {totalEarning}
-                        </td>
-                    </tr>
                     </tbody>
                   </table>
                 </div>
@@ -129,18 +121,42 @@ export const PaySlipDetails = () => {
                             </tr>
                             )
                         })}
-                        <tr>
-                            <td className="border px-4 py-2">
-                                {__('Total Deduction', 'pcm')}
-                            </td>
-                            <td className="border px-4 py-2 text-right">
-                                {totalDeduction}
-                            </td>
-                        </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
+                <div className="pt-4">
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">
+                          {__('Basic Salary:', 'pcm')}
+                      </p>
+                      <p>
+                            {data.basic_salary || 0}
+                      </p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">
+                          {__('Total Earnings:', 'pcm')}
+                      </p>
+                      <p>{totalEarning}</p>
+                    </div>
+                    <div className="flex justify-between">
+                      <p className="text-gray-500">
+                          {__('Total Deductions:', 'pcm')}
+                      </p>
+                      <p>{totalDeduction}</p>
+                    </div>
+                    <div className="flex justify-between mt-2 border-t border-gray-200">
+                      <h3 className="text-lg font-semibold">
+                          {__('Net Pay:', 'pcm')}
+                      </h3>
+                      <h3>
+                          {
+                              (parseInt(data.basic_salary) + totalEarning) - totalDeduction
+                          }
+                      </h3>
+                    </div>
+                  </div>
             </div>
             </Card>
     );

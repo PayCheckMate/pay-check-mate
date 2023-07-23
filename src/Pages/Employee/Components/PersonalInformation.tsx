@@ -171,6 +171,16 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
+                                    label={__('Phone number', 'pcm')}
+                                    name="phone"
+                                    id="phone"
+                                    value={formValues.phone || initialValues.phone || ''}
+                                    onChange={handleFormInputChange}
+                                    error={formError.phone}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
                                     required={true}
                                     type="date"
                                     label={__('Joining date', 'pcm')}

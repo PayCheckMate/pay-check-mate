@@ -23,11 +23,6 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['administrator', 'pay_check_mate_accountant'],
         children: [
             {title: __('Payroll', 'pcm'), href: 'payroll-report', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('P.F report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Gratuity report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Loan report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Advance salary report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
-            {title: __('Arrear salary report', 'pcm'), href: 'attendance', current: false, roles: ['administrator', 'pay_check_mate_accountant']},
         ]
     },
 ]) as NavigationType[];

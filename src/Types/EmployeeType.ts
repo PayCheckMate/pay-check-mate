@@ -3,6 +3,7 @@ import {SalaryHistoryType} from "./SalaryHistoryType";
 export interface EmployeeType {
     id: number;
     employee_id: string;
+    user_id: number;
     department_id: number;
     designation_id: number;
     first_name: string;
