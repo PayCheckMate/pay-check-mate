@@ -6,7 +6,7 @@ class PayrollRequest extends Request {
 
     protected static string $nonce = 'pay_check_mate_nonce';
 
-    protected static array $fillable = [ 'department_id', 'designation_id', 'payroll_date', 'created_employee_id', 'total_salary' ];
+    protected static array $fillable = [ 'department_id', 'designation_id', 'payroll_date', 'created_employee_id', 'total_salary', 'created_employee_id' ];
 
     // Have to create a rule that will validate $request in next.
     protected static array $rules = [

@@ -77,6 +77,13 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
             }) || defaultDesignation);
         }, [initialValues.designation_id]);
 
+    useEffect(() => {
+        setFormValues((prevState: EmployeeType) => ({
+            ...prevState,
+            ...initialValues
+        }));
+    }, [initialValues]);
+
 
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;
@@ -167,6 +174,16 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     value={formValues.email || initialValues.email || ''}
                                     onChange={handleFormInputChange}
                                     error={formError.email}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
+                                    label={__('Phone number', 'pcm')}
+                                    name="phone"
+                                    id="phone"
+                                    value={formValues.phone || initialValues.phone || ''}
+                                    onChange={handleFormInputChange}
+                                    error={formError.phone}
                                 />
                             </div>
                             <div className="sm:col-span-3">

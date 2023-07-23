@@ -12,7 +12,8 @@ import useFetchApi from "../../Helpers/useFetchApi";
 import {toast} from "react-toastify";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
-import {NotFound, PermissionDenied} from "../../Components/404";
+import {PermissionDenied} from "../../Components/404";
+import {FormInput} from "../../Components/FormInput";
 
 type ResponseType = {
     data: EmployeeType,
@@ -25,6 +26,7 @@ export const AddEmployee = () => {
 
     const navigate = useNavigate();
     const [error, setError] = useState(false);
+    const [userId, setUserId] = useState('');
     let savedPersonalInformation = {} as EmployeeType
     let savedSalaryInformation = {} as SalaryInformationType
     if (!employeeId) {
@@ -178,11 +180,41 @@ export const AddEmployee = () => {
                 }
 
                 toast.success(__('Employee added successfully', 'pcm'));
-            } else {
-                console.log(response)
             }
+
         }).catch(error => {
             console.log(error, 'error');
+        })
+    }
+    const handleImportEmployee = (e: any) => {
+        e.preventDefault();
+
+        const userId = e.target.value;
+        setUserId(userId);
+
+        if (userId === null || userId === '') {
+            return false;
+        }
+
+        makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/user/' + userId, {}, true).then((response) => {
+            if (response.status === 200) {
+                setPersonalInformation((prevState) => {
+                    return {
+                        ...prevState,
+                        ...response.data,
+                    }
+                })
+
+                // @ts-ignore
+                if (response.data.user_id === 0) {
+                    toast.error(__('User not found', 'pcm'));
+                    return;
+                }
+            } else {
+                toast.error(__('Something went wrong', 'pcm'));
+            }
+        }).catch(error => {
+            toast.error(error.message);
         })
     }
     return (
@@ -202,9 +234,12 @@ export const AddEmployee = () => {
                         <form onSubmit={handleSubmit}>
                             {step === 1 && (
                                 <>
-                                    <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
-                                        {__('Personal Information', 'pcm')}
-                                    </h2>
+                                    <div className="flex items-center justify-between border-b-2 border-gray-500">
+                                        <h2 className="text-2xl font-medium mb-4">
+                                            {__('Personal Information', 'pcm')}
+                                        </h2>
+                                        {!employeeId && <FormInput type={"number"} label={__('Search from existing user', 'pcm')} placeholder={__("Enter user id", "pcm")} name='employee_id' id='employee_id' value={userId} onChange={(e)=>handleImportEmployee(e) } className='mb-4' />}
+                                    </div>
                                     <div className="mx-auto w-3/4">
                                         <PersonalInformation
                                             initialValues={personalInformation}

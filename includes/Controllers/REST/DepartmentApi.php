@@ -107,7 +107,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      */
     public function get_items_permissions_check( $request ): bool {
         // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( 'pay_check_mate_accountant' ) || current_user_can( 'pay_check_mate_employee' );
     }
 
     /**

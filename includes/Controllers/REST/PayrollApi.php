@@ -147,7 +147,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $payroll_model = new PayrollModel();
-        $payrolls = $payroll_model->all( $args );
+        $payrolls      = $payroll_model->all( $args );
 
         $data = [];
         foreach ( $payrolls as $payroll ) {
@@ -329,9 +329,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
-        $parameters = $request->get_params();
-        $employee = new EmployeeModel();
-        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
+        $parameters                        = $request->get_params();
+        $employee                          = new EmployeeModel();
+        $employee                          = $employee->get_employee_by_user_id( get_current_user_id() );
+        $parameters['created_employee_id'] = $employee->get_employee_id();
 
         $validated_data = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
@@ -424,7 +425,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        $employee = new EmployeeModel();
+        $employee                          = new EmployeeModel();
         $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
@@ -638,7 +639,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'readonly'    => true,
                     'context'     => [ 'view', 'embed' ],
                 ],
-                'payroll_date_string' => [
+                'payroll_date_string'  => [
                     'description' => __( 'The date of the payroll in string format', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',

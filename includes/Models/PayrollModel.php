@@ -9,7 +9,7 @@ class PayrollModel extends Model {
     /**
      * @var array|string[] $search_by
      */
-    protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary' ];
+    protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary', 'created_employee_id' ];
 
     protected static array $columns = [
         'department_id'       => '%d',

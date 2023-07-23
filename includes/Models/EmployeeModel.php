@@ -20,6 +20,7 @@ class EmployeeModel extends Model implements EmployeeInterface {
      */
     protected static array $columns = [
         'employee_id'    => '%s',
+        'user_id'        => '%d',
         'department_id'  => '%d',
         'designation_id' => '%d',
         'first_name'     => '%s',
