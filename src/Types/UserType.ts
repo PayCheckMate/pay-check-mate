@@ -24,6 +24,7 @@ export enum UserCapNames {
     pay_check_mate_view_employee_details = "pay_check_mate_view_employee_details",
     pay_check_mate_salary_increment = "pay_check_mate_salary_increment",
     pay_check_mate_payroll_list = "pay_check_mate_payroll_list",
+    pay_check_mate_view_payslip_list = "pay_check_mate_view_payslip_list",
     pay_check_mate_add_payroll = "pay_check_mate_add_payroll",
     pay_check_mate_edit_payroll = "pay_check_mate_edit_payroll",
     pay_check_mate_approve_payroll = "pay_check_mate_approve_payroll",

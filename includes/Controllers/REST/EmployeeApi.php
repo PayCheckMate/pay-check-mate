@@ -243,16 +243,19 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     if ( is_wp_error( $user_id ) ) {
                         return new WP_Error( 'rest_invalid_data', $user_id->get_error_message(), [ 'status' => 400 ] );
                     }
-
-                    // Update the user meta.
-                    update_user_meta( $user_id, 'phone', $data['phone'] );
-                    update_user_meta( $user_id, 'address', $data['address'] );
                 } else {
                     $user_id = $user->ID;
                 }
 
+                // Update the user meta.
+                update_user_meta( $user_id, 'phone', $data['phone'] );
+                update_user_meta( $user_id, 'address', $data['address'] );
+
                 // @phpstan-ignore-next-line
                 $validated_data->user_id = $user_id;
+
+                // Send the email to the user to set the password.
+                wp_new_user_notification( $user_id, null, 'both' );
             }
 
             $employee = $employee_model->create( $validated_data );

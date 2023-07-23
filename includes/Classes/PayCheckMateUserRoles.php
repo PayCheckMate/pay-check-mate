@@ -59,6 +59,7 @@ class PayCheckMateUserRoles {
             'read'                       => true,
             'pay_check_mate_employee'    => true,
             'pay_check_mate_manage_menu' => true,
+            'pay_check_mate_view_payslip_list' => true,
         ];
     }
 

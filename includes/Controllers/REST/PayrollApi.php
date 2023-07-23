@@ -147,7 +147,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $payroll_model = new PayrollModel();
-        $payrolls = $payroll_model->all( $args );
+        $payrolls      = $payroll_model->all( $args );
 
         $data = [];
         foreach ( $payrolls as $payroll ) {
@@ -156,7 +156,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         }
 
         $total     = $payroll_model->count( $args );
-        $max_pages = ceil( $total / (int) $args['limit'] );
+        $max_pages = ceil( $total / (int) $args[ 'limit' ] );
 
         $response = new WP_REST_Response( $data );
 
@@ -180,16 +180,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function generate_payroll( WP_REST_Request $request ): WP_REST_Response {
         $parameters = $request->get_params();
 
-        if ( ! isset( $parameters['payroll_date'] ) ) {
+        if ( ! isset( $parameters[ 'payroll_date' ] ) ) {
             return new WP_REST_Response( [ 'error' => 'The "date" parameter is required.' ], 400 );
         }
 
-        $date              = gmdate( 'Y-m-d', strtotime( $parameters['payroll_date'] ) );
+        $date              = gmdate( 'Y-m-d', strtotime( $parameters[ 'payroll_date' ] ) );
         $month             = gmdate( 'm', strtotime( $date ) );
         $year              = gmdate( 'Y', strtotime( $date ) );
         $last_day_of_month = gmdate( 't', strtotime( $date ) );
 
-        $parameters['payroll_date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
+        $parameters[ 'payroll_date' ] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
 
         $args              = [
             'status'   => 1,
@@ -231,17 +231,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        if ( ! empty( $parameters['department_id'] ) ) {
-            $department_args['where']['id'] = [
+        if ( ! empty( $parameters[ 'department_id' ] ) ) {
+            $department_args[ 'where' ][ 'id' ] = [
                 'operator' => '=',
-                'value'    => $parameters['department_id'],
+                'value'    => $parameters[ 'department_id' ],
             ];
         }
 
-        if ( ! empty( $parameters['designation_id'] ) ) {
-            $designation_args['where']['id'] = [
+        if ( ! empty( $parameters[ 'designation_id' ] ) ) {
+            $designation_args[ 'where' ][ 'id' ] = [
                 'operator' => '=',
-                'value'    => $parameters['designation_id'],
+                'value'    => $parameters[ 'designation_id' ],
             ];
         }
 
@@ -256,7 +256,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'where'           => [
                 'joining_date' => [
                     'operator' => '<=',
-                    'value'    => $parameters['payroll_date'],
+                    'value'    => $parameters[ 'payroll_date' ],
                     'type'     => 'AND',
                 ],
             ],
@@ -278,11 +278,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'select_max'  => [
                         'active_from' => [
                             'operator' => '<=',
-                            'value'    => $parameters['payroll_date'],
+                            'value'    => $parameters[ 'payroll_date' ],
                             'compare'  => [
                                 'key'      => 'active_from',
                                 'operator' => '<=',
-                                'value'    => $parameters['payroll_date'],
+                                'value'    => $parameters[ 'payroll_date' ],
                             ],
                         ],
                     ],
@@ -299,13 +299,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $employees = new EmployeeModel();
         $employees = $employees->all(
             $args, [
-				'id',
-				'employee_id',
-				'first_name',
-				'last_name',
-				'designation_id',
-				'department_id',
-			], $salary_head_types
+            'id',
+            'employee_id',
+            'first_name',
+            'last_name',
+            'designation_id',
+            'department_id',
+        ], $salary_head_types
         );
 
         return new WP_REST_Response(
@@ -329,9 +329,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
-        $parameters = $request->get_params();
-        $employee = new EmployeeModel();
-        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
+        $parameters                          = $request->get_params();
+        $employee                            = new EmployeeModel();
+        $employee                            = $employee->get_employee_by_user_id( get_current_user_id() );
+        $parameters[ 'created_employee_id' ] = $employee->get_employee_id();
 
         $validated_data = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
@@ -362,21 +363,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $payroll_details    = new PayrollDetailsModel();
-        $details_parameters = $parameters['employee_salary_history'];
-        $data['_wpnonce']   = $parameters['_wpnonce'];
-        $data['payroll_id'] = $inserted_payroll->id;
+        $payroll_details      = new PayrollDetailsModel();
+        $details_parameters   = $parameters[ 'employee_salary_history' ];
+        $data[ '_wpnonce' ]   = $parameters[ '_wpnonce' ];
+        $data[ 'payroll_id' ] = $inserted_payroll->id;
         foreach ( $details_parameters as $detail ) {
-            $data['employee_id']  = $detail['employee_id'];
-            $data['basic_salary'] = $detail['basic_salary'];
-            $data['gross_salary'] = $detail['gross_salary'];
-            $merged_array         = [];
+            $data[ 'employee_id' ]  = $detail[ 'employee_id' ];
+            $data[ 'basic_salary' ] = $detail[ 'basic_salary' ];
+            $data[ 'gross_salary' ] = $detail[ 'gross_salary' ];
+            $merged_array           = [];
             array_walk_recursive(
-                $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
-					$merged_array[ $key ] = $value;
-				}
+                $detail[ 'salary_details' ], function ( $value, $key ) use ( &$merged_array ) {
+                $merged_array[ $key ] = $value;
+            }
             );
-            $data['salary_details'] = wp_json_encode( $merged_array );
+            $data[ 'salary_details' ] = wp_json_encode( $merged_array );
 
             $validated_details_data = new PayrollDetailsRequest( $data );
             if ( $validated_details_data->error ) {
@@ -414,7 +415,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function update_payroll_sheet( WP_REST_Request $request ) {
         global $wpdb;
         $parameters = $request->get_params();
-        $payroll_id = $parameters['id'];
+        $payroll_id = $parameters[ 'id' ];
         if ( ! $payroll_id ) {
             return new WP_Error(
                 400, __( 'Payroll ID is required.', 'pcm' ), [
@@ -424,8 +425,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        $employee = new EmployeeModel();
-        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
+        $employee                            = new EmployeeModel();
+        $parameters[ 'created_employee_id' ] = $employee->get_employee_by_user_id( get_current_user_id() );
 
         $validated_data = new PayrollRequest( $parameters );
 
@@ -457,12 +458,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 400, $inserted_payroll->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $payroll_details    = new PayrollDetailsModel();
-        $details_parameters = $parameters['employee_salary_history'];
-        $data['_wpnonce']   = $parameters['_wpnonce'];
-        $data['payroll_id'] = $payroll_id;
+        $payroll_details      = new PayrollDetailsModel();
+        $details_parameters   = $parameters[ 'employee_salary_history' ];
+        $data[ '_wpnonce' ]   = $parameters[ '_wpnonce' ];
+        $data[ 'payroll_id' ] = $payroll_id;
         foreach ( $details_parameters as $detail ) {
-            $payroll_details_id = $detail['payroll_details_id'];
+            $payroll_details_id = $detail[ 'payroll_details_id' ];
             if ( ! $payroll_details_id ) {
                 return new WP_Error(
                     400, __( 'Payroll Details ID is required.', 'pcm' ), [
@@ -471,16 +472,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     ]
                 );
             }
-            $data['employee_id']  = $detail['employee_id'];
-            $data['basic_salary'] = $detail['basic_salary'];
-            $data['gross_salary'] = $detail['gross_salary'];
-            $merged_array         = [];
+            $data[ 'employee_id' ]  = $detail[ 'employee_id' ];
+            $data[ 'basic_salary' ] = $detail[ 'basic_salary' ];
+            $data[ 'gross_salary' ] = $detail[ 'gross_salary' ];
+            $merged_array           = [];
             array_walk_recursive(
-                $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
-					$merged_array[ $key ] = $value;
-				}
+                $detail[ 'salary_details' ], function ( $value, $key ) use ( &$merged_array ) {
+                $merged_array[ $key ] = $value;
+            }
             );
-            $data['salary_details'] = wp_json_encode( $merged_array );
+            $data[ 'salary_details' ] = wp_json_encode( $merged_array );
 
             $validated_details_data = new PayrollDetailsRequest( $data );
             if ( $validated_details_data->error ) {
@@ -638,7 +639,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'readonly'    => true,
                     'context'     => [ 'view', 'embed' ],
                 ],
-                'payroll_date_string' => [
+                'payroll_date_string'  => [
                     'description' => __( 'The date of the payroll in string format', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',

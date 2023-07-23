@@ -180,9 +180,8 @@ export const AddEmployee = () => {
                 }
 
                 toast.success(__('Employee added successfully', 'pcm'));
-            } else {
-                console.log(response)
             }
+
         }).catch(error => {
             console.log(error, 'error');
         })
@@ -198,7 +197,6 @@ export const AddEmployee = () => {
         }
 
         makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/user/' + userId, {}, true).then((response) => {
-            console.log(response)
             if (response.status === 200) {
                 setPersonalInformation((prevState) => {
                     return {

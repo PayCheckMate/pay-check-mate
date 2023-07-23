@@ -87,6 +87,7 @@ export const PaySlipDetails = () => {
                     </thead>
                     <tbody>
                       {earnings.map((earning: any) => {
+                          if (parseInt(String(earning.is_taxable)) === 0) return;
                           totalEarning += data.salary_details[earning.id] ? data.salary_details[earning.id] : 0;
                           return (
                               <tr>
@@ -111,6 +112,7 @@ export const PaySlipDetails = () => {
                     </thead>
                     <tbody>
                         {deductions.map((deduction: any) => {
+                            if (parseInt(String(deduction.is_taxable)) === 0) return;
                             totalDeduction += data.salary_details[deduction.id] ? data.salary_details[deduction.id] : 0;
                             return (
                                 <tr>

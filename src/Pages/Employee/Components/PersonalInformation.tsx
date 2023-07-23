@@ -77,6 +77,13 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
             }) || defaultDesignation);
         }, [initialValues.designation_id]);
 
+    useEffect(() => {
+        setFormValues((prevState: EmployeeType) => ({
+            ...prevState,
+            ...initialValues
+        }));
+    }, [initialValues]);
+
 
     const handleFormInputChange = (e: any) => {
         const {name, value} = e.target;

@@ -65,7 +65,7 @@ export const PaySlipList = () => {
                     </div>
                 </div>
                 <Table
-                    permissions={UserCapNames.pay_check_mate_view_payroll_list}
+                    permissions={UserCapNames.pay_check_mate_view_payslip_list}
                     columns={columns}
                     data={paySlipList}
                     isLoading={loading}
