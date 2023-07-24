@@ -155,7 +155,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function get_employee_salary_details_permissions_check(): bool {
         // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( 'pay_check_mate_employee' );
     }
 
     /**

@@ -34,7 +34,7 @@ class Databases {
     /**
      * Create tables.
      *
-     * @since 1.0.0
+     * @since PAY_CHECK_MATE_SINCE
      * @return void
      */
     public function create_tables() {

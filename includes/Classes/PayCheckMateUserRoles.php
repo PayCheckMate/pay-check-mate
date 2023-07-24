@@ -41,11 +41,10 @@ class PayCheckMateUserRoles {
      * @return array<string, bool>
      */
     protected function get_accountant_capabilities(): array {
-        return [
-            'read'                       => true,
-            'pay_check_mate_accountant'  => true,
-            'pay_check_mate_manage_menu' => true,
-        ];
+        $employee_capabilities = $this->get_employee_capabilities();
+        $employee_capabilities['pay_check_mate_accountant'] = true;
+
+        return $employee_capabilities;
     }
 
     /**

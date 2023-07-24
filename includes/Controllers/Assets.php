@@ -2,6 +2,7 @@
 
 namespace PayCheckMate\Controllers;
 
+use PayCheckMate\Classes\Employee;
 use PayCheckMate\Contracts\HookAbleInterface;
 
 class Assets implements HookAbleInterface {
@@ -57,11 +58,18 @@ class Assets implements HookAbleInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @throws \Exception
      * @return void
      */
     public function register_translations(): void {
         $user = wp_get_current_user();
-        unset( $user->user_pass );
+        $employee = new Employee();
+        $employee = $employee->get_employee_by_user_id( $user->ID );
+
+        unset( $employee->user_pass );
+        // @phpstan-ignore-next-line
+        $user->employee = $employee->get_data();
+
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
 				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),
