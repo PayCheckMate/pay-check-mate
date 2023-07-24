@@ -78,7 +78,7 @@ final class PayCheckMate {
     /**
      * On activate this plugin.
      *
-     * @since 1.0.0
+     * @since PAY_CHECK_MATE_SINCE
      * @return void
      */
     public function activate_this_plugin(): void {

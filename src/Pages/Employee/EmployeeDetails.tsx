@@ -6,7 +6,7 @@ import {__} from "@wordpress/i18n";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
-import {userCan} from "../../Helpers/User";
+import {userCan, userIs} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {Card} from "../../Components/Card";
 import {PermissionDenied} from "../../Components/404";
@@ -54,7 +54,7 @@ export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
 
     return (
         <>
-            {!userCan(UserCapNames.pay_check_mate_view_employee_details) ? (
+            {!userCan(UserCapNames.pay_check_mate_view_employee_details) && !userIs('pay_check_mate_employee') ? (
                 <Card>
                     <PermissionDenied />
                 </Card>
@@ -183,29 +183,29 @@ export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
                                                 key={salary.id}
                                                 className="mb-10 ml-6 cursor-pointer"
                                             >
-                                                <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
+                                                <span key={'span'+salary.id} className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
                                                 <CurrencyDollarIcon className="w-4 h-4 text-blue-500" />
                                                 </span>
-                                                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">
+                                                <h3 key={'h3'+salary.id} className="flex items-center mb-1 text-lg font-semibold text-gray-900">
                                                     {SalaryPurposeType.Initial === parseInt(String(salary.salary_purpose)) &&
                                                         (
                                                             <>
-                                                                <span className="ml-2 font-normal text-gray-600">
+                                                                <p key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
                                                                     {__('Initial salary', 'pcm')}
-                                                                </span>
+                                                                </p>
                                                             </>
                                                         )
                                                     }
                                                     {SalaryPurposeType.Increment === parseInt(String(salary.salary_purpose)) && (
                                                         <>
-                                                            <span className="ml-2 font-normal text-gray-600">
+                                                            <span key={'increment'+salary.id} className="ml-2 font-normal text-gray-600">
                                                                 {__('Increment', 'pcm')}
                                                             </span>
                                                       </>
                                                     )}
                                                     {SalaryPurposeType.Promotion === parseInt(String(salary.salary_purpose)) && (
                                                         <>
-                                                            <span className="ml-2 font-normal text-gray-600">
+                                                            <span key={'Promotion'+salary.id} className="ml-2 font-normal text-gray-600">
                                                                 {__('Promotion', 'pcm')}
                                                             </span>
                                                       </>
@@ -235,12 +235,12 @@ export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
                                                         </div>
                                                         {salaryHeads && salaryHeads.map((salaryHead) => {
                                                                 return (
-                                                                    <div className="mt-1 border-b border-gray-100">
+                                                                    <div key={'div'+salaryHead.id} className="mt-1 border-b border-gray-100">
                                                                         <dl key={salaryHead.id} className="flex flex-col sm:flex-row sm:justify-between">
-                                                                            <dt className="text-sm font-medium leading-6 text-gray-900">
+                                                                            <dt key={'dt'+salaryHead.id} className="text-sm font-medium leading-6 text-gray-900">
                                                                                 {salaryHead.head_name}
                                                                             </dt>
-                                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                            <dd key={'dd'+salaryHead.id} className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
                                                                                 {parseInt(String(salaryHead.head_type)) === HeadType.Earning ? '+' : '-'} {salary.salary_details[salaryHead.id]}
                                                                             </dd>
                                                                         </dl>
