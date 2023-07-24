@@ -19,6 +19,7 @@ import {EmployeeDetails} from "./Employee/EmployeeDetails";
 import {NotFound} from "../Components/404";
 import {PaySlipList} from "./Payroll/PaySlip/PaySlipList";
 import {PaySlipDetails} from "./Payroll/PaySlip/PaySlipDetails";
+import {Profile} from "./Profile/Profile";
 
 export default function Main() {
     const userRole = userIs('administrator') || userIs('pay_check_mate_accountant') || userIs('pay_check_mate_employee');
@@ -35,6 +36,7 @@ export default function Main() {
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="add-employee" element={<AddEmployee/>}/>)}
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/edit/:id" element={<AddEmployee/>}/>)}
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/:id" element={<EmployeeDetails/>}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/profile" element={<Profile />}/>)}
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='departments' element={<DepartmentList />}/>)}
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='designations' element={<DesignationList />}/>)}
                                 {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='salary-heads' element={<SalaryHeadList />}/>)}

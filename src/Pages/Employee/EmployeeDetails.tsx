@@ -15,9 +15,15 @@ import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryType";
 import {HeadType} from "../../Types/SalaryHeadType";
 
-export const EmployeeDetails = () => {
+type EmployeeDetailsProps = {
+    employee_id?: number|string
+}
+export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
     const {makeGetRequest} = useFetchApi('', {}, false);
-    const employeeId = useParams().id;
+    let employeeId = useParams().id;
+    if (employee_id !== '') {
+        employeeId = String(employee_id)
+    }
     const [personalInformation, setPersonalInformation] = useState({} as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState([] as SalaryHistoryType[]);
     const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
