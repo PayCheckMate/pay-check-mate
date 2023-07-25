@@ -7,9 +7,12 @@ type ModalProps = {
     header?: React.ReactNode;
     children?: React.ReactNode;
     description?: React.ReactNode;
+    width?: string;
+    zIndex?: string;
 };
 
-export const Modal = ({ setShowModal, children, header, description = '' }: ModalProps) => (
+export const Modal = ({ setShowModal, children, header, description = '', width = 'sm:w-full sm:max-w-lg', ...props }: ModalProps) => (
+    props.zIndex = ' z-[' + props.zIndex + ']' || ' z-auto',
     <>
         <Transition.Root show={true} as={Fragment}>
             <Dialog as="div" className="relative z-auto" onClose={setShowModal}>
@@ -25,7 +28,7 @@ export const Modal = ({ setShowModal, children, header, description = '' }: Moda
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 z-auto overflow-y-auto">
+                <div className={"fixed inset-0 overflow-y-auto" + props.zIndex}>
                     <div className="flex mt-2 items-end justify-center p-4 text-center sm:items-center sm:p-0">
                         <Transition.Child
                             as={Fragment}
@@ -36,7 +39,7 @@ export const Modal = ({ setShowModal, children, header, description = '' }: Moda
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <Dialog.Panel className="relative transform overflow-hidden bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-16 sm:w-full sm:max-w-lg sm:p-6">
+                            <Dialog.Panel className={"relative transform overflow-hidden bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-16 sm:p-6 " + width}>
                                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                                     <button
                                         type="button"

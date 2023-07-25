@@ -10,6 +10,10 @@ import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
+import {SalaryInformation} from "./Components/SalaryInformation";
+import {toast} from "react-toastify";
+import {SelectBox} from "../../Components/SelectBox";
+import {SelectBoxType} from "../../Types/SalaryHeadType";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -35,7 +39,18 @@ export const EmployeeList = () => {
         setCurrentPage(filterObject.page || 1);
     };
 
-    const viewEmployee = (id: number) => {
+    const [pageTitle, setPageTitle] = useState(__('Employee List', 'pcm'));
+    const salaryIncrement = (record: any) => {
+        if (record.status === EmployeeStatus.Inactive) {
+            toast.error(__('Employee is inactive. Please active employee first.', 'pcm'));
+            return;
+        }
+        if (!record.employee_id) {
+            toast.error(__('Employee ID is required.', 'pcm'));
+            return;
+        }
+
+        setPageTitle(__("Salary Increment of", 'pcm') + ' ' + record.first_name + ' ' + record.last_name);
         setShowViewModal(true);
     }
 
@@ -70,8 +85,8 @@ export const EmployeeList = () => {
                             to={`/employee/${record.employee_id}`}
                             className="text-indigo-600 hover:text-indigo-900"
                         >
-                        {record.first_name + ' ' + record.last_name}
-                    </Link>
+                            {record.first_name + ' ' + record.last_name}
+                        </Link>
                     )
                 } else {
                     return (
@@ -107,7 +122,7 @@ export const EmployeeList = () => {
                     <div className="flex">
                         {userCan(UserCapNames.pay_check_mate_salary_increment) && (
                             <button
-                                onClick={() => viewEmployee(record.id)}
+                                onClick={() => salaryIncrement(record)}
                                 className="text-green-600 hover:text-green-900"
                             >
                                 {__('Salary increment', 'pcm')}
@@ -131,9 +146,53 @@ export const EmployeeList = () => {
         },
     ];
     const [showModal, setShowModal] = useState(false);
+    const handleSalaryInformation = (salary: string) => {
+        console.log(salary)
+    }
+    const purposeOptions = [
+        {id: 2, name: __('Salary Increment', 'pcm')},
+        {id: 3, name: __('Promotion', 'pcm')}
+    ]
     return (
         <>
-            {showViewModal && <Modal setShowModal={setShowViewModal} />}
+            {showViewModal &&
+                <>
+                    <Modal
+                        setShowModal={setShowViewModal}
+                        header={pageTitle}
+                        width={' sm:max-w-3xl'}
+                        zIndex={'9999'}
+                    >
+                        <SalaryInformation
+                            initialValues={{}}
+                            setSalaryData={(salary: string) => handleSalaryInformation(salary)}
+                        >
+                            <div className="sm:col-span-3">
+                                <SelectBox
+                                    required={true}
+                                    options={purposeOptions}
+                                    selected={{} as SelectBoxType}
+                                    setSelected={() => {
+                                    }}
+                                    title={__('Purpose', 'pcm')}
+                                />
+                            </div>
+                            <div className="mt-10 flex justify-end">
+                                <Button
+                                    className="hover:text-white"
+                                    path="/add-employee"
+                                >
+                                    <CheckCircleIcon
+                                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                                        aria-hidden="true"
+                                    />
+                                    {__('Add Salary', 'pcm')}
+                                </Button>
+                            </div>
+                        </SalaryInformation>
+                    </Modal>
+                </>
+            }
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
