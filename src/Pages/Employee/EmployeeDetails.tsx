@@ -16,9 +16,10 @@ import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryTyp
 import {HeadType} from "../../Types/SalaryHeadType";
 
 type EmployeeDetailsProps = {
-    employee_id?: number|string
+    employee_id?: number|string,
+    page_title?: string
 }
-export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
+export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetailsProps) => {
     const {makeGetRequest} = useFetchApi('', {}, false);
     let employeeId = useParams().id;
     if (employee_id !== '') {
@@ -62,7 +63,9 @@ export const EmployeeDetails = ({employee_id = ''}: EmployeeDetailsProps) => {
                 <div>
                     <div className="sm:flex-auto mb-6">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Employee Details', 'pcm')}
+                            {
+                                page_title !== '' ? page_title : __('Employee Details', 'pcm')
+                            }
                         </h1>
                     </div>
                     <div className="grid grid-cols-2 gap-8">
