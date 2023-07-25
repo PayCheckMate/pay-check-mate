@@ -206,8 +206,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function create_employee( WP_REST_Request $request ) {
         global $wpdb;
-        $data                                = $request->get_params();
-        $salary_information                  = $data['salaryInformation'];
+        $data                              = $request->get_params();
+        $salary_information                = $data['salaryInformation'];
         $salary_information['_wpnonce']    = $data['_wpnonce'];
         $salary_information['active_from'] = $salary_information['active_from'] ?? $data['joining_date'];
         unset( $data['salaryInformation'] );
@@ -266,7 +266,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $salary_information['employee_id'] = $data['employee_id'];
-        $salary_data                         = [
+        $salary_data                       = [
             'salary_history_id',
             'employee_id',
             'basic_salary',
@@ -275,17 +275,17 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'remarks',
             '_wpnonce',
         ];
-        $head_details                        = $salary_information;
-        $salary_information                  = array_intersect_key( $salary_information, array_flip( $salary_data ) );
-        $keys_to_remove                      = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
-        $salary_details                      = array_filter(
+        $head_details                      = $salary_information;
+        $salary_information                = array_intersect_key( $salary_information, array_flip( $salary_data ) );
+        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
+        $salary_details                    = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
 				return ! in_array( $key, $keys_to_remove, true );
 			}, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
-        $validate_salary_data                   = new SalaryHistoryRequest( $salary_information );
+        $validate_salary_data                 = new SalaryHistoryRequest( $salary_information );
         if ( $validate_salary_data->error ) {
             return new WP_Error(
                 'rest_invalid_salary_data', __( 'Invalid salary data', 'pcm' ), [
@@ -375,15 +375,15 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
         }
 
-        $item                                               = $this->prepare_item_for_response( $employee, $request );
-        $data                                               = $this->prepare_response_for_collection( $item );
+        $item                                           = $this->prepare_item_for_response( $employee, $request );
+        $data                                           = $this->prepare_response_for_collection( $item );
         $data['salaryInformation']['salary_history_id'] = $employee->salary_history_id;
         $data['salaryInformation']['salary_details']    = $employee->salary_details;
         $data['salaryInformation']['basic_salary']      = $employee->basic_salary;
         $data['salaryInformation']['gross_salary']      = $employee->gross_salary;
         $data['salaryInformation']['active_from']       = $employee->active_from;
         $data['salaryInformation']['remarks']           = $employee->remarks;
-        $response = new WP_REST_Response( $data );
+        $response                                       = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
     }
@@ -398,16 +398,16 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_user( WP_REST_Request $request ): WP_REST_Response {
-        $user_id  = $request->get_param( 'user_id' );
-        $user = new \WP_User( $user_id );
+        $user_id = $request->get_param( 'user_id' );
+        $user    = new \WP_User( $user_id );
 
-        $data['user_id'] = $user->ID;
+        $data['user_id']    = $user->ID;
         $data['first_name'] = $user->first_name;
         $data['last_name']  = $user->last_name;
         $data['email']      = $user->user_email;
         $data['phone']      = get_user_meta( $user_id, 'phone', true );
         $data['address']    = get_user_meta( $user_id, 'address', true );
-        $data = new WP_REST_Response( $data, 200 );
+        $data               = new WP_REST_Response( $data, 200 );
 
         return new WP_REST_Response( $data, 200 );
     }
@@ -430,7 +430,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data           = $this->prepare_response_for_collection( $item );
 
         $data['salaryInformation'] = $salary_details;
-        $response                    = new WP_REST_Response( $data );
+        $response                  = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );
     }

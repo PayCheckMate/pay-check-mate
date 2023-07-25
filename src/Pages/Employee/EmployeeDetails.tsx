@@ -193,9 +193,9 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                     {SalaryPurposeType.Initial === parseInt(String(salary.salary_purpose)) &&
                                                         (
                                                             <>
-                                                                <p key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
+                                                                <span key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
                                                                     {__('Initial salary', 'pcm')}
-                                                                </p>
+                                                                </span>
                                                             </>
                                                         )
                                                     }

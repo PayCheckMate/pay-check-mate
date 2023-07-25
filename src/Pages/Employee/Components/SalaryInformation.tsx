@@ -6,7 +6,7 @@ import {__} from "@wordpress/i18n";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../../Store/SalaryHead";
 
-export const SalaryInformation = ({setSalaryData, initialValues = {}, nextStep, children, useStorage=true}: any) => {
+export const SalaryInformation = ({setSalaryData, initialValues = {}, children, formErrors}: any) => {
     // const employeeId = useParams().id;
     if (initialValues === null) {
         initialValues = {} as SalaryHeadType;
@@ -99,6 +99,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, nextStep, 
                                 id="gross_salary"
                                 value={grossSalary}
                                 onChange={handleFormInputChange}
+                                error={formErrors.gross_salary}
                                 helpText={__('Set gross salary to auto calculate basic salary and other salary heads.', 'pcm')}
                             />
                         </div>
@@ -109,6 +110,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, nextStep, 
                                 name="basic_salary"
                                 id="basic_salary"
                                 value={formValues.basic_salary}
+                                error={formErrors.basic_salary}
                                 onChange={handleFormInputChange}
                             />
                         </div>
@@ -135,6 +137,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, nextStep, 
                                 label={__('Active from', 'pcm')}
                                 name="active_from"
                                 id="active_from"
+                                error={formErrors.active_from}
                                 value={formValues.active_from}
                                 onChange={handleActiveFormChange}
                             />

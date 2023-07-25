@@ -10,10 +10,8 @@ import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
-import {SalaryInformation} from "./Components/SalaryInformation";
 import {toast} from "react-toastify";
-import {SelectBox} from "../../Components/SelectBox";
-import {SelectBoxType} from "../../Types/SalaryHeadType";
+import {Increment} from "./Increment";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -39,6 +37,7 @@ export const EmployeeList = () => {
         setCurrentPage(filterObject.page || 1);
     };
 
+    const [incrementedEmployee, setIncrementedEmployee] = useState({} as EmployeeType);
     const [pageTitle, setPageTitle] = useState(__('Employee List', 'pcm'));
     const salaryIncrement = (record: any) => {
         if (record.status === EmployeeStatus.Inactive) {
@@ -50,6 +49,7 @@ export const EmployeeList = () => {
             return;
         }
 
+        setIncrementedEmployee(record);
         setPageTitle(__("Salary Increment of", 'pcm') + ' ' + record.first_name + ' ' + record.last_name);
         setShowViewModal(true);
     }
@@ -146,13 +146,7 @@ export const EmployeeList = () => {
         },
     ];
     const [showModal, setShowModal] = useState(false);
-    const handleSalaryInformation = (salary: string) => {
-        console.log(salary)
-    }
-    const purposeOptions = [
-        {id: 2, name: __('Salary Increment', 'pcm')},
-        {id: 3, name: __('Promotion', 'pcm')}
-    ]
+
     return (
         <>
             {showViewModal &&
@@ -163,33 +157,7 @@ export const EmployeeList = () => {
                         width={' sm:max-w-3xl'}
                         zIndex={'9999'}
                     >
-                        <SalaryInformation
-                            initialValues={{}}
-                            setSalaryData={(salary: string) => handleSalaryInformation(salary)}
-                        >
-                            <div className="sm:col-span-3">
-                                <SelectBox
-                                    required={true}
-                                    options={purposeOptions}
-                                    selected={{} as SelectBoxType}
-                                    setSelected={() => {
-                                    }}
-                                    title={__('Purpose', 'pcm')}
-                                />
-                            </div>
-                            <div className="mt-10 flex justify-end">
-                                <Button
-                                    className="hover:text-white"
-                                    path="/add-employee"
-                                >
-                                    <CheckCircleIcon
-                                        className="w-5 h-5 mr-2 -ml-1 text-white"
-                                        aria-hidden="true"
-                                    />
-                                    {__('Add Salary', 'pcm')}
-                                </Button>
-                            </div>
-                        </SalaryInformation>
+                        <Increment key={incrementedEmployee.employee_id} employee={incrementedEmployee} />
                     </Modal>
                 </>
             }

@@ -1,4 +1,5 @@
 import {createRoot} from '@wordpress/element';
+import { render } from '@wordpress/element';
 import './app.css';
 import './Store/Store';
 
@@ -15,4 +16,5 @@ export default function App() {
 
 // Render the app
 // @ts-ignore
-createRoot(document.getElementById('root')).render(<App/>);
+// createRoot(document.getElementById('root')).render(<App/>);
+render( <App />, document.getElementById( 'pcm-root' ) );

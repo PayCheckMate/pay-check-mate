@@ -2,6 +2,8 @@
 
 namespace PayCheckMate\Models;
 
+use PayCheckMate\Requests\SalaryHistoryRequest;
+
 class SalaryHistoryModel extends Model {
 
     protected static string $table = 'employee_salary_history';
@@ -84,4 +86,20 @@ class SalaryHistoryModel extends Model {
         ];
     }
 
+
+
+    /**
+     * Employee salary increment.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \PayCheckMate\Requests\SalaryHistoryRequest $request
+     *
+     * @throws \Exception
+     *
+     * @return mixed|object|\WP_Error
+     */
+    public function employee_salary_increment(SalaryHistoryRequest $request){
+        return $this->create( $request );
+    }
 }
