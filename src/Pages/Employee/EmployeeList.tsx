@@ -97,6 +97,22 @@ export const EmployeeList = () => {
         },
         {title: __('Email', 'pcm'), dataIndex: 'email'},
         {
+            title: __('Designation', 'pcm'), dataIndex: 'designation_id', sortable: true,
+            render: (text: string, record: any) => {
+                return (
+                    <span>{record.designation_name}</span>
+                )
+            }
+        },
+        {
+            title: __('Department', 'pcm'), dataIndex: 'department_id', sortable: true,
+            render: (text: string, record: any) => {
+                return (
+                    <span>{record.department_name}</span>
+                )
+            }
+        },
+        {
             title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
             render: (text: string, record: any) => {
                 if (parseInt(String(record.status)) === EmployeeStatus.Active) {
@@ -145,7 +161,6 @@ export const EmployeeList = () => {
             },
         },
     ];
-    const [showModal, setShowModal] = useState(false);
 
     return (
         <>
@@ -157,7 +172,13 @@ export const EmployeeList = () => {
                         width={' sm:max-w-3xl'}
                         zIndex={'9999'}
                     >
-                        <Increment key={incrementedEmployee.employee_id} employee={incrementedEmployee} />
+                        <Increment
+                            key={incrementedEmployee.employee_id}
+                            employee={incrementedEmployee}
+                            setData={() => {
+                                setShowViewModal(false);
+                            }}
+                        />
                     </Modal>
                 </>
             }
@@ -181,9 +202,6 @@ export const EmployeeList = () => {
                                     />
                                     {__('Add Employee', 'pcm')}
                                 </Button>
-                                {showModal && (
-                                    <Modal setShowModal={setShowModal} />
-                                )}
                             </>
                         )}
                     </div>

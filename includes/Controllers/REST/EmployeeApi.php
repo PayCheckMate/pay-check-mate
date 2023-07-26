@@ -176,6 +176,38 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
             'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
             'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_designations',
+                    'local_key'   => 'designation_id',
+                    'foreign_key' => 'id',
+                    'join_type'   => 'left',
+                    'where'       => [
+                        'status' => [
+                            'operator' => '=',
+                            'value'    => 1,
+                        ],
+                    ],
+                    'fields'      => [
+                        'name as designation_name',
+                    ],
+                ],
+                [
+                    'table'       => 'pay_check_mate_departments',
+                    'local_key'   => 'department_id',
+                    'foreign_key' => 'id',
+                    'join_type'   => 'left',
+                    'where'       => [
+                        'status' => [
+                            'operator' => '=',
+                            'value'    => 1,
+                        ],
+                    ],
+                    'fields'      => [
+                        'name as department_name',
+                    ],
+                ],
+            ],
         ];
         $employees      = [];
         $employee_model = new EmployeeModel();
@@ -482,6 +514,16 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Designation ID', 'pcm' ),
                     'type'        => 'integer',
                     'required'    => true,
+                ],
+                'department_name'     => [
+                    'description' => __( 'Department ID', 'pcm' ),
+                    'type'        => 'integer',
+                    'context'     => [ 'view', 'edit', 'embed' ],
+                ],
+                'designation_name'      => [
+                    'description' => __( 'Designation ID', 'pcm' ),
+                    'type'        => 'integer',
+                    'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'first_name'          => [
                     'description' => __( 'Employee First Name', 'pcm' ),

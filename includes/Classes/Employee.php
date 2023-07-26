@@ -3,6 +3,7 @@
 namespace PayCheckMate\Classes;
 
 use PayCheckMate\Contracts\EmployeeInterface;
+use PayCheckMate\Models\EmployeeModel;
 
 class Employee {
 
@@ -33,12 +34,12 @@ class Employee {
      */
     public function set_employee( $employee = null ) {
         if ( is_numeric( $employee ) ) {
-            $model          = new \PayCheckMate\Models\EmployeeModel();
+            $model          = new EmployeeModel();
             $this->employee = $model->find_employee( $employee );
         } elseif ( $employee instanceof EmployeeInterface ) {
             $this->employee = $employee;
         } else {
-            $this->employee = new \PayCheckMate\Models\EmployeeModel();
+            $this->employee = new EmployeeModel();
         }
     }
 

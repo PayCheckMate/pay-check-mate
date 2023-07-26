@@ -79,6 +79,13 @@ class SalaryIncrementApi extends RestController implements HookAbleApiInterface 
             );
         }
 
+        // @phpstan-ignore-next-line
+        if ( ! empty( (string) $valid_data->designation_id ) ) {
+            $employee = new EmployeeModel();
+            // @phpstan-ignore-next-line
+            $employee->update_by( [ 'employee_id' => $valid_data->employee_id ], [ 'designation_id' => $valid_data->designation_id ] );
+        }
+
         $salary = new SalaryHistoryModel();
         $result = $salary->employee_salary_increment( $valid_data );
 

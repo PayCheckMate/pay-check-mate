@@ -14,8 +14,11 @@ import {userCan, userIs} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {Card} from "../../Components/Card";
 import {PermissionDenied} from "../../Components/404";
+import {SalaryPurposeType} from "../../Types/SalaryHistoryType";
+import {useSelect} from "@wordpress/data";
+import designation from "../../Store/Designation";
 
-export const Increment = ({employee}: { employee: EmployeeType }) => {
+export const Increment = ({employee, setData=()=>{}}: { employee: EmployeeType, setData?: ()=>void }) => {
     if (!employee) {
         toast.error(__('Employee not found.', 'pcm'));
         return null;
@@ -32,11 +35,19 @@ export const Increment = ({employee}: { employee: EmployeeType }) => {
         {id: 2, name: __('Salary Increment', 'pcm')},
         {id: 3, name: __('Promotion', 'pcm')}
     ] as SelectBoxType[];
-
+    const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const [selectedPurpose, setSelectedPurpose] = useState({} as SelectBoxType);
+    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const {makePostRequest} = useFetchApi('', {}, false);
     const [formError, setFormError] = useState({} as { [key: string]: string });
     const submitSalaryIncrement = () => {
+        if (salaryData.purpose === SalaryPurposeType.Promotion && !salaryData.designation_id) {
+            setFormError((prevState) => ({
+                ...prevState,
+                designation_id: __('Designation is required.', 'pcm')
+            }));
+            return;
+        }
         const requiredFields = ['gross_salary', 'basic_salary', 'active_from', 'purpose'];
         const errors = validateRequiredFields(salaryData, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
@@ -48,24 +59,37 @@ export const Increment = ({employee}: { employee: EmployeeType }) => {
         let data = {
             '_wpnonce': _wpnonce,
             employee_id: employee.employee_id,
+            designation_id: salaryData.designation_id,
             basic_salary: salaryData.basic_salary,
             gross_salary: salaryData.gross_salary,
             active_from: salaryData.active_from,
+            remarks: salaryData.remarks,
             salary_purpose: salaryData.purpose,
         }
-        delete salaryData.basic_salary;
-        delete salaryData.gross_salary;
-        delete salaryData.active_from;
-        delete salaryData.purpose;
-        data = {...data, ...{
-            salary_details: salaryData,
-        }};
+
+        // Delete all fields from salaryData that are included in data.
+        Object.keys(data).forEach((key) => {
+            // Check if key exists in salaryData.
+            if (!salaryData.hasOwnProperty(key)) {
+                // @ts-ignore
+                delete salaryData[key];
+            }
+        });
+
+        data = {
+            ...data, ...{
+                salary_details: salaryData,
+            }
+        };
         makePostRequest('/pay-check-mate/v1/salary-increment', data, false)
             .then((response) => {
                     setSalaryData({} as SalaryInformationType);
                     toast.success(__('Salary Incremented Successfully.', 'pcm'));
+                    setData();
                 }
-            )
+            ).catch((error) => {
+            toast.error(error.message);
+        })
 
     }
     return (
@@ -97,6 +121,25 @@ export const Increment = ({employee}: { employee: EmployeeType }) => {
                             title={__('Purpose', 'pcm')}
                         />
                     </div>
+                    {salaryData.purpose === SalaryPurposeType.Promotion && (
+                        <div className="sm:col-span-3">
+                            <SelectBox
+                                required={true}
+                                options={designations}
+                                selected={selectedDesignation}
+                                setSelected={(designation) => {
+                                    // @ts-ignore
+                                    setSalaryData((prevState) => ({
+                                        ...prevState,
+                                        designation_id: designation.id,
+                                    }));
+                                    setSelectedDesignation(designation)
+                                }}
+                                error={formError.designation_id}
+                                title={__('Set Designation', 'pcm')}
+                            />
+                        </div>
+                    )}
                     <div className="mt-10 flex justify-end">
                         <Button
                             className="hover:text-white"

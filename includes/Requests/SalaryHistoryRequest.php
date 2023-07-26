@@ -16,6 +16,8 @@ class SalaryHistoryRequest extends Request {
         'salary_details' => 'sanitize_text_field',
         'status'         => 'absint',
         'active_from'    => 'sanitize_text_field',
+        'remarks'        => 'sanitize_text_field',
+        'salary_purpose' => 'sanitize_text_field',
         'created_on'     => 'sanitize_text_field',
         'updated_at'     => 'sanitize_text_field',
     ];

@@ -24,6 +24,7 @@ class SalaryHistoryModel extends Model {
         'status'         => '%d',
         'active_from'    => '%s',
         'remarks'        => '%s',
+        'salary_purpose' => '%s',
         'created_on'     => '%s',
         'updated_at'     => '%s',
     ];
