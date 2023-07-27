@@ -1,5 +1,5 @@
 import {useEffect, useState} from "@wordpress/element";
-import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType,} from "../../Types/SalaryHeadType";
+import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType,} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
 import {Loading} from "../../Components/Loading";
@@ -17,11 +17,17 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import {handlePrint} from "../../Helpers/Helpers";
+import {SelectBox} from "../../Components/SelectBox";
+import {FormInput} from "../../Components/FormInput";
+import {Button} from "../../Components/Button";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
-    const {loading, makeGetRequest,} = useFetchApi('');
+    const {loading, makeGetRequest,makePostRequest} = useFetchApi('');
 
+    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
+    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
+    const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
     const [payRoll, setPayRoll] = useState<PayrollType>({} as PayrollType);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
@@ -31,26 +37,61 @@ const ViewPayroll = () => {
         deductions: [],
         non_taxable: []
     });
+    const handleFilter = (e: any) => {
+        e.preventDefault();
+        try {
+            if (!payDate) {
+                toast.error(__('Please select a date', 'pcm'));
+                return;
+            }
+            const data = {
+                'payroll_date': payDate,
+                'department_id': selectedDepartment.id,
+                'designation_id': selectedDesignation.id,
+            }
+            makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payrolls/reports', data, false).then((response) => {
+                const salary_heads = {
+                    earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
+                    deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
+                    non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
+                };
+                setSalaryHeads(salary_heads as SalaryHeadsResponseType);
+                setTableData(response.employee_salary_history);
+                // @ts-ignore
+                setPayRoll(response.payroll);
+            }).catch((error: any) => {
+                toast.error(__('Something went wrong while fetching payroll report', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
+                setTableData([]);
+                setPayRoll({} as PayrollType);
+                setSalaryHeads({} as SalaryHeadsResponseType);
+            })
+        } catch (error) {
+            console.log(error, 'error'); // Handle the error accordingly
+        }
+    };
+    useEffect(() => {
+        if (designations.length <= 0) return;
+        const defaultDesignation = {
+            id: 'all',
+            name: __('All', 'pcm'),
+        }
+
+        setSelectedDesignation(defaultDesignation)
+    }, [designations]);
 
     useEffect(() => {
-        makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
-            const salary_heads = {
-                earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
-                deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
-                non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
-            };
-            setSalaryHeads(salary_heads as SalaryHeadsResponseType);
-            setTableData(response.employee_salary_history);
-            setPayRoll(response.payroll);
-        }).catch((error: any) => {
-            console.log(error, 'error')
-            toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000
-            });
-        })
-    }, [])
+        if (departments.length <= 0) return;
 
+        const defaultDepartment = {
+            id: 'all',
+            name: __('All', 'pcm'),
+        }
+
+        setSelectedDepartment(defaultDepartment)
+    }, [departments]);
     const sumValues = (values: { [key: number]: number }): number => {
         return Object.values(values).reduce((sum, value) => sum + parseFloat(String(value)), 0);
     };
@@ -96,6 +137,52 @@ const ViewPayroll = () => {
                 </Card>
             ) : (
                 <>
+                    <div className="flex justify-between">
+                        <form
+                            className="p-6"
+                            onSubmit={handleFilter}
+                        >
+                            <div className="grid grid-cols-4 gap-4">
+                                <div>
+                                    <SelectBox
+                                        title={__('Designation', 'pcm')}
+                                        options={designations}
+                                        selected={selectedDesignation}
+                                        setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}
+                                    />
+                                </div>
+                                <div>
+                                    <SelectBox
+                                        title={__('Department', 'pcm')}
+                                        options={departments}
+                                        selected={selectedDepartment}
+                                        setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}
+                                    />
+                                </div>
+                                <div>
+                                    <FormInput
+                                        type="date"
+                                        label={__('Pay month', 'pcm')}
+                                        name="pay_month"
+                                        id="pay_month"
+                                        value={payDate}
+                                        onChange={(e) => setPayDate(e.target.value)}
+                                    />
+                                </div>
+                                <div className="flex items-end">
+                                    {/*This button should flat and small*/}
+                                    {!payrollId && (
+                                        <Button
+                                            type="submit"
+                                            className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
+                                        >
+                                            {__('Show report', 'pcm')}
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
@@ -109,17 +196,17 @@ const ViewPayroll = () => {
                                                     {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date_string}
                                                 </h1>
                                             </div>
-                                            <div className="flex justify-between mt-2 mb-4">
-                                                <div className="grid grid-cols-4 gap-4">
-                                                    <div>
-                                                        {__('Department', 'pcm')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pcm')}
-                                                    </div>
-                                                    <div>
-                                                        {__('Designation', 'pcm')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pcm')}
-                                                    </div>
+                                            {/*<div className="flex justify-between mt-2 mb-4">*/}
+                                            {/*    <div className="grid grid-cols-4 gap-4">*/}
+                                            {/*        <div>*/}
+                                            {/*            {__('Department', 'pcm')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pcm')}*/}
+                                            {/*        </div>*/}
+                                            {/*        <div>*/}
+                                            {/*            {__('Designation', 'pcm')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pcm')}*/}
+                                            {/*        </div>*/}
 
-                                                </div>
-                                            </div>
+                                            {/*    </div>*/}
+                                            {/*</div>*/}
                                         </div>
                                         <div className="flex items-center no-print">
                                             <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />

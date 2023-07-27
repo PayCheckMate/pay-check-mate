@@ -73,6 +73,18 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         );
         register_rest_route(
             $this->namespace,
+            '/' . $this->rest_base . '/reports', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'get_payroll_report' ],
+                    'permission_callback' => [ $this, 'get_payroll_permissions_check' ],
+                    'args'                => $this->get_report_collection_params(),
+                ],
+                'schema' => [ $this, 'get_public_item_schema' ],
+            ]
+        );
+        register_rest_route(
+            $this->namespace,
             '/' . $this->rest_base . '/(?P<id>[\d]+)', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
@@ -231,14 +243,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        if ( ! empty( $parameters['department_id'] ) ) {
+        if ( ! empty( $parameters['department_id'] ) || 'all' !== $parameters['department_id'] ) {
             $department_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['department_id'],
             ];
         }
 
-        if ( ! empty( $parameters['designation_id'] ) ) {
+        if ( ! empty( $parameters['designation_id'] ) || 'all' !== $parameters['designation_id'] ) {
             $designation_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['designation_id'],
@@ -513,6 +525,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request
      *
+     * @throws \Exception
+     *
      * @return WP_REST_Response Response object.
      */
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
@@ -573,6 +587,124 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         return new WP_REST_Response(
             [
                 'payroll'                 => $payroll,
+                'employee_salary_history' => $payroll_details,
+                'salary_head_types'       => $salary_head_types,
+            ], 200
+        );
+    }
+
+    /**
+     * Gets the payroll report.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @throws \Exception
+     * @return WP_REST_Response|WP_Error
+     */
+    public function get_payroll_report( WP_REST_Request $request ) {
+        $parameters = $request->get_params();
+        if ( ! isset( $parameters['payroll_date'] ) ) {
+            return new WP_Error(
+                400, __( 'Payroll Date is required.', 'pcm' ), [
+                    'status' => 400,
+                    'error'  => __( 'Payroll Date is required.', 'pcm' ),
+                ]
+            );
+        }
+
+        $where = [];
+        if ( ! empty( $parameters['department_id'] ) && 'all' !== $parameters['department_id'] ) {
+            $where['department_id'] = [
+                'operator' => '=',
+                'value'    => $parameters['department_id'],
+                'type'     => 'AND',
+            ];
+        }
+
+        if ( ! empty( $parameters['designation_id'] ) && 'all' !== $parameters['designation_id'] ) {
+            $where['designation_id'] = [
+                'operator' => '=',
+                'value'    => $parameters['designation_id'],
+                'type'     => 'AND',
+            ];
+        }
+
+        $payroll      = new PayrollModel();
+        $payroll_args = [
+            'status'    => 1,
+            'order'     => 'DESC',
+            'order_by'  => 'id',
+            'where'     => $where,
+            'where_between' => [
+                'payroll_date' => [
+                    'start' => gmdate( 'Y-m-01', strtotime( $parameters['payroll_date'] ) ),
+                    'end'   => gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) ),
+                ],
+            ],
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_employees',
+                    'local_key'   => 'created_employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'right',
+                    'fields'      => [
+                        'employee_id as prepared_by_employee_id',
+                        'first_name as prepared_by_first_name',
+                        'last_name as prepared_by_last_name',
+                    ],
+                ],
+            ],
+        ];
+
+        $payroll_data = $payroll->all( $payroll_args, [ '*', 'id as payroll_id' ] );
+
+        if ( empty( $payroll_data ) || empty( $payroll_data[0] ) ) {
+            return new WP_Error(
+                400, __( 'No payroll found.', 'pcm' ), [
+                    'status' => 400,
+                    'error'  => __( 'No payroll found.', 'pcm' ),
+                ]
+            );
+        }
+
+        $payroll_data = $payroll_data[0];
+        $args              = [
+            'status'   => 1,
+            'limit'    => '-1',
+            'order'    => 'ASC',
+            'order_by' => 'priority',
+        ];
+        $salary_head_types = Helper::get_salary_head( $args );
+
+        $payroll_details = new PayrollDetailsModel();
+        $args            = [
+            'status'    => 1,
+            'limit'     => '-1',
+            'order_by'  => 'employee_id',
+            'order'     => 'ASC',
+            'where'     => [
+                'payroll_id' => [
+                    'operator' => '=',
+                    'value'    => $payroll_data->payroll_id ?? 0,
+                    'type'     => 'AND',
+                ],
+            ],
+            'relations' => [
+                [
+                    'table'       => 'pay_check_mate_employees',
+                    'local_key'   => 'employee_id',
+                    'foreign_key' => 'employee_id',
+                    'join_type'   => 'left',
+                ],
+            ],
+        ];
+        $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+
+        return new WP_REST_Response(
+            [
+                'payroll'                 => $payroll_data,
                 'employee_salary_history' => $payroll_details,
                 'salary_head_types'       => $salary_head_types,
             ], 200
@@ -690,6 +822,36 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'format'      => 'date-time',
                     'readonly'    => true,
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * Retrieves the query params for the collections.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<array<string, mixed>> Collection parameters.
+     */
+    public function get_report_collection_params(): array {
+        return [
+            'department_id' => [
+                'description' => __( 'Unique identifier for the department.', 'pcm' ),
+                'type'        => 'string',
+                'required'    => true,
+            ],
+            'designation_id' => [
+                'description' => __( 'Unique identifier for the designation.', 'pcm' ),
+                'type'        => 'string',
+                'required'    => true,
+            ],
+            'payroll_date' => [
+                'description' => __( 'The date of the payroll', 'pcm' ),
+                'type'        => 'string',
+                'format'      => 'Y-m-d',
+                'required'    => true,
+                'readonly'    => true,
+                'context'     => [ 'view', 'embed' ],
             ],
         ];
     }
