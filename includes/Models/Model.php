@@ -513,6 +513,38 @@ class Model implements ModelInterface {
     }
 
     /**
+     * Update an item by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $find_by
+     * @param array<string, mixed> $data
+     *
+     * @throws \Exception
+     * @return object|\WP_Error
+     */
+    public function update_by( array $find_by, array $data ): object {
+        global $wpdb;
+
+        $filteredData = $this->filter_data( $data );
+
+        if ( $wpdb->update(
+            $this->get_table(),
+            $filteredData,
+            $find_by,
+            $this->get_where_format( $filteredData ),
+            [
+                '%d',
+            ],
+        )
+        ) {
+            return $this->find_by( $find_by, [] )[ 0 ];
+        }
+
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pcm' ) );
+    }
+
+    /**
      * Delete an item.
      *
      * @since PAY_CHECK_MATE_SINCE

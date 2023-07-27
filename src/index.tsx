@@ -15,4 +15,4 @@ export default function App() {
 
 // Render the app
 // @ts-ignore
-createRoot(document.getElementById('root')).render(<App/>);
+createRoot(document.getElementById('pcm-root')).render(<App/>);

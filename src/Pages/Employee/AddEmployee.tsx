@@ -14,6 +14,7 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import {FormInput} from "../../Components/FormInput";
+import {validateRequiredFields} from "../../Helpers/Helpers";
 
 type ResponseType = {
     data: EmployeeType,
@@ -217,6 +218,16 @@ export const AddEmployee = () => {
             toast.error(error.message);
         })
     }
+    const [salaryFormError, setSalaryFormError] = useState({} as { [key: string]: string});
+
+    const goToReview = () => {
+        const requiredFields = ['gross_salary', 'basic_salary', 'active_from', 'purpose'];
+        const errors = validateRequiredFields(salaryInformation, requiredFields, setSalaryFormError);
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+        setStep(3)
+    }
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_employee) ? (
@@ -259,6 +270,7 @@ export const AddEmployee = () => {
                                         <SalaryInformation
                                             initialValues={salaryInformation}
                                             setSalaryData={(salary: string) => handleSalaryInformation(salary)}
+                                            formErrors={salaryFormError}
                                         />
                                         <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                                             <button
@@ -269,7 +281,7 @@ export const AddEmployee = () => {
                                                 {__('Back', 'pcm')}
                                             </button>
                                             <Button
-                                                onClick={() => setStep(3)}
+                                                onClick={() => goToReview()}
                                                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                             >
                                                 {__('Save & Continue', 'pcm')}

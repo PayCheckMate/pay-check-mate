@@ -35,7 +35,7 @@ class Request implements FormRequestInterface {
      *
      * @var array<string>
      */
-    protected array $data;
+    public array $data;
 
     /**
      * Any error.
@@ -83,6 +83,8 @@ class Request implements FormRequestInterface {
     public function validate() {
         if ( ! isset( $this->data['_wpnonce'] ) || ! wp_verify_nonce( $this->data['_wpnonce'], $this->get_nonce() ) ) {
             $this->addError( 'nonce', __( 'Nonce verification failed', 'pcm' ) );
+
+            throw new Exception( __( 'Nonce verification failed', 'pcm' ) );
         }
 
         $this->validate_fillable();
