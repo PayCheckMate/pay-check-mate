@@ -112,6 +112,8 @@ final class PayCheckMate {
                 $this->load_hooks( $item );
             }
         }
+
+        do_action( 'pay_check_mate_loaded' );
     }
 
     /**
