@@ -13,7 +13,6 @@ let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigation
     {title: __('Profile', 'pcm'), href: 'profile', icon: UserPlusIcon, current: false, roles: ['pay_check_mate_employee']},
     {title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee']},
     {title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Final Settlement (Pro)', 'pcm'), href: 'final-settlement', icon: UserIcon, current: false, roles: ['pay_check_mate_accountant']},
     {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
         children: [
             {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant']},

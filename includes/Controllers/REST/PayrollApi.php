@@ -156,6 +156,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => $request->get_param( 'order' ) ? sanitize_text_field( $request->get_param( 'order' ) ) : 'DESC',
             'order_by' => $request->get_param( 'order_by' ) ? sanitize_text_field( $request->get_param( 'order_by' ) ) : 'id',
             'search'   => $request->get_param( 'search' ) ? sanitize_text_field( $request->get_param( 'search' ) ) : '',
+            'group_by' => $request->get_param( 'group_by' ) ? sanitize_text_field( $request->get_param( 'group_by' ) ) : '',
         ];
 
         $payroll_model = new PayrollModel();
@@ -243,14 +244,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        if ( ! empty( $parameters['department_id'] ) || 'all' !== $parameters['department_id'] ) {
+        // || 'all' !== $parameters['department_id']
+        if ( ! empty( $parameters['department_id'] ) ) {
             $department_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['department_id'],
             ];
         }
 
-        if ( ! empty( $parameters['designation_id'] ) || 'all' !== $parameters['designation_id'] ) {
+        //  || 'all' !== $parameters['designation_id']
+        if ( ! empty( $parameters['designation_id'] ) ) {
             $designation_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['designation_id'],

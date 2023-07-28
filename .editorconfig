@@ -11,7 +11,7 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-[{.jshintrc,*.json,*.yml,*.js,*.less}]
+[{.jshintrc,*.json,*.yml,*.js,*.less,*.tsx,*.ts,*.jsx}]
 indent_style = space
 indent_size = 4
 

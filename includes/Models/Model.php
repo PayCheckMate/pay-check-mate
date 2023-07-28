@@ -92,7 +92,7 @@ class Model implements ModelInterface {
                 'order_by'  => 'id',
                 'search'    => '',
                 'status'    => 'all',
-                'groupby'   => '',
+                'group_by'   => '',
                 'relations' => [],
             ]
         );
@@ -139,9 +139,9 @@ class Model implements ModelInterface {
             $where .= $this->get_search_query( $args[ 'search' ] );
         }
 
-        $groupby = '';
-        if ( ! empty( $args[ 'groupby' ] ) ) {
-            $groupby = $wpdb->prepare( 'GROUP BY %s', $args[ 'groupby' ] );
+        $group_by = '';
+        if ( ! empty( $args[ 'group_by' ] ) ) {
+            $group_by = $wpdb->prepare( 'GROUP BY %s', $args[ 'group_by' ] );
         }
 
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
@@ -162,11 +162,11 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$groupby} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
                 $args[ 'limit' ],
                 $args[ 'offset' ]
             );
@@ -275,7 +275,7 @@ class Model implements ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param array<string> $args
+     * @param array<string, mixed> $args
      *
      * @throws Exception
      * @return int
