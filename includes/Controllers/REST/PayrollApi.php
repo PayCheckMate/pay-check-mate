@@ -156,6 +156,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => $request->get_param( 'order' ) ? sanitize_text_field( $request->get_param( 'order' ) ) : 'DESC',
             'order_by' => $request->get_param( 'order_by' ) ? sanitize_text_field( $request->get_param( 'order_by' ) ) : 'id',
             'search'   => $request->get_param( 'search' ) ? sanitize_text_field( $request->get_param( 'search' ) ) : '',
+            'group_by' => $request->get_param( 'group_by' ) ? sanitize_text_field( $request->get_param( 'group_by' ) ) : '',
         ];
 
         $payroll_model = new PayrollModel();
