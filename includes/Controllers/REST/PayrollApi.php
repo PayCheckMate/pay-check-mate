@@ -598,7 +598,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request $request
+     * @param \WP_REST_Request<array<string>> $request
      *
      * @throws \Exception
      * @return WP_REST_Response|WP_Error
