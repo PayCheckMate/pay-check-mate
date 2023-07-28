@@ -123,6 +123,14 @@ class Model implements ModelInterface {
                 $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value[ 'value' ] );
             }
         }
+
+        if( ! empty( $args['where_between'] ) ){
+            foreach( $args['where_between'] as $key => $value ){
+                $type = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
+            }
+        }
+
         if ( ! empty( $args[ 'status' ] ) && 'all' !== $args[ 'status' ] ) {
             $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args[ 'status' ] );
         }
