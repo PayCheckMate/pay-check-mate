@@ -1,7 +1,7 @@
 import {__} from "@wordpress/i18n";
 import {Link} from "react-router-dom";
 
-export const NotFound = () => {
+export const NotFound = ({goBackUrl='/'}: {goBackUrl?: string}) => {
     return(
         <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="text-center">
@@ -15,7 +15,7 @@ export const NotFound = () => {
                     {__('Sorry, we couldn’t find the page you’re looking for.', 'pcm')}
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
-                    <Link to={'/'} className="text-sm font-semibold text-gray-900">
+                    <Link to={goBackUrl} className="text-sm font-semibold text-gray-900">
                         <span aria-hidden="true">&larr;</span> {__('Go back home', 'pcm')}
                     </Link>
                 </div>

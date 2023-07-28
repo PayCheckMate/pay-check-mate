@@ -3,6 +3,7 @@ export interface PayrollType {
     department_id: number;
     designation_id: number;
     payroll_date: string;
+    total_salary: number;
     payroll_date_string: string;
     remarks: string;
     status: number;

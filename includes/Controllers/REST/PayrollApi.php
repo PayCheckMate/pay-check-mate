@@ -244,14 +244,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        if ( ! empty( $parameters['department_id'] ) || 'all' !== $parameters['department_id'] ) {
+        // || 'all' !== $parameters['department_id']
+        if ( ! empty( $parameters['department_id'] ) ) {
             $department_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['department_id'],
             ];
         }
 
-        if ( ! empty( $parameters['designation_id'] ) || 'all' !== $parameters['designation_id'] ) {
+        //  || 'all' !== $parameters['designation_id']
+        if ( ! empty( $parameters['designation_id'] ) ) {
             $designation_args['where']['id'] = [
                 'operator' => '=',
                 'value'    => $parameters['designation_id'],

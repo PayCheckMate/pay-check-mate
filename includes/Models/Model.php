@@ -275,7 +275,7 @@ class Model implements ModelInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param array<string> $args
+     * @param array<string, mixed> $args
      *
      * @throws Exception
      * @return int
