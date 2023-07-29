@@ -18,27 +18,25 @@ final class PayCheckMate {
      *
      * @var array|string[]
      */
-    protected array $classes
-        = [
-            'PayCheckMate\Controllers\AdminMenu',
-            'PayCheckMate\Controllers\Assets',
-        ];
+    protected array $classes = [
+        'PayCheckMate\Controllers\AdminMenu',
+        'PayCheckMate\Controllers\Assets',
+    ];
 
     /**
      * All the API classes.
      *
      * @var array|string[]
      */
-    protected array $api_classes
-        = [
-            'PayCheckMate\Controllers\REST\DepartmentApi',
-            'PayCheckMate\Controllers\REST\DesignationApi',
-            'PayCheckMate\Controllers\REST\SalaryHeadApi',
-            'PayCheckMate\Controllers\REST\PayrollApi',
-            'PayCheckMate\Controllers\REST\EmployeeApi',
-            'PayCheckMate\Controllers\REST\PaySlipApi',
-            'PayCheckMate\Controllers\REST\DashboardApi',
-        ];
+    protected array $api_classes = [
+        'PayCheckMate\Controllers\REST\DepartmentApi',
+        'PayCheckMate\Controllers\REST\DesignationApi',
+        'PayCheckMate\Controllers\REST\SalaryHeadApi',
+        'PayCheckMate\Controllers\REST\PayrollApi',
+        'PayCheckMate\Controllers\REST\EmployeeApi',
+        'PayCheckMate\Controllers\REST\PaySlipApi',
+        'PayCheckMate\Controllers\REST\DashboardApi',
+    ];
 
     /**
      * Get the single instance of the class

@@ -41,6 +41,7 @@ class Assets implements HookAbleInterface {
      * Enqueue scripts.
      *
      * @since DOKAN_PRO_SINCE
+     * @throws \Exception
      * @return void
      */
     public function enqueue_scripts(): void {
@@ -48,7 +49,7 @@ class Assets implements HookAbleInterface {
             return;
         }
 
-        $this->register_translations();
+        $this->register_localize_script();
         wp_enqueue_script( 'pay-check-mate-js' );
         wp_enqueue_style( 'pay-check-mate-css' );
     }
@@ -61,7 +62,7 @@ class Assets implements HookAbleInterface {
      * @throws \Exception
      * @return void
      */
-    public function register_translations(): void {
+    public function register_localize_script(): void {
         $user = wp_get_current_user();
         $employee = new Employee();
         $employee = $employee->get_employee_by_user_id( $user->ID );

@@ -2,8 +2,22 @@
     "name": "pay-check-mate",
     "version": "1.0.0",
     "description": "Pay Check Mate is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors.",
-    "homepage": "https://wedevs.com/",
+    "homepage": "https://paycheckmate.com/",
+    "private": true,
     "main": "index.js",
+    "author": "Ratul Hasan",
+    "license": "GPL-3.0-or-later",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "payroll",
+        "payroll management",
+        "payroll management system",
+        "payroll management software",
+        "payroll software",
+        "payroll system",
+        "payroll system software"
+    ],
     "scripts": {
         "start": "wp-scripts start",
         "start:hot": "wp-scripts start --hot",
@@ -27,9 +41,6 @@
         "wp-env": "wp-env",
         "env:start": "wp-env start"
     },
-    "keywords": [],
-    "author": "Ratul Hasan",
-    "license": "GPL-3.0-or-later",
     "devDependencies": {
         "@babel/preset-typescript": "^7.21.5",
         "@playwright/test": "^1.35.1",
