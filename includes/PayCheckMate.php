@@ -131,6 +131,20 @@ final class PayCheckMate {
      * @return void
      */
     public function load_plugin_hooks(): void {
+        $this->load_hook_classes();
+        $this->load_classes();
+
+        do_action( 'pay_check_mate_loaded' );
+    }
+
+    /**
+     * Load all the hook classes.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function load_hook_classes() {
         if ( empty( $this->hook_classes ) ) {
             return;
         }
@@ -141,12 +155,23 @@ final class PayCheckMate {
                 $this->load_hooks( $item );
             }
         }
+    }
+
+    /**
+     * Load all the classes.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function load_classes() {
+        if ( empty( $this->classes ) ) {
+            return;
+        }
 
         foreach ( $this->classes as $key => $item ) {
             $this->container[ $key ] = new $item();
         }
-
-        do_action( 'pay_check_mate_loaded' );
     }
 
     /**

@@ -1,5 +1,5 @@
 import {Fragment, useState} from '@wordpress/element'
-import {BanknotesIcon, Bars3Icon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, UserGroupIcon, UserIcon, UserPlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {BanknotesIcon, Bars3Icon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, UserGroupIcon, UserPlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "../Components/NavbarLink";

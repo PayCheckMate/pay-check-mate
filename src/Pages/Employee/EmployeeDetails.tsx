@@ -27,7 +27,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
     }
     const [personalInformation, setPersonalInformation] = useState({} as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState([] as SalaryHistoryType[]);
-    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
+    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc', status: '1'}), []);
 
     useEffect(() => {
         if (employeeId) {

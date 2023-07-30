@@ -125,7 +125,7 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        {applyFilters('pcm.employee_list_action', record)}
+                        {applyFilters('pcm.employee_list_action', null, record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
