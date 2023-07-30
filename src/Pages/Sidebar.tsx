@@ -1,36 +1,33 @@
 import {Fragment, useState} from '@wordpress/element'
-import {createHooks} from '@wordpress/hooks';
 import {BanknotesIcon, Bars3Icon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, UserGroupIcon, UserIcon, UserPlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
 import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "../Components/NavbarLink";
 import {__} from "@wordpress/i18n";
+import {applyFilters} from "../Helpers/Hooks";
 
-const Hooks = createHooks();
-let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
-    {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Profile', 'pcm'), href: 'profile', icon: UserPlusIcon, current: false, roles: ['pay_check_mate_employee']},
-    {title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
+
+let navigation: NavigationType[] = [
+    {key: 'dashboard', title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee']},
+    {key: 'employees', title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant']},
+    {key: 'profile', title: __('Profile', 'pcm'), href: 'profile', icon: UserPlusIcon, current: false, roles: ['pay_check_mate_employee']},
+    {key: 'payslip', title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee']},
+    {key: 'payroll', title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['pay_check_mate_accountant']},
+    {key: 'settings', title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
         children: [
-            {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant']},
-            {title: __('Designations', 'pcm'), href: 'designations', current: false, roles: ['pay_check_mate_accountant']},
-            {title: __('Salary Heads', 'pcm'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant']},
+            {key: 'departments', title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant']},
+            {key: 'designations', title: __('Designations', 'pcm'), href: 'designations', current: false, roles: ['pay_check_mate_accountant']},
+            {key: 'salary_heads', title: __('Salary Heads', 'pcm'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant']},
         ]
     },
-    {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
+    {key: 'reports', title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
         children: [
-            {title: __('Payroll', 'pcm'), href: 'reports/payroll-report', current: false, roles: ['pay_check_mate_accountant']},
+            {key: 'payroll_report', title: __('Payroll', 'pcm'), href: 'reports/payroll-report', current: false, roles: ['pay_check_mate_accountant'], icon: null},
         ]
     },
-]) as NavigationType[];
+] as NavigationType[];
 
-// @ts-ignore
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+navigation = applyFilters('pcm.sidebar_navigations', navigation);
 
 export const Sidebar = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false)

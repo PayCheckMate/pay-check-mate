@@ -1,4 +1,5 @@
 export interface NavigationType {
+    key: string;
     title: string;
     href: string;
     icon: any;

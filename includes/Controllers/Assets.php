@@ -9,7 +9,8 @@ class Assets implements HookAbleInterface {
 
     public function hooks(): void {
         add_action( 'init', [ $this, 'register_scripts' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+        // This asset needs to be loaded after pro-assets.
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ], 12 );
     }
 
     /**

@@ -10,6 +10,8 @@ import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
+import {applyFilters} from "../../Helpers/Hooks";
+import {SalaryInformation} from "./Components/SalaryInformation";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -123,15 +125,7 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        {userCan(UserCapNames.pay_check_mate_salary_increment) && (
-                            <button
-                                onClick={() => viewEmployee(record.id)}
-                                className="text-green-600 hover:text-green-900"
-                            >
-                                {__('Salary increment', 'pcm')}
-                            </button>
-                        )
-                        }
+                        {applyFilters('pcm.employee_list_action', record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
@@ -151,7 +145,18 @@ export const EmployeeList = () => {
 
     return (
         <>
-            {showViewModal && <Modal setShowModal={setShowViewModal} />}
+            {/*{showViewModal &&*/}
+            {/*    <>*/}
+            {/*        <Modal*/}
+            {/*            setShowModal={setShowViewModal}*/}
+            {/*            header={pageTitle}*/}
+            {/*            width={' sm:max-w-3xl'}*/}
+            {/*            zIndex={'9999'}*/}
+            {/*        >*/}
+            {/*            {applyFilters('pcm.employee_view_modal', null, setShowViewModal)}*/}
+            {/*        </Modal>*/}
+            {/*    </>*/}
+            {/*}*/}
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">

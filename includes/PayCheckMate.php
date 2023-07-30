@@ -14,13 +14,22 @@ final class PayCheckMate {
     protected static ?PayCheckMate $instance = null;
 
     /**
+     * All the hook classes.
+     *
+     * @var array|string[]
+     */
+    protected array $hook_classes = [
+        'PayCheckMate\Controllers\AdminMenu',
+        'PayCheckMate\Controllers\Assets',
+    ];
+
+    /**
      * All the controller classes.
      *
      * @var array|string[]
      */
     protected array $classes = [
-        'PayCheckMate\Controllers\AdminMenu',
-        'PayCheckMate\Controllers\Assets',
+        'employee' => 'PayCheckMate\Classes\Employee',
     ];
 
     /**
@@ -37,6 +46,13 @@ final class PayCheckMate {
         'PayCheckMate\Controllers\REST\PaySlipApi',
         'PayCheckMate\Controllers\REST\DashboardApi',
     ];
+
+    /**
+     * Holds classes instances
+     *
+     * @var array
+     */
+    private array $container = [];
 
     /**
      * Get the single instance of the class
@@ -62,6 +78,21 @@ final class PayCheckMate {
 
         // Register REST API routes.
         add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+    }
+
+    /**
+     * Magic getter to bypass referencing plugin.
+     *
+     * @param string $prop Property name.
+     *
+     * @return mixed
+     */
+    public function __get( string $prop ) {
+        if ( array_key_exists( $prop, $this->container ) ) {
+            return $this->container[ $prop ];
+        }
+
+        return $this->{$prop};
     }
 
     /**
@@ -100,15 +131,19 @@ final class PayCheckMate {
      * @return void
      */
     public function load_plugin_hooks(): void {
-        if ( empty( $this->classes ) ) {
+        if ( empty( $this->hook_classes ) ) {
             return;
         }
 
-        foreach ( $this->classes as $item ) {
+        foreach ( $this->hook_classes as $item ) {
             $item = new $item();
             if ( $item instanceof HookAbleInterface ) {
                 $this->load_hooks( $item );
             }
+        }
+
+        foreach ( $this->classes as $key => $item ) {
+            $this->container[ $key ] = new $item();
         }
 
         do_action( 'pay_check_mate_loaded' );

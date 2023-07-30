@@ -58,10 +58,10 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
  *
  * @since PAY_CHECK_MATE_SINCE
  *
- * @return void
+ * @return PayCheckMate
  */
-function pay_check_mate_init(): void {
-    PayCheckMate::get_instance();
+function pcm(): PayCheckMate {
+    return PayCheckMate::get_instance();
 }
 
 /**
@@ -69,4 +69,4 @@ function pay_check_mate_init(): void {
  *
  * @since PAY_CHECK_MATE_SINCE
  */
-pay_check_mate_init();
+pcm();
