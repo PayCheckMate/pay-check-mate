@@ -312,8 +312,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details                    = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-            return ! in_array( $key, $keys_to_remove, true );
-        }, ARRAY_FILTER_USE_KEY
+				return ! in_array( $key, $keys_to_remove, true );
+			}, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
