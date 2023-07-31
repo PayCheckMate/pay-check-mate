@@ -312,8 +312,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details                    = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-				return ! in_array( $key, $keys_to_remove, true );
-			}, ARRAY_FILTER_USE_KEY
+            return ! in_array( $key, $keys_to_remove, true );
+        }, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
@@ -455,9 +455,15 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return \WP_REST_Response
      */
     public function get_employee_salary_details( WP_REST_Request $request ): WP_REST_Response {
+        $args           = [
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : '-1',
+            'offset'   => $request->get_param( 'offset' ) ? $request->get_param( 'offset' ) : '0',
+            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
+            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
+        ];
         $employee_id    = $request->get_param( 'employee_id' );
         $employee       = new Employee( $employee_id );
-        $salary_details = $employee->get_salary_history();
+        $salary_details = $employee->get_salary_history( $args );
         $item           = $this->prepare_item_for_response( (object) $employee->get_employee(), $request );
         $data           = $this->prepare_response_for_collection( $item );
 
@@ -520,7 +526,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'designation_name'      => [
+                'designation_name'    => [
                     'description' => __( 'Designation ID', 'pcm' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],

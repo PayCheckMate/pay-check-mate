@@ -60,13 +60,15 @@ class Employee {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @throws \Exception
      * @return array<string, mixed>
      */
-    public function get_salary_history(): array {
+    public function get_salary_history( array $args ): array {
         $salary = new Salary( $this->employee );
 
-        return $salary->get_salary_history();
+        return $salary->get_salary_history( $args );
     }
 
     /**
