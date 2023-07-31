@@ -10,6 +10,9 @@ export interface EmployeeType {
     last_name: string;
     email: string;
     phone: string;
+    bank_name: string;
+    bank_account_number: string;
+    tax_number: string;
     address: string;
     joining_date: string;
     regine_date: string;

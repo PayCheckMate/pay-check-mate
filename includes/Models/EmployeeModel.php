@@ -19,20 +19,23 @@ class EmployeeModel extends Model implements EmployeeInterface {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'employee_id'    => '%s',
-        'user_id'        => '%d',
-        'department_id'  => '%d',
-        'designation_id' => '%d',
-        'first_name'     => '%s',
-        'last_name'      => '%s',
-        'email'          => '%s',
-        'phone'          => '%s',
-        'address'        => '%s',
-        'joining_date'   => '%s',
-        'regine_date'    => '%s',
-        'status'         => '%d',
-        'created_on'     => '%s',
-        'updated_at'     => '%s',
+        'employee_id'         => '%s',
+        'user_id'             => '%d',
+        'department_id'       => '%d',
+        'designation_id'      => '%d',
+        'first_name'          => '%s',
+        'last_name'           => '%s',
+        'email'               => '%s',
+        'phone'               => '%s',
+        'bank_name'           => '%s',
+        'bank_account_number' => '%s',
+        'tax_number'          => '%s',
+        'address'             => '%s',
+        'joining_date'        => '%s',
+        'regine_date'         => '%s',
+        'status'              => '%d',
+        'created_on'          => '%s',
+        'updated_at'          => '%s',
     ];
 
     public function find_employee( int $employee_id ): EmployeeModel {
@@ -161,8 +164,8 @@ class EmployeeModel extends Model implements EmployeeInterface {
 
         foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
-                if ( array_key_exists( $key, $salary_head_types[ $type ] ) ) {
-                    $salary[ 'salary_details' ][ $type ][ $key ] = $amount;
+                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
+                    $salary['salary_details'][$type][$key] = $amount;
                 }
             }
         }

@@ -188,6 +188,36 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
+                                    label={__('Bank name', 'pcm')}
+                                    name="bank_name"
+                                    id="bank_name"
+                                    value={formValues.bank_name || initialValues.bank_name || ''}
+                                    onChange={handleFormInputChange}
+                                    error={formError.bank_name}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
+                                    label={__('Bank account number', 'pcm')}
+                                    name="bank_account_number"
+                                    id="bank_account_number"
+                                    value={formValues.bank_account_number || initialValues.bank_account_number || ''}
+                                    onChange={handleFormInputChange}
+                                    error={formError.bank_account_number}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
+                                    label={__('Tax number', 'pcm')}
+                                    name="tax_number"
+                                    id="tax_number"
+                                    value={formValues.tax_number || initialValues.tax_number || ''}
+                                    onChange={handleFormInputChange}
+                                    error={formError.tax_number}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <FormInput
                                     required={true}
                                     type="date"
                                     label={__('Joining date', 'pcm')}

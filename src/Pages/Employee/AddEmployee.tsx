@@ -212,6 +212,7 @@ export const AddEmployee = () => {
                     return;
                 }
             } else {
+                console.log(response, 'error')
                 toast.error(__('Something went wrong', 'pcm'));
             }
         }).catch(error => {

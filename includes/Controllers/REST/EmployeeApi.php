@@ -427,11 +427,19 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @return WP_REST_Response
+     * @throws \Exception
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function get_user( WP_REST_Request $request ): WP_REST_Response {
+    public function get_user( WP_REST_Request $request ) {
         $user_id = $request->get_param( 'user_id' );
-        $user    = new \WP_User( $user_id );
+        $employee = new EmployeeModel();
+        $employee = $employee->get_employee_by_user_id( $user_id );
+        // Check if there is any employee with this user id, then return, cause employee exists.
+        if ( '' !== $employee->get_employee_id() ) {
+            return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pcm' ), [ 'status' => 302 ] );
+        }
+        $user = new \WP_User( $user_id );
 
         $data['user_id']    = $user->ID;
         $data['first_name'] = $user->first_name;
@@ -548,6 +556,18 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 ],
                 'phone'               => [
                     'description' => __( 'Employee Phone Number', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'bank_name'           => [
+                    'description' => __( 'Employee Bank Name', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'bank_account_number' => [
+                    'description' => __( 'Employee Bank Account Number', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'tax_number' => [
+                    'description' => __( 'Employee Bank Account Number', 'pcm' ),
                     'type'        => 'string',
                 ],
                 'address'             => [
