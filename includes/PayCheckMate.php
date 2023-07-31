@@ -83,7 +83,7 @@ final class PayCheckMate {
     /**
      * Holds classes instances
      *
-     * @var array
+     * @var array<string, mixed>
      */
     private array $container = [];
 
