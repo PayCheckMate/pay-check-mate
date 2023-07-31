@@ -5,6 +5,7 @@ namespace PayCheckMate;
 use PayCheckMate\Classes\Installer;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Contracts\HookAbleInterface;
+use ReflectionClass;
 
 final class PayCheckMate {
 
@@ -26,10 +27,42 @@ final class PayCheckMate {
     /**
      * All the controller classes.
      *
-     * @var array|string[]
+     * @var array<string, mixed>
      */
     protected array $classes = [
-        'employee' => 'PayCheckMate\Classes\Employee',
+        'employee' => [
+            'class' => 'PayCheckMate\Classes\Employee',
+        ],
+    ];
+
+    /**
+     * All the model classes.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $model_classes = [
+        'employee_model' => [
+            'class' => 'PayCheckMate\Models\EmployeeModel',
+        ],
+        'salary_history_model' => [
+            'class' => 'PayCheckMate\Models\SalaryHistoryModel',
+        ],
+    ];
+
+    /**
+     * All the request classes.
+     *
+     * @var array<string, mixed>
+     */
+    protected array $request_classes = [
+        'employee_request' => [
+            'class' => 'PayCheckMate\Requests\EmployeeRequest',
+            'args'  => [],
+        ],
+        'salary_history_request' => [
+            'class' => 'PayCheckMate\Requests\SalaryHistoryRequest',
+            'args'  => [],
+        ],
     ];
 
     /**
@@ -128,11 +161,15 @@ final class PayCheckMate {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @throws \ReflectionException
+     *
      * @return void
      */
     public function load_plugin_hooks(): void {
         $this->load_hook_classes();
-        $this->load_classes();
+        $this->load_classes( $this->classes );
+        $this->load_classes( $this->model_classes );
+        $this->load_classes( $this->request_classes );
 
         do_action( 'pay_check_mate_loaded' );
     }
@@ -162,15 +199,25 @@ final class PayCheckMate {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $classes Classes to load.
+     *
+     * @throws \ReflectionException
      * @return void
      */
-    public function load_classes() {
-        if ( empty( $this->classes ) ) {
+    public function load_classes( array $classes = [] ) {
+        if ( empty( $classes ) ) {
             return;
         }
 
-        foreach ( $this->classes as $key => $item ) {
-            $this->container[ $key ] = new $item();
+        foreach ( $classes as $key => $item ) {
+            $reflector = new ReflectionClass( $item['class'] );
+            if ( isset( $item['args'] ) ) {
+                $instance = $reflector->newInstanceArgs( $item['args'] );
+            } else {
+                $instance = $reflector->newInstance();
+            }
+
+            $this->container[ $key ] = $instance;
         }
     }
 

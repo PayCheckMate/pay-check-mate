@@ -52,8 +52,12 @@ class Request implements FormRequestInterface {
      *
      * @throws Exception
      */
-    public function __construct( array $data ) {
+    public function __construct( array $data = [] ) {
         $this->data = $data;
+        if ( empty( $this->data ) ) {
+            return;
+        }
+
         $this->validate();
     }
 
@@ -70,6 +74,22 @@ class Request implements FormRequestInterface {
         return $this->data[ $name ] ?? null;
     }
 
+    /**
+     * Set data.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $data Post Super Global.
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    public function set( array $data ): Request {
+        $this->data = $data;
+        $this->validate();
+
+        return $this;
+    }
 
     /**
      * Validate nonce.
@@ -84,7 +104,8 @@ class Request implements FormRequestInterface {
         if ( ! isset( $this->data['_wpnonce'] ) || ! wp_verify_nonce( $this->data['_wpnonce'], $this->get_nonce() ) ) {
             $this->addError( 'nonce', __( 'Nonce verification failed', 'pcm' ) );
 
-            throw new Exception( __( 'Nonce verification failed', 'pcm' ) );
+            wp_die( __( 'Nonce verification failed', 'pcm' ) );
+			// throw new Exception( __( 'Nonce verification failed', 'pcm' ) );
         }
 
         $this->validate_fillable();
