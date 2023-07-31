@@ -14,6 +14,7 @@ import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
+import {CreateDesignation} from "./CreateDesignation";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
@@ -54,7 +55,10 @@ export const DesignationList = () => {
             render: (text: string, record: DesignationType) => (
                 <div className="flex">
                     {userCan(UserCapNames.pay_check_mate_edit_designation) && (
-                        <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
+                        <button
+                            className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => handleModal(record)}
+                        >
                         {__('Edit', 'pcm')}
                     </button>
                     )}
@@ -63,7 +67,10 @@ export const DesignationList = () => {
                             {parseInt(String(record.status)) === DesignationStatus.Active && (
                                 <>
                                     <span className="mx-2 text-gray-300">|</span>
-                                    <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
+                                    <button
+                                        onClick={() => handleStatus(record.id, 0)}
+                                        className="text-red-600 hover:text-red-900"
+                                    >
                                         {__('Inactive', 'pcm')}
                                     </button>
                                 </>
@@ -71,7 +78,10 @@ export const DesignationList = () => {
                             {parseInt(String(record.status)) === DesignationStatus.Inactive && (
                                 <>
                                     <span className="mx-2 text-gray-300">|</span>
-                                    <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
+                                    <button
+                                        onClick={() => handleStatus(record.id, 1)}
+                                        className="text-green-600 hover:text-green-900"
+                                    >
                                         {__('Active', 'pcm')}
                                     </button>
                                 </>
@@ -116,49 +126,6 @@ export const DesignationList = () => {
         setCurrentPage(filterObject.page);
     };
 
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        const data = formData
-        // @ts-ignore
-        data._wpnonce = payCheckMate.pay_check_mate_nonce;
-        // Handle required fields
-        const requiredFields = ['name'];
-        const errors = validateRequiredFields(data, requiredFields, setFormError);
-        if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill all required fields', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: false
-            });
-
-            return;
-        }
-
-        if (formData.id) {
-            dispatch(designation).updateDesignation(data).then((response: any) => {
-                useNotify(response, __('Designation updated successfully', 'pcm'));
-            }).catch((error: any) => {
-                console.log(error, 'error')
-                toast.error(__('Something went wrong while updating designation', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000
-                });
-            })
-
-            setShowModal(false);
-        } else {
-            dispatch(designation).createDesignation(data).then((response: any) => {
-                useNotify(response, __('Designation created successfully', 'pcm'));
-            }).catch((error: any) => {
-                console.log(error, 'error')
-                toast.error(__('Something went wrong while creating designation', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000
-                });
-            })
-            setShowModal(false);
-        }
-    }
     return (
         <>
             <div>
@@ -169,30 +136,25 @@ export const DesignationList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <Button onClick={() => handleModal({} as DesignationType)} className="hover:text-white active:text-white">
-                            <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
+                        <Button
+                            onClick={() => handleModal({} as DesignationType)}
+                            className="hover:text-white active:text-white"
+                        >
+                            <CheckCircleIcon
+                                className="w-5 h-5 mr-2 -ml-1 text-white"
+                                aria-hidden="true"
+                            />
                             {__('Add designation', 'pcm')}
                         </Button>
                         {showModal && (
-                            <Modal setShowModal={setShowModal} header={__('Add designation', 'pcm')}>
-                                {/*Create a form to save designation*/}
-                                <div className="mt-5 md:mt-0 md:col-span-2">
-                                    <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput
-                                            label={__('Designation name', 'pcm')}
-                                            name="name"
-                                            id="name"
-                                            value={formData.name}
-                                            error={formError.name}
-                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                            required={true}
-                                        />
-                                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                                            {__('Add designation', 'pcm')}
-                                        </Button>
-                                    </form>
-                                </div>
-                            </Modal>
+                            <CreateDesignation
+                                showModal={showModal}
+                                setShowModal={setShowModal}
+                                formData={formData}
+                                setFormData={setFormData}
+                                formError={formError}
+                                setFormError={setFormError}
+                            />
                         )}
                     </div>
                 </div>

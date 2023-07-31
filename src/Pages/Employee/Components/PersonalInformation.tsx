@@ -1,7 +1,7 @@
 import {FormInput} from "../../../Components/FormInput";
 import {__} from "@wordpress/i18n";
 import {SelectBox} from "../../../Components/SelectBox";
-import {useEffect, useState} from "@wordpress/element";
+import React, {useEffect, useState} from "@wordpress/element";
 import {DesignationType} from "../../../Types/DesignationType";
 import {DepartmentType} from "../../../Types/DepartmentType";
 import {SelectBoxType} from "../../../Types/SalaryHeadType";
@@ -14,6 +14,8 @@ import {useSelect} from "@wordpress/data";
 import department from "../../../Store/Department";
 import designation from "../../../Store/Designation";
 import {useParams} from "react-router-dom";
+import {CreateDepartment} from "../../Department/CreateDepartment";
+import {CreateDesignation} from "../../Designation/CreateDesignation";
 
 type PersonalInformationPropTypes = {
     setFormData: (formData: EmployeeType) => void;
@@ -99,8 +101,34 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
         }
         nextStep();
     }
+
+    const [showDepartmentModal, setShowDepartmentModal] = useState(false);
+    const [showDesignationModal, setShowDesignationModal] = useState(false);
+    const [departmentData, setDepartmentData] = useState<DepartmentType>({} as DepartmentType);
+    const [designationData, setDesignationData] = useState<DesignationType>({} as DesignationType);
+
     return (
         <>
+            {showDepartmentModal && (
+                <CreateDepartment
+                    showModal={showDepartmentModal}
+                    setShowModal={setShowDepartmentModal}
+                    formData={departmentData}
+                    setFormData={setDepartmentData}
+                    formError={formError}
+                    setFormError={setFormError}
+                />
+            )}
+            {showDesignationModal && (
+                <CreateDesignation
+                    showModal={showDesignationModal}
+                    setShowModal={setShowDesignationModal}
+                    formData={designationData}
+                    setFormData={setDesignationData}
+                    formError={formError}
+                    setFormError={setFormError}
+                />
+            )}
             <div className="space-y-12">
                 <div className="bg-white sm:rounded-xl md:col-span-2">
                     <div className="px-4 py-6 sm:p-8">
@@ -140,6 +168,11 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                         handleFormInputChange({target: {name: 'department_id', value: selectedDepartment.id}})
                                     }}
                                 />
+                                <div className="mt-1 text-sm text-gray-500">
+                                    <span onClick={() => setShowDepartmentModal(true)} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                        {__('Create a new department', 'pcm')}
+                                    </span>
+                                </div>
                             </div>
                             <div className="sm:col-span-3">
                                 <SelectBox
@@ -153,6 +186,11 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                         handleFormInputChange({target: {name: 'designation_id', value: selectedDesignation.id}})
                                     }}
                                 />
+                                <div className="mt-1 text-sm text-gray-500">
+                                    <span onClick={() => setShowDesignationModal(true)} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                        {__('Create a new designation', 'pcm')}
+                                    </span>
+                                </div>
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput

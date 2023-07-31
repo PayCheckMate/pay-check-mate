@@ -14,13 +14,14 @@ import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
+import {CreateDepartment} from "./CreateDepartment";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
     const per_page = '10';
     const {departments, loading, totalPages, filters, total} = useSelect((select) => select(department).getDepartments({per_page: per_page, page: 1}), []);
     const [formData, setFormData] = useState<DepartmentType>({} as DepartmentType);
-    const [formError, setFormError] = useState({} as { [key: string]: string});
+    const [formError, setFormError] = useState({} as { [key: string]: string });
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(filters.page);
 
@@ -54,7 +55,10 @@ export const DepartmentList = () => {
             render: (text: string, record: DepartmentType) => (
                 <div className="flex">
                     {userCan(UserCapNames.pay_check_mate_edit_department) && (
-                    <button className="text-indigo-600 hover:text-indigo-900" onClick={() => handleModal(record)}>
+                        <button
+                            className="text-indigo-600 hover:text-indigo-900"
+                            onClick={() => handleModal(record)}
+                        >
                         {__('Edit', 'pcm')}
                     </button>
                     )}
@@ -63,7 +67,10 @@ export const DepartmentList = () => {
                             {parseInt(String(record.status)) === DepartmentStatus.Active && (
                                 <>
                                     <span className="mx-2 text-gray-300">|</span>
-                                    <button onClick={() => handleStatus(record.id, 0)} className="text-red-600 hover:text-red-900">
+                                    <button
+                                        onClick={() => handleStatus(record.id, 0)}
+                                        className="text-red-600 hover:text-red-900"
+                                    >
                                         {__('Inactive', 'pcm')}
                                     </button>
                                 </>
@@ -71,7 +78,10 @@ export const DepartmentList = () => {
                             {parseInt(String(record.status)) === DepartmentStatus.Inactive && (
                                 <>
                                     <span className="mx-2 text-gray-300">|</span>
-                                    <button onClick={() => handleStatus(record.id, 1)} className="text-green-600 hover:text-green-900">
+                                    <button
+                                        onClick={() => handleStatus(record.id, 1)}
+                                        className="text-green-600 hover:text-green-900"
+                                    >
                                         {__('Active', 'pcm')}
                                     </button>
                                 </>
@@ -117,48 +127,6 @@ export const DepartmentList = () => {
     };
 
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        const data = formData
-        // @ts-ignore
-        data._wpnonce = payCheckMate.pay_check_mate_nonce;
-        // Handle required fields
-        const requiredFields = ['name'];
-        const errors = validateRequiredFields(data, requiredFields, setFormError);
-        if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill all required fields', 'pcm'), {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: false
-            });
-
-            return;
-        }
-
-        if (formData.id) {
-            dispatch(department).updateDepartment(data).then((response: any) => {
-                useNotify(response, __('Department updated successfully', 'pcm'));
-            }).catch((error: any) => {
-                console.log(error, 'error')
-                toast.error(__('Something went wrong while updating department', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000
-                });
-            })
-
-            setShowModal(false);
-        } else {
-            dispatch(department).createDepartment(data).then((response: any) => {
-                useNotify(response, __('Department created successfully', 'pcm'));
-            }).catch((error: any) => {
-                console.log(error, 'error')
-                toast.error(__('Something went wrong while creating department', 'pcm'), {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000
-                });
-            })
-            setShowModal(false);
-        }
-    }
     return (
         <>
             <div>
@@ -170,31 +138,26 @@ export const DepartmentList = () => {
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         {userCan(UserCapNames.pay_check_mate_add_department) && (
-                            <Button onClick={() => handleModal({} as DepartmentType)} className="hover:text-white active:text-white">
-                                <CheckCircleIcon className="w-5 h-5 mr-2 -ml-1 text-white" aria-hidden="true" />
+                            <Button
+                                onClick={() => handleModal({} as DepartmentType)}
+                                className="hover:text-white active:text-white"
+                            >
+                                <CheckCircleIcon
+                                    className="w-5 h-5 mr-2 -ml-1 text-white"
+                                    aria-hidden="true"
+                                />
                                 {__('Add department', 'pcm')}
                             </Button>
                         )}
                         {showModal && (
-                            <Modal setShowModal={setShowModal} header={__('Add department', 'pcm')}>
-                                {/*Create a form to save department*/}
-                                <div className="mt-5 md:mt-0 md:col-span-2">
-                                    <form onSubmit={handleSubmit} className="space-y-6">
-                                        <FormInput
-                                            label={__('Department name', 'pcm')}
-                                            name="name"
-                                            id="name"
-                                            value={formData.name}
-                                            error={formError.name}
-                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                            required={true}
-                                        />
-                                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                                            {formData.id ? __('Update', 'pcm') : __('Save', 'pcm')}
-                                        </Button>
-                                    </form>
-                                </div>
-                            </Modal>
+                            <CreateDepartment
+                                showModal={showModal}
+                                setShowModal={setShowModal}
+                                formData={formData}
+                                setFormData={setFormData}
+                                formError={formError}
+                                setFormError={setFormError}
+                            />
                         )}
                     </div>
                 </div>
