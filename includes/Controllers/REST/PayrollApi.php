@@ -188,9 +188,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      *
      * @throws \Exception
      *
-     * @return \WP_REST_Response
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function generate_payroll( WP_REST_Request $request ): WP_REST_Response {
+    public function generate_payroll( WP_REST_Request $request ) {
         $parameters = $request->get_params();
 
         if ( ! isset( $parameters['payroll_date'] ) ) {
@@ -210,6 +210,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order'    => 'ASC',
             'order_by' => 'priority',
         ];
+        $employee = apply_filters( 'pay_check_mate_before_generate_payroll', $parameters );
+        if ( is_wp_error( $employee ) ) {
+            return $employee;
+        }
         $salary_head_types = Helper::get_salary_head( $args );
 
         $department_args = [
@@ -359,6 +363,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
+        $employee = apply_filters( 'pay_check_mate_before_save_payroll', $parameters );
+        if ( is_wp_error( $employee ) ) {
+            return $employee;
+        }
         // Start the transaction.
         $wpdb->query( 'START TRANSACTION' );
 
@@ -438,6 +446,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'error'  => __( 'Payroll ID is required.', 'pcm' ),
                 ]
             );
+        }
+        $result = apply_filters( 'pay_check_mate_before_save_payroll', $parameters );
+        if ( is_wp_error( $result ) ) {
+            return $result;
         }
 
         $employee                          = new EmployeeModel();

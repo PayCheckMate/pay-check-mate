@@ -15,6 +15,7 @@ import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import {FormInput} from "../../Components/FormInput";
 import {validateRequiredFields} from "../../Helpers/Helpers";
+import apiFetch from "@wordpress/api-fetch";
 
 type ResponseType = {
     data: EmployeeType,
@@ -169,11 +170,16 @@ export const AddEmployee = () => {
             url = '/pay-check-mate/v1/employees/' + employeeId;
             data.status = parseInt(String(personalInformation.status)) === EmployeeStatus.Active ? 1 : 0;
         }
-        makePostRequest<ResponseType>(url, data).then((response) => {
+
+        apiFetch({
+            path: url,
+            method: employeeId ? 'PUT' : 'POST',
+            data: data,
+        }).then((response: any) => {
+            console.log(response, 'response')
             if (response.status === 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
-                // Push to employee list page
                 navigate('/employees');
                 if (employeeId) {
                     toast.success(__('Employee updated successfully', 'pcm'));
@@ -182,9 +188,12 @@ export const AddEmployee = () => {
 
                 toast.success(__('Employee added successfully', 'pcm'));
             }
-
         }).catch(error => {
-            console.log(error, 'error');
+            const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
+            employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
+            navigate('/employees');
+            const errorMessage = error.data ? error.data : error.message;
+            toast.error(errorMessage);
         })
     }
     const handleImportEmployee = (e: any) => {

@@ -298,7 +298,8 @@ class Model implements ModelInterface {
             $where .= $this->get_search_query( $args[ 'search' ] );
         }
 
-        $query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->get_table()} {$where}", );
+        // As we prepared the where clause before, we can directly use it.
+        $query = "SELECT COUNT(*) FROM {$this->get_table()} {$where}";
 
         return $wpdb->get_var( $query );
     }

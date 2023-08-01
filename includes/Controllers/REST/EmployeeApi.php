@@ -254,6 +254,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             );
         }
 
+        $employee = apply_filters( 'pay_check_mate_before_employee_save', $data );
+        if ( is_wp_error( $employee ) ) {
+            return $employee;
+        }
+
         $wpdb->query( 'START TRANSACTION' );
         if ( ! empty( $data['id'] ) ) {
             $employee = $employee_model->update( $data['id'], $validated_data );

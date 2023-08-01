@@ -20,6 +20,10 @@ import {BanknotesIcon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, User
 import {applyFilters} from "../Helpers/Hooks";
 import {Card} from "../Components/Card";
 import {NotFound} from "../Components/404";
+import {AddEmployee} from "./Employee/AddEmployee";
+import {EmployeeDetails} from "./Employee/EmployeeDetails";
+import {PaySlipDetails} from "./Payroll/PaySlip/PaySlipDetails";
+import CreatePayroll from "./Payroll/CreatePayroll";
 
 export default function Main() {
     let navigations: NavigationType[] = [
@@ -68,6 +72,13 @@ export default function Main() {
                                     }
                                 })
                             }
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="add-employee" element={<AddEmployee/>}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/edit/:id" element={<AddEmployee/>}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/:id" element={<EmployeeDetails/>}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='pay-slip/view/:id' element={<PaySlipDetails />}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='payroll/edit/:id' element={<CreatePayroll />}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='generate-payroll' element={<CreatePayroll />}/>)}
+                                {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><NotFound /></Card>} />)}
                             </Routes>
                             <div>
                                 <ToastContainer
