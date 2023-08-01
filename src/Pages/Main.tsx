@@ -69,24 +69,6 @@ export default function Main() {
                                 })
                             }
                             </Routes>
-                            {/*<Routes>*/}
-                            {/*    {userIs(['pay_check_mate_accountant']) && (<Route path="/" element={<Dashboard/>}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="employees" element={<EmployeeList/>}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="add-employee" element={<AddEmployee/>}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/edit/:id" element={<AddEmployee/>}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/employee/:id" element={<EmployeeDetails/>}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="/profile" element={<Profile />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='departments' element={<DepartmentList />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='designations' element={<DesignationList />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='salary-heads' element={<SalaryHeadList />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='pay-slip' element={<PaySlipList />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='pay-slip/view/:id' element={<PaySlipDetails />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='payroll' element={<PayrollList />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='reports/payroll-report' element={<PayrollReport />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='payroll/edit/:id' element={<CreatePayroll />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path='generate-payroll' element={<CreatePayroll />}/>)}*/}
-                            {/*    {userIs(['pay_check_mate_accountant', 'pay_check_mate_employee']) && (<Route path="*" element={<Card><NotFound /></Card>} />)}*/}
-                            {/*</Routes>*/}
                             <div>
                                 <ToastContainer
                                     newestOnTop={false}
