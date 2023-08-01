@@ -6,6 +6,7 @@ export interface NavigationType {
     roles: string[];
     current?: boolean;
     children?: NavigationType[];
+    component?: any;
 }
 
 export interface NavbarLinkProps {
