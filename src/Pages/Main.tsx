@@ -8,7 +8,7 @@ import {DesignationList} from "./Designation/DesignationList";
 import {SalaryHeadList} from "./SalaryHead/SalaryHeadList";
 import {EmployeeList} from "./Employee/EmployeeList";
 
-import { ToastContainer } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {PayrollList} from "./Payroll/PayrollList";
 import {PaySlipList} from "./Payroll/PaySlip/PaySlipList";
@@ -24,7 +24,12 @@ import {AddEmployee} from "./Employee/AddEmployee";
 import {EmployeeDetails} from "./Employee/EmployeeDetails";
 import {PaySlipDetails} from "./Payroll/PaySlip/PaySlipDetails";
 import CreatePayroll from "./Payroll/CreatePayroll";
-
+import {addAction} from "../Helpers/Hooks";
+addAction('pcm_notification', 'pcm_notification', (message: string, type: string = 'success') => {
+    console.log(message)
+    // @ts-ignore
+    toast[type](message);
+});
 export default function Main() {
     let navigations: NavigationType[] = [
         {key: 'dashboard', title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: Dashboard},
