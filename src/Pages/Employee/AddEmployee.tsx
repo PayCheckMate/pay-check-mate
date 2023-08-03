@@ -176,7 +176,6 @@ export const AddEmployee = () => {
             method: employeeId ? 'PUT' : 'POST',
             data: data,
         }).then((response: any) => {
-            console.log(response, 'response')
             if (response.status === 201) {
                 const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));

@@ -65,13 +65,13 @@ class Assets implements HookAbleInterface {
      */
     public function register_localize_script(): void {
         $user = wp_get_current_user();
-        $employee = new Employee();
+        $employee = new Employee( $user );
+
         $employee = $employee->get_employee_by_user_id( $user->ID );
 
         unset( $employee->user_pass );
         // @phpstan-ignore-next-line
-        $user->employee = $employee->get_data();
-
+        $user->employee = $employee->get_employee();
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
 				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),

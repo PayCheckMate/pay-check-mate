@@ -29,7 +29,7 @@ class RestController extends WP_REST_Controller {
                 continue;
             }
 
-            $data[ $key ] = $item->{$key};
+            $data[ $key ] = $item->{$key} ?? '';
         }
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
