@@ -20,7 +20,8 @@ class Assets implements HookAbleInterface {
      * @return void
      */
     public function register_scripts(): void {
-        $asset_file = require_once defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_DIR . '/dist/index.asset.php' : PAY_CHECK_MATE_DIR . '/assets/index.asset.php';
+        $file = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_DIR . '/dist/index.asset.php' : PAY_CHECK_MATE_DIR . '/assets/index.asset.php';
+        $asset_file = require_once $file;
         $src_js        = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.js' : PAY_CHECK_MATE_URL . '/assets/index.js';
         $src_css       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.css' : PAY_CHECK_MATE_URL . '/assets/index.css';
         wp_register_script(
