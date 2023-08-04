@@ -1,4 +1,4 @@
-const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const updatedConfig = {
@@ -7,14 +7,15 @@ const updatedConfig = {
         ...defaultConfig.entry,
         index: './src/index',
     },
-    // Change the output path to `dist` instead of `build`
+    // Change the output path to `dist` in development or `build` in production
     output: {
         ...defaultConfig.output,
-        path: __dirname + '/dist',
-    }
+        path: __dirname + (isProduction ? '/build/assets' : '/dist'),
+    },
 };
 
-if ( ! isProduction ) {
+// For development, add the devServer configuration
+if (!isProduction) {
     updatedConfig.devServer = {
         devMiddleware: {
             writeToDisk: true,

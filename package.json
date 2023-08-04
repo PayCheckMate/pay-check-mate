@@ -22,6 +22,7 @@
         "start": "wp-scripts start",
         "start:hot": "wp-scripts start --hot",
         "build": "wp-scripts build",
+        "build:production": "NODE_ENV=production wp-scripts build",
         "check-engines": "wp-scripts check-engines",
         "check-licenses": "wp-scripts check-licenses",
         "format": "wp-scripts format",
@@ -39,7 +40,11 @@
         "test:unit": "wp-scripts test-unit-js",
         "make-pot": "wp i18n make-pot . languages/pay-check-mate.pot",
         "wp-env": "wp-env",
-        "env:start": "wp-env start"
+        "env:start": "wp-env start",
+        "clean": "node bin/clean",
+        "release:dev": "composer install --no-scripts --no-dev && composer dumpautoload -o && npm run clean && npm run make-pot && npm run build:production && node bin/copy && node bin/zip",
+        "version:replace": "node bin/version-replace",
+        "release:prod": "npm run version:replace && npm run release:dev"
     },
     "devDependencies": {
         "@babel/preset-typescript": "^7.21.5",

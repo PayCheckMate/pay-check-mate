@@ -20,11 +20,12 @@ class Assets implements HookAbleInterface {
      * @return void
      */
     public function register_scripts(): void {
-        $asset_file = require_once PAY_CHECK_MATE_DIR . '/dist/index.asset.php';
-
+        $asset_file = require_once defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_DIR . '/dist/index.asset.php' : PAY_CHECK_MATE_DIR . '/assets/index.asset.php';
+        $src_js        = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.js' : PAY_CHECK_MATE_URL . '/assets/index.js';
+        $src_css       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.css' : PAY_CHECK_MATE_URL . '/assets/index.css';
         wp_register_script(
             'pay-check-mate-js',
-            PAY_CHECK_MATE_URL . '/dist/index.js',
+            $src_js,
             $asset_file['dependencies'],
             $asset_file['version'],
             true,
@@ -32,7 +33,7 @@ class Assets implements HookAbleInterface {
 
         wp_register_style(
             'pay-check-mate-css',
-            PAY_CHECK_MATE_URL . '/dist/index.css',
+            $src_css,
             [],
             $asset_file['version'],
         );
