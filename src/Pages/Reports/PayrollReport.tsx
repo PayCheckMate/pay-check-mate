@@ -23,7 +23,7 @@ import {Button} from "../../Components/Button";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
-    const {loading, makeGetRequest,makePostRequest} = useFetchApi('');
+    const {loading,makePostRequest} = useFetchApi('');
 
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
@@ -174,7 +174,6 @@ const ViewPayroll = () => {
                                     {!payrollId && (
                                         <Button
                                             type="submit"
-                                            className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
                                         >
                                             {__('Show report', 'pcm')}
                                         </Button>

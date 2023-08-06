@@ -267,7 +267,7 @@ const CreatePayroll = () => {
                                 </div>
                                 <div>
                                     <FormInput
-                                        type="date"
+                                        type="month"
                                         label={__('Pay month', 'pcm')}
                                         name="pay_month"
                                         id="pay_month"

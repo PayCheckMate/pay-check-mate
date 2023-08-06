@@ -26,7 +26,6 @@ import {PaySlipDetails} from "./Payroll/PaySlip/PaySlipDetails";
 import CreatePayroll from "./Payroll/CreatePayroll";
 import {addAction} from "../Helpers/Hooks";
 addAction('pcm_notification', 'pcm_notification', (message: string, type: string = 'success') => {
-    console.log(message)
     // @ts-ignore
     toast[type](message);
 });
@@ -66,13 +65,13 @@ export default function Main() {
                                         return navigation.children.map((child, index) => {
                                             const component = typeof child.component === 'function'
                                             return (
-                                                component ? <Route key={index} path={child.href} element={<child.component/>}/> : <Route path="*" element={<Card><NotFound /></Card>} />
+                                                component ? userIs(child.roles) && (<Route key={index} path={child.href} element={<child.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
                                             )
                                         })
                                     }else {
                                         const component = typeof navigation.component === 'function'
                                         return (
-                                            component ? <Route key={index} path={navigation.href} element={<navigation.component/>}/> : <Route path="*" element={<Card><NotFound /></Card>} />
+                                            component ? userIs(navigation.roles) && (<Route key={index} path={navigation.href} element={<navigation.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
                                         )
                                     }
                                 })
