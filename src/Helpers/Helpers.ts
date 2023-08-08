@@ -53,6 +53,9 @@ export const handlePrint = (divID: string) => {
                     .justify-between {
                         justify-content: space-between;
                     }
+                    .justify-center {
+                        justify-content: center;
+                    }
                     h4 {
                       font-size: 20px;
                       font-weight: 400;

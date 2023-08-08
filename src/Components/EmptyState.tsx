@@ -13,10 +13,10 @@ export const EmptyState = ({title, description, icon}: { title?: string, descrip
                                 aria-hidden="true"
                             />}
                         </div>
-                        <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                        <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-700 sm:text-5xl">
                             {title ? title : __('No results found', 'pcm')}
                         </h1>
-                        <p className="mt-6 text-base leading-7 text-gray-600">
+                        <p className="mt-6 text-base leading-7 text-gray-400">
                             {description ? description : __('Try adjusting your search or filter to find what you are looking for.', 'pcm')}
                         </p>
                     </div>

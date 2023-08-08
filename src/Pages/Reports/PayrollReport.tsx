@@ -20,6 +20,7 @@ import {handlePrint} from "../../Helpers/Helpers";
 import {SelectBox} from "../../Components/SelectBox";
 import {FormInput} from "../../Components/FormInput";
 import {Button} from "../../Components/Button";
+import {PrintButton} from "../../Components/PrintButton";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
@@ -208,7 +209,7 @@ const ViewPayroll = () => {
                                             {/*</div>*/}
                                         </div>
                                         <div className="flex items-center no-print">
-                                            <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
+                                            <PrintButton onClick={() => handlePrint('printable')} />
                                             {/*Excel Download*/}
                                         </div>
                                     </div>

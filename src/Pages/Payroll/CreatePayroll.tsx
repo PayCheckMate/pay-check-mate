@@ -54,7 +54,7 @@ const CreatePayroll = () => {
     });
     useEffect(() => {
         // Check if this is an edit page.
-        if(payrollId) {
+        if (payrollId) {
             makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
                 const salary_heads = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
@@ -416,13 +416,13 @@ const CreatePayroll = () => {
                                                 className="text-left"
                                                 key={`department${tableDataIndex}`}
                                             >
-                                                {data.department_name || designations.find((designation: any) => designation.id === data.designation_id)?.name || '' }
+                                                {data.department_name || designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
                                             </td>
                                             <td
                                                 className="text-left"
                                                 key={`designation${tableDataIndex}`}
                                             >
-                                                {data.designation_name || departments.find((department: any) => department.id === data.department_id)?.name || '' }
+                                                {data.designation_name || departments.find((department: any) => department.id === data.department_id)?.name || ''}
                                             </td>
                                             <td
                                                 className="text-right"

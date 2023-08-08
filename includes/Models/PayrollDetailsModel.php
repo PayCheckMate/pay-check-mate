@@ -7,13 +7,13 @@ class PayrollDetailsModel extends Model {
     protected static string $table = 'payroll_details';
 
     protected static array $columns = [
-        'payroll_id'          => '%d',
-        'employee_id'         => '%d',
-        'basic_salary'        => '%d',
-        'salary_details'      => '%s',
-        'status'              => '%d',
-        'created_on'          => '%s',
-        'updated_at'          => '%s',
+        'payroll_id'     => '%d',
+        'employee_id'    => '%d',
+        'basic_salary'   => '%d',
+        'salary_details' => '%s',
+        'status'         => '%d',
+        'created_on'     => '%s',
+        'updated_at'     => '%s',
     ];
 
     /**
@@ -28,7 +28,7 @@ class PayrollDetailsModel extends Model {
     private $payroll_id = null;
 
     public function __construct( int $payroll_id = null ) {
-        if ($payroll_id){
+        if ( $payroll_id ) {
             $this->payroll_id = $payroll_id;
         }
     }
@@ -80,13 +80,13 @@ class PayrollDetailsModel extends Model {
      */
     public function get_salary_details( string $salary_details, array $salary_head_types ): array {
         $salary_details = json_decode( $salary_details, true );
-        if(empty( $salary_head_types ) ){
+        if ( empty( $salary_head_types ) ) {
             return [
-                'salary_details' => $salary_details
+                'salary_details' => $salary_details,
             ];
         }
 
-        $salary         = [
+        $salary = [
             'salary_details' => [
                 'earnings'    => [],
                 'deductions'  => [],
@@ -120,7 +120,7 @@ class PayrollDetailsModel extends Model {
         global $wpdb;
 
         $where = "employee_id = $employee_id";
-        if ( empty( $employee_id ) ){
+        if ( empty( $employee_id ) ) {
             $where = '';
         }
 
