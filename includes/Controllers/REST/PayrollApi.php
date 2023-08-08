@@ -204,7 +204,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $parameters['payroll_date'] = gmdate( 'Y-m-d', strtotime( $year . '-' . $month . '-' . $last_day_of_month ) );
 
-        $args              = [
+        $args     = [
             'status'   => 1,
             'limit'    => '-1',
             'order'    => 'ASC',
@@ -327,6 +327,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 			], $salary_head_types
         );
 
+        $employees = apply_filters( 'pay_check_mate_generate_payroll_response', $employees, $salary_head_types, $parameters );
+
         return new WP_REST_Response(
             [
                 'salary_head_types'       => $salary_head_types,
@@ -349,9 +351,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
         $parameters                        = $request->get_params();
-        $employee                          = new EmployeeModel();
-        $employee                          = $employee->get_employee_by_user_id( get_current_user_id() );
+        $employee_model                    = new EmployeeModel();
+        $employee                          = $employee_model->get_employee_by_user_id( get_current_user_id() );
         $parameters['created_employee_id'] = $employee->get_employee_id();
+
+        $parameters['payroll_date'] = gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) );
 
         $validated_data = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
@@ -413,6 +417,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             }
 
             $payroll_details->create( $validated_details_data );
+            do_action( 'pay_check_mate_after_save_payroll', $validated_details_data->data, $parameters );
         }
 
         // If everything is fine, then commit the data.
@@ -648,17 +653,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll      = new PayrollModel();
         $payroll_args = [
-            'status'    => 1,
-            'order'     => 'DESC',
-            'order_by'  => 'id',
-            'where'     => $where,
+            'status'        => 1,
+            'order'         => 'DESC',
+            'order_by'      => 'id',
+            'where'         => $where,
             'where_between' => [
                 'payroll_date' => [
                     'start' => gmdate( 'Y-m-01', strtotime( $parameters['payroll_date'] ) ),
                     'end'   => gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) ),
                 ],
             ],
-            'relations' => [
+            'relations'     => [
                 [
                     'table'       => 'pay_check_mate_employees',
                     'local_key'   => 'created_employee_id',
@@ -684,7 +689,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        $payroll_data = $payroll_data[0];
+        $payroll_data      = $payroll_data[0];
         $args              = [
             'status'   => 1,
             'limit'    => '-1',
@@ -850,7 +855,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function get_report_collection_params(): array {
         return [
-            'department_id' => [
+            'department_id'  => [
                 'description' => __( 'Unique identifier for the department.', 'pcm' ),
                 'type'        => 'string',
                 'required'    => true,
@@ -860,7 +865,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'type'        => 'string',
                 'required'    => true,
             ],
-            'payroll_date' => [
+            'payroll_date'   => [
                 'description' => __( 'The date of the payroll', 'pcm' ),
                 'type'        => 'string',
                 'format'      => 'Y-m-d',

@@ -224,7 +224,7 @@ const CreatePayroll = () => {
                 setIsSubmitting(false);
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
-                navigate('/payroll');
+                // navigate('/payroll');
                 toast.success(__('Payroll saved successfully', 'pcm'));
             }).catch((e: unknown) => {
                 console.log(e);
