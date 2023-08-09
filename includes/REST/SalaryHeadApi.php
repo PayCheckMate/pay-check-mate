@@ -1,8 +1,9 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use Exception;
+use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;

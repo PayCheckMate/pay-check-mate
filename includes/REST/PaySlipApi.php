@@ -1,9 +1,10 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\PayrollDetails;
+use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;

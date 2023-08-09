@@ -20,8 +20,8 @@ final class PayCheckMate {
      * @var array|string[]
      */
     protected array $hook_classes = [
-        'PayCheckMate\Controllers\AdminMenu',
-        'PayCheckMate\Controllers\Assets',
+        'PayCheckMate\Hooks\AdminMenu',
+        'PayCheckMate\Hooks\Assets',
     ];
 
     /**
@@ -71,13 +71,13 @@ final class PayCheckMate {
      * @var array|string[]
      */
     protected array $api_classes = [
-        'PayCheckMate\Controllers\REST\DepartmentApi',
-        'PayCheckMate\Controllers\REST\DesignationApi',
-        'PayCheckMate\Controllers\REST\SalaryHeadApi',
-        'PayCheckMate\Controllers\REST\PayrollApi',
-        'PayCheckMate\Controllers\REST\EmployeeApi',
-        'PayCheckMate\Controllers\REST\PaySlipApi',
-        'PayCheckMate\Controllers\REST\DashboardApi',
+        'PayCheckMate\REST\DepartmentApi',
+        'PayCheckMate\REST\DesignationApi',
+        'PayCheckMate\REST\SalaryHeadApi',
+        'PayCheckMate\REST\PayrollApi',
+        'PayCheckMate\REST\EmployeeApi',
+        'PayCheckMate\REST\PaySlipApi',
+        'PayCheckMate\REST\DashboardApi',
     ];
 
     /**

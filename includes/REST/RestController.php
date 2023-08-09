@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use WP_REST_Controller;
 use WP_REST_Response;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Helper;
 use PayCheckMate\Models\PayrollModel;
@@ -9,6 +9,7 @@ use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
+use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
