@@ -298,7 +298,8 @@ class Model implements ModelInterface {
             $where .= $this->get_search_query( $args[ 'search' ] );
         }
 
-        $query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->get_table()} {$where}", );
+        // As we prepared the where clause before, we can directly use it.
+        $query = "SELECT COUNT(*) FROM {$this->get_table()} {$where}";
 
         return $wpdb->get_var( $query );
     }
@@ -437,7 +438,7 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
 
         if ( '-1' === "$args[limit]" ) {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} " );
+            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} ";
         } else {
             $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args[ 'limit' ], $args[ 'offset' ] );
         }

@@ -24,6 +24,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
+import apiFetch from "@wordpress/api-fetch";
 
 const CreatePayroll = () => {
     const payrollId = useParams().id;
@@ -53,7 +54,7 @@ const CreatePayroll = () => {
     });
     useEffect(() => {
         // Check if this is an edit page.
-        if(payrollId) {
+        if (payrollId) {
             makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
                 const salary_heads = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
@@ -95,8 +96,12 @@ const CreatePayroll = () => {
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
-            makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payrolls', data, false).then((response) => {
-                const salary_heads = {
+            apiFetch({
+                path: '/pay-check-mate/v1/payrolls',
+                method: 'POST',
+                data: data
+            }).then((response: any) => {
+                const salary_heads: any = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
                     non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
@@ -104,8 +109,9 @@ const CreatePayroll = () => {
 
                 setSalaryHeads(salary_heads)
                 setTableData(response.employee_salary_history)
-            }).catch((e: unknown) => {
-                console.log(e);
+            }).catch(error => {
+                const errorMessage = error.data ? error.data : error.message;
+                toast.error(errorMessage);
             })
         } catch (error) {
             console.log(error, 'error'); // Handle the error accordingly
@@ -229,6 +235,7 @@ const CreatePayroll = () => {
             setIsSubmitting(false);
         }
     }
+    console.log(tableData, 'tableData');
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
@@ -261,7 +268,7 @@ const CreatePayroll = () => {
                                 </div>
                                 <div>
                                     <FormInput
-                                        type="date"
+                                        type="month"
                                         label={__('Pay month', 'pcm')}
                                         name="pay_month"
                                         id="pay_month"
@@ -410,13 +417,13 @@ const CreatePayroll = () => {
                                                 className="text-left"
                                                 key={`department${tableDataIndex}`}
                                             >
-                                                {data.department_name || designations.find((designation: any) => designation.id === data.designation_id)?.name || '' }
+                                                {data.department_name || designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
                                             </td>
                                             <td
                                                 className="text-left"
                                                 key={`designation${tableDataIndex}`}
                                             >
-                                                {data.designation_name || departments.find((department: any) => department.id === data.department_id)?.name || '' }
+                                                {data.designation_name || departments.find((department: any) => department.id === data.department_id)?.name || ''}
                                             </td>
                                             <td
                                                 className="text-right"

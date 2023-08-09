@@ -1,6 +1,6 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use WP_REST_Controller;
 use WP_REST_Response;
@@ -29,7 +29,7 @@ class RestController extends WP_REST_Controller {
                 continue;
             }
 
-            $data[ $key ] = $item->{$key};
+            $data[ $key ] = $item->{$key} ?? '';
         }
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';

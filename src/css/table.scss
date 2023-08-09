@@ -1,8 +1,12 @@
-.payroll-table-container {
+.payroll-table-container, .table-raw {
   margin-top: 10px;
   width: 100%;
   overflow: auto;
   max-height: 75vh; /* Adjust the height as needed */
+
+    &.table-raw {
+        max-height: 100%;
+    }
 
   .payroll-table {
     width: max-content;
@@ -57,7 +61,7 @@
       font-weight: bold;
     }
 
-    tbody td:nth-child(3) {
+    tbody td.fixed-column {
       position: sticky;
       left: 0;
       z-index: 10;

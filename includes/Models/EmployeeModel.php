@@ -2,9 +2,7 @@
 
 namespace PayCheckMate\Models;
 
-use PayCheckMate\Contracts\EmployeeInterface;
-
-class EmployeeModel extends Model implements EmployeeInterface {
+class EmployeeModel extends Model {
 
     protected static string $find_key = 'employee_id';
 
@@ -19,22 +17,35 @@ class EmployeeModel extends Model implements EmployeeInterface {
      * @var array|string[] $columns
      */
     protected static array $columns = [
-        'employee_id'    => '%s',
-        'user_id'        => '%d',
-        'department_id'  => '%d',
-        'designation_id' => '%d',
-        'first_name'     => '%s',
-        'last_name'      => '%s',
-        'email'          => '%s',
-        'phone'          => '%s',
-        'address'        => '%s',
-        'joining_date'   => '%s',
-        'regine_date'    => '%s',
-        'status'         => '%d',
-        'created_on'     => '%s',
-        'updated_at'     => '%s',
+        'employee_id'         => '%s',
+        'user_id'             => '%d',
+        'department_id'       => '%d',
+        'designation_id'      => '%d',
+        'first_name'          => '%s',
+        'last_name'           => '%s',
+        'email'               => '%s',
+        'phone'               => '%s',
+        'bank_name'           => '%s',
+        'bank_account_number' => '%s',
+        'tax_number'          => '%s',
+        'address'             => '%s',
+        'joining_date'        => '%s',
+        'regine_date'         => '%s',
+        'status'              => '%d',
+        'created_on'          => '%s',
+        'updated_at'          => '%s',
     ];
 
+    /**
+     * Find employee by id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int $employee_id
+     *
+     * @throws \Exception
+     * @return $this
+     */
     public function find_employee( int $employee_id ): EmployeeModel {
         $this->find( $employee_id, [] );
 
@@ -50,6 +61,13 @@ class EmployeeModel extends Model implements EmployeeInterface {
      */
     public function get_data(): array {
         return (array) $this->data;
+    }
+
+    public function set_employee( object $data ): void {
+        if ( ! isset( $data->employee_id ) ) {
+            $this->data = [];
+        }
+        $this->data = $data;
     }
 
     /**
@@ -161,8 +179,8 @@ class EmployeeModel extends Model implements EmployeeInterface {
 
         foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
-                if ( array_key_exists( $key, $salary_head_types[ $type ] ) ) {
-                    $salary[ 'salary_details' ][ $type ][ $key ] = $amount;
+                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
+                    $salary['salary_details'][$type][$key] = $amount;
                 }
             }
         }
@@ -188,9 +206,9 @@ class EmployeeModel extends Model implements EmployeeInterface {
      * @param int $user_id
      *
      * @throws \Exception
-     * @return EmployeeInterface
+     * @return \PayCheckMate\Models\EmployeeModel
      */
-    public function get_employee_by_user_id( int $user_id ): EmployeeInterface {
+    public function get_employee_by_user_id( int $user_id ): EmployeeModel {
         $new_find_key   = self::$find_key;
         self::$find_key = 'user_id';
         $data           = $this->find( $user_id );

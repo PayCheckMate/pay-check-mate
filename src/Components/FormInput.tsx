@@ -36,7 +36,7 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
 
     return (
         <div>
-            <div className="relative mt-2 rounded-md shadow-sm">
+            <div className="relative mt-2 rounded-md">
                 <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
                     {label}
                     {required && <span className="text-red-500">*</span>}

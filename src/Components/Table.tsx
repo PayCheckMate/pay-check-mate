@@ -162,7 +162,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                                 htmlFor="search"
                                 className="sr-only"
                             >
-                              Search
+                              {searchPlaceholder}
                             </label>
                             <FormInput
                                 type="search"

@@ -1,38 +1,12 @@
 import {Fragment, useState} from '@wordpress/element'
-import {createHooks} from '@wordpress/hooks';
-import {BanknotesIcon, Bars3Icon, ChartPieIcon, CogIcon, CurrencyDollarIcon, HomeIcon, UserGroupIcon, UserIcon, UserPlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Dialog, Transition} from "@headlessui/react";
-import {NavigationType} from "../Types/NavigationType";
 import {NavbarLink} from "../Components/NavbarLink";
 import {__} from "@wordpress/i18n";
+import {NavigationType} from "../Types/NavigationType";
 
-const Hooks = createHooks();
-let navigation: NavigationType[] = Hooks.applyFilters('pay_check_mate_navigations', [
-    {title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Profile', 'pcm'), href: 'profile', icon: UserPlusIcon, current: false, roles: ['pay_check_mate_employee']},
-    {title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee']},
-    {title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['pay_check_mate_accountant']},
-    {title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
-        children: [
-            {title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant']},
-            {title: __('Designations', 'pcm'), href: 'designations', current: false, roles: ['pay_check_mate_accountant']},
-            {title: __('Salary Heads', 'pcm'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant']},
-        ]
-    },
-    {title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
-        children: [
-            {title: __('Payroll', 'pcm'), href: 'reports/payroll-report', current: false, roles: ['pay_check_mate_accountant']},
-        ]
-    },
-]) as NavigationType[];
 
-// @ts-ignore
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
-export const Sidebar = () => {
+export const Sidebar = ({navigations}: { navigations: NavigationType[] }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     return (
         <>
@@ -86,7 +60,7 @@ export const Sidebar = () => {
                                             <li>
                                                 <ul role="list" className="-mx-2 space-y-1">
                                                     <NavbarLink
-                                                        navigation={navigation}
+                                                        navigation={navigations}
                                                     />
                                                 </ul>
                                             </li>
@@ -108,7 +82,7 @@ export const Sidebar = () => {
                             <li>
                                 <ul role="list" className="-mx-2 space-y-1 mt-2.5">
                                     <NavbarLink
-                                        navigation={navigation}
+                                        navigation={navigations}
                                     />
                                 </ul>
                             </li>

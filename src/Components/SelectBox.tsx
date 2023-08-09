@@ -21,7 +21,7 @@ interface SelectBoxProps extends React.InputHTMLAttributes<HTMLDivElement> {
 export const SelectBox = ({title, options, selected, setSelected, error, required= false, className, ...props}: SelectBoxProps) => {
     return (
         <div>
-            <div className={`relative mt-2 rounded-md shadow-sm ${className}`}>
+            <div className={`relative mt-2 rounded-md ${className || ''}`}>
                 <Listbox value={selected} onChange={setSelected}>
                     {({ open }) => (
                         <>

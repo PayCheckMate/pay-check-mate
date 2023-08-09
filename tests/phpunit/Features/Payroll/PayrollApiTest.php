@@ -1,6 +1,6 @@
 <?php
 
-use PayCheckMate\Controllers\REST\PayrollApi;
+use PayCheckMate\REST\PayrollApi;
 
 class PayrollApiTest extends WP_UnitTestCase
 {

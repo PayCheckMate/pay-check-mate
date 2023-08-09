@@ -1,8 +1,9 @@
 <?php
 
-namespace PayCheckMate\Controllers\REST;
+namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -169,56 +170,17 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_employees( WP_REST_Request $request ): WP_REST_Response {
-        $args           = [
-            'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
-            'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'     => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
-            'order_by'  => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
-            'status'    => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
-            'search'    => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
-            'relations' => [
-                [
-                    'table'       => 'pay_check_mate_designations',
-                    'local_key'   => 'designation_id',
-                    'foreign_key' => 'id',
-                    'join_type'   => 'left',
-                    'where'       => [
-                        'status' => [
-                            'operator' => '=',
-                            'value'    => 1,
-                        ],
-                    ],
-                    'fields'      => [
-                        'name as designation_name',
-                    ],
-                ],
-                [
-                    'table'       => 'pay_check_mate_departments',
-                    'local_key'   => 'department_id',
-                    'foreign_key' => 'id',
-                    'join_type'   => 'left',
-                    'where'       => [
-                        'status' => [
-                            'operator' => '=',
-                            'value'    => 1,
-                        ],
-                    ],
-                    'fields'      => [
-                        'name as department_name',
-                    ],
-                ],
-            ],
-        ];
+        $employee = new Employee();
+        $employee_data  = $employee->get_all_employees( $request );
         $employees      = [];
-        $employee_model = new EmployeeModel();
-        $employee_data  = $employee_model->all( $args );
-        foreach ( $employee_data as $employee ) {
-            $item        = $this->prepare_item_for_response( $employee, $request );
+        foreach ( $employee_data as $data ) {
+            $item        = $this->prepare_item_for_response( $data, $request );
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $employee_model->count( $args );
-        $max_pages = ceil( $total / (int) $args['limit'] );
+        $total     = $employee->count_employee( $request );
+        // @phpstan-ignore-next-line
+        $max_pages = ceil( $total / (int) ! empty( $request->get_param( 'per_page' ) ) ?? 1 );
 
         $response = new WP_REST_Response( $employees );
 
@@ -252,6 +214,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'status' => 400,
                 ]
             );
+        }
+
+        $employee = apply_filters( 'pay_check_mate_before_employee_save', $data );
+        if ( is_wp_error( $employee ) ) {
+            return $employee;
         }
 
         $wpdb->query( 'START TRANSACTION' );
@@ -357,55 +324,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception
-     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
-    public function get_employee( WP_REST_Request $request ) {
+    public function get_employee( WP_REST_Request $request ): WP_REST_Response {
         $employee_id   = $request->get_param( 'employee_id' );
-        $limit         = $request->get_param( 'per_page' ) ?? '-1';
-        $employee      = new EmployeeModel();
-        $employee_args = [
-            'order_by'  => 'employee_id',
-            'order'     => 'DESC',
-            'limit'     => $limit,
-            'relations' => [
-                [
-                    'table'       => 'pay_check_mate_employee_salary_history',
-                    'local_key'   => 'employee_id',
-                    'foreign_key' => 'employee_id',
-                    'join_type'   => 'left',
-                    'fields'      => [
-                        'id as salary_history_id',
-                        'basic_salary',
-                        'gross_salary',
-                        'active_from',
-                        'remarks',
-                        'salary_details',
-                    ],
-                    'select_max'  => [
-                        'active_from' => [
-                            'operator' => '=',
-                            'compare'  => [
-                                'key'      => 'employee_id',
-                                'operator' => '=',
-                                'value'    => $employee_id,
-                            ],
-                        ],
-                    ],
-                    'where'       => [
-                        'employee_id' => [
-                            'operator' => '=',
-                            'value'    => $employee_id,
-                            'type'     => 'AND',
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $employee = $employee->find( $employee_id, $employee_args );
-        if ( is_wp_error( $employee ) ) {
-            return new WP_Error( 'rest_invalid_data', $employee->get_error_message(), [ 'status' => 400 ] );
-        }
+        $employee_obj      = new Employee();
+        $employee = $employee_obj->get_an_employee_with_salary_history( $employee_id, $request );
 
         $item                                           = $this->prepare_item_for_response( $employee, $request );
         $data                                           = $this->prepare_response_for_collection( $item );
@@ -427,11 +351,19 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
-     * @return WP_REST_Response
+     * @throws \Exception
+     *
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function get_user( WP_REST_Request $request ): WP_REST_Response {
+    public function get_user( WP_REST_Request $request ) {
         $user_id = $request->get_param( 'user_id' );
-        $user    = new \WP_User( $user_id );
+        $employee = new Employee();
+        $employee = $employee->get_employee_by_user_id( $user_id );
+        // Check if there is any employee with this user id, then return, cause employee exists.
+        if ( '' !== $employee->get_employee_id() ) {
+            return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pcm' ), [ 'status' => 302 ] );
+        }
+        $user = new \WP_User( $user_id );
 
         $data['user_id']    = $user->ID;
         $data['first_name'] = $user->first_name;
@@ -455,9 +387,15 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return \WP_REST_Response
      */
     public function get_employee_salary_details( WP_REST_Request $request ): WP_REST_Response {
+        $args           = [
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : '-1',
+            'offset'   => $request->get_param( 'offset' ) ? $request->get_param( 'offset' ) : '0',
+            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
+            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
+        ];
         $employee_id    = $request->get_param( 'employee_id' );
         $employee       = new Employee( $employee_id );
-        $salary_details = $employee->get_salary_history();
+        $salary_details = $employee->get_salary_history( $args );
         $item           = $this->prepare_item_for_response( (object) $employee->get_employee(), $request );
         $data           = $this->prepare_response_for_collection( $item );
 
@@ -516,14 +454,14 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'required'    => true,
                 ],
                 'department_name'     => [
-                    'description' => __( 'Department ID', 'pcm' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                    'description' => __( 'Department name', 'pcm' ),
+                    'type'        => 'string',
+                    'context'     => [ 'view' ],
                 ],
-                'designation_name'      => [
-                    'description' => __( 'Designation ID', 'pcm' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view', 'edit', 'embed' ],
+                'designation_name'    => [
+                    'description' => __( 'Designation name', 'pcm' ),
+                    'type'        => 'string',
+                    'context'     => [ 'view' ],
                 ],
                 'first_name'          => [
                     'description' => __( 'Employee First Name', 'pcm' ),
@@ -542,6 +480,18 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 ],
                 'phone'               => [
                     'description' => __( 'Employee Phone Number', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'bank_name'           => [
+                    'description' => __( 'Employee Bank Name', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'bank_account_number' => [
+                    'description' => __( 'Employee Bank Account Number', 'pcm' ),
+                    'type'        => 'string',
+                ],
+                'tax_number' => [
+                    'description' => __( 'Employee Bank Account Number', 'pcm' ),
                     'type'        => 'string',
                 ],
                 'address'             => [

@@ -5,7 +5,7 @@ import selectors from './selectors';
 import controls from './controls';
 import resolvers from './resolvers';
 
-const SALARY_HEAD_STORE = 'salaryHead';
+const SALARY_HEAD_STORE = 'pcm/salary-head';
 
 const salaryHead = createReduxStore( SALARY_HEAD_STORE, {
     reducer,

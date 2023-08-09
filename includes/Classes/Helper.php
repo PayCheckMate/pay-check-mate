@@ -13,6 +13,7 @@ class Helper {
      *
      * @param array<string, mixed> $args
      *
+     * @throws \Exception
      * @return array<string, mixed>
      */
     public static function get_salary_head( array $args ): array {

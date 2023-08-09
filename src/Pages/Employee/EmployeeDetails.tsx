@@ -27,11 +27,11 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
     }
     const [personalInformation, setPersonalInformation] = useState({} as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState([] as SalaryHistoryType[]);
-    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc'}), []);
+    const {salaryHeads} = useSelect(select => select(salaryHead).getSalaryHeads({per_page: '-1', page: 1, order_by: 'head_type', order: 'asc', status: '1'}), []);
 
     useEffect(() => {
         if (employeeId) {
-            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId + '/salary-details', {}, true).then((response) => {
+            makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId + '/salary-details', {order_by: 'active_from', order: 'DESC', per_page: '-1'}, true).then((response) => {
                 if (response.status === 200) {
                     const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
                     employeeKeysToRemove.forEach(key => localStorage.removeItem(key));

@@ -144,7 +144,9 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                         </div>
                         <div className="col-span-full">
                             <div>
-                                <h3 className="font-bold text-2xl leading-6 text-gray-600">{__('Salary in hand', 'pcm')}</h3>
+                                <h3 className="font-bold text-2xl leading-6 text-gray-600">
+                                    {__('Salary in hand', 'pcm')}
+                                </h3>
                                 {Object.keys(formValues).map((head) => {
                                     if (head === 'gross_salary' || head === 'remarks') {
                                         return;
@@ -164,7 +166,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                                         }
                                     });
                                     return (
-                                      (head!=='active_from' && head !== 'salary_history_id') &&
+                                      (parseInt(String(salaryHead?.id)) === parseInt(head) || head === 'basic_salary') &&
                                         <div key={head} className="flex items-center justify-between mt-2">
                                             <span className="text-sm text-gray-500">{salaryHead?.head_name ? salaryHead?.head_name : head.replace(/_/g, ' ').toUpperCase()}</span>
                                             <span className="text-sm text-gray-500">

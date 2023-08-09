@@ -21,7 +21,7 @@ export const PaySlipList = () => {
 
     const columns = [
         {
-            title: __('Salary for', 'pcm'), dataIndex: 'payroll_date', sortable: true,
+            title: __('Salary date', 'pcm'), dataIndex: 'payroll_date',
             render: (text: any, record: PayrollType) => {
                 return (
                     <>
@@ -34,7 +34,7 @@ export const PaySlipList = () => {
             }
         },
         {
-            title: __('Action', 'pcm'), dataIndex: 'action', sortable: false,
+            title: __('Action', 'pcm'), dataIndex: 'action',
             render: (value: any, record: PayrollType) => {
                 return (
                     <>

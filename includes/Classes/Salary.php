@@ -68,19 +68,25 @@ class Salary {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param array<string, mixed> $args
+     *
      * @throws \Exception
      * @return array<object>
      */
-    public function get_salary_history(): array {
-        $args = [
-            'where' => [
-                'employee_id' => [
-                    'operator' => '=',
-                    'value'    => $this->get_employee_id(),
-                    'type'     => 'AND',
+    public function get_salary_history( array $args ): array {
+        $args = wp_parse_args(
+            $args,
+            [
+                'where' => [
+                    'employee_id' => [
+                        'operator' => '=',
+                        'value'    => $this->get_employee_id(),
+                        'type'     => 'AND',
+                    ],
                 ],
-            ],
-        ];
+            ]
+        );
+
         return $this->model->all( $args );
     }
 }

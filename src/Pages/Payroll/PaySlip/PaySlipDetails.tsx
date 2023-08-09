@@ -9,6 +9,7 @@ import {HeadType} from "../../../Types/SalaryHeadType";
 import {__} from "@wordpress/i18n";
 import department from "../../../Store/Department";
 import designation from "../../../Store/Designation";
+import {PrintButton} from "../../../Components/PrintButton";
 
 export const PaySlipDetails = () => {
     const location = useLocation()
@@ -43,10 +44,7 @@ export const PaySlipDetails = () => {
                     </Link>
                 </>
                 <>
-                    <PrinterIcon
-                        className="h-6 w-6 text-gray-500 cursor-pointer"
-                        onClick={() => handlePrint('printable')}
-                    />
+                    <PrintButton onClick={() => handlePrint('printable')} />
                 </>
             </div>
             <div
