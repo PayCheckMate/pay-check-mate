@@ -224,7 +224,7 @@ const CreatePayroll = () => {
                 setIsSubmitting(false);
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
-                // navigate('/payroll');
+                navigate('/payroll');
                 toast.success(__('Payroll saved successfully', 'pcm'));
             }).catch((e: unknown) => {
                 console.log(e);
@@ -235,6 +235,7 @@ const CreatePayroll = () => {
             setIsSubmitting(false);
         }
     }
+    console.log(tableData, 'tableData');
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
