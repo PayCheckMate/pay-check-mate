@@ -67,7 +67,7 @@ class Assets implements HookAbleInterface {
      */
     public function register_localize_script(): void {
         $user = wp_get_current_user();
-        $employee = new Employee( $user );
+        $employee = new Employee();
 
         $employee = $employee->get_employee_by_user_id( $user->ID );
 
