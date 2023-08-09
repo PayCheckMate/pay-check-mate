@@ -72,9 +72,12 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
             'limit' => 12,
             'status' => 1,
             'order_by' => 'payroll_date',
-            'order' => 'ASC',
+            'order' => 'DESC',
         ];
         $salary = $payroll_model->all( $args );
+        // Now sort this in reverse order.
+        $salary = array_reverse( $salary );
+
         // Get total salary amount of last month.
         $last_month_salary = end( $salary );
 

@@ -18,4 +18,5 @@ export enum SalaryPurposeType {
     Initial = 1,
     Increment = 2,
     Promotion = 3,
+    Permanent = 4,
 }
