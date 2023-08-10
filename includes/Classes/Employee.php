@@ -41,7 +41,7 @@ class Employee implements EmployeeInterface {
     public function set_employee( $employee = null ) {
         if ( is_numeric( $employee ) ) {
             $model          = new EmployeeModel();
-            $employee = $model->find_employee( $employee );
+            $employee       = $model->find_employee( $employee );
             $this->employee = $employee->get_data();
         } elseif ( is_array( $employee ) ) {
             $this->employee = $employee;
@@ -90,7 +90,7 @@ class Employee implements EmployeeInterface {
      * @return Employee
      */
     public function get_employee_by_user_id( int $user_id ): Employee {
-        $employee = $this->model->get_employee_by_user_id( $user_id );
+        $employee       = $this->model->get_employee_by_user_id( $user_id );
         $this->employee = $employee->get_data();
 
         return $this;
@@ -180,12 +180,12 @@ class Employee implements EmployeeInterface {
      */
     public function count_employee( WP_REST_Request $request ): int {
         $args = [
-            'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
-            'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
-            'order'     => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
-            'order_by'  => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
-            'status'    => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
-            'search'    => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
+            'limit'    => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
+            'offset'   => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
+            'order'    => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
+            'order_by' => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
+            'status'   => $request->get_param( 'status' ) ? $request->get_param( 'status' ) : 'all',
+            'search'   => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
         ];
 
         $employee_model = new EmployeeModel();
@@ -198,7 +198,7 @@ class Employee implements EmployeeInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param int              $employee_id
+     * @param int                             $employee_id
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception

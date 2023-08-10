@@ -2,6 +2,7 @@
 
 namespace PayCheckMate\REST;
 
+use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
 use PayCheckMate\Models\PayrollModel;
 use PayCheckMate\Models\PayrollDetailsModel;
@@ -9,7 +10,6 @@ use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
-use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -776,7 +776,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'designation',
+            'title'      => 'payroll',
             'type'       => 'object',
             'properties' => [
                 'id'                   => [

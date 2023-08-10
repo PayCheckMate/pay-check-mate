@@ -444,6 +444,7 @@ export const SalaryHeadList = () => {
                     currentPage={currentPage}
                     filters={filters}
                     onFilterChange={(filter) => handleFilterChange(filter)}
+                    search={true}
                 />
             </div>
         </>

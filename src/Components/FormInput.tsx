@@ -23,7 +23,7 @@ interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     autoFocus?: boolean;
 }
 
-export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value, onChange, error, required = false, helpText = "", disabled = false, tooltip, min, max,autoComplete = 'off', autoFocus = false}: NumberInputProps) => {
+export const FormInput = ({label, name, id, className = "", type = "text", placeholder, value='', onChange, error, required = false, helpText = "", disabled = false, tooltip, min, max,autoComplete = 'off', autoFocus = false}: NumberInputProps) => {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (type === "number" && (min !== undefined || max !== undefined)) {
             const numericValue = Number(event.target.value);
