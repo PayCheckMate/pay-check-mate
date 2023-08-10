@@ -100,7 +100,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'employee',
+            'title'      => 'dashboard',
             'type'       => 'object',
             'properties' => [
                 'id'                  => [

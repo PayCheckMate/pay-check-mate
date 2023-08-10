@@ -354,7 +354,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
     public function get_item_schema(): array {
         return [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'designation',
+            'title'      => 'salary_head',
             'type'       => 'object',
             'properties' => [
                 'id'                  => [

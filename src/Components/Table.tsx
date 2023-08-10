@@ -37,7 +37,7 @@ type TableProps = {
     searchPlaceholder?: string;
 };
 
-export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = true, searchPlaceholder = "Search by name..."}: TableProps) => {
+export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = false, searchPlaceholder = "Search by name..."}: TableProps) => {
     if (!userCan(UserCapNames[permissions])) {
         return (
             <>
