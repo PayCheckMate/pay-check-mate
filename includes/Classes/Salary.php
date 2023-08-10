@@ -16,52 +16,13 @@ class Salary {
 
 
     public function __construct( EmployeeInterface $employee ) {
-        $this->model = new SalaryHistoryModel();
+        $this->model    = new SalaryHistoryModel();
         $this->employee = $employee;
     }
 
     public function get_employee_id(): string {
         return $this->employee->get_employee_id();
     }
-
-    /**
-     * Get last salary of the employee.
-     *
-     * @since PAY_CHECK_MATE_SINCE
-     *
-     * @throws \Exception
-     */
-	//    public function get_last_salary() {
-	//        $args = [
-	//            'fields'      => [
-	//                'id as salary_history_id',
-	//                'basic_salary',
-	//                'gross_salary',
-	//                'active_from',
-	//                'remarks',
-	//                'salary_details',
-	//            ],
-	//            'select_max'  => [
-	//                'active_from' => [
-	//                    'operator' => '=',
-	//                    'compare'  => [
-	//                        'key'      => 'employee_id',
-	//                        'operator' => '=',
-	//                        'value'    => $this->get_employee_id(),
-	//                    ],
-	//                ],
-	//            ],
-	//            'where'       => [
-	//                'employee_id' => [
-	//                    'operator' => '=',
-	//                    'value'    => $this->get_employee_id(),
-	//                    'type'     => 'AND',
-	//                ],
-	//            ],
-	//        ];
-	//
-	//        return $this->model->find_by( [ 'employee_id' => "{$this->get_employee_id()}" ], $args );
-	//    }
 
     /**
      * Get salary history of the employee.
@@ -88,5 +49,42 @@ class Salary {
         );
 
         return $this->model->all( $args );
+    }
+
+    /**
+     * Get date wise last salary.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $date
+     *
+     * @throws \Exception
+     * @return object|\stdClass
+     */
+    public function get_date_wise_last_salary( string $date ): object {
+        $args = [
+            'where'    => [
+                'employee_id' => [
+                    'operator' => '=',
+                    'value'    => $this->get_employee_id(),
+                    'type'     => 'AND',
+                ],
+                'active_from' => [
+                    'operator' => '<=',
+                    'value'    => $date,
+                    'type'     => 'AND',
+                ],
+            ],
+            'order_by' => 'active_from',
+            'order'    => 'DESC',
+            'limit'    => 1,
+        ];
+
+        $salary_history = $this->get_salary_history( $args );
+        if ( empty( $salary_history ) ) {
+            return new \stdClass();
+        }
+
+        return $salary_history[0];
     }
 }

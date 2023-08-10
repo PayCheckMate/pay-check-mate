@@ -501,15 +501,15 @@ class Model implements ModelInterface {
         global $wpdb;
 
         $data         = $data->to_array();
-        $filteredData = $this->filter_data( $data );
+        $filtered_data = $this->filter_data( $data );
 
         if ( $wpdb->update(
             $this->get_table(),
-            $filteredData,
+            $filtered_data,
             [
                 'id' => $id,
             ],
-            $this->get_where_format( $filteredData ),
+            $this->get_where_format( $filtered_data ),
             [
                 '%d',
             ],
