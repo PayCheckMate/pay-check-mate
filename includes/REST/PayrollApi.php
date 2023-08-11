@@ -378,7 +378,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll = new PayrollModel();
         // @phpstan-ignore-next-line
-        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date );
+        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [2,3,4] ] );
         if ( $previous_payroll ) {
             return new WP_Error(
                 400, __( 'Payroll already exists for this Month.', 'pcm' ), [

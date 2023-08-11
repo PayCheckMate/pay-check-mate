@@ -27,10 +27,8 @@ export const PayrollList = () => {
     const handleStatus = (payrollData: PayrollType, status: number) => {
         if (!userCan(UserCapNames.pay_check_mate_approve_payroll)) return;
         if (status === payrollData.status) return;
-        if (status === PayrollStatus.Approved) {
-            // @ts-ignore
-            payrollData.approved_employee_id = payCheckMatePro.currentUser.data.employee.employee_id;
-        }
+        // @ts-ignore
+        payrollData.approved_employee_id = payCheckMatePro.currentUser.data.employee.employee_id;
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {

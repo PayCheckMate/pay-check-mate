@@ -46,7 +46,7 @@ const CreatePayroll = () => {
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
-    const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
+    const [payDate, setPayDate] = useState('');
     const [remarks, setRemarks] = useState<string>('');
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
         earnings: [],
@@ -192,6 +192,10 @@ const CreatePayroll = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (payDate === '') {
+            toast.error(__('Please select a date', 'pcm'));
+            return;
+        }
         setIsSubmitting(true);
         try {
             // @ts-ignore

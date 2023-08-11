@@ -95,7 +95,11 @@ class PayrollModel extends Model {
 
         if( ! empty( $except ) ) {
             $except = implode( ' AND ', array_map( function( $value, $key ) {
-                return "{$key} != {$value}";
+                if( is_array( $value ) ){
+                    return "{$key} NOT IN ('" . implode( "','", $value ) . "')";
+                }else{
+                    return "{$key} != '{$value}'";
+                }
             }, $except, array_keys( $except ) ) );
         } else {
             $except = '1=1';
