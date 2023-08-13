@@ -2,6 +2,9 @@
 
 namespace PayCheckMate\Classes;
 
+use PayCheckMate\Models\DepartmentModel;
+use PayCheckMate\Models\DesignationModel;
+use PayCheckMate\Models\SalaryHistoryModel;
 use WP_Error;
 use WP_REST_Request;
 use PayCheckMate\Contracts\EmployeeInterface;
@@ -116,7 +119,7 @@ class Employee implements EmployeeInterface {
             'search'    => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_designations',
+                    'table'       => DesignationModel::get_table(),
                     'local_key'   => 'designation_id',
                     'foreign_key' => 'id',
                     'join_type'   => 'left',
@@ -131,7 +134,7 @@ class Employee implements EmployeeInterface {
                     ],
                 ],
                 [
-                    'table'       => 'pay_check_mate_departments',
+                    'table'       => DepartmentModel::get_table(),
                     'local_key'   => 'department_id',
                     'foreign_key' => 'id',
                     'join_type'   => 'left',
@@ -213,7 +216,7 @@ class Employee implements EmployeeInterface {
             'limit'     => $limit,
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employee_salary_history',
+                    'table'       => SalaryHistoryModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -244,7 +247,7 @@ class Employee implements EmployeeInterface {
                     ],
                 ],
                 [
-                    'table'       => 'pay_check_mate_designations',
+                    'table'       => DesignationModel::get_table(),
                     'local_key'   => 'designation_id',
                     'foreign_key' => 'id',
                     'join_type'   => 'left',
@@ -259,7 +262,7 @@ class Employee implements EmployeeInterface {
                     ],
                 ],
                 [
-                    'table'       => 'pay_check_mate_departments',
+                    'table'       => DepartmentModel::get_table(),
                     'local_key'   => 'department_id',
                     'foreign_key' => 'id',
                     'join_type'   => 'left',

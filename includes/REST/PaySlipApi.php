@@ -4,6 +4,7 @@ namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\PayrollDetails;
+use PayCheckMate\Models\PayrollModel;
 use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Server;
@@ -69,7 +70,7 @@ class PaySlipApi extends RestController implements HookAbleApiInterface {
             'search'    => $request->get_param( 'search' ) ? $request->get_param( 'search' ) : '',
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_payroll',
+                    'table'       => PayrollModel::get_table(),
                     'local_key'   => 'payroll_id',
                     'foreign_key' => 'id',
                     'join_type'   => 'left',

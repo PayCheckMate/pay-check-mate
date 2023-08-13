@@ -4,10 +4,13 @@ namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
+use PayCheckMate\Models\DepartmentModel;
+use PayCheckMate\Models\DesignationModel;
 use PayCheckMate\Models\PayrollModel;
 use PayCheckMate\Models\PayrollDetailsModel;
 use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Models\SalaryHistoryModel;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
 use WP_Error;
@@ -218,7 +221,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_head_types = Helper::get_salary_head( $args );
 
         $department_args = [
-            'table'       => 'pay_check_mate_departments',
+            'table'       => DepartmentModel::get_table(),
             'local_key'   => 'department_id',
             'foreign_key' => 'id',
             'join_type'   => 'left',
@@ -234,7 +237,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $designation_args = [
-            'table'       => 'pay_check_mate_designations',
+            'table'       => DesignationModel::get_table(),
             'local_key'   => 'designation_id',
             'foreign_key' => 'id',
             'join_type'   => 'left',
@@ -284,7 +287,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 $designation_args,
                 $department_args,
                 [
-                    'table'       => 'pay_check_mate_employee_salary_history',
+                    'table'       => SalaryHistoryModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -378,7 +381,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll = new PayrollModel();
         // @phpstan-ignore-next-line
-        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [2,3,4] ] );
+        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [ 2, 3, 4 ] ] );
         if ( $previous_payroll ) {
             return new WP_Error(
                 400, __( 'Payroll already exists for this Month.', 'pcm' ), [
@@ -559,7 +562,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order_by'  => 'id',
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'created_employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -597,7 +600,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -667,7 +670,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations'     => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'created_employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'right',
@@ -715,7 +718,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',

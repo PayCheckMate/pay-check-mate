@@ -178,7 +178,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total     = $employee->count_employee( $request );
+        $total = $employee->count_employee( $request );
         // @phpstan-ignore-next-line
         $max_pages = ceil( $total / (int) ! empty( $request->get_param( 'per_page' ) ) ?? 1 );
 

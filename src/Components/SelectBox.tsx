@@ -15,7 +15,7 @@ interface SelectBoxProps extends React.InputHTMLAttributes<HTMLDivElement> {
     selected: SelectBoxType;
     setSelected: (selected: SelectBoxType) => void;
     required?: boolean;
-    error?: string;
+    error?: any;
 }
 
 export const SelectBox = ({title, options, selected, setSelected, error, required= false, className, ...props}: SelectBoxProps) => {

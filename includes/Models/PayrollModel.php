@@ -12,16 +12,16 @@ class PayrollModel extends Model {
     protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary', 'created_employee_id' ];
 
     protected static array $columns = [
-        'department_id'       => '%d',
-        'designation_id'      => '%d',
-        'payroll_date'        => '%s',
-        'total_salary'        => '%d',
-        'remarks'             => '%s',
-        'status'              => '%d',
-        'created_employee_id' => '%s',
-        'approved_employee_id'=> '%s',
-        'created_on'          => '%s',
-        'updated_at'          => '%s',
+        'department_id'        => '%d',
+        'designation_id'       => '%d',
+        'payroll_date'         => '%s',
+        'total_salary'         => '%d',
+        'remarks'              => '%s',
+        'status'               => '%d',
+        'created_employee_id'  => '%s',
+        'approved_employee_id' => '%s',
+        'created_on'           => '%s',
+        'updated_at'           => '%s',
     ];
 
     /**
@@ -70,7 +70,7 @@ class PayrollModel extends Model {
      */
     public function get_payroll_date( string $date ): array {
         return [
-            'payroll_date' => $date,
+            'payroll_date'        => $date,
             'payroll_date_string' => get_date_from_gmt( $date, 'd M, Y' ),
         ];
     }
@@ -80,7 +80,7 @@ class PayrollModel extends Model {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param string $date
+     * @param string               $date
      * @param array<string, mixed> $except
      *
      * @throws \Exception
@@ -89,15 +89,15 @@ class PayrollModel extends Model {
     public function get_payroll_by_date( string $date, array $except = [] ): array {
         global $wpdb;
 
-        $date              = gmdate( 'Y-m-d', strtotime( $date ) );
-        $month             = gmdate( 'm', strtotime( $date ) );
-        $year              = gmdate( 'Y', strtotime( $date ) );
+        $date  = gmdate( 'Y-m-d', strtotime( $date ) );
+        $month = gmdate( 'm', strtotime( $date ) );
+        $year  = gmdate( 'Y', strtotime( $date ) );
 
-        if( ! empty( $except ) ) {
-            $except = implode( ' AND ', array_map( function( $value, $key ) {
-                if( is_array( $value ) ){
+        if ( ! empty( $except ) ) {
+            $except = implode( ' AND ', array_map( function ( $value, $key ) {
+                if ( is_array( $value ) ) {
                     return "{$key} NOT IN ('" . implode( "','", $value ) . "')";
-                }else{
+                } else {
                     return "{$key} != '{$value}'";
                 }
             }, $except, array_keys( $except ) ) );

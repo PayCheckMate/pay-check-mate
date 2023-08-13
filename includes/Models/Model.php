@@ -2,7 +2,6 @@
 
 namespace PayCheckMate\Models;
 
-
 use Exception;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
@@ -201,7 +200,6 @@ class Model implements ModelInterface {
             }
 
             // Add table prefix on the table name.
-            $relation['table'] = $wpdb->prefix . $relation['table'];
             $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
 
             if ( ! empty( $relation['where'] ) ) {
