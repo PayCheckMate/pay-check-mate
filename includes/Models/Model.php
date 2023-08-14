@@ -143,6 +143,11 @@ class Model implements ModelInterface {
             $group_by = $wpdb->prepare( 'GROUP BY %s', $args['group_by'] );
         }
 
+        // Add table name as prefix and esc_sql the fields for the base table.
+        foreach ( $fields as $key => $field ) {
+            $fields[ $key ] = $this->get_table() . '.' . esc_sql( $field );
+        }
+
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
         $fields = array_map( function ( $field ) {
             // E.g., id as something_id
