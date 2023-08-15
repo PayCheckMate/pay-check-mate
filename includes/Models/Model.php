@@ -149,17 +149,17 @@ class Model implements ModelInterface {
         }
 
         // If fields has column name id, then add the table name as prefix and esc_sql the fields.
-        $fields = array_map( function ( $field ) {
-            // E.g., id as something_id
-            if ( strpos( $field, 'id' ) !== false ) {
-                $field = $this->get_table() . '.' . esc_sql( $field );
-            }
-            if ( 'id' === $field ) {
-                $field = $this->get_table() . '.' . esc_sql( $field );
-            }
-
-            return $field;
-        }, $fields );
+//        $fields = array_map( function ( $field ) {
+//            // E.g., id as something_id
+//            if ( strpos( $field, 'id' ) !== false ) {
+//                $field = $this->get_table() . '.' . esc_sql( $field );
+//            }
+//            if ( 'id' === $field ) {
+//                $field = $this->get_table() . '.' . esc_sql( $field );
+//            }
+//
+//            return $field;
+//        }, $fields );
 
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
@@ -418,6 +418,12 @@ class Model implements ModelInterface {
         }
 
         $where = 'WHERE 1=1';
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
 
         $relational_fields = [];
         $relations         = '';

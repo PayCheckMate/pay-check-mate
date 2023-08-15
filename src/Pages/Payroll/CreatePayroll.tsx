@@ -97,16 +97,22 @@ const CreatePayroll = () => {
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
-            apiFetch({
-                path: '/pay-check-mate/v1/payrolls',
-                method: 'POST',
-                data: data
-            }).then((response: any) => {
+            apiFetch({path: '/pay-check-mate/v1/payrolls', method: 'POST', data: data}).then((response: any) => {
                 const salary_heads: any = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
                     non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
                 };
+
+                // Object.keys(response.salary_head_types.earnings).forEach((key: any) => {
+                //     salary_heads.earnings[key] = response.salary_head_types.earnings[key]
+                // })
+                // Object.keys(response.salary_head_types.deductions).forEach((key: any) => {
+                //     salary_heads.deductions[key] = response.salary_head_types.deductions[key]
+                // })
+                // Object.keys(response.salary_head_types.non_taxable).forEach((key: any) => {
+                //     salary_heads.non_taxable[key] = response.salary_head_types.non_taxable[key]
+                // })
 
                 setSalaryHeads(salary_heads)
                 setTableData(response.employee_salary_history)

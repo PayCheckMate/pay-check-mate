@@ -89,8 +89,7 @@ export default function Main() {
                                 })
                             }
 
-                            {
-                                paths.map((path, index) => {
+                            {paths.map((path, index) => {
                                     const component = typeof path.component === 'function'
                                     return (
                                         component ? userIs(path.roles) && (<Route key={index} path={path.href} element={<path.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />

@@ -2,7 +2,6 @@
 
 namespace PayCheckMate\REST;
 
-use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
 use PayCheckMate\Models\DepartmentModel;
 use PayCheckMate\Models\DesignationModel;
@@ -328,11 +327,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 				'last_name',
 				'designation_id',
 				'department_id',
-                'joining_date',
+				'joining_date',
 			], $salary_head_types
         );
 
-        $employees = apply_filters( 'pay_check_mate_generate_payroll_response', $employees, $salary_head_types, $parameters );
+        $employees         = apply_filters( 'pcm_generate_payroll_employee_response', $employees, $salary_head_types, $parameters );
+        $salary_head_types = apply_filters( 'pcm_generate_payroll_salary_head_types', $salary_head_types, $employees, $parameters );
 
         return new WP_REST_Response(
             [
@@ -604,10 +604,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
+                    'fields'      => [
+                        'first_name',
+                        'last_name',
+                    ],
                 ],
             ],
         ];
-        $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+
+        $payroll_details   = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+        $payroll_details   = apply_filters( 'pcm_generate_payroll_employee_response', $payroll_details, $salary_head_types, $request->get_params() );
+        $salary_head_types = apply_filters( 'pcm_generate_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         return new WP_REST_Response(
             [

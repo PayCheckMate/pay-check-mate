@@ -302,13 +302,13 @@ const ViewPayroll = () => {
                                                 className="text-left"
                                                 key={`designation${tableDataIndex}`}
                                             >
-                                                {departments.find((department: any) => department.id === data.department_id)?.name || ''}
+                                                {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pcm')}
                                             </td>
                                             <td
                                                 className="text-left"
                                                 key={`department${tableDataIndex}`}
                                             >
-                                                {designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
+                                                {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pcm')}
                                             </td>
                                             <td
                                                 className="text-right"
