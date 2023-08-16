@@ -62,6 +62,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'schema' => [ $this, 'get_public_item_schema' ],
             ]
         );
+        // Update payroll sheet
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base . '/(?P<id>[\d]+)/update-payroll', [
@@ -767,7 +768,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );
         }
 
-        $payroll  = $payroll->find( $request->get_param( 'id' ) );
+        $payroll = $payroll->find( $request->get_param( 'id' ) );
+
+        do_action( 'pcm_after_update_payroll_status', (array) $payroll );
+
         $item     = $this->prepare_item_for_response( $payroll, $request );
         $data     = $this->prepare_response_for_collection( $item );
         $response = new WP_REST_Response( $data );
