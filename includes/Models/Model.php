@@ -410,6 +410,7 @@ class Model implements ModelInterface {
                 'order'    => 'DESC',
                 'limit'    => 1,
                 'offset'   => 0,
+                'status'   => 'all',
             ]
         );
 
@@ -423,6 +424,10 @@ class Model implements ModelInterface {
                 $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
                 $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
             }
+        }
+
+        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
         }
 
         $relational_fields = [];
@@ -457,7 +462,6 @@ class Model implements ModelInterface {
         if ( empty( $results ) ) {
             return [];
         }
-
 
         $this->data = $this->process_items( $results );
 
