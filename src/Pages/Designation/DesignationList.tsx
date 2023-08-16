@@ -15,6 +15,7 @@ import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {CreateDesignation} from "./CreateDesignation";
+import {Status} from "../../Components/Status";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
@@ -29,23 +30,21 @@ export const DesignationList = () => {
     const columns = [
         {title: 'Designation name', dataIndex: 'name', sortable: true},
         {
-            title: 'Status', dataIndex: 'status',
-            render: (text: string, record: DesignationType) => {
-                const status = parseInt(String(record.status))
-                return (
-                    <span className={`${status === DesignationStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {status === DesignationStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
-                    </span>
-                )
-            }
-        },
-        {
             title: 'Created on', dataIndex: 'created_on',
             render: (text: string, record: DesignationType) => {
                 return (
                     <span>
                         {record.created_on}
                     </span>
+                )
+            }
+        },
+        {
+            title: 'Status', dataIndex: 'status',
+            render: (text: string, record: DesignationType) => {
+                const status = parseInt(String(record.status))
+                return (
+                    <Status status={record.status} />
                 )
             }
         },

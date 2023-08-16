@@ -12,6 +12,7 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {applyFilters} from "../../Helpers/Hooks";
 import {SalaryInformation} from "./Components/SalaryInformation";
+import {Status} from "../../Components/Status";
 
 export const EmployeeList = () => {
     const [showViewModal, setShowViewModal] = useState(false);
@@ -104,19 +105,7 @@ export const EmployeeList = () => {
         {
             title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
             render: (text: string, record: any) => {
-                if (parseInt(String(record.status)) === EmployeeStatus.Active) {
-                    return (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            {__('Active', 'pcm')}
-                        </span>
-                    )
-                } else {
-                    return (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            {__('Inactive', 'pcm')}
-                        </span>
-                    )
-                }
+                return(<Status status={record.status} />)
             }
         },
         {

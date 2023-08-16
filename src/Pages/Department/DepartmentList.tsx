@@ -15,6 +15,7 @@ import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {CreateDepartment} from "./CreateDepartment";
+import {Status} from "../../Components/Status";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
@@ -29,23 +30,21 @@ export const DepartmentList = () => {
     const columns = [
         {title: 'Department name', dataIndex: 'name', sortable: true},
         {
-            title: 'Status', dataIndex: 'status',
-            render: (text: string, record: DepartmentType) => {
-                const status = parseInt(String(record.status))
-                return (
-                    <span className={`${status === DepartmentStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {status === DepartmentStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
-                    </span>
-                )
-            }
-        },
-        {
             title: 'Created on', dataIndex: 'created_on',
             render: (text: string, record: DepartmentType) => {
                 return (
                     <span>
                         {record.created_on}
                     </span>
+                )
+            }
+        },
+        {
+            title: 'Status', dataIndex: 'status',
+            render: (text: string, record: DepartmentType) => {
+                const status = parseInt(String(record.status))
+                return (
+                    <Status status={record.status} />
                 )
             }
         },

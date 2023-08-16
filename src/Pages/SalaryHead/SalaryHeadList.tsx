@@ -16,6 +16,7 @@ import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
+import {Status} from "../../Components/Status";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -100,9 +101,7 @@ export const SalaryHeadList = () => {
             render: (text: string, record: SalaryHeadType) => {
                 const status = parseInt(String(record.status))
                 return (
-                    <span className={`${status === SalaryHeadStatus.Active ? 'text-green-600' : 'text-red-600'}`}>
-                        {status === SalaryHeadStatus.Active ? __('Active', 'pcm') : __('Inactive', 'pcm')}
-                    </span>
+                    <Status status={record.status} />
                 )
             }
         },
