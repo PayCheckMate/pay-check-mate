@@ -20,7 +20,7 @@ export const NotFound = ({goBackUrl='/'}: {goBackUrl?: string}) => {
                     </Link>
                 </div>
             </div>
-      </main>
+        </main>
     )
 }
 export const PermissionDenied = () => {
