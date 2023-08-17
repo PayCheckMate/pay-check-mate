@@ -458,10 +458,15 @@ class Model implements ModelInterface {
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
 
+        $group_by = '';
+        if ( ! empty( $args['group_by'] ) ) {
+            $group_by = $wpdb->prepare( 'GROUP BY %s', $args['group_by'] );
+        }
+
         if ( '-1' === "$args[limit]" ) {
-            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} ";
+            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ";
         } else {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
         }
 
         $results = $wpdb->get_results( $query );
