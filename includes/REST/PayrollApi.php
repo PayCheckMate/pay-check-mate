@@ -588,7 +588,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll_details = new PayrollDetailsModel();
         $args            = [
-            'status'    => 1,
+            'status'    => $request->get_param( 'status' ) ? sanitize_text_field( $request->get_param( 'status' ) ) : 'all',
             'limit'     => '-1',
             'order_by'  => 'employee_id',
             'order'     => 'ASC',
