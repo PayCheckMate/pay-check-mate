@@ -33,7 +33,7 @@ export const NeedPro = () => {
             <div>
                 {Object.keys(jsonData).length > 0 ? Object.keys(jsonData).map((index: string) => {
                     return (
-                        <div className="px-4 py-5">
+                        <div key={index} className="px-4 py-5">
                             <h1 className="text-base font-semibold leading-6 text-gray-900 mb-6">
                                 {index}
                             </h1>
