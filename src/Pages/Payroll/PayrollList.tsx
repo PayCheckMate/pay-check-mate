@@ -123,10 +123,18 @@ export const PayrollList = () => {
             render: (text: string, record: PayrollType) => {
                 return (
                     <div className="flex">
+                        <Link
+                            to={`/payroll/${record.id}`}
+                            className="text-indigo-600 hover:text-indigo-900"
+                        >
+                            {__('View', 'pcm')}
+                        </Link>
                         {parseInt(String(record.status)) === PayrollStatus.NotApproved && (
                             <>
                                 {userCan(UserCapNames.pay_check_mate_edit_payroll) && (
+
                                     <>
+                                        <span className="mx-2 text-gray-300">|</span>
                                         <Link
                                             to={`/payroll/edit/${record.id}`}
                                             className="text-orange-400 hover:text-orange-600"

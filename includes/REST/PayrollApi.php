@@ -2,12 +2,14 @@
 
 namespace PayCheckMate\REST;
 
-use PayCheckMate\Classes\Employee;
 use PayCheckMate\Classes\Helper;
+use PayCheckMate\Models\DepartmentModel;
+use PayCheckMate\Models\DesignationModel;
 use PayCheckMate\Models\PayrollModel;
 use PayCheckMate\Models\PayrollDetailsModel;
 use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Contracts\HookAbleApiInterface;
+use PayCheckMate\Models\SalaryHistoryModel;
 use PayCheckMate\Requests\PayrollDetailsRequest;
 use PayCheckMate\Requests\PayrollRequest;
 use WP_Error;
@@ -60,6 +62,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'schema' => [ $this, 'get_public_item_schema' ],
             ]
         );
+        // Update payroll sheet
         register_rest_route(
             $this->namespace,
             '/' . $this->rest_base . '/(?P<id>[\d]+)/update-payroll', [
@@ -218,7 +221,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $salary_head_types = Helper::get_salary_head( $args );
 
         $department_args = [
-            'table'       => 'pay_check_mate_departments',
+            'table'       => DepartmentModel::get_table(),
             'local_key'   => 'department_id',
             'foreign_key' => 'id',
             'join_type'   => 'left',
@@ -234,7 +237,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $designation_args = [
-            'table'       => 'pay_check_mate_designations',
+            'table'       => DesignationModel::get_table(),
             'local_key'   => 'designation_id',
             'foreign_key' => 'id',
             'join_type'   => 'left',
@@ -284,7 +287,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 $designation_args,
                 $department_args,
                 [
-                    'table'       => 'pay_check_mate_employee_salary_history',
+                    'table'       => SalaryHistoryModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -325,11 +328,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 				'last_name',
 				'designation_id',
 				'department_id',
-                'joining_date',
+				'joining_date',
 			], $salary_head_types
         );
 
-        $employees = apply_filters( 'pay_check_mate_generate_payroll_response', $employees, $salary_head_types, $parameters );
+        $employees         = apply_filters( 'pcm_generate_payroll_employee_response', $employees, $salary_head_types, $parameters );
+        $salary_head_types = apply_filters( 'pcm_generate_payroll_salary_head_types', $salary_head_types, $employees, $parameters );
 
         return new WP_REST_Response(
             [
@@ -378,7 +382,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll = new PayrollModel();
         // @phpstan-ignore-next-line
-        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [2,3,4] ] );
+        $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [ 2, 3, 4 ] ] );
         if ( $previous_payroll ) {
             return new WP_Error(
                 400, __( 'Payroll already exists for this Month.', 'pcm' ), [
@@ -559,7 +563,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'order_by'  => 'id',
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'created_employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -584,7 +588,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll_details = new PayrollDetailsModel();
         $args            = [
-            'status'    => 1,
+            'status'    => $request->get_param( 'status' ) ? sanitize_text_field( $request->get_param( 'status' ) ) : 'all',
             'limit'     => '-1',
             'order_by'  => 'employee_id',
             'order'     => 'ASC',
@@ -597,14 +601,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
+                    'fields'      => [
+                        'first_name',
+                        'last_name',
+                    ],
                 ],
             ],
         ];
-        $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+
+        $payroll_details   = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+        $payroll_details   = apply_filters( 'pcm_get_payroll_employee_response', $payroll_details, $salary_head_types, $request->get_params() );
+        $salary_head_types = apply_filters( 'pcm_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         return new WP_REST_Response(
             [
@@ -667,7 +678,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations'     => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'created_employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'right',
@@ -715,7 +726,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
             'relations' => [
                 [
-                    'table'       => 'pay_check_mate_employees',
+                    'table'       => EmployeeModel::get_table(),
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
@@ -757,7 +768,10 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return new WP_Error( 500, $updated->get_error_message(), [ 'status' => 500 ] );
         }
 
-        $payroll  = $payroll->find( $request->get_param( 'id' ) );
+        $payroll = $payroll->find( $request->get_param( 'id' ) );
+
+        do_action( 'pcm_after_update_payroll_status', (array) $payroll );
+
         $item     = $this->prepare_item_for_response( $payroll, $request );
         $data     = $this->prepare_response_for_collection( $item );
         $response = new WP_REST_Response( $data );

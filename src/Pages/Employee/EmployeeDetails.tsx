@@ -14,6 +14,7 @@ import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryType";
 import {HeadType} from "../../Types/SalaryHeadType";
+import {Status} from "../../Components/Status";
 
 type EmployeeDetailsProps = {
     employee_id?: number|string,
@@ -153,17 +154,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                             {__('Status', 'pcm')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                            {
-                                                parseInt(String(personalInformation.status)) === 1 ? (
-                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold text-green-800 bg-gradient-to-r from-green-100/10 to-green-200">
-                                                        {__('Active', 'pcm')}
-                                                    </span>
-                                                ) : (
-                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold text-red-800 bg-gradient-to-r from-red-100/10 to-red-200">
-                                                        {__('Inactive', 'pcm')}
-                                                    </span>
-                                                )
-                                            }
+                                            {<Status status={personalInformation.status} />}
                                         </dd>
                                       </div>
                                     </dl>

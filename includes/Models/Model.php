@@ -2,7 +2,6 @@
 
 namespace PayCheckMate\Models;
 
-
 use Exception;
 use PayCheckMate\Contracts\ModelInterface;
 use PayCheckMate\Requests\Request;
@@ -144,18 +143,23 @@ class Model implements ModelInterface {
             $group_by = $wpdb->prepare( 'GROUP BY %s', $args['group_by'] );
         }
 
-        // If fields has column name id, then add the table name as prefix and esc_sql the fields.
-        $fields = array_map( function ( $field ) {
-            // E.g., id as something_id
-            if ( strpos( $field, 'id' ) !== false ) {
-                $field = $this->get_table() . '.' . esc_sql( $field );
-            }
-            if ( 'id' === $field ) {
-                $field = $this->get_table() . '.' . esc_sql( $field );
-            }
+        // Add table name as prefix and esc_sql the fields for the base table.
+        foreach ( $fields as $key => $field ) {
+            $fields[ $key ] = $this->get_table() . '.' . esc_sql( $field );
+        }
 
-            return $field;
-        }, $fields );
+        // If fields has column name id, then add the table name as prefix and esc_sql the fields.
+//        $fields = array_map( function ( $field ) {
+//            // E.g., id as something_id
+//            if ( strpos( $field, 'id' ) !== false ) {
+//                $field = $this->get_table() . '.' . esc_sql( $field );
+//            }
+//            if ( 'id' === $field ) {
+//                $field = $this->get_table() . '.' . esc_sql( $field );
+//            }
+//
+//            return $field;
+//        }, $fields );
 
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
@@ -201,7 +205,6 @@ class Model implements ModelInterface {
             }
 
             // Add table prefix on the table name.
-            $relation['table'] = $wpdb->prefix . $relation['table'];
             $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
 
             if ( ! empty( $relation['where'] ) ) {
@@ -407,6 +410,7 @@ class Model implements ModelInterface {
                 'order'    => 'DESC',
                 'limit'    => 1,
                 'offset'   => 0,
+                'status'   => 'all',
             ]
         );
 
@@ -415,6 +419,23 @@ class Model implements ModelInterface {
         }
 
         $where = 'WHERE 1=1';
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
+
+        if ( ! empty( $args['where_between'] ) ) {
+            foreach ( $args['where_between'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
+            }
+        }
+
+        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+        }
 
         $relational_fields = [];
         $relations         = '';
@@ -437,10 +458,15 @@ class Model implements ModelInterface {
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
 
+        $group_by = '';
+        if ( ! empty( $args['group_by'] ) ) {
+            $group_by = $wpdb->prepare( 'GROUP BY %s', $args['group_by'] );
+        }
+
         if ( '-1' === "$args[limit]" ) {
-            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} ";
+            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ";
         } else {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
         }
 
         $results = $wpdb->get_results( $query );
@@ -448,7 +474,6 @@ class Model implements ModelInterface {
         if ( empty( $results ) ) {
             return [];
         }
-
 
         $this->data = $this->process_items( $results );
 

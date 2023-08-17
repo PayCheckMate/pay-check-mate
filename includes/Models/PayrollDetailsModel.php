@@ -96,8 +96,8 @@ class PayrollDetailsModel extends Model {
 
         foreach ( $salary_details as $key => $amount ) {
             foreach ( array_keys( $salary_head_types ) as $type ) {
-                if ( array_key_exists( $key, $salary_head_types[$type] ) ) {
-                    $salary['salary_details'][$type][$key] = $amount;
+                if ( array_key_exists( $key, $salary_head_types[ $type ] ) ) {
+                    $salary['salary_details'][ $type ][ $key ] = $amount;
                 }
             }
         }

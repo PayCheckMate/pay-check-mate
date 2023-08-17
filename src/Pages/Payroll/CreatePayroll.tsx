@@ -13,7 +13,7 @@ import {__} from "@wordpress/i18n";
 import {FormInput} from "../../Components/FormInput";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon, LockClosedIcon} from "@heroicons/react/24/outline";
 import {useSelect} from "@wordpress/data";
 import department from "../../Store/Department";
 import designation from "../../Store/Designation";
@@ -25,7 +25,7 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import apiFetch from "@wordpress/api-fetch";
-import {addAction, applyFilters} from "../../Helpers/Hooks";
+import {addAction, addFilter, applyFilters} from "../../Helpers/Hooks";
 
 const CreatePayroll = () => {
     const payrollId = useParams().id;
@@ -97,16 +97,22 @@ const CreatePayroll = () => {
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
-            apiFetch({
-                path: '/pay-check-mate/v1/payrolls',
-                method: 'POST',
-                data: data
-            }).then((response: any) => {
+            apiFetch({path: '/pay-check-mate/v1/payrolls', method: 'POST', data: data}).then((response: any) => {
                 const salary_heads: any = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
                     non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
                 };
+
+                // Object.keys(response.salary_head_types.earnings).forEach((key: any) => {
+                //     salary_heads.earnings[key] = response.salary_head_types.earnings[key]
+                // })
+                // Object.keys(response.salary_head_types.deductions).forEach((key: any) => {
+                //     salary_heads.deductions[key] = response.salary_head_types.deductions[key]
+                // })
+                // Object.keys(response.salary_head_types.non_taxable).forEach((key: any) => {
+                //     salary_heads.non_taxable[key] = response.salary_head_types.non_taxable[key]
+                // })
 
                 setSalaryHeads(salary_heads)
                 setTableData(response.employee_salary_history)
@@ -243,6 +249,15 @@ const CreatePayroll = () => {
 
     addAction('pcm.payroll_edit_action', 'pcm.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
+    })
+    addFilter('pcm.payroll_edit_filter', 'need_pro.payroll_edit_filter', (salaryHeads: SalaryHeadsResponseType) => {
+        const text = __('Turn on edit mode (PRO)', 'pcm-pro');
+        return(
+             <>
+                 {text}
+                 <LockClosedIcon className="h-5 w-5 text-gray-400" />
+             </>
+        )
     })
     return (
         <>

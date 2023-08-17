@@ -12,7 +12,7 @@ interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     placeholder?: string;
     value: string | number;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    error?: string;
+    error?: any;
     required?: boolean;
     helpText?: string;
     disabled?: boolean;
