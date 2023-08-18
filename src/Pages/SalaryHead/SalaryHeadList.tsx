@@ -17,6 +17,7 @@ import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {Status} from "../../Components/Status";
+import {applyFilters} from "../../Helpers/Hooks";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -46,7 +47,9 @@ export const SalaryHeadList = () => {
     const [isPercentage, setIsPercentage] = useState(is_percentage[0]);
     const [isVariable, setIsVariable] = useState(is_variable[0]);
 
-
+    let indigo = applyFilters('pcm.indigo', 'gray');
+    let green = applyFilters('pcm.green', 'gray');
+    let red = applyFilters('pcm.red', 'gray');
     const columns = [
         {title: __('Salary Head', 'pcm'), dataIndex: 'head_name', sortable: true},
         {
@@ -54,7 +57,7 @@ export const SalaryHeadList = () => {
             render: (text: string, record: SalaryHeadType) => {
                 const headType = parseInt(String(record.head_type))
                 return (
-                    <span className={`${headType === HeadType.Earning ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`${headType === HeadType.Earning ? `text-${green}-600` : `text-${red}-600`}`}>
                         {headType === HeadType.Earning ? __('Earning', 'pcm') : __('Deduction', 'pcm')}
                     </span>
                 )
@@ -78,7 +81,7 @@ export const SalaryHeadList = () => {
             render: (text: string, record: SalaryHeadType) => {
                 const isTaxable = parseInt(String(record.is_taxable))
                 return (
-                    <span className={`${isTaxable === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`${isTaxable === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
                         {isTaxable === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
                     </span>
                 )
@@ -89,7 +92,7 @@ export const SalaryHeadList = () => {
             render: (text: string, record: SalaryHeadType) => {
                 const isPersonalSavings = parseInt(String(record.is_personal_savings))
                 return (
-                    <span className={`${isPersonalSavings === 1 ? 'text-green-600' : 'text-red-600'}`}>
+                    <span className={`${isPersonalSavings === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
                         {isPersonalSavings === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
                     </span>
                 )
@@ -122,7 +125,7 @@ export const SalaryHeadList = () => {
                 <div className="flex">
                     {userCan(UserCapNames.pay_check_mate_edit_salary_head) && (
                     <button
-                        className="text-indigo-600 hover:text-indigo-900"
+                        className={"text-"+indigo+"-600 hover:text-"+indigo+"-900 font-semibold"}
                         onClick={() => handleModal(record)}
                     >
                         {__('Edit', 'pcm')}
@@ -135,7 +138,7 @@ export const SalaryHeadList = () => {
                                     <span className="mx-2 text-gray-300">|</span>
                                     <button
                                         onClick={() => handleStatus(record.id, 0)}
-                                        className="text-red-600 hover:text-red-900"
+                                        className={"text-"+red+"-600 hover:text-"+red+"-900 font-semibold"}
                                     >
                                         {__('Inactive', 'pcm')}
                                     </button>
@@ -146,7 +149,7 @@ export const SalaryHeadList = () => {
                                     <span className="mx-2 text-gray-300">|</span>
                                     <button
                                         onClick={() => handleStatus(record.id, 1)}
-                                        className="text-green-600 hover:text-green-900"
+                                        className={"text-"+green+"-600 hover:text-"+green+"-900 font-semibold"}
                                     >
                                         {__('Active', 'pcm')}
                                     </button>

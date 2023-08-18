@@ -3,7 +3,6 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
-import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
@@ -11,11 +10,9 @@ import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {applyFilters} from "../../Helpers/Hooks";
-import {SalaryInformation} from "./Components/SalaryInformation";
 import {Status} from "../../Components/Status";
 
 export const EmployeeList = () => {
-    const [showViewModal, setShowViewModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const per_page = 10;
     const {
@@ -38,12 +35,7 @@ export const EmployeeList = () => {
         setCurrentPage(filterObject.page || 1);
     };
 
-    const [pageTitle, setPageTitle] = useState(__('Employee List', 'pcm'));
-
-    const viewEmployee = (id: number) => {
-        setShowViewModal(true);
-    }
-
+    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
     const columns = [
         {
             title: 'Employee ID',
@@ -69,7 +61,6 @@ export const EmployeeList = () => {
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
-                let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
                 if (userCan(UserCapNames.pay_check_mate_view_employee_details)) {
                     return (
                         <Link
@@ -121,7 +112,7 @@ export const EmployeeList = () => {
                                 <span className="mx-2 text-gray-300">|</span>
                                 <Link
                                     to={`/employee/edit/${record.employee_id}`}
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className={anchorClass}
                                 >
                                     {__('Edit', 'pcm')}
                                 </Link>

@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {filtersType} from "../../../Store/Store";
 import useFetchApi from "../../../Helpers/useFetchApi";
 import {EmployeeSalary} from "../../../Types/SalaryHeadType";
+import {applyFilters} from "../../../Helpers/Hooks";
 
 export const PaySlipList = () => {
     let per_page = '10';
@@ -19,6 +20,7 @@ export const PaySlipList = () => {
         }
     }, [models]);
 
+    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
     const columns = [
         {
             title: __('Salary date', 'pcm'), dataIndex: 'payroll_date',
@@ -41,7 +43,7 @@ export const PaySlipList = () => {
                         <Link
                             to={`/pay-slip/view/${record.id}`}
                             state={{data: record}}
-                            className="text-blue-500 hover:text-blue-700 mr-2"
+                            className={anchorClass}
                         >
                             {__('View', 'pcm')}
                         </Link>

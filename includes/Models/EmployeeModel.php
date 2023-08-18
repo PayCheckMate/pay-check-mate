@@ -188,6 +188,13 @@ class EmployeeModel extends Model {
         return $salary;
     }
 
+    /**
+     * Get employee Id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
     public function get_employee_id(): string {
         // @phpstan-ignore-next-line
         return $this->employee_id;

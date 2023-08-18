@@ -16,6 +16,7 @@ import designation from "../../../Store/Designation";
 import {useParams} from "react-router-dom";
 import {CreateDepartment} from "../../Department/CreateDepartment";
 import {CreateDesignation} from "../../Designation/CreateDesignation";
+import {applyFilters} from "../../../Helpers/Hooks";
 
 type PersonalInformationPropTypes = {
     setFormData: (formData: EmployeeType) => void;
@@ -106,6 +107,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
     const [showDesignationModal, setShowDesignationModal] = useState(false);
     const [departmentData, setDepartmentData] = useState<DepartmentType>({} as DepartmentType);
     const [designationData, setDesignationData] = useState<DesignationType>({} as DesignationType);
+    let indigo = applyFilters('pcm.indigo', 'gray');
 
     return (
         <>
@@ -168,7 +170,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     }}
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
-                                    <span onClick={() => setShowDepartmentModal(true)} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                    <span onClick={() => setShowDepartmentModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
                                         {__('Create a new department', 'pcm')}
                                     </span>
                                 </div>
@@ -186,7 +188,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     }}
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
-                                    <span onClick={() => setShowDesignationModal(true)} className="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                    <span onClick={() => setShowDesignationModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
                                         {__('Create a new designation', 'pcm')}
                                     </span>
                                 </div>
@@ -286,7 +288,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                         </button>
                         <Button
                             onClick={() => handleNextStep()}
-                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className={"rounded-md bg-" + indigo + "-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-" + indigo + "-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-" + indigo + "-600"}
                         >
                             {__('Save & Continue', 'pcm')}
                         </Button>
