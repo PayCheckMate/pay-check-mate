@@ -730,9 +730,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
+                    'fields'      => [
+                        'first_name',
+                        'last_name',
+                    ],
                 ],
             ],
         ];
+
         $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
 
         return new WP_REST_Response(

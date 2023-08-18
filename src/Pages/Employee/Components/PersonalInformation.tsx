@@ -144,7 +144,6 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     error={formError.first_name}
                                 />
                             </div>
-
                             <div className="sm:col-span-3">
                                 <FormInput
                                     required={true}

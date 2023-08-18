@@ -51,6 +51,14 @@ const ViewPayroll = () => {
                 'designation_id': selectedDesignation.id,
             }
             makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payrolls/reports', data, false).then((response) => {
+                if (response.employee_salary_history.length <= 0) {
+                    toast.error(__('No data found with this date or status filter.', 'pcm'), {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000
+                    });
+
+                    return;
+                }
                 const salary_heads = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],

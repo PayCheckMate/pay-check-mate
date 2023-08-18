@@ -69,14 +69,15 @@ export const EmployeeList = () => {
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
+                let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
                 if (userCan(UserCapNames.pay_check_mate_view_employee_details)) {
                     return (
                         <Link
                             to={`/employee/${record.employee_id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className={anchorClass}
                         >
-                        {record.first_name + ' ' + record.last_name}
-                    </Link>
+                            {record.first_name + ' ' + record.last_name}
+                        </Link>
                     )
                 } else {
                     return (

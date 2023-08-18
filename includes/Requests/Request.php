@@ -92,6 +92,24 @@ class Request implements FormRequestInterface {
     }
 
     /**
+     * Set data.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $key   Key name.
+     * @param mixed  $value Value.
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    public function set_data( string $key, $value ): Request {
+        $this->data[ $key ] = $value;
+        $this->validate();
+
+        return $this;
+    }
+
+    /**
      * Validate nonce.
      *
      * @since PAY_CHECK_MATE_SINCE

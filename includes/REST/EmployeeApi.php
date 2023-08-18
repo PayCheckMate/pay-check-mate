@@ -250,8 +250,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 update_user_meta( $user_id, 'phone', $data['phone'] );
                 update_user_meta( $user_id, 'address', $data['address'] );
 
-                // @phpstan-ignore-next-line
-                $validated_data->user_id = $user_id;
+                $validated_data->set_data( 'user_id', $user_id );
 
                 // Send the email to the user to set the password.
                 wp_new_user_notification( $user_id, null, 'both' );

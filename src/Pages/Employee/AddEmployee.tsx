@@ -230,7 +230,7 @@ export const AddEmployee = () => {
     const [salaryFormError, setSalaryFormError] = useState({} as { [key: string]: string});
 
     const goToReview = () => {
-        const requiredFields = ['gross_salary', 'basic_salary', 'active_from', 'purpose'];
+        const requiredFields = ['gross_salary', 'basic_salary', 'active_from'];
         const errors = validateRequiredFields(salaryInformation, requiredFields, setSalaryFormError);
         if (Object.keys(errors).length > 0) {
             return;

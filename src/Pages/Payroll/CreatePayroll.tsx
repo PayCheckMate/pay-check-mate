@@ -250,15 +250,15 @@ const CreatePayroll = () => {
     addAction('pcm.payroll_edit_action', 'pcm.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
     })
-    addFilter('pcm.payroll_edit_filter', 'need_pro.payroll_edit_filter', (salaryHeads: SalaryHeadsResponseType) => {
-        const text = __('Turn on edit mode (PRO)', 'pcm-pro');
-        return(
-             <>
-                 {text}
-                 <LockClosedIcon className="h-5 w-5 text-gray-400" />
-             </>
-        )
-    })
+    // addFilter('pcm.payroll_edit_filter', 'need_pro.payroll_edit_filter', (salaryHeads: SalaryHeadsResponseType) => {
+    //     const text = __('Turn on edit mode (PRO)', 'pcm-pro');
+    //     return(
+    //          <>
+    //              {text}
+    //              <LockClosedIcon className="h-5 w-5 text-gray-400" />
+    //          </>
+    //     )
+    // })
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
