@@ -170,9 +170,9 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response
      */
     public function get_employees( WP_REST_Request $request ): WP_REST_Response {
-        $employee = new Employee();
-        $employee_data  = $employee->get_all_employees( $request );
-        $employees      = [];
+        $employee      = new Employee();
+        $employee_data = $employee->get_all_employees( $request );
+        $employees     = [];
         foreach ( $employee_data as $data ) {
             $item        = $this->prepare_item_for_response( $data, $request );
             $employees[] = $this->prepare_response_for_collection( $item );
@@ -256,6 +256,10 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 wp_new_user_notification( $user_id, null, 'both' );
             }
 
+            if ( empty( $validated_data->user_id ) ) {
+                wp_send_json_error( __( 'Unable to create user, please try again.', 'pcm' ), 400 );
+            }
+
             $employee = $employee_model->create( $validated_data );
         }
 
@@ -264,7 +268,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         $salary_information['employee_id'] = $data['employee_id'];
-        $salary_data                       = [
+
+        $salary_data        = [
             'salary_history_id',
             'employee_id',
             'basic_salary',
@@ -273,10 +278,10 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'remarks',
             '_wpnonce',
         ];
-        $head_details                      = $salary_information;
-        $salary_information                = array_intersect_key( $salary_information, array_flip( $salary_data ) );
-        $keys_to_remove                    = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
-        $salary_details                    = array_filter(
+        $head_details       = $salary_information;
+        $salary_information = array_intersect_key( $salary_information, array_flip( $salary_data ) );
+        $keys_to_remove     = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
+        $salary_details     = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
 				return ! in_array( $key, $keys_to_remove, true );
 			}, ARRAY_FILTER_USE_KEY
@@ -326,9 +331,9 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object on success, or WP_Error object on failure.
      */
     public function get_employee( WP_REST_Request $request ): WP_REST_Response {
-        $employee_id   = $request->get_param( 'employee_id' );
-        $employee_obj      = new Employee();
-        $employee = $employee_obj->get_an_employee_with_salary_history( $employee_id, $request );
+        $employee_id  = $request->get_param( 'employee_id' );
+        $employee_obj = new Employee();
+        $employee     = $employee_obj->get_an_employee_with_salary_history( $employee_id, $request );
 
         $item                                           = $this->prepare_item_for_response( $employee, $request );
         $data                                           = $this->prepare_response_for_collection( $item );
@@ -355,7 +360,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
     public function get_user( WP_REST_Request $request ) {
-        $user_id = $request->get_param( 'user_id' );
+        $user_id  = $request->get_param( 'user_id' );
         $employee = new Employee();
         $employee = $employee->get_employee_by_user_id( $user_id );
         // Check if there is any employee with this user id, then return, cause employee exists.
@@ -489,7 +494,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Employee Bank Account Number', 'pcm' ),
                     'type'        => 'string',
                 ],
-                'tax_number' => [
+                'tax_number'          => [
                     'description' => __( 'Employee Bank Account Number', 'pcm' ),
                     'type'        => 'string',
                 ],

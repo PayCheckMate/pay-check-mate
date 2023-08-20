@@ -9,7 +9,7 @@ import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
-import {applyFilters} from "../../Helpers/Hooks";
+import {applyFilters, doAction} from "../../Helpers/Hooks";
 import {Status} from "../../Components/Status";
 
 export const EmployeeList = () => {
@@ -106,7 +106,7 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        {applyFilters('pcm.employee_list_action', null, record)}
+                        {applyFilters('pcm.employee_list_filter', null, record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
