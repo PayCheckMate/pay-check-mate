@@ -151,7 +151,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         });
     }, 1000), []);
 
-    const color = applyFilters('pcm.pagination_color', 'gray');
+    const color = applyFilters('pcm.pagination_button_color', 'gray');
     return (
         <>
             {isLoading ? (
