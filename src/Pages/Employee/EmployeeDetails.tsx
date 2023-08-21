@@ -140,8 +140,8 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {
-                                                personalInformation.regine_date ?
-                                                    new Date(personalInformation.regine_date).toLocaleDateString('en-US', {
+                                                personalInformation.resign_date ?
+                                                    new Date(personalInformation.resign_date).toLocaleDateString('en-US', {
                                                         year: 'numeric',
                                                         month: 'short',
                                                         day: 'numeric'

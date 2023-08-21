@@ -15,7 +15,7 @@ export interface EmployeeType {
     tax_number: string;
     address: string;
     joining_date: string;
-    regine_date: string;
+    resign_date: string;
     status: EmployeeStatus;
     created_on: string;
     updated_at: string;

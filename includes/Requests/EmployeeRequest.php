@@ -23,7 +23,7 @@ class EmployeeRequest extends Request {
         'tax_number'          => 'sanitize_text_field',
         'address'             => 'sanitize_text_field',
         'joining_date'        => 'sanitize_text_field',
-        'regine_date'         => 'sanitize_text_field',
+        'resign_date'         => 'sanitize_text_field',
         'status'              => 'absint',
         'created_on'          => 'sanitize_text_field',
         'updated_at'          => 'sanitize_text_field',

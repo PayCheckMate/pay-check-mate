@@ -302,7 +302,37 @@ class Employee implements EmployeeInterface {
         return $employee;
     }
 
-    public function update_employee_status( int $employee_id, string $status ): bool {
-        return $this->model->update_by( $employee_id, $status );
+    /**
+     * Update employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int    $employee_id
+     * @param string $status
+     *
+     * @throws \Exception
+     * @return object|\WP_Error
+     */
+    public function update_employee_status( int $employee_id, string $status ) {
+        return $this->model->update_by( [ 'employee_id' => $employee_id ], [ 'status' => $status ] );
+    }
+
+    /**
+     * Resign employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int    $employee_id
+     * @param string $resign_date
+     *
+     * @throws \Exception
+     * @return object|\WP_Error
+     */
+    public function resign_employee( int $employee_id, string $resign_date ) {
+        $data = [
+            'status' => 0,
+            'resign_date' => $resign_date,
+        ];
+        return $this->model->update_by( [ 'employee_id' => $employee_id ], $data );
     }
 }

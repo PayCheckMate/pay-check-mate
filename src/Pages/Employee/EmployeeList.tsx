@@ -126,18 +126,6 @@ export const EmployeeList = () => {
 
     return (
         <>
-            {/*{showViewModal &&*/}
-            {/*    <>*/}
-            {/*        <Modal*/}
-            {/*            setShowModal={setShowViewModal}*/}
-            {/*            header={pageTitle}*/}
-            {/*            width={' sm:max-w-3xl'}*/}
-            {/*            zIndex={'9999'}*/}
-            {/*        >*/}
-            {/*            {applyFilters('pcm.employee_view_modal', null, setShowViewModal)}*/}
-            {/*        </Modal>*/}
-            {/*    </>*/}
-            {/*}*/}
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
