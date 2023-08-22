@@ -11,13 +11,12 @@ import {SelectBox} from "../../Components/SelectBox";
 import {useEffect, useState} from "@wordpress/element";
 import {SelectBoxType} from "../../Types/SalaryHeadType";
 import DragAndDrop from "../../Components/DragAndDrop";
-import {EmployeeType} from "../../Types/EmployeeType";
 
 export const ImportEmployee = () => {
     const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
     const [csvFileData, setCsvFileData] = useState([] as any[]);
     const [excelFileData, setExcelFileData] = useState([] as any[]);
-    const [employees, setEmployees] = useState([] as EmployeeType[]);
+    const [employees, setEmployees] = useState([] as any[]);
     const [downloadOptions, setDownloadOptions] = useState([
         {id: 1, name: 'CSV'},
         {id: 2, name: 'Excel'}
@@ -25,22 +24,20 @@ export const ImportEmployee = () => {
     const [selectedOption, setSelectedOption] = useState(downloadOptions[0]);
 
     useEffect(() => {
-        setEmployees([] as EmployeeType[])
-        if (csvFileData.length > 0) {
-            console.log(csvFileData, 'csvFileData')
-            csvFileData.map((data) => {
-                if (data[0] === 'First name') {
-                    return;
-                }
+        setEmployees([]); // Reset employees when CSV or Excel data changes
 
-                setEmployees([data]);
-            })
+        if (csvFileData.length > 0) {
+            setEmployees(prevEmployees => {
+                return prevEmployees.concat(
+                    csvFileData.filter((data: any) => data[0] !== 'First name')
+                );
+            });
         }
+
         if (excelFileData.length > 0) {
-            excelFileData.map((data) => {
-                console.log(data, 'data')
-                setEmployees([data]);
-            })
+            setEmployees(prevEmployees => {
+                return prevEmployees.concat(excelFileData);
+            });
         }
     }, [csvFileData, excelFileData]);
 
@@ -62,6 +59,7 @@ export const ImportEmployee = () => {
             __('Designation id', 'pcm'),
             __('Department id', 'pcm'),
             __('Employee id', 'pcm'),
+            __('User id', 'pcm'),
             __('Email', 'pcm'),
             __('Phone number', 'pcm'),
             __('Bank name', 'pcm'),
@@ -78,7 +76,7 @@ export const ImportEmployee = () => {
 
         // Adding data rows to CSV
         const dataRow = [
-            'John', 'Doe', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
+            'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
             '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
         ];
         for (let i = 0; i < 100; i++) {
@@ -110,6 +108,7 @@ export const ImportEmployee = () => {
             __('Designation id', 'pcm'),
             __('Department id', 'pcm'),
             __('Employee id', 'pcm'),
+            __('User id', 'pcm'),
             __('Email', 'pcm'),
             __('Phone number', 'pcm'),
             __('Bank name', 'pcm'),
@@ -126,7 +125,7 @@ export const ImportEmployee = () => {
 
         // Adding data row to Excel
         const dataRow = [
-            'John', 'Doe', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
+            'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
             '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
         ];
         for (let i = 0; i < 100; i++) {
@@ -164,7 +163,7 @@ export const ImportEmployee = () => {
                         <div className="flex justify-between mb-6 gap-4">
                             <div>
                                 <p className="text-base leading-6 text-gray-900">
-                                    {__('According to the following format, import the employee data in CSV format. Shown bellow is based on your salary heads.', 'pcm')}
+                                    {__('Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads.', 'pcm')}
                                 </p>
                                 <p className="text-gray-600">
                                     {__('Note: The first row of the CSV file must be the column name.', 'pcm')}
@@ -196,15 +195,17 @@ export const ImportEmployee = () => {
                     </div>
                     <div className="flex justify-end mt-12">
                         {employees.length > 0 &&(
-                            <div className="payroll-table-container">
+                            <div className="payroll-table-container h-full">
                                 <table className="payroll-table">
                                 <thead>
                                     <tr>
+                                        <th>{__('SL', 'pcm')}</th>
                                         <th>{__('First name', 'pcm')}</th>
                                         <th>{__('Last name', 'pcm')}</th>
                                         <th>{__('Designation id', 'pcm')}</th>
                                         <th>{__('Department id', 'pcm')}</th>
                                         <th>{__('Employee id', 'pcm')}</th>
+                                        <th>{__('User id', 'pcm')}</th>
                                         <th>{__('Email', 'pcm')}</th>
                                         <th>{__('Phone number', 'pcm')}</th>
                                         <th>{__('Bank name', 'pcm')}</th>
@@ -222,10 +223,11 @@ export const ImportEmployee = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {employees.map((employee) => (
-                                        <tr>
-                                            {Object.keys(employee).map((key) => (
-                                                <td>{employee[key]}</td>
+                                    {employees.map((employee, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            {Object.keys(employee).map((key, index) => (
+                                                <td key={index}>{employee[key]}</td>
                                             ))}
                                         </tr>
                                     ))}
