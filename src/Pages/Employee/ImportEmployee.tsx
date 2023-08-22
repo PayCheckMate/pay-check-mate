@@ -5,11 +5,12 @@ import {__} from "@wordpress/i18n";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {Button} from "../../Components/Button";
-import {DocumentArrowDownIcon} from "@heroicons/react/24/outline";
+import {CloudArrowUpIcon, DocumentArrowDownIcon} from "@heroicons/react/24/outline";
 import * as XLSX from 'xlsx';
 import {SelectBox} from "../../Components/SelectBox";
 import {useState} from "@wordpress/element";
 import {SelectBoxType} from "../../Types/SalaryHeadType";
+import DragAndDropComponent from "../../Components/DragAndDrop";
 
 export const ImportEmployee = () => {
     const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
@@ -160,54 +161,9 @@ export const ImportEmployee = () => {
                                 </Button>
                             </div>
                         </div>
-                        <table className="payroll-table">
-                            <thead>
-                                <tr>
-                                    <th>{__('First name', 'pcm')}</th>
-                                    <th>{__('Last name', 'pcm')}</th>
-                                    <th>{__('Designation id', 'pcm')}</th>
-                                    <th>{__('Department id', 'pcm')}</th>
-                                    <th>{__('Employee id', 'pcm')}</th>
-                                    <th>{__('Email', 'pcm')}</th>
-                                    <th>{__('Phone number', 'pcm')}</th>
-                                    <th>{__('Bank name', 'pcm')}</th>
-                                    <th>{__('Bank account number', 'pcm')}</th>
-                                    <th>{__('Tax number', 'pcm')}</th>
-                                    <th>{__('Joining date', 'pcm')}</th>
-                                    <th>{__('Address', 'pcm')}</th>
-                                    <th>{__('Gross salary', 'pcm')}</th>
-                                    <th>{__('Basic salary', 'pcm')}</th>
-                                    {salaryHeads.map((head) => (
-                                        <th>{head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : '')}</th>
-                                    ))}
-                                    <th>{__('Salary active from', 'pcm')}</th>
-                                    <th>{__('Remarks', 'pcm')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>johndoe@example.com</td>
-                                    <td>1234567890</td>
-                                    <td>Bank name</td>
-                                    <td>1234567890</td>
-                                    <td>1234567890</td>
-                                    <td>2021-01-01</td>
-                                    <td>Address</td>
-                                    <td>10000</td>
-                                    <td>1000</td>
-                                    {salaryHeads.map((head) => (
-                                        <td>100</td>
-                                    ))}
-                                    <td>2021-01-01</td>
-                                    <td>Remarks</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div>
+                            <DragAndDropComponent />
+                        </div>
                     </div>
                 </Card>
             </div>
