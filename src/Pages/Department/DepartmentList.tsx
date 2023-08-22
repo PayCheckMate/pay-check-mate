@@ -16,6 +16,7 @@ import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {CreateDepartment} from "./CreateDepartment";
 import {Status} from "../../Components/Status";
+import {applyFilters} from "../../Helpers/Hooks";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
@@ -26,6 +27,9 @@ export const DepartmentList = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(filters.page);
 
+    let indigo = applyFilters('pcm.indigo', 'gray');
+    let green = applyFilters('pcm.green', 'gray');
+    let red = applyFilters('pcm.red', 'gray');
 
     const columns = [
         {title: 'Department name', dataIndex: 'name', sortable: true},
@@ -55,11 +59,11 @@ export const DepartmentList = () => {
                 <div className="flex">
                     {userCan(UserCapNames.pay_check_mate_edit_department) && (
                         <button
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className={"text-"+indigo+"-600 hover:text-"+indigo+"-900 font-semibold"}
                             onClick={() => handleModal(record)}
                         >
-                        {__('Edit', 'pcm')}
-                    </button>
+                            {__('Edit', 'pcm')}
+                        </button>
                     )}
                     {userCan(UserCapNames.pay_check_mate_change_department_status) && (
                         <>
@@ -68,7 +72,7 @@ export const DepartmentList = () => {
                                     <span className="mx-2 text-gray-300">|</span>
                                     <button
                                         onClick={() => handleStatus(record.id, 0)}
-                                        className="text-red-600 hover:text-red-900"
+                                        className={"text-"+red+"-600 hover:text-"+red+"-900 font-semibold"}
                                     >
                                         {__('Inactive', 'pcm')}
                                     </button>
@@ -79,7 +83,7 @@ export const DepartmentList = () => {
                                     <span className="mx-2 text-gray-300">|</span>
                                     <button
                                         onClick={() => handleStatus(record.id, 1)}
-                                        className="text-green-600 hover:text-green-900"
+                                        className={"text-"+green+"-600 hover:text-"+green+"-900 font-semibold"}
                                     >
                                         {__('Active', 'pcm')}
                                     </button>

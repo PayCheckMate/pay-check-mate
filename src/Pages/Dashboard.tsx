@@ -14,6 +14,7 @@ import {Bar} from 'react-chartjs-2';
 import React, {useEffect, useState} from "@wordpress/element";
 import useFetchApi from "../Helpers/useFetchApi";
 import {Link} from "react-router-dom";
+import {applyFilters} from "../Helpers/Hooks";
 
 // ChartJS.register
 ChartJS.register(
@@ -65,6 +66,8 @@ export const Dashboard = () => {
         {id: 2, name: 'Last Payroll Total', stat: lastPayroll, icon: CurrencyDollarIcon, link: '/payroll'},
     ]
     useEffect(() => {
+        const backgroundColor = applyFilters('pcm.chart_background_color', 'rgba(110,114,114,0.7)');
+        const borderColor = applyFilters('pcm.chart_border_color', 'rgb(48,49,49)');
         makeGetRequest<DashboardResponse>('/pay-check-mate/v1/dashboard').then((response) => {
             if (response.all_payrolls) {
                 setTotalEmployees(response.total_employees);
@@ -82,10 +85,10 @@ export const Dashboard = () => {
                             label: __('Payroll Summary', 'pcm'),
                             data: response.all_payrolls.map((model: any) => model.total_salary),
                             backgroundColor: [
-                                'rgba(99,237,255, .7)',
+                                backgroundColor,
                             ],
                             borderColor: [
-                                'rgb(8,136,152)',
+                                borderColor,
                             ],
                             borderWidth: 1,
                         },
@@ -95,6 +98,7 @@ export const Dashboard = () => {
         })
     }, []);
 
+    let indigo = applyFilters('pcm.indigo', 'gray');
     return (
         <>
             <div>
@@ -109,7 +113,7 @@ export const Dashboard = () => {
                                 className="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6"
                             >
                                 <dt>
-                                    <div className="absolute rounded-md bg-indigo-500 p-3">
+                                    <div className={"absolute rounded-md bg-" + indigo + "-500 p-3"}>
                                       <item.icon
                                           className="h-6 w-6 text-white"
                                           aria-hidden="true"
@@ -123,7 +127,7 @@ export const Dashboard = () => {
                                         <div className="text-sm">
                                             <Link
                                                 to={item.link || '#'}
-                                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                className={"font-medium text-" + indigo + "-500 hover:text-" + indigo + "-500"}
                                             >
                                                 {__('View all', 'pcm')}
                                                 <span className="sr-only"> {item.name} stats</span>

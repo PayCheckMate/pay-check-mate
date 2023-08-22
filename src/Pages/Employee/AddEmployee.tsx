@@ -16,6 +16,7 @@ import {PermissionDenied} from "../../Components/404";
 import {FormInput} from "../../Components/FormInput";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import apiFetch from "@wordpress/api-fetch";
+import {applyFilters} from "../../Helpers/Hooks";
 
 type ResponseType = {
     data: EmployeeType,
@@ -230,13 +231,14 @@ export const AddEmployee = () => {
     const [salaryFormError, setSalaryFormError] = useState({} as { [key: string]: string});
 
     const goToReview = () => {
-        const requiredFields = ['gross_salary', 'basic_salary', 'active_from', 'purpose'];
+        const requiredFields = ['gross_salary', 'basic_salary', 'active_from'];
         const errors = validateRequiredFields(salaryInformation, requiredFields, setSalaryFormError);
         if (Object.keys(errors).length > 0) {
             return;
         }
         setStep(3)
     }
+    let indigo = applyFilters('pcm.indigo', 'gray');
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_employee) ? (
@@ -291,7 +293,7 @@ export const AddEmployee = () => {
                                             </button>
                                             <Button
                                                 onClick={() => goToReview()}
-                                                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                className={"rounded-md bg-"+indigo+"-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-"+indigo+"-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-"+indigo+"-600"}
                                             >
                                                 {__('Save & Continue', 'pcm')}
                                             </Button>
@@ -314,7 +316,7 @@ export const AddEmployee = () => {
                                                         type="submit"
                                                         onClick={() => {
                                                         }}
-                                                        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                        className={"rounded-md bg-"+indigo+"-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-"+indigo+"-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-"+indigo+"-600"}
                                                     >
                                                         {__('Submit', 'pcm')}
                                                     </Button>

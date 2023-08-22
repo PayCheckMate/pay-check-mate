@@ -12,6 +12,7 @@ import {UserCapNames} from "../Types/UserType";
 import {PermissionDenied} from "./404";
 import {userCan} from "../Helpers/User";
 import {debounce} from "lodash";
+import {applyFilters} from "../Helpers/Hooks";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -150,6 +151,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         });
     }, 1000), []);
 
+    const color = applyFilters('pcm.pagination_button_color', 'gray');
     return (
         <>
             {isLoading ? (
@@ -216,7 +218,10 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                         {!data.length && !isLoading && (
                             <>
                                 <tr>
-                                    <td colSpan={columns.length} className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6">
+                                    <td
+                                        colSpan={columns.length}
+                                        className="py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                    >
                                         <EmptyState />
                                     </td>
                                 </tr>
@@ -246,7 +251,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={"px-4 py-1 mr-6 text-sm bg-indigo-400 text-white hover:bg-indigo-500 focus:outline-none " + (currentPage === 1 ? "cursor-not-allowed" : "")}
+                        className={`px-4 py-1 mr-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === 1 ? "cursor-not-allowed" : "")}
                     >
                         Previous
                     </button>
@@ -293,7 +298,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === parseInt(String(totalPages))}
-                        className={"px-4 py-1 ml-6 text-sm bg-indigo-400 text-white hover:bg-indigo-500 focus:outline-none " + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
+                        className={`px-4 py-1 ml-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
                     >
                     Next
                     </button>

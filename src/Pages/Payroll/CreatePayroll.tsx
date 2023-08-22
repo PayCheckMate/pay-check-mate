@@ -151,7 +151,7 @@ const CreatePayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        return parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
+        return (parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings)) - sumValues(data.salary_details.deductions);
     }
 
     const rowTotalPayable = (data: EmployeeSalary): number => {
@@ -196,8 +196,7 @@ const CreatePayroll = () => {
         })
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = () => {
         if (payDate === '') {
             toast.error(__('Please select a date', 'pcm'));
             return;
@@ -210,39 +209,34 @@ const CreatePayroll = () => {
             if (payrollId) {
                 url = `pay-check-mate/v1/payrolls/${payrollId}/update-payroll`;
             }
-            apiFetchUnparsed(url, {
+            apiFetch({
+                path: url,
                 method: 'POST',
-                parse: true,
-                body: JSON.stringify({
-                    'payroll_date': payDate,
-                    'remarks': remarks,
-                    'department_id': selectedDepartment.id,
-                    'designation_id': selectedDesignation.id,
-                    'total_salary': totalNetPayable,
-                    'employee_salary_history': tableData,
-                    '_wpnonce': _wpnonce,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
+                data: {
+                    payroll_date: payDate,
+                    department_id: selectedDepartment.id,
+                    designation_id: selectedDesignation.id,
+                    remarks: remarks,
+                    total_salary: totalNetPayable,
+                    employee_salary_history: tableData,
+                    _wpnonce: _wpnonce,
+                },
             }).then((response: any) => {
-                if (response.data.code === 400) {
-                    toast.error(response.data.message);
-                    setIsSubmitting(false);
-                    return;
-                }
-
                 setIsSubmitting(false);
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
                 navigate('/payroll');
                 toast.success(__('Payroll saved successfully', 'pcm'));
-            }).catch((e: unknown) => {
-                console.log(e);
+            }).catch((error: any) => {
+                localStorage.removeItem('Payroll.TableData');
+                navigate('/payroll');
+                toast.error(error.message);
                 setIsSubmitting(false);
             });
-        } catch (e) {
-            console.log(e);
+        } catch (error: any) {
+            localStorage.removeItem('Payroll.TableData');
+            navigate('/payroll');
+            toast.error(error.message);
             setIsSubmitting(false);
         }
     }
@@ -250,15 +244,15 @@ const CreatePayroll = () => {
     addAction('pcm.payroll_edit_action', 'pcm.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
     })
-    addFilter('pcm.payroll_edit_filter', 'need_pro.payroll_edit_filter', (salaryHeads: SalaryHeadsResponseType) => {
-        const text = __('Turn on edit mode (PRO)', 'pcm-pro');
-        return(
-             <>
-                 {text}
-                 <LockClosedIcon className="h-5 w-5 text-gray-400" />
-             </>
-        )
-    })
+
+    const text = __('Turn on edit mode (PRO)', 'pcm-pro');
+    const editSalaryHead = applyFilters( 'pcm.payroll_edit_filter',
+        <>
+            {text}
+            <LockClosedIcon className="h-5 w-5 text-gray-400" />
+        </>,
+        salaryHeads
+    );
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
@@ -302,10 +296,7 @@ const CreatePayroll = () => {
                                 <div className="flex items-end">
                                     {/*This button should flat and small*/}
                                     {!payrollId && (
-                                        <Button
-                                            type="submit"
-                                            className="px-4 py-2 h-8 m-2 text-sm font-medium tracking-wide text-white capitalize bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500"
-                                        >
+                                        <Button type="submit">
                                             {__('Generate', 'pcm')}
                                         </Button>
                                     )}
@@ -321,7 +312,7 @@ const CreatePayroll = () => {
                                 <>
                                     <div className="flex justify-between">
                                         <div className="flex items-center">
-                                            {applyFilters( 'pcm.payroll_edit_filter', salaryHeads )}
+                                            {editSalaryHead}
                                         </div>
                                     </div>
                                     <div className="payroll-table-container">
@@ -624,18 +615,17 @@ const CreatePayroll = () => {
                                 />
                             </div>
                             <div className="flex justify-end mt-4">
-                                <button
-                                    type="submit"
+                                <Button
                                     className={isSubmitting ? 'btn-primary inline-flex items-center px-4 py-2 btn-disabled cursor-not-allowed' : 'btn btn-primary'}
                                     disabled={isSubmitting}
-                                    onClick={(event: any) => {
-                                        handleSubmit(event)
+                                    onClick={() => {
+                                        handleSubmit()
                                     }}
                                 >
                                     {isSubmitting ? (
                                         <>{__('Submitting...', 'pcm')}<Spinner /></>
                                     ) : __('Save', 'pcm')}
-                                </button>
+                                </Button>
                             </div>
                         </>
                     ) : (

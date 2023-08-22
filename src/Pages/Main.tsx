@@ -16,7 +16,7 @@ import {Profile} from "./Profile/Profile";
 import PayrollReport from "./Reports/PayrollReport";
 import {NavigationType} from "../Types/NavigationType";
 import {__} from "@wordpress/i18n";
-import {BanknotesIcon, ChartPieIcon, CogIcon, CurrencyDollarIcon, DocumentTextIcon, HomeIcon, UserGroupIcon, UserPlusIcon} from "@heroicons/react/24/outline";
+import {BanknotesIcon, ChartPieIcon, CogIcon, DocumentTextIcon, HomeIcon, RocketLaunchIcon, UserGroupIcon, UserIcon} from "@heroicons/react/24/outline";
 import {applyFilters} from "../Helpers/Hooks";
 import {Card} from "../Components/Card";
 import {NotFound} from "../Components/404";
@@ -35,10 +35,11 @@ export default function Main() {
     let navigations: NavigationType[] = [
         {key: 'dashboard', title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: Dashboard},
         {key: 'employees', title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
-        {key: 'profile', title: __('Profile', 'pcm'), href: 'profile', icon: UserPlusIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
+        {key: 'profile', title: __('Profile', 'pcm'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
-        {key: 'payroll', title: __('Payroll', 'pcm'), href: 'payroll', icon: CurrencyDollarIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
+        {key: 'payroll', title: __('Payroll', 'pcm'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
         {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pcm'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pcm'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: 'settings', title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
                 {key: 'departments', title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant'], component: DepartmentList},

@@ -3,19 +3,16 @@ import {CheckCircleIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
-import {Modal} from "../../Components/Modal";
 import useFetchApi from "../../Helpers/useFetchApi";
 import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
-import {applyFilters} from "../../Helpers/Hooks";
-import {SalaryInformation} from "./Components/SalaryInformation";
+import {applyFilters, doAction} from "../../Helpers/Hooks";
 import {Status} from "../../Components/Status";
 
 export const EmployeeList = () => {
-    const [showViewModal, setShowViewModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const per_page = 10;
     const {
@@ -38,12 +35,7 @@ export const EmployeeList = () => {
         setCurrentPage(filterObject.page || 1);
     };
 
-    const [pageTitle, setPageTitle] = useState(__('Employee List', 'pcm'));
-
-    const viewEmployee = (id: number) => {
-        setShowViewModal(true);
-    }
-
+    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
     const columns = [
         {
             title: 'Employee ID',
@@ -73,10 +65,10 @@ export const EmployeeList = () => {
                     return (
                         <Link
                             to={`/employee/${record.employee_id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className={anchorClass}
                         >
-                        {record.first_name + ' ' + record.last_name}
-                    </Link>
+                            {record.first_name + ' ' + record.last_name}
+                        </Link>
                     )
                 } else {
                     return (
@@ -114,13 +106,13 @@ export const EmployeeList = () => {
             render: (text: string, record: any) => {
                 return (
                     <div className="flex">
-                        {applyFilters('pcm.employee_list_action', null, record)}
+                        {applyFilters('pcm.employee_list_filter', null, record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
                                 <Link
                                     to={`/employee/edit/${record.employee_id}`}
-                                    className="text-indigo-600 hover:text-indigo-900"
+                                    className={anchorClass}
                                 >
                                     {__('Edit', 'pcm')}
                                 </Link>
@@ -134,18 +126,6 @@ export const EmployeeList = () => {
 
     return (
         <>
-            {/*{showViewModal &&*/}
-            {/*    <>*/}
-            {/*        <Modal*/}
-            {/*            setShowModal={setShowViewModal}*/}
-            {/*            header={pageTitle}*/}
-            {/*            width={' sm:max-w-3xl'}*/}
-            {/*            zIndex={'9999'}*/}
-            {/*        >*/}
-            {/*            {applyFilters('pcm.employee_view_modal', null, setShowViewModal)}*/}
-            {/*        </Modal>*/}
-            {/*    </>*/}
-            {/*}*/}
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">

@@ -15,6 +15,7 @@ import {Link} from "react-router-dom";
 import {CheckIcon} from "@heroicons/react/20/solid";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
+import {applyFilters} from "../../Helpers/Hooks";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
@@ -46,6 +47,10 @@ export const PayrollList = () => {
             });
         })
     }
+    const orange = applyFilters('pcm.orange', 'gray');
+    const red = applyFilters('pcm.red', 'gray');
+    const green = applyFilters('pcm.green', 'gray');
+    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
     const columns = [
         {
             title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date', sortable: true,
@@ -89,14 +94,14 @@ export const PayrollList = () => {
             render: (text: string, record: PayrollType) => {
                 if (parseInt(String(record.status)) === PayrollStatus.Approved) {
                     return (
-                        <span className="flex items-center text-green-500">
+                        <span className={"flex items-center text-"+green+"-500"}>
                             <CheckIcon className="h-5 w-5 mr-1"/>
                             {__('Approved', 'pcm')}
                         </span>
                     )
                 } else if (parseInt(String(record.status)) === PayrollStatus.Rejected) {
                     return (
-                        <span className="flex items-center text-red-500">
+                        <span className={"flex items-center text-" + red + "-500"}>
                             <XMarkIcon className="h-5 w-5 mr-1"/>
                             {__('Rejected', 'pcm')}
                         </span>
@@ -110,7 +115,7 @@ export const PayrollList = () => {
                     )
                 } else {
                     return (
-                        <span className="flex items-center text-orange-500">
+                        <span className={"flex items-center text-" + orange + "-500"}>
                             <PencilSquareIcon className="h-5 w-5 mr-1"/>
                             {__('Pending', 'pcm')}
                         </span>
@@ -125,7 +130,7 @@ export const PayrollList = () => {
                     <div className="flex">
                         <Link
                             to={`/payroll/${record.id}`}
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className={anchorClass}
                         >
                             {__('View', 'pcm')}
                         </Link>
@@ -137,7 +142,7 @@ export const PayrollList = () => {
                                         <span className="mx-2 text-gray-300">|</span>
                                         <Link
                                             to={`/payroll/edit/${record.id}`}
-                                            className="text-orange-400 hover:text-orange-600"
+                                            className={"text-" + orange + "-400 hover:text-" + orange + "-600"}
                                         >
                                             {__('Edit', 'pcm')}
                                         </Link>
@@ -148,7 +153,7 @@ export const PayrollList = () => {
                                         <span className="mx-2 text-gray-300">|</span>
                                         <button
                                             onClick={() => handleStatus(record, 1)}
-                                            className="text-green-600 hover:text-green-900"
+                                            className={"text-" + green + "-600 hover:text-" + green + "-900"}
                                         >
                                             {__('Approve', 'pcm')}
                                         </button>
@@ -159,7 +164,7 @@ export const PayrollList = () => {
                                         <span className="mx-2 text-gray-300">|</span>
                                         <button
                                             onClick={() => handleStatus(record, 2)}
-                                            className="text-red-600 hover:text-red-900"
+                                            className={"text-" + red + "-600 hover:text-" + red + "-900"}
                                         >
                                             {__('Reject', 'pcm')}
                                         </button>

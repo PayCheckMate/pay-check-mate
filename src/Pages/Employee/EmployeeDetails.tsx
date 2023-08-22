@@ -15,6 +15,7 @@ import {ChevronDownIcon} from "@heroicons/react/20/solid";
 import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryType";
 import {HeadType} from "../../Types/SalaryHeadType";
 import {Status} from "../../Components/Status";
+import {applyFilters} from "../../Helpers/Hooks";
 
 type EmployeeDetailsProps = {
     employee_id?: number|string,
@@ -54,6 +55,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
         });
     };
 
+    let blue = applyFilters('pcm.blue', 'gray')
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_employee_details) && !userIs('pay_check_mate_employee') ? (
@@ -140,8 +142,8 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {
-                                                personalInformation.regine_date ?
-                                                    new Date(personalInformation.regine_date).toLocaleDateString('en-US', {
+                                                personalInformation.resign_date ?
+                                                    new Date(personalInformation.resign_date).toLocaleDateString('en-US', {
                                                         year: 'numeric',
                                                         month: 'short',
                                                         day: 'numeric'
@@ -177,8 +179,8 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                 key={salary.id}
                                                 className="mb-10 ml-6 cursor-pointer"
                                             >
-                                                <span key={'span'+salary.id} className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">
-                                                <CurrencyDollarIcon className="w-4 h-4 text-blue-500" />
+                                                <span key={'span'+salary.id} className={`absolute flex items-center justify-center w-6 h-6 bg-${blue}-100 rounded-full -left-3 ring-8 ring-white`}>
+                                                <CurrencyDollarIcon className={`w-4 h-4 text-${blue}-500`} />
                                                 </span>
                                                 <h3 key={'h3'+salary.id} className="flex items-center mb-1 text-lg font-semibold text-gray-900">
                                                     {SalaryPurposeType.Initial === parseInt(String(salary.salary_purpose)) &&

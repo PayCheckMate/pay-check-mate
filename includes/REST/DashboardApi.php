@@ -169,7 +169,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'regine_date'         => [
+                'resign_date'         => [
                     'description' => __( 'Employee Regine Date', 'pcm' ),
                     'type'        => 'string',
                     'format'      => 'date',

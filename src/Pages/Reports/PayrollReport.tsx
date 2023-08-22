@@ -21,6 +21,7 @@ import {SelectBox} from "../../Components/SelectBox";
 import {FormInput} from "../../Components/FormInput";
 import {Button} from "../../Components/Button";
 import {PrintButton} from "../../Components/PrintButton";
+import apiFetch from "@wordpress/api-fetch";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
@@ -50,7 +51,11 @@ const ViewPayroll = () => {
                 'department_id': selectedDepartment.id,
                 'designation_id': selectedDesignation.id,
             }
-            makePostRequest<SalaryResponseType>('/pay-check-mate/v1/payrolls/reports', data, false).then((response) => {
+            apiFetch({
+                path: '/pay-check-mate/v1/payrolls/reports',
+                method: 'POST',
+                data: data,
+            }).then((response: any) => {
                 const salary_heads = {
                     earnings: response.salary_head_types.earnings ? Object.values(response.salary_head_types.earnings) : [],
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
@@ -61,7 +66,7 @@ const ViewPayroll = () => {
                 // @ts-ignore
                 setPayRoll(response.payroll);
             }).catch((error: any) => {
-                toast.error(__('Something went wrong while fetching payroll report', 'pcm'), {
+                toast.error(error.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });

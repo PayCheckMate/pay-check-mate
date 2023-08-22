@@ -172,6 +172,21 @@ class Employee implements EmployeeInterface {
     }
 
     /**
+     * Get user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return int
+     */
+    public function get_user_id(): int {
+        if ( ! empty( $this->employee['user_id'] ) ) {
+            return $this->employee['user_id'];
+        }
+
+        return 0;
+    }
+
+    /**
      * Count all employees.
      *
      * @since PAY_CHECK_MATE_SINCE
@@ -285,5 +300,55 @@ class Employee implements EmployeeInterface {
         }
 
         return $employee;
+    }
+
+    /**
+     * Update employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int    $employee_id
+     * @param string $status
+     *
+     * @throws \Exception
+     * @return object|\WP_Error
+     */
+    public function update_employee_status( int $employee_id, string $status ) {
+        return $this->model->update_by( [ 'employee_id' => $employee_id ], [ 'status' => $status ] );
+    }
+
+    /**
+     * Resign employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int    $employee_id
+     * @param string $resign_date
+     *
+     * @throws \Exception
+     * @return object|\WP_Error
+     */
+    public function resign_employee( int $employee_id, string $resign_date ) {
+        $data = [
+            'status'      => 0,
+            'resign_date' => $resign_date,
+        ];
+
+        return $this->model->update_by( [ 'employee_id' => $employee_id ], $data );
+    }
+
+    /**
+     * Get employee find by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     * @param string[]      $fields
+     *
+     * @throws \Exception
+     * @return array<object>
+     */
+    public function get( array $args, array $fields = [ '*' ] ): array {
+        return $this->model->all( $args, $fields );
     }
 }

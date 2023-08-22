@@ -12,6 +12,14 @@ export const validateRequiredFields = (data: any, requiredFields: string[], setF
     return errors;
 }
 
+export const getNonce = () => {
+    // @ts-ignore
+    return  payCheckMate.pay_check_mate_nonce;
+}
+export const getCurrentEmployee = () => {
+    // @ts-ignore
+    return  payCheckMate.currentUser.data.employee;
+}
 export const handlePrint = (divID: string) => {
     const divToPrint = document.getElementById(divID);
     const iframe = document.createElement('iframe')

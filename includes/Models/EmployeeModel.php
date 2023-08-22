@@ -30,7 +30,7 @@ class EmployeeModel extends Model {
         'tax_number'          => '%s',
         'address'             => '%s',
         'joining_date'        => '%s',
-        'regine_date'         => '%s',
+        'resign_date'         => '%s',
         'status'              => '%d',
         'created_on'          => '%s',
         'updated_at'          => '%s',
@@ -142,7 +142,7 @@ class EmployeeModel extends Model {
      *
      * @return string
      */
-    public function get_regine_date( ?string $date ): string {
+    public function get_resign_date( ?string $date ): string {
         if ( ! $date ) {
             return 'N/A';
         }
@@ -188,6 +188,13 @@ class EmployeeModel extends Model {
         return $salary;
     }
 
+    /**
+     * Get employee Id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
     public function get_employee_id(): string {
         // @phpstan-ignore-next-line
         return $this->employee_id;

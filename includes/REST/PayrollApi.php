@@ -356,9 +356,18 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
-        $parameters                        = $request->get_params();
-        $employee_model                    = new EmployeeModel();
-        $employee                          = $employee_model->get_employee_by_user_id( get_current_user_id() );
+        $parameters     = $request->get_params();
+        $employee_model = new EmployeeModel();
+        $employee       = $employee_model->get_employee_by_user_id( get_current_user_id() );
+        if ( empty( $employee->get_data() ) ) {
+            return new WP_Error(
+                400, __( 'You are not authorized to perform this action.', 'pcm' ), [
+                    'status' => 400,
+                    'error'  => __( 'You are not authorized to perform this action.', 'pcm' ),
+                ]
+            );
+        }
+
         $parameters['created_employee_id'] = $employee->get_employee_id();
 
         $parameters['payroll_date'] = gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) );
@@ -730,9 +739,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'local_key'   => 'employee_id',
                     'foreign_key' => 'employee_id',
                     'join_type'   => 'left',
+                    'fields'      => [
+                        'first_name',
+                        'last_name',
+                    ],
                 ],
             ],
         ];
+
         $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
 
         return new WP_REST_Response(

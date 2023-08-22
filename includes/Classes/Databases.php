@@ -146,7 +146,7 @@ class Databases {
                 `tax_number` varchar(255) NULL,
                 `address` varchar(255) NOT NULL,
                 `joining_date` DATE NOT NULL,
-                `regine_date` DATE NULL,
+                `resign_date` DATE NULL,
                 `status` tinyint(1) NOT NULL DEFAULT '1',
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
