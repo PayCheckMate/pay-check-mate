@@ -39,6 +39,7 @@ export default function Main() {
         {key: 'payslip', title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
         {key: 'payroll', title: __('Payroll', 'pcm'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
         {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pcm'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pcm'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: 'settings', title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
                 {key: 'departments', title: __('Departments', 'pcm'), href: 'departments', current: false, roles: ['pay_check_mate_accountant'], component: DepartmentList},

@@ -151,7 +151,7 @@ const CreatePayroll = () => {
     };
 
     const rowNetPayable = (data: EmployeeSalary): number => {
-        return parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings) - sumValues(data.salary_details.deductions);
+        return (parseInt(String(data.basic_salary)) + sumValues(data.salary_details.earnings)) - sumValues(data.salary_details.deductions);
     }
 
     const rowTotalPayable = (data: EmployeeSalary): number => {

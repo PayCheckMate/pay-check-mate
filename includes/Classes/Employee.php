@@ -330,9 +330,25 @@ class Employee implements EmployeeInterface {
      */
     public function resign_employee( int $employee_id, string $resign_date ) {
         $data = [
-            'status' => 0,
+            'status'      => 0,
             'resign_date' => $resign_date,
         ];
+
         return $this->model->update_by( [ 'employee_id' => $employee_id ], $data );
+    }
+
+    /**
+     * Get employee find by.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string> $args
+     * @param string[]      $fields
+     *
+     * @throws \Exception
+     * @return array<object>
+     */
+    public function get( array $args, array $fields = [ '*' ] ): array {
+        return $this->model->all( $args, $fields );
     }
 }
