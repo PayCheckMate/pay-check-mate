@@ -1,15 +1,15 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, DocumentTextIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
 import useFetchApi from "../../Helpers/useFetchApi";
-import {EmployeeStatus, EmployeeType} from "../../Types/EmployeeType";
+import {EmployeeType} from "../../Types/EmployeeType";
 import {filtersType} from "../../Store/Store";
 import {Link} from "react-router-dom";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
-import {applyFilters, doAction} from "../../Helpers/Hooks";
+import {applyFilters} from "../../Helpers/Hooks";
 import {Status} from "../../Components/Status";
 
 export const EmployeeList = () => {
@@ -135,7 +135,17 @@ export const EmployeeList = () => {
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                         {userCan(UserCapNames.pay_check_mate_add_employee) && (
-                            <>
+                            <div className="flex space-x-3">
+                                <Button
+                                    className="hover:text-white"
+                                    path="/import-employee"
+                                >
+                                    <DocumentTextIcon
+                                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                                        aria-hidden="true"
+                                    />
+                                    {__('Import Employee', 'pcm')}
+                                </Button>
                                 <Button
                                     className="hover:text-white"
                                     path="/add-employee"
@@ -146,7 +156,7 @@ export const EmployeeList = () => {
                                     />
                                     {__('Add Employee', 'pcm')}
                                 </Button>
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>

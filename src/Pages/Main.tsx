@@ -27,6 +27,7 @@ import CreatePayroll from "./Payroll/CreatePayroll";
 import {addAction} from "../Helpers/Hooks";
 import ViewPayroll from "./Payroll/ViewPayroll";
 import {NeedPro} from "../Components/NeedPro/NeedPro";
+import {ImportEmployee} from "./Employee/ImportEmployee";
 addAction('pcm_notification', 'pcm_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
     toast[type](message);
@@ -72,6 +73,7 @@ export default function Main() {
         {key: 'view-payroll', href: 'payroll/:id', roles: ['pay_check_mate_accountant'], component: ViewPayroll},
         {key: 'edit-payroll', href: 'payroll/edit/:id', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
         {key: 'create-payroll', href: 'generate-payroll', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
+        {key: 'import-payroll', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee},
     ];
     paths = applyFilters('pcm.routes', paths);
 
