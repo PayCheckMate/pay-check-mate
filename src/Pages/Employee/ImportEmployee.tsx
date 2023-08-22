@@ -5,23 +5,47 @@ import {__} from "@wordpress/i18n";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {Button} from "../../Components/Button";
-import {CloudArrowUpIcon, DocumentArrowDownIcon} from "@heroicons/react/24/outline";
+import {DocumentArrowDownIcon} from "@heroicons/react/24/outline";
 import * as XLSX from 'xlsx';
 import {SelectBox} from "../../Components/SelectBox";
-import {useState} from "@wordpress/element";
+import {useEffect, useState} from "@wordpress/element";
 import {SelectBoxType} from "../../Types/SalaryHeadType";
-import DragAndDropComponent from "../../Components/DragAndDrop";
+import DragAndDrop from "../../Components/DragAndDrop";
+import {EmployeeType} from "../../Types/EmployeeType";
 
 export const ImportEmployee = () => {
     const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
+    const [csvFileData, setCsvFileData] = useState([] as any[]);
+    const [excelFileData, setExcelFileData] = useState([] as any[]);
+    const [employees, setEmployees] = useState([] as EmployeeType[]);
     const [downloadOptions, setDownloadOptions] = useState([
-        {name: 'CSV', id: 'csv'},
-        {name: 'Excel', id: 'excel'}
+        {id: 1, name: 'CSV'},
+        {id: 2, name: 'Excel'}
     ] as SelectBoxType[]);
     const [selectedOption, setSelectedOption] = useState(downloadOptions[0]);
 
+    useEffect(() => {
+        setEmployees([] as EmployeeType[])
+        if (csvFileData.length > 0) {
+            console.log(csvFileData, 'csvFileData')
+            csvFileData.map((data) => {
+                if (data[0] === 'First name') {
+                    return;
+                }
+
+                setEmployees([data]);
+            })
+        }
+        if (excelFileData.length > 0) {
+            excelFileData.map((data) => {
+                console.log(data, 'data')
+                setEmployees([data]);
+            })
+        }
+    }, [csvFileData, excelFileData]);
+
     const downloadFile = () => {
-        if (downloadOptions[0].id === 'csv') {
+        if (selectedOption.id === 1) {
             downloadCSV();
         } else {
             downloadExcel();
@@ -57,7 +81,9 @@ export const ImportEmployee = () => {
             'John', 'Doe', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
             '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
         ];
-        csvData.push(dataRow);
+        for (let i = 0; i < 100; i++) {
+            csvData.push(dataRow);
+        }
 
         // Create CSV content
         const csvContent = csvData.map(row => row.join(',')).join('\n');
@@ -68,7 +94,8 @@ export const ImportEmployee = () => {
         // Create a download link and trigger click event
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'payroll_data.csv';
+        // With date
+        a.download = 'payroll_data_' + new Date().toISOString().slice(0, 10) + '.csv';
         a.click();
     };
 
@@ -102,7 +129,9 @@ export const ImportEmployee = () => {
             'John', 'Doe', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
             '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
         ];
-        excelData.push(dataRow);
+        for (let i = 0; i < 100; i++) {
+            excelData.push(dataRow);
+        }
 
         // Create Excel Workbook
         const workbook = XLSX.utils.book_new();
@@ -118,7 +147,7 @@ export const ImportEmployee = () => {
         // Create a download link and trigger click event
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'payroll_data.xlsx';
+        a.download = 'payroll_data' + new Date().toISOString().slice(0, 10) + '.xlsx';
         a.click();
     };
 
@@ -162,8 +191,48 @@ export const ImportEmployee = () => {
                             </div>
                         </div>
                         <div>
-                            <DragAndDropComponent />
+                            <DragAndDrop setCsvFileData={(data: any) => setCsvFileData(data)} setExcelFileData={(data: any) => setExcelFileData(data)} />
                         </div>
+                    </div>
+                    <div className="flex justify-end mt-12">
+                        {employees.length > 0 &&(
+                            <div className="payroll-table-container">
+                                <table className="payroll-table">
+                                <thead>
+                                    <tr>
+                                        <th>{__('First name', 'pcm')}</th>
+                                        <th>{__('Last name', 'pcm')}</th>
+                                        <th>{__('Designation id', 'pcm')}</th>
+                                        <th>{__('Department id', 'pcm')}</th>
+                                        <th>{__('Employee id', 'pcm')}</th>
+                                        <th>{__('Email', 'pcm')}</th>
+                                        <th>{__('Phone number', 'pcm')}</th>
+                                        <th>{__('Bank name', 'pcm')}</th>
+                                        <th>{__('Bank account number', 'pcm')}</th>
+                                        <th>{__('Tax number', 'pcm')}</th>
+                                        <th>{__('Joining date', 'pcm')}</th>
+                                        <th>{__('Address', 'pcm')}</th>
+                                        <th>{__('Gross salary', 'pcm')}</th>
+                                        <th>{__('Basic salary', 'pcm')}</th>
+                                        {salaryHeads.map((head) => (
+                                            <th>{head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : '')}</th>
+                                        ))}
+                                        <th>{__('Salary active from', 'pcm')}</th>
+                                        <th>{__('Remarks', 'pcm')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {employees.map((employee) => (
+                                        <tr>
+                                            {Object.keys(employee).map((key) => (
+                                                <td>{employee[key]}</td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        )}
                     </div>
                 </Card>
             </div>

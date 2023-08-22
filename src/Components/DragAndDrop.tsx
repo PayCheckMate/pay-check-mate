@@ -1,30 +1,78 @@
-import React, { useState } from 'react';
-import { __ } from '@wordpress/i18n';
+import React, {useState} from 'react';
+import {__} from '@wordpress/i18n';
 import {CloudArrowUpIcon} from "@heroicons/react/24/outline";
+import {toast} from "react-toastify";
+import * as XLSX from 'xlsx';
 
-function DragAndDropComponent() {
+interface DragAndDropComponentProps {
+    setCsvFileData: (fileData: any) => void;
+    setExcelFileData: (fileData: any) => void;
+}
+
+function DragAndDrop({setCsvFileData, setExcelFileData, ...props}: DragAndDropComponentProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
 
+    const isCSVorExcelFile = (file: File) => {
+        return file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    };
+    const parseCSV = (csvString: string) => {
+        const lines = csvString.split('\n');
+        return lines.map((line) => line.split(','));
+    };
+
+    const parseExcel = (arrayBuffer: ArrayBuffer) => {
+        // Parse Excel data using xlsx
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        return XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+    };
     const handleFileUpload = (files: FileList | null) => {
-        console.log(files, 'files')
-        if (files && files.length > 0) {
+        if (files && files.length > 0 && isCSVorExcelFile(files[0])) {
             setIsLoading(true);
 
-            // Simulating a file upload process
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 10;
-                setUploadProgress(progress);
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setIsLoading(false);
-                    setUploadProgress(0);
-                    // Handle the uploaded file here
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const fileContent = event.target?.result; // Get the content of the file
+                if (fileContent) {
+                    // Parse the file content if it's a CSV or Excel file
+                    if (files[0].type === 'text/csv') {
+                        const csvData = parseCSV(fileContent as string);
+                        console.log('CSV Data:', csvData);
+                        setCsvFileData(csvData); // Set the parsed CSV data
+                    } else if (files[0].type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                        const excelData = parseExcel(fileContent as ArrayBuffer);
+                        console.log('Excel Data:', excelData);
+                        setExcelFileData(excelData); // Set the parsed Excel data
+                    }
                 }
-            }, 200);
+
+                // Simulating a file upload process
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    setUploadProgress(progress);
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setIsLoading(false);
+                        setUploadProgress(0);
+                        // Handle the uploaded file here
+                    }
+                }, 200);
+            };
+
+            // Read the file as text content or ArrayBuffer
+            if (files[0].type === 'text/csv') {
+                reader.readAsText(files[0]);
+            } else if (files[0].type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                reader.readAsArrayBuffer(files[0]);
+            }
+        } else {
+            toast.error(__('Please upload a CSV or Excel file only', 'pcm'));
         }
     };
+
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -81,4 +129,4 @@ function DragAndDropComponent() {
     );
 }
 
-export default DragAndDropComponent;
+export default DragAndDrop;
