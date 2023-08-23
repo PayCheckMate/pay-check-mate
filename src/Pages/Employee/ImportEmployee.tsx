@@ -173,18 +173,19 @@ export const ImportEmployee = () => {
             data: formattedEmployees,
         }).then((response: any) => {
             if (response.success) {
-                // setEmployees([]);
-                // setFileData([]);
-                toast.success(__('Employees imported successfully', 'pcm') );
-                // navigate('/employee');
+                setEmployees([]);
+                setFileData([]);
+                toast.success(response.data);
+                navigate('/employees');
             } else {
-                // setEmployees([]);
-                // setFileData([]);
-                toast.error(__('Something went wrong while importing employees', 'pcm'));
+                setEmployees([]);
+                setFileData([]);
+                toast.error(response.data);
             }
         }).catch((error: any) => {
-            console.log(error, 'error')
-            toast.error(error.message);
+            setEmployees([]);
+            setFileData([]);
+            toast.error(error.data);
         });
     }
     return (

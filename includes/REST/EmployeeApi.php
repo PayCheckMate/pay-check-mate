@@ -46,9 +46,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     'methods'             => WP_REST_Server::CREATABLE,
                     'callback'            => [ $this, 'create_bulk_employee' ],
                     'permission_callback' => [ $this, 'create_employee_permissions_check' ],
-                    'args'                => [
-                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
-                    ],
+                    'args'                => [ $this->get_item_schema() ],
                 ],
                 'schema' => [ $this, 'get_public_item_schema' ],
             ]
@@ -213,7 +211,16 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function create_employee( WP_REST_Request $request ) {
         global $wpdb;
-        $data                              = $request->get_params();
+        $data = $request->get_params();
+        if ( empty( $data['employee_id'] ) ) {
+            wp_send_json_error( __( 'Employee ID is required', 'pcm' ), 400 );
+        }
+        // Check if employee id exists.
+        $employee = new Employee( $data['employee_id'] );
+        if ( ! empty( $employee->get_employee_id() ) ) {
+            wp_send_json_error( __( 'Employee already exists', 'pcm' ), 400 );
+        }
+
         $salary_information                = $data['salaryInformation'];
         $salary_information['_wpnonce']    = $data['_wpnonce'];
         $salary_information['active_from'] = $salary_information['active_from'] ?? $data['joining_date'];
@@ -238,19 +245,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         if ( ! empty( $data['id'] ) ) {
             $employee = $employee_model->update( $data['id'], $validated_data );
         } else {
-            if ( empty( $validated_data->user_id ) ) {
+            // @phpstan-ignore-next-line
+            if ( empty( (string) $validated_data->user_id ) ) {
                 // Check if the user exists.
                 $user = get_user_by( 'email', $data['email'] );
                 if ( ! $user ) {
-                    $user_id = wp_insert_user(
-                        [
-                            'user_login' => $data['email'],
-                            'user_email' => $data['email'],
-                            'first_name' => $data['first_name'],
-                            'last_name'  => $data['last_name'],
-                            'role'       => 'pay_check_mate_employee',
-                        ]
-                    );
+                    $user_id = wp_create_user( $data['email'], wp_generate_password(), $data['email'] );
 
                     if ( is_wp_error( $user_id ) ) {
                         return new WP_Error( 'rest_invalid_data', $user_id->get_error_message(), [ 'status' => 400 ] );
@@ -269,7 +269,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 wp_new_user_notification( $user_id, null, 'both' );
             }
 
-            if ( empty( $validated_data->user_id ) ) {
+            // @phpstan-ignore-next-line
+            if ( empty( (string) $validated_data->user_id ) ) {
                 wp_send_json_error( __( 'Unable to create user, please try again.', 'pcm' ), 400 );
             }
 
@@ -338,22 +339,28 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
-     * @param \WP_REST_Request $request
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
      * @throws \Exception
      * @return void
      */
     public function create_bulk_employee( WP_REST_Request $request ) {
         $data = $request->get_params();
+        unset( $data['_locale'] );
         if ( empty( $data ) ) {
             wp_send_json_error( __( 'No data found', 'pcm' ), 400 );
         }
 
+        $count = 0;
         foreach ( $data as $employee ) {
             $employee_request = new WP_REST_Request();
-            $employee_request->set_default_params($employee );
+            $employee_request->set_default_params( $employee );
+            // @phpstan-ignore-next-line
             $this->create_employee( $employee_request );
+            $count++;
         }
+
+        wp_send_json_success( __( 'Successfully created ' . $count . ' employees', 'pcm' ), 200 );
     }
 
     /**
