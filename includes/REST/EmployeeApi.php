@@ -357,10 +357,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employee_request->set_default_params( $employee );
             // @phpstan-ignore-next-line
             $this->create_employee( $employee_request );
-            $count++;
+            ++$count;
         }
 
-        wp_send_json_success( __( 'Successfully created ' . $count . ' employees', 'pcm' ), 200 );
+        // translators: %d: number of employees.
+        wp_send_json_success( sprintf( _n( 'Successfully created %d employee.', 'Successfully created %d employees.', $count, 'pcm' ), $count ), 200 );
     }
 
     /**

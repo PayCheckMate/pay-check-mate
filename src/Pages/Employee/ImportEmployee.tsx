@@ -28,32 +28,36 @@ export const ImportEmployee = () => {
     const [selectedOption, setSelectedOption] = useState(downloadOptions[0]);
 
 
+
+    // Adding header row to Excel
+    const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
+    const headers = [
+        __('First name', 'pcm'),
+        __('Last name', 'pcm'),
+        __('Designation id', 'pcm'),
+        __('Department id', 'pcm'),
+        __('Employee id', 'pcm'),
+        __('User id', 'pcm'),
+        __('Email', 'pcm'),
+        __('Phone', 'pcm'),
+        __('Bank name', 'pcm'),
+        __('Bank account number', 'pcm'),
+        __('Tax number', 'pcm'),
+        __('Joining date', 'pcm'),
+        __('Address', 'pcm'),
+        __('Gross salary', 'pcm'),
+        __('Basic salary', 'pcm'),
+        __('Salary active from', 'pcm'),
+        __('Remarks', 'pcm'),
+        ...headerRow,
+    ]
+
+    const totalHeadRowToBe = headers.length;
     const getSampleData = () => {
         const data = [];
-        // Adding header row to Excel
-        const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
-        data.push([
-            __('First name', 'pcm'),
-            __('Last name', 'pcm'),
-            __('Designation id', 'pcm'),
-            __('Department id', 'pcm'),
-            __('Employee id', 'pcm'),
-            __('User id', 'pcm'),
-            __('Email', 'pcm'),
-            __('Phone', 'pcm'),
-            __('Bank name', 'pcm'),
-            __('Bank account number', 'pcm'),
-            __('Tax number', 'pcm'),
-            __('Joining date', 'pcm'),
-            __('Address', 'pcm'),
-            __('Gross salary', 'pcm'),
-            __('Basic salary', 'pcm'),
-            __('Salary active from', 'pcm'),
-            __('Remarks', 'pcm'),
-            ...headerRow,
-        ]);
+        data.push(headers);
 
-        // Adding data 2 row to Excel and/or CSV
+        // Adding data row to Excel and/or CSV
         const dataRow = [
             'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
             '10000', '1000', '2021-01-01', 'Remarks', ...Array(salaryHeads.length).fill('100')
@@ -70,7 +74,16 @@ export const ImportEmployee = () => {
         if (fileData.length > 0) {
             setEmployees(prevEmployees => {
                 return prevEmployees.concat(
-                    fileData.filter((data: any) => data[0] !== 'First name')
+                    fileData.filter((data: any) => {
+                        console.log(data.length, totalHeadRowToBe)
+                        if (data.length !== totalHeadRowToBe) {
+                            toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
+                            setFileData([]);
+                            return false;
+                        }
+                        // Remove header row.
+                        return data[0] !== 'First name'
+                    })
                 );
             });
         }

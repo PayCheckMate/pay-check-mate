@@ -56,7 +56,7 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
                         setUploadProgress(0);
                         // Handle the uploaded file here
                     }
-                }, 30);
+                }, 20);
             };
 
             // Read the file as text content or ArrayBuffer
@@ -86,43 +86,55 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
         background: `linear-gradient(to right, #4299e1 ${uploadProgress}%, transparent ${uploadProgress}%)`,
     };
 
+    const dropZoneStyle = {
+        background: isLoading ? `linear-gradient(to right, rgba(159,239,207,0.5) ${uploadProgress}%, transparent ${uploadProgress}%)` : '',
+    };
+
     return (
         <>
-            <div className="flex items-center justify-center w-full">
-            {/*<div style={isLoading ? progressBarStyle : {}} className="flex items-center justify-center w-full">*/}
-                <div
-                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                >
-                    <div>
-                        <label htmlFor="dropzone-file">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <CloudArrowUpIcon className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" />
-                                <p className="mb-2 text-sm text-gray-500">
-                                    <span className="font-semibold">{__('Click to upload', 'pcm')}</span> {__('or drag and drop file here', 'pcm')}
-                                </p>
-                                <p className="text-xs text-gray-500">{__('CSV and Excel files only', 'pcm')}</p>
-                            </div>
-                            <input
-                                id="dropzone-file"
-                                type="file"
-                                className="hidden"
-                                onChange={(event) => handleFileUpload(event.target.files)}
-                                disabled={isLoading}
-                            />
-                        </label>
+            <label htmlFor="dropzone-file">
+                <div className="flex items-center justify-center w-full">
+                    <div
+                        style={dropZoneStyle}
+                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                    >
+                        <div>
+                            {isLoading ? (
+                                <div className="flex flex-col items-center justify-center w-full">
+                                    <p className="mt-2 text-sm text-gray-500">{uploadProgress}% {__('Analyzing file', 'pcm')}</p>
+                                </div>
+                                ) : (
+                                <>
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <CloudArrowUpIcon className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" />
+                                        <p className="mb-2 text-sm text-gray-500">
+                                            <span className="font-semibold">{__('Click to upload', 'pcm')}</span> {__('or drag and drop file here', 'pcm')}
+                                        </p>
+                                        <p className="text-xs text-gray-500">{__('CSV and Excel files only', 'pcm')}</p>
+                                    </div>
+                                    <input
+                                        id="dropzone-file"
+                                        type="file"
+                                        className="hidden"
+                                        onChange={(event) => handleFileUpload(event.target.files)}
+                                        disabled={isLoading}
+                                    />
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-            {isLoading && (
-                <div className="flex flex-col items-center justify-center w-full">
-                    <div className="w-full bg-blue-100 h-2 rounded-md">
-                        <div style={progressBarStyle} className="h-2 rounded-md" />
-                    </div>
-                    <p className="mt-2 text-xs text-gray-500">{uploadProgress}% {__('Uploaded', 'pcm')}</p>
-                </div>
-            )}
+                {/*{isLoading && (*/}
+                {/*    <div className="flex flex-col items-center justify-center w-full">*/}
+                {/*    <div className="w-full bg-blue-100 h-2 rounded-md">*/}
+                {/*        <div style={progressBarStyle} className="h-2 rounded-md" />*/}
+                {/*    </div>*/}
+                {/*    <p className="mt-2 text-xs text-gray-500">{uploadProgress}% {__('Uploaded', 'pcm')}</p>*/}
+                {/*</div>*/}
+                {/*)}*/}
+            </label>
         </>
     );
 }
