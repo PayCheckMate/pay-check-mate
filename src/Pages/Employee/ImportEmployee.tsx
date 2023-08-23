@@ -75,7 +75,6 @@ export const ImportEmployee = () => {
             setEmployees(prevEmployees => {
                 return prevEmployees.concat(
                     fileData.filter((data: any) => {
-                        console.log(data.length, totalHeadRowToBe)
                         if (data.length !== totalHeadRowToBe) {
                             toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
                             setFileData([]);
