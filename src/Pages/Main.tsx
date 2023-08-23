@@ -27,6 +27,7 @@ import CreatePayroll from "./Payroll/CreatePayroll";
 import {addAction} from "../Helpers/Hooks";
 import ViewPayroll from "./Payroll/ViewPayroll";
 import {NeedPro} from "../Components/NeedPro/NeedPro";
+import {ImportEmployee} from "./Employee/ImportEmployee";
 addAction('pcm_notification', 'pcm_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
     toast[type](message);
@@ -72,6 +73,7 @@ export default function Main() {
         {key: 'view-payroll', href: 'payroll/:id', roles: ['pay_check_mate_accountant'], component: ViewPayroll},
         {key: 'edit-payroll', href: 'payroll/edit/:id', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
         {key: 'create-payroll', href: 'generate-payroll', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
+        {key: 'import-payroll', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee},
     ];
     paths = applyFilters('pcm.routes', paths);
 
@@ -84,30 +86,31 @@ export default function Main() {
                     <main className="pb-12 lg:pl-72">
                         <div className="sm:px-6 lg:px-2">
                             <Routes>
-                            {navigations.map((navigation, index) => {
-                                    if (navigation.children) {
-                                        return navigation.children.map((child, index) => {
-                                            const component = typeof child.component === 'function'
+                                <Route path="*" element={<Card><NotFound /></Card>} />
+                                {navigations.map((navigation, index) => {
+                                        if (navigation.children) {
+                                            return navigation.children.map((child, index) => {
+                                                const component = typeof child.component === 'function'
+                                                return (
+                                                    component ? userIs(child.roles) && (<Route key={index} path={child.href} element={<child.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                                )
+                                            })
+                                        }else {
+                                            const component = typeof navigation.component === 'function'
                                             return (
-                                                component ? userIs(child.roles) && (<Route key={index} path={child.href} element={<child.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                                component ? userIs(navigation.roles) && (<Route key={index} path={navigation.href} element={<navigation.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
                                             )
-                                        })
-                                    }else {
-                                        const component = typeof navigation.component === 'function'
-                                        return (
-                                            component ? userIs(navigation.roles) && (<Route key={index} path={navigation.href} element={<navigation.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
-                                        )
-                                    }
-                                })
-                            }
+                                        }
+                                    })
+                                }
 
-                            {paths.map((path, index) => {
-                                    const component = typeof path.component === 'function'
-                                    return (
-                                        component ? userIs(path.roles) && (<Route key={index} path={path.href} element={<path.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
-                                    )
-                                })
-                            }
+                                {paths.map((path, index) => {
+                                        const component = typeof path.component === 'function'
+                                        return (
+                                            component ? userIs(path.roles) && (<Route key={index} path={path.href} element={<path.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                        )
+                                    })
+                                }
                             </Routes>
                             <div>
                                 <ToastContainer
