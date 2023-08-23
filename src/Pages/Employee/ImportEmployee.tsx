@@ -109,7 +109,7 @@ export const ImportEmployee = () => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         // With date
-        a.download = 'payroll_data_' + new Date().toISOString().slice(0, 10) + '.csv';
+        a.download = 'sample_employee__' + new Date().toISOString().slice(0, 10) + '.csv';
         a.click();
     };
 
@@ -129,7 +129,7 @@ export const ImportEmployee = () => {
         // Create a download link and trigger click event
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'payroll_data' + new Date().toISOString().slice(0, 10) + '.xlsx';
+        a.download = 'sample_employee_' + new Date().toISOString().slice(0, 10) + '.xlsx';
         a.click();
     };
 
