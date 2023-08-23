@@ -41,6 +41,19 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             ]
         );
         register_rest_route(
+            $this->namespace, '/' . $this->rest_base . '/bulk', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'create_bulk_employee' ],
+                    'permission_callback' => [ $this, 'create_employee_permissions_check' ],
+                    'args'                => [
+                        'context' => $this->get_context_param( [ 'default' => 'view' ] ),
+                    ],
+                ],
+                'schema' => [ $this, 'get_public_item_schema' ],
+            ]
+        );
+        register_rest_route(
             $this->namespace, '/' . $this->rest_base . '/(?P<employee_id>[\d]+)', [
                 [
                     'methods'             => WP_REST_Server::READABLE,
@@ -318,6 +331,29 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $response->set_status( 201 );
 
         return new WP_REST_Response( $response, 201 );
+    }
+
+    /**
+     * Create bulk employee.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @throws \Exception
+     * @return void
+     */
+    public function create_bulk_employee( WP_REST_Request $request ) {
+        $data = $request->get_params();
+        if ( empty( $data ) ) {
+            wp_send_json_error( __( 'No data found', 'pcm' ), 400 );
+        }
+
+        foreach ( $data as $employee ) {
+            $employee_request = new WP_REST_Request();
+            $employee_request->set_default_params($employee );
+            $this->create_employee( $employee_request );
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, ExclamationTriangleIcon, PencilSquareIcon, PlusIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {__} from "@wordpress/i18n";
 import {useDispatch, useSelect} from "@wordpress/data";
 import payroll from "../../Store/Payroll";
@@ -210,11 +210,8 @@ export const PayrollList = () => {
                                     className="hover:text-white"
                                     path="/generate-payroll"
                                 >
-                                    <CheckCircleIcon
-                                        className="w-5 h-5 mr-2 -ml-1 text-white"
-                                        aria-hidden="true"
-                                    />
-                                            {__('Generate Payroll', 'pcm')}
+                                    <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                                    {__('Generate Payroll', 'pcm')}
                                 </Button>
                             </>
                         )}

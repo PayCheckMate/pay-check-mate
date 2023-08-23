@@ -2,7 +2,7 @@ import React, {useMemo, useState} from "@wordpress/element";
 import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
-import {ArrowDownIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
+import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
 import {FormInput} from "./FormInput";
 import {filtersType} from "../Store/Store";
 import {SelectBox} from "./SelectBox";
@@ -13,6 +13,7 @@ import {PermissionDenied} from "./404";
 import {userCan} from "../Helpers/User";
 import {debounce} from "lodash";
 import {applyFilters} from "../Helpers/Hooks";
+import {Button} from "./Button";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -248,13 +249,14 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
             {/* Pagination */}
             <div className="flex justify-center mt-4">
                 <nav className="flex items-center">
-                    <button
+                    <Button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
                         className={`px-4 py-1 mr-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === 1 ? "cursor-not-allowed" : "")}
                     >
-                        Previous
-                    </button>
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        {__("Previous", "pcm")}
+                    </Button>
                     {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
                     {/*    Page {currentPage} of {totalPages}*/}
                     {/*</span>*/}
@@ -295,13 +297,14 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                             setSelected={(value) => handlePerPageChange(value)}
                         />
                     </span>
-                    <button
+                    <Button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === parseInt(String(totalPages))}
                         className={`px-4 py-1 ml-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
                     >
-                    Next
-                    </button>
+                    {__("Next", "pcm")}
+                        <ArrowRightIcon className="w-4 h-4" />
+                    </Button>
                 </nav>
             </div>
         </>

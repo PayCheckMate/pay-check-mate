@@ -11,11 +11,15 @@ import {SelectBox} from "../../Components/SelectBox";
 import {useEffect, useState} from "@wordpress/element";
 import {SelectBoxType} from "../../Types/SalaryHeadType";
 import DragAndDrop from "../../Components/DragAndDrop";
+import apiFetch from "@wordpress/api-fetch";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
+import {getNonce} from "../../Helpers/Helpers";
 
 export const ImportEmployee = () => {
+    const navigate = useNavigate();
     const {salaryHeads} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: '-1', status: '1', order_by: 'head_type', order: 'ASC'}), []);
-    const [csvFileData, setCsvFileData] = useState([] as any[]);
-    const [excelFileData, setExcelFileData] = useState([] as any[]);
+    const [fileData, setFileData] = useState([] as any[]);
     const [employees, setEmployees] = useState([] as any[]);
     const [downloadOptions, setDownloadOptions] = useState([
         {id: 1, name: 'CSV'},
@@ -23,23 +27,54 @@ export const ImportEmployee = () => {
     ] as SelectBoxType[]);
     const [selectedOption, setSelectedOption] = useState(downloadOptions[0]);
 
+
+    const getSampleData = () => {
+        const data = [];
+        // Adding header row to Excel
+        const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
+        data.push([
+            __('First name', 'pcm'),
+            __('Last name', 'pcm'),
+            __('Designation id', 'pcm'),
+            __('Department id', 'pcm'),
+            __('Employee id', 'pcm'),
+            __('User id', 'pcm'),
+            __('Email', 'pcm'),
+            __('Phone', 'pcm'),
+            __('Bank name', 'pcm'),
+            __('Bank account number', 'pcm'),
+            __('Tax number', 'pcm'),
+            __('Joining date', 'pcm'),
+            __('Address', 'pcm'),
+            __('Gross salary', 'pcm'),
+            __('Basic salary', 'pcm'),
+            __('Salary active from', 'pcm'),
+            __('Remarks', 'pcm'),
+            ...headerRow,
+        ]);
+
+        // Adding data 2 row to Excel and/or CSV
+        const dataRow = [
+            'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
+            '10000', '1000', '2021-01-01', 'Remarks', ...Array(salaryHeads.length).fill('100')
+        ];
+
+        data.push(dataRow);
+
+
+        return data;
+    }
+
     useEffect(() => {
         setEmployees([]); // Reset employees when CSV or Excel data changes
-
-        if (csvFileData.length > 0) {
+        if (fileData.length > 0) {
             setEmployees(prevEmployees => {
                 return prevEmployees.concat(
-                    csvFileData.filter((data: any) => data[0] !== 'First name')
+                    fileData.filter((data: any) => data[0] !== 'First name')
                 );
             });
         }
-
-        if (excelFileData.length > 0) {
-            setEmployees(prevEmployees => {
-                return prevEmployees.concat(excelFileData);
-            });
-        }
-    }, [csvFileData, excelFileData]);
+    }, [fileData]);
 
     const downloadFile = () => {
         if (selectedOption.id === 1) {
@@ -50,38 +85,7 @@ export const ImportEmployee = () => {
     }
 
     const downloadCSV = () => {
-        const csvData = [];
-        // Adding header row to CSV
-        const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
-        csvData.push([
-            __('First name', 'pcm'),
-            __('Last name', 'pcm'),
-            __('Designation id', 'pcm'),
-            __('Department id', 'pcm'),
-            __('Employee id', 'pcm'),
-            __('User id', 'pcm'),
-            __('Email', 'pcm'),
-            __('Phone number', 'pcm'),
-            __('Bank name', 'pcm'),
-            __('Bank account number', 'pcm'),
-            __('Tax number', 'pcm'),
-            __('Joining date', 'pcm'),
-            __('Address', 'pcm'),
-            __('Gross salary', 'pcm'),
-            __('Basic salary', 'pcm'),
-            ...headerRow,
-            __('Salary active from', 'pcm'),
-            __('Remarks', 'pcm')
-        ]);
-
-        // Adding data rows to CSV
-        const dataRow = [
-            'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
-            '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
-        ];
-        for (let i = 0; i < 100; i++) {
-            csvData.push(dataRow);
-        }
+        const csvData = getSampleData();
 
         // Create CSV content
         const csvContent = csvData.map(row => row.join(',')).join('\n');
@@ -98,40 +102,7 @@ export const ImportEmployee = () => {
     };
 
     const downloadExcel = () => {
-        const excelData = [];
-
-        // Adding header row to Excel
-        const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
-        excelData.push([
-            __('First name', 'pcm'),
-            __('Last name', 'pcm'),
-            __('Designation id', 'pcm'),
-            __('Department id', 'pcm'),
-            __('Employee id', 'pcm'),
-            __('User id', 'pcm'),
-            __('Email', 'pcm'),
-            __('Phone number', 'pcm'),
-            __('Bank name', 'pcm'),
-            __('Bank account number', 'pcm'),
-            __('Tax number', 'pcm'),
-            __('Joining date', 'pcm'),
-            __('Address', 'pcm'),
-            __('Gross salary', 'pcm'),
-            __('Basic salary', 'pcm'),
-            ...headerRow,
-            __('Salary active from', 'pcm'),
-            __('Remarks', 'pcm')
-        ]);
-
-        // Adding data row to Excel
-        const dataRow = [
-            'John', 'Doe', '1', '1', '1', '1', 'johndoe@example.com', '1234567890', 'Bank name', '1234567890', '1234567890', '2021-01-01', 'Address',
-            '10000', '1000', ...Array(salaryHeads.length).fill('100'), '2021-01-01', 'Remarks'
-        ];
-        for (let i = 0; i < 100; i++) {
-            excelData.push(dataRow);
-        }
-
+        const excelData = getSampleData();
         // Create Excel Workbook
         const workbook = XLSX.utils.book_new();
         const sheetData = XLSX.utils.aoa_to_sheet(excelData);
@@ -150,6 +121,72 @@ export const ImportEmployee = () => {
         a.click();
     };
 
+
+    const formatEmployeeData = (employees: any[]) => {
+        return employees.map((employee) => {
+            const [firstName, lastName, designationId, departmentId, employeeId, userId, email, phone, bankName, bankAccountNumber,
+                taxNumber, joiningDate, address, grossSalary, basicSalary, activeFrom, remarks, ...salaryDetails] = employee;
+
+            const personalInformation = {
+                'first_name': firstName,
+                'last_name': lastName,
+                'designation_id': designationId,
+                'department_id': departmentId,
+                'employee_id': employeeId,
+                'user_id': userId,
+                'email': email,
+                'phone': phone,
+                'bank_name': bankName,
+                'bank_account_number': bankAccountNumber,
+                'tax_number': taxNumber,
+                'joining_date': joiningDate,
+                'address': address,
+            };
+
+            // Format salary details with salary head id as key
+            const formattedSalaryDetails = {} as any
+            salaryHeads.map((head, index) => {
+                formattedSalaryDetails[head.id] = parseInt(String(salaryDetails[index])) || 0;
+            });
+            const salaryInformation = {
+                'basic_salary': parseInt(String(basicSalary)),
+                'gross_salary': parseInt(String(grossSalary)),
+                'remarks': remarks,
+                'active_from': activeFrom,
+                ...formattedSalaryDetails,
+            };
+
+            return {
+                ...personalInformation,
+                status: 1,
+                'salaryInformation': salaryInformation,
+                _wpnonce: getNonce(),
+            };
+        });
+    };
+
+    const saveBulkEmployees = () => {
+        const formattedEmployees = formatEmployeeData(employees);
+        apiFetch({
+            path: '/pay-check-mate/v1/employees/bulk',
+            method: 'POST',
+            data: formattedEmployees,
+        }).then((response: any) => {
+            if (response.success) {
+                // setEmployees([]);
+                // setFileData([]);
+                toast.success(__('Employees imported successfully', 'pcm') );
+                // navigate('/employee');
+            } else {
+                // setEmployees([]);
+                // setFileData([]);
+                toast.error(__('Something went wrong while importing employees', 'pcm'));
+            }
+        }).catch((error: any) => {
+            console.log(error, 'error')
+            toast.error(error.message);
+        });
+    }
     return (
         <HOC role={UserCapNames.pay_check_mate_approve_payroll}>
             <div>
@@ -190,11 +227,11 @@ export const ImportEmployee = () => {
                             </div>
                         </div>
                         <div>
-                            <DragAndDrop setCsvFileData={(data: any) => setCsvFileData(data)} setExcelFileData={(data: any) => setExcelFileData(data)} />
+                            <DragAndDrop setFileData={(data: any) => setFileData(data)} />
                         </div>
                     </div>
                     <div className="flex justify-end mt-12">
-                        {employees.length > 0 &&(
+                        {employees.length > 0 && (
                             <div className="payroll-table-container h-full">
                                 <table className="payroll-table">
                                 <thead>
@@ -207,7 +244,7 @@ export const ImportEmployee = () => {
                                         <th>{__('Employee id', 'pcm')}</th>
                                         <th>{__('User id', 'pcm')}</th>
                                         <th>{__('Email', 'pcm')}</th>
-                                        <th>{__('Phone number', 'pcm')}</th>
+                                        <th>{__('Phone', 'pcm')}</th>
                                         <th>{__('Bank name', 'pcm')}</th>
                                         <th>{__('Bank account number', 'pcm')}</th>
                                         <th>{__('Tax number', 'pcm')}</th>
@@ -215,11 +252,11 @@ export const ImportEmployee = () => {
                                         <th>{__('Address', 'pcm')}</th>
                                         <th>{__('Gross salary', 'pcm')}</th>
                                         <th>{__('Basic salary', 'pcm')}</th>
+                                        <th>{__('Salary active from', 'pcm')}</th>
+                                        <th>{__('Remarks', 'pcm')}</th>
                                         {salaryHeads.map((head) => (
                                             <th>{head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : '')}</th>
                                         ))}
-                                        <th>{__('Salary active from', 'pcm')}</th>
-                                        <th>{__('Remarks', 'pcm')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -236,6 +273,28 @@ export const ImportEmployee = () => {
                         </div>
                         )}
                     </div>
+                    {employees.length > 0 && (
+                        <>
+                            <div className="flex items-center justify-end gap-x-6 py-6">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmployees([]);
+                                        setFileData([]);
+                                    }}
+                                    className="text-sm font-semibold leading-6 text-gray-900 btn-cancel"
+                                >
+                                    {__('Reset', 'pcm')}
+                                </button>
+                                <Button
+                                    onClick={() => saveBulkEmployees()}
+                                    className="btn-primary"
+                                >
+                                    {__('Save & Continue', 'pcm')}
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </Card>
             </div>
         </HOC>

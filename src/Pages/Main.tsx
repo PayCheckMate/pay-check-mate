@@ -86,30 +86,31 @@ export default function Main() {
                     <main className="pb-12 lg:pl-72">
                         <div className="sm:px-6 lg:px-2">
                             <Routes>
-                            {navigations.map((navigation, index) => {
-                                    if (navigation.children) {
-                                        return navigation.children.map((child, index) => {
-                                            const component = typeof child.component === 'function'
+                                <Route path="*" element={<Card><NotFound /></Card>} />
+                                {navigations.map((navigation, index) => {
+                                        if (navigation.children) {
+                                            return navigation.children.map((child, index) => {
+                                                const component = typeof child.component === 'function'
+                                                return (
+                                                    component ? userIs(child.roles) && (<Route key={index} path={child.href} element={<child.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                                )
+                                            })
+                                        }else {
+                                            const component = typeof navigation.component === 'function'
                                             return (
-                                                component ? userIs(child.roles) && (<Route key={index} path={child.href} element={<child.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                                component ? userIs(navigation.roles) && (<Route key={index} path={navigation.href} element={<navigation.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
                                             )
-                                        })
-                                    }else {
-                                        const component = typeof navigation.component === 'function'
-                                        return (
-                                            component ? userIs(navigation.roles) && (<Route key={index} path={navigation.href} element={<navigation.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
-                                        )
-                                    }
-                                })
-                            }
+                                        }
+                                    })
+                                }
 
-                            {paths.map((path, index) => {
-                                    const component = typeof path.component === 'function'
-                                    return (
-                                        component ? userIs(path.roles) && (<Route key={index} path={path.href} element={<path.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
-                                    )
-                                })
-                            }
+                                {paths.map((path, index) => {
+                                        const component = typeof path.component === 'function'
+                                        return (
+                                            component ? userIs(path.roles) && (<Route key={index} path={path.href} element={<path.component/>}/>) : <Route path="*" element={<Card><NotFound /></Card>} />
+                                        )
+                                    })
+                                }
                             </Routes>
                             <div>
                                 <ToastContainer

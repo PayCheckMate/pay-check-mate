@@ -5,11 +5,10 @@ import {toast} from "react-toastify";
 import * as XLSX from 'xlsx';
 
 interface DragAndDropComponentProps {
-    setCsvFileData: (fileData: any) => void;
-    setExcelFileData: (fileData: any) => void;
+    setFileData: (fileData: any) => void;
 }
 
-function DragAndDrop({setCsvFileData, setExcelFileData, ...props}: DragAndDropComponentProps) {
+function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -39,19 +38,17 @@ function DragAndDrop({setCsvFileData, setExcelFileData, ...props}: DragAndDropCo
                     // Parse the file content if it's a CSV or Excel file
                     if (files[0].type === 'text/csv') {
                         const csvData = parseCSV(fileContent as string);
-                        console.log('CSV Data:', csvData);
-                        setCsvFileData(csvData); // Set the parsed CSV data
+                        setFileData(csvData); // Set the parsed CSV data
                     } else if (files[0].type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                         const excelData = parseExcel(fileContent as ArrayBuffer);
-                        console.log('Excel Data:', excelData);
-                        setExcelFileData(excelData); // Set the parsed Excel data
+                        setFileData(excelData); // Set the parsed Excel data
                     }
                 }
 
                 // Simulating a file upload process
                 let progress = 0;
                 const interval = setInterval(() => {
-                    progress += 10;
+                    progress += 1;
                     setUploadProgress(progress);
                     if (progress >= 100) {
                         clearInterval(interval);
@@ -59,7 +56,7 @@ function DragAndDrop({setCsvFileData, setExcelFileData, ...props}: DragAndDropCo
                         setUploadProgress(0);
                         // Handle the uploaded file here
                     }
-                }, 200);
+                }, 30);
             };
 
             // Read the file as text content or ArrayBuffer
@@ -92,6 +89,7 @@ function DragAndDrop({setCsvFileData, setExcelFileData, ...props}: DragAndDropCo
     return (
         <>
             <div className="flex items-center justify-center w-full">
+            {/*<div style={isLoading ? progressBarStyle : {}} className="flex items-center justify-center w-full">*/}
                 <div
                     className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
                     onDrop={handleDrop}

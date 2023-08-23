@@ -1,5 +1,5 @@
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon, DocumentTextIcon} from "@heroicons/react/24/outline";
+import {CheckCircleIcon, DocumentTextIcon, PlusIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import {__} from "@wordpress/i18n";
 import {useEffect, useState} from "@wordpress/element";
@@ -150,10 +150,7 @@ export const EmployeeList = () => {
                                     className="hover:text-white"
                                     path="/add-employee"
                                 >
-                                    <CheckCircleIcon
-                                        className="w-5 h-5 mr-2 -ml-1 text-white"
-                                        aria-hidden="true"
-                                    />
+                                    <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
                                     {__('Add Employee', 'pcm')}
                                 </Button>
                             </div>

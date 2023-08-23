@@ -238,7 +238,7 @@ export const AddEmployee = () => {
         }
         setStep(3)
     }
-    let indigo = applyFilters('pcm.indigo', 'gray');
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_employee) ? (
@@ -293,7 +293,7 @@ export const AddEmployee = () => {
                                             </button>
                                             <Button
                                                 onClick={() => goToReview()}
-                                                className={"rounded-md bg-"+indigo+"-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-"+indigo+"-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-"+indigo+"-600"}
+                                                className="btn-primary"
                                             >
                                                 {__('Save & Continue', 'pcm')}
                                             </Button>
@@ -316,7 +316,7 @@ export const AddEmployee = () => {
                                                         type="submit"
                                                         onClick={() => {
                                                         }}
-                                                        className={"rounded-md bg-"+indigo+"-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-"+indigo+"-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-"+indigo+"-600"}
+                                                        className="btn-primary"
                                                     >
                                                         {__('Submit', 'pcm')}
                                                     </Button>
