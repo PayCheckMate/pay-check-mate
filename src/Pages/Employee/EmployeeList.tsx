@@ -97,13 +97,23 @@ export const EmployeeList = () => {
         {
             title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
             render: (text: string, record: any) => {
-                return(<Status status={record.status} />)
+                return (<Status
+                    status={record.status}
+                    textMap={{active: __('Active', 'pcm'), inactive: __('Resigned', 'pcm')}}
+                />)
             }
         },
         {
             title: __('Action', 'pcm'),
             dataIndex: 'action',
             render: (text: string, record: any) => {
+                if (parseInt(String(record.status)) === 0){
+                    return (
+                        <div className="flex">
+                            <span className="text-gray-300">{__('Resigned', 'pcm')}</span>
+                        </div>
+                    )
+                }
                 return (
                     <div className="flex">
                         {applyFilters('pcm.employee_list_filter', null, record)}
@@ -150,7 +160,10 @@ export const EmployeeList = () => {
                                     className="hover:text-white"
                                     path="/add-employee"
                                 >
-                                    <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                                    <PlusIcon
+                                        className="w-5 h-5 mr-2"
+                                        aria-hidden="true"
+                                    />
                                     {__('Add Employee', 'pcm')}
                                 </Button>
                             </div>

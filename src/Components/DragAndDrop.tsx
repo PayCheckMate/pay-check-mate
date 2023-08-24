@@ -3,6 +3,7 @@ import {__} from '@wordpress/i18n';
 import {CloudArrowUpIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
 import * as XLSX from 'xlsx';
+import {applyFilters} from "../Helpers/Hooks";
 
 interface DragAndDropComponentProps {
     setFileData: (fileData: any) => void;
@@ -86,8 +87,9 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
         background: `linear-gradient(to right, #4299e1 ${uploadProgress}%, transparent ${uploadProgress}%)`,
     };
 
+    const dropZoneStyleColor = applyFilters('pcm.dropZoneStyleColor', 'rgba(145,144,144,0.3)')
     const dropZoneStyle = {
-        background: isLoading ? `linear-gradient(to right, rgba(159,239,207,0.5) ${uploadProgress}%, transparent ${uploadProgress}%)` : '',
+        background: isLoading ? `linear-gradient(to right, ${dropZoneStyleColor} ${uploadProgress}%, transparent ${uploadProgress}%)` : '',
     };
 
     return (

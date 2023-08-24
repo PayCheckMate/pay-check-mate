@@ -13,7 +13,7 @@ import {__} from "@wordpress/i18n";
 import {FormInput} from "../../Components/FormInput";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon, LockClosedIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon, DocumentTextIcon, LockClosedIcon} from "@heroicons/react/24/outline";
 import {useSelect} from "@wordpress/data";
 import department from "../../Store/Department";
 import designation from "../../Store/Designation";
@@ -26,6 +26,8 @@ import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import apiFetch from "@wordpress/api-fetch";
 import {addAction, addFilter, applyFilters} from "../../Helpers/Hooks";
+import {Modal} from "../../Components/Modal";
+import {ImportSalary} from "./ImportSalary";
 
 const CreatePayroll = () => {
     const payrollId = useParams().id;
@@ -253,6 +255,30 @@ const CreatePayroll = () => {
         </>,
         salaryHeads
     );
+
+    const [variableSalary, setVariableSalary] = useState([] as any[]);
+    const [variableSalaryModal, setVariableSalaryModal] = useState(false);
+    const handleImportVariableSalary = () => {
+        setVariableSalaryModal(true);
+    }
+
+    useEffect(() => {
+        if (variableSalary.length <= 0) return;
+        setTableData((prevTableData: EmployeeSalary[]) => {
+            const newTableData = [...prevTableData];
+            variableSalary.forEach((salary: any) => {
+                newTableData.map((data: EmployeeSalary) => {
+                    if (data.employee_id === salary[0]) {
+                        Object.keys(data.salary_details).forEach((key: any) => {
+
+                        });
+                    }
+                })
+            })
+            return newTableData;
+        })
+    }, [variableSalary])
+    console.log(tableData, 'tableData')
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
@@ -303,6 +329,25 @@ const CreatePayroll = () => {
                                 </div>
                             </div>
                         </form>
+                        {tableData.length > 0 && (
+                            <div className="flex items-center">
+                                <Button
+                                    className="hover:text-white"
+                                    onClick={() => handleImportVariableSalary()}
+                                >
+                                    <DocumentTextIcon
+                                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                                        aria-hidden="true"
+                                    />
+                                    {__('Import Variable Salary', 'pcm')}
+                                </Button>
+                            </div>
+                        ) }
+                        {(tableData.length > 0 && variableSalaryModal) && (
+                            <Modal setShowModal={setVariableSalaryModal} zIndex={'50'} width={'w-3/4'}>
+                                <ImportSalary setVariableSalary={setVariableSalary} />
+                            </Modal>
+                        )}
                     </div>
                     {tableData.length > 0 ? (
                         <>
