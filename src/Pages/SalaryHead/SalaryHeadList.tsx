@@ -100,21 +100,21 @@ export const SalaryHeadList = () => {
         },
         {title: __('Priority', 'pcm'), dataIndex: 'priority', sortable: true},
         {
+            title: __('Variable', 'pcm'), dataIndex: 'is_variable',
+            render: (text: string, record: SalaryHeadType) => {
+                return (
+                    <span className={`${parseInt(String(record.is_variable)) === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
+                        {parseInt(String(record.is_variable)) === 1 ? __('Yes', 'pcm') : __('No', 'pcm')}
+                    </span>
+                )
+            }
+        },
+        {
             title: __('Status', 'pcm'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
                 const status = parseInt(String(record.status))
                 return (
                     <Status status={record.status} />
-                )
-            }
-        },
-        {
-            title: __('Created on', 'pcm'), dataIndex: 'created_on',
-            render: (text: string, record: SalaryHeadType) => {
-                return (
-                    <span>
-                        {record.created_on}
-                    </span>
                 )
             }
         },

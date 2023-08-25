@@ -253,8 +253,11 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     $user_id = wp_create_user( $data['email'], wp_generate_password(), $data['email'] );
 
                     if ( is_wp_error( $user_id ) ) {
-                        return new WP_Error( 'rest_invalid_data', $user_id->get_error_message(), [ 'status' => 400 ] );
+                        wp_send_json_error( $user_id->get_error_message(), 400 );
                     }
+
+                    $user = new \WP_User( $user_id );
+                    $user->set_role( 'pay_check_mate_employee' );
                 } else {
                     $user_id = $user->ID;
                 }

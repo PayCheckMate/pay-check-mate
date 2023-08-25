@@ -28,6 +28,7 @@ import {addAction} from "../Helpers/Hooks";
 import ViewPayroll from "./Payroll/ViewPayroll";
 import {NeedPro} from "../Components/NeedPro/NeedPro";
 import {ImportEmployee} from "./Employee/ImportEmployee";
+
 addAction('pcm_notification', 'pcm_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
     toast[type](message);
@@ -39,6 +40,7 @@ export default function Main() {
         {key: 'profile', title: __('Profile', 'pcm'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
         {key: 'payroll', title: __('Payroll', 'pcm'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
+        {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pcm'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pcm'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pcm'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: 'settings', title: __('Settings', 'pcm'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
@@ -73,7 +75,7 @@ export default function Main() {
         {key: 'view-payroll', href: 'payroll/:id', roles: ['pay_check_mate_accountant'], component: ViewPayroll},
         {key: 'edit-payroll', href: 'payroll/edit/:id', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
         {key: 'create-payroll', href: 'generate-payroll', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
-        {key: 'import-payroll', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee},
+        {key: 'import-employee', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee}
     ];
     paths = applyFilters('pcm.routes', paths);
 
