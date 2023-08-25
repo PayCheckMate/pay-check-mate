@@ -298,6 +298,7 @@ const CreatePayroll = () => {
                                     <FormInput
                                         type="month"
                                         label={__('Pay month', 'pcm')}
+                                        className="mt-2"
                                         name="pay_month"
                                         id="pay_month"
                                         value={payDate}
