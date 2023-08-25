@@ -58,17 +58,23 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
         return data;
     }
 
+    const [fileDataError, setFileDataError] = useState(false);
+    useEffect(() => {
+        if (fileDataError) {
+            toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
+        }
+    }, [fileDataError]);
     const [exportSalaries, setExportSalaries] = useState([] as any);
     useEffect(() => {
         setSalaries([]); // Reset salaries when CSV or Excel data changes
         if (fileData.length > 0) {
-            // Set salary as key is head id and value is amount
+            // Set salary, key is head id and value is amount
             setSalaries(prevSalaries => {
                 const salaries = [] as any;
                 return prevSalaries.concat(
                     fileData.filter((data: any) => {
                         if (data.length !== totalHeadRowToBe) {
-                            toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
+                            setFileDataError(true);
                             setFileData([]);
                             return false;
                         }
