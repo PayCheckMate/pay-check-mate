@@ -58,7 +58,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
         return data;
     }
 
-    const [exportSalaries, setExportSalaries] = useState([] as any[]);
+    const [exportSalaries, setExportSalaries] = useState([] as any);
     useEffect(() => {
         setSalaries([]); // Reset salaries when CSV or Excel data changes
         if (fileData.length > 0) {
@@ -78,13 +78,12 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                             salaryHeads.forEach((head) => {
                                 const salary = data[headerRow.indexOf(head.head_name) + 1];
                                 if (headerRow.includes(head.head_name)) {
-                                    salaries.push({
-                                        employee_id: data[0],
+                                    salaries[data[0]] = {
                                         [head.id]: salary
-                                    })
+                                    };
                                 }
                             });
-                            console.log(salaries, 'salaries')
+                            setExportSalaries(salaries);
                             return true;
                         }
                     })
@@ -92,7 +91,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
             });
         }
     }, [fileData]);
-    console.log(exportSalaries, 'exportSalaries')
+
     const downloadFile = () => {
         if (selectedOption.id === 1) {
             downloadCSV();
@@ -140,7 +139,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
             toast.error(__('Please upload a file first.', 'pcm'));
             return;
         }
-        setVariableSalary(salaries);
+        setVariableSalary(exportSalaries);
     }
     return (
         <HOC role={UserCapNames.pay_check_mate_approve_payroll}>

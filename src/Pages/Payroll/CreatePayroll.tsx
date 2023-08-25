@@ -6,7 +6,7 @@ import {
     SelectBoxType
 } from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
-import useFetchApi, {apiFetchUnparsed} from "../../Helpers/useFetchApi";
+import useFetchApi from "../../Helpers/useFetchApi";
 import {Loading} from "../../Components/Loading";
 import {SelectBox} from "../../Components/SelectBox";
 import {__} from "@wordpress/i18n";
@@ -105,17 +105,6 @@ const CreatePayroll = () => {
                     deductions: response.salary_head_types.deductions ? Object.values(response.salary_head_types.deductions) : [],
                     non_taxable: response.salary_head_types.non_taxable ? Object.values(response.salary_head_types.non_taxable) : [],
                 };
-
-                // Object.keys(response.salary_head_types.earnings).forEach((key: any) => {
-                //     salary_heads.earnings[key] = response.salary_head_types.earnings[key]
-                // })
-                // Object.keys(response.salary_head_types.deductions).forEach((key: any) => {
-                //     salary_heads.deductions[key] = response.salary_head_types.deductions[key]
-                // })
-                // Object.keys(response.salary_head_types.non_taxable).forEach((key: any) => {
-                //     salary_heads.non_taxable[key] = response.salary_head_types.non_taxable[key]
-                // })
-
                 setSalaryHeads(salary_heads)
                 setTableData(response.employee_salary_history)
             }).catch(error => {
@@ -256,29 +245,25 @@ const CreatePayroll = () => {
         salaryHeads
     );
 
-    const [variableSalary, setVariableSalary] = useState([] as any[]);
+    const [variableSalary, setVariableSalary] = useState([] as any);
     const [variableSalaryModal, setVariableSalaryModal] = useState(false);
     const handleImportVariableSalary = () => {
         setVariableSalaryModal(true);
     }
 
-    useEffect(() => {
-        if (variableSalary.length <= 0) return;
-        setTableData((prevTableData: EmployeeSalary[]) => {
-            const newTableData = [...prevTableData];
-            variableSalary.forEach((salary: any) => {
-                newTableData.map((data: EmployeeSalary) => {
-                    if (data.employee_id === salary[0]) {
-                        Object.keys(data.salary_details).forEach((key: any) => {
+    const handleImportSalary = (data: any) => {
+        setVariableSalary(data);
+        setVariableSalaryModal(false)
+    }
 
-                        });
-                    }
-                })
-            })
-            return newTableData;
-        })
-    }, [variableSalary])
-    console.log(tableData, 'tableData')
+    const isVariableSalaryImporter = applyFilters('pcm.is_variable_salary_importer', false)
+    const earningClass = applyFilters('pcm.earning_class', '')
+    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
+    const deductionClass = applyFilters('pcm.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
+    const netPayableClass = applyFilters('pcm.net_payable_class', '')
+    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
@@ -329,7 +314,7 @@ const CreatePayroll = () => {
                                 </div>
                             </div>
                         </form>
-                        {tableData.length > 0 && (
+                        {isVariableSalaryImporter && tableData.length > 0 && (
                             <div className="flex items-center">
                                 <Button
                                     className="hover:text-white"
@@ -343,9 +328,9 @@ const CreatePayroll = () => {
                                 </Button>
                             </div>
                         ) }
-                        {(tableData.length > 0 && variableSalaryModal) && (
+                        {(isVariableSalaryImporter && tableData.length > 0 && variableSalaryModal) && (
                             <Modal setShowModal={setVariableSalaryModal} zIndex={'50'} width={'w-3/4'}>
-                                <ImportSalary setVariableSalary={setVariableSalary} />
+                                <ImportSalary setVariableSalary={(data: any) => handleImportSalary(data)} />
                             </Modal>
                         )}
                     </div>
@@ -387,46 +372,48 @@ const CreatePayroll = () => {
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         colSpan={salaryHeads.earnings.length}
-                                                    >Earnings</th>
+                                                    >
+                                                        {__('Earnings', 'pcm')}
+                                                    </th>
                                                 )}
                                                 <th
-                                                    className="total_salary"
+                                                    className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Earnings', 'pcm')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
                                                         {__('Deductions', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_deduction"
+                                                    className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Deductions', 'pcm')}
                                                 </th>
                                                 <th
-                                                    className="net_payable"
+                                                    className={netPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Net Payable', 'pcm')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
-                                                        className="non_taxable"
+                                                        className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
                                                         {__('Non Taxable', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_payable"
+                                                    className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Payable', 'pcm')}
@@ -435,7 +422,7 @@ const CreatePayroll = () => {
                                             <tr className="second-row">
                                                 {salaryHeads.earnings.map((earning) => (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         key={earning.id}
                                                     >
                                                         {earning.head_name}
@@ -443,7 +430,7 @@ const CreatePayroll = () => {
                                                 ))}
                                                 {salaryHeads.deductions.map((deduction) => (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         key={deduction.id}
                                                     >
                                                         {deduction.head_name}
@@ -496,83 +483,110 @@ const CreatePayroll = () => {
                                                     >
                                                         {data.basic_salary}
                                                     </td>
-                                                    {salaryHeads.earnings.map((earning) => (
-                                                        <td
-                                                            className="text-right"
-                                                            key={earning.id}
-                                                        >
+                                                    {salaryHeads.earnings.map((earning) => {
+                                                        let salary = data.salary_details.earnings[earning.id] || 0;
+                                                        if (variableSalary.hasOwnProperty(data.employee_id)) {
+                                                            const employeeSalaryData = variableSalary[data.employee_id];
+                                                            if (employeeSalaryData.hasOwnProperty(earning.id)) {
+                                                                salary = employeeSalaryData[earning.id];
+                                                            }
+                                                        }
+                                                        return(
+                                                            <td
+                                                                className="text-right"
+                                                                key={earning.id}
+                                                            >
                                                             {(parseInt(String(earning.is_variable)) === 1) ? (
                                                                 <FormInput
                                                                     id={`earnings[${data.id}][${earning.id}]`}
                                                                     key={earning.id}
                                                                     type="number"
                                                                     name={`earnings[${data.id}][${earning.id}]`}
-                                                                    value={data.salary_details.earnings[earning.id] || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[earning.id] : 0)}
+                                                                    value={salary || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.earnings[earning.id] : 0)}
                                                                     onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, earning.id, 'earnings')}
                                                                 />
                                                             ) : (
                                                                 data.salary_details.earnings[earning.id] || 0
                                                             )}
                                                         </td>
-                                                    ))}
+                                                        )
+                                                    })}
                                                     <td
-                                                        className="text-right total_salary"
+                                                        className={`text-right ${totalEarningsClass}`}
                                                         key={`total_earnings${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.earnings)}
                                                     </td>
-                                                    {salaryHeads.deductions.map((deduction) => (
-                                                        <td
-                                                            className="text-right"
-                                                            key={deduction.id}
-                                                        >
+                                                    {salaryHeads.deductions.map((deduction) => {
+                                                        let salary = data.salary_details.deductions[deduction.id] || 0;
+                                                        if (variableSalary.hasOwnProperty(data.employee_id)) {
+                                                            const employeeSalaryData = variableSalary[data.employee_id];
+                                                            if (employeeSalaryData.hasOwnProperty(deduction.id)) {
+                                                                salary = employeeSalaryData[deduction.id];
+                                                            }
+                                                        }
+                                                        return(
+                                                            <td
+                                                                className="text-right"
+                                                                key={deduction.id}
+                                                            >
                                                             {(parseInt(String(deduction.is_variable)) === 1) ? (
                                                                 <FormInput
                                                                     id={`deductions[${data.id}][${deduction.id}]`}
                                                                     type="number"
                                                                     key={deduction.id}
                                                                     name={`deductions[${data.id}][${deduction.id}]`}
-                                                                    value={data.salary_details.deductions[deduction.id] || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[deduction.id] : 0)}
+                                                                    value={salary || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.deductions[deduction.id] : 0)}
                                                                     onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                                                 />
                                                             ) : (
                                                                 data.salary_details.deductions[deduction.id] || 0
                                                             )}
                                                         </td>
-                                                    ))}
+                                                        )
+                                                    })}
                                                     <td
-                                                        className="total_deduction text-right"
+                                                        className={`${totalDeductionsClass} text-right`}
                                                         key={`total_deductions${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.deductions)}
                                                     </td>
                                                     <td
-                                                        className="net_payable text-right"
+                                                        className={`${netPayableClass} text-right`}
                                                         key={`net_payable${tableDataIndex}`}
                                                     >
                                                         {rowNetPayable(data)}
                                                     </td>
-                                                    {salaryHeads.non_taxable.map((non_taxable) => (
-                                                        <td
-                                                            className="text-right"
-                                                            key={non_taxable.id}
-                                                        >
+                                                    {salaryHeads.non_taxable.map((non_taxable) => {
+                                                        let salary = data.salary_details.non_taxable[non_taxable.id] || 0;
+                                                        if (variableSalary.hasOwnProperty(data.employee_id)) {
+                                                            const employeeSalaryData = variableSalary[data.employee_id];
+                                                            if (employeeSalaryData.hasOwnProperty(non_taxable.id)) {
+                                                                salary = employeeSalaryData[non_taxable.id];
+                                                            }
+                                                        }
+                                                        return(
+                                                            <td
+                                                                className="text-right"
+                                                                key={non_taxable.id}
+                                                            >
                                                             {(parseInt(String(non_taxable.is_variable)) === 1) ? (
                                                                 <FormInput
                                                                     id={`non_taxable[${data.id}][${non_taxable.id}]`}
                                                                     type="number"
                                                                     key={non_taxable.id}
                                                                     name={`non_taxable[${data.id}][${non_taxable.id}]`}
-                                                                    value={data.salary_details.non_taxable[non_taxable.id] || (TableData && TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id] : 0)}
+                                                                    value={salary || (TableData && TableData.length > 0 ? TableData[tableDataIndex].salary_details.non_taxable[non_taxable.id] : 0)}
                                                                     onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, non_taxable.id, 'non_taxable')}
                                                                 />
                                                             ) : (
                                                                 data.salary_details.non_taxable[non_taxable.id] || 0
                                                             )}
                                                         </td>
-                                                    ))}
+                                                        )
+                                                    })}
                                                     <td
-                                                        className="total_payable text-right"
+                                                        className={`${totalPayableClass} text-right`}
                                                         key={`total_payable${tableDataIndex}`}
                                                     >
                                                         {rowTotalPayable(data)}
@@ -604,7 +618,7 @@ const CreatePayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="total_salary text-right"
+                                                    className={`${totalEarningsClass} text-right`}
                                                     key={`total_earnings`}
                                                 >
                                                     {totalAllowance}
@@ -618,13 +632,13 @@ const CreatePayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`${totalDeductionsClass} text-right`}
                                                     key={`total_deductions`}
                                                 >
                                                     {totalDeductions}
                                                 </td>
                                                 <td
-                                                    className="text-right"
+                                                    className={`${netPayableClass} text-right`}
                                                     key={`non_taxable`}
                                                 >
                                                     {netPayable}
@@ -638,7 +652,7 @@ const CreatePayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`${totalPayableClass} text-right`}
                                                     key={`total_net_payable`}
                                                 >
                                                     {totalNetPayable}

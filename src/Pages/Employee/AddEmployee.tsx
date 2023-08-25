@@ -260,7 +260,7 @@ export const AddEmployee = () => {
                                         <h2 className="text-2xl font-medium mb-4">
                                             {__('Personal Information', 'pcm')}
                                         </h2>
-                                        {!employeeId && <FormInput type={"number"} label={__('Search from existing user', 'pcm')} placeholder={__("Enter user id", "pcm")} name='employee_id' id='employee_id' value={userId} onChange={(e)=>handleImportEmployee(e) } className='mb-4' />}
+                                        {!employeeId && <FormInput type={"number"} label={__('Search from existing user', 'pcm')} placeholder={__("Enter user id", "pcm")} name='employee_id' id='user_id' value={userId} onChange={(e)=>handleImportEmployee(e) } className='mb-4' />}
                                     </div>
                                     <div className="mx-auto w-3/4">
                                         <PersonalInformation
