@@ -25,7 +25,7 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import apiFetch from "@wordpress/api-fetch";
-import {addAction, addFilter, applyFilters} from "../../Helpers/Hooks";
+import {addAction, applyFilters} from "../../Helpers/Hooks";
 import {Modal} from "../../Components/Modal";
 import {ImportSalary} from "./ImportSalary";
 

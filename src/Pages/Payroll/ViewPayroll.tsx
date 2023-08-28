@@ -1,23 +1,22 @@
 import {useEffect, useState} from "@wordpress/element";
-import {
-    EmployeeSalary,
-    SalaryHeadsResponseType,
-    SalaryResponseType,
-} from "../../Types/SalaryHeadType";
+import {EmployeeSalary, HeadType, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType,} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
 import {Loading} from "../../Components/Loading";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon, DocumentArrowDownIcon, PrinterIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 import department from "../../Store/Department";
-import {PrinterIcon} from "@heroicons/react/24/outline";
 import {PayrollType} from "../../Types/PayrollType";
+import {applyFilters} from "../../Helpers/Hooks";
+import {SelectBox} from "../../Components/SelectBox";
+import {Button} from "../../Components/Button";
+import * as XLSX from "xlsx";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
@@ -32,6 +31,12 @@ const ViewPayroll = () => {
         deductions: [],
         non_taxable: []
     });
+
+    const [downloadOptions, setDownloadOptions] = useState([
+        {id: 1, name: 'CSV'},
+        {id: 2, name: 'Excel'}
+    ] as SelectBoxType[]);
+    const [selectedOption, setSelectedOption] = useState(downloadOptions[0]);
 
     useEffect(() => {
         makeGetRequest<SalaryResponseType>(`/pay-check-mate/v1/payrolls/${payrollId}`).then((response: any) => {
@@ -148,6 +153,99 @@ const ViewPayroll = () => {
             print.print()
         }
     }
+
+    const downloadFile = () => {
+        if (selectedOption.id === 1) {
+            downloadCSV();
+        } else {
+            downloadExcel();
+        }
+    }
+
+    // Adding header row to Excel
+    const allSalaryHeads = salaryHeads.earnings.concat(salaryHeads.deductions, salaryHeads.non_taxable);
+    const headers = [
+        __('Employee ID', 'pcm'),
+        __('Employee name', 'pcm'),
+        __('Designation', 'pcm'),
+        __('Department', 'pcm'),
+        __('Basic Salary', 'pcm'),
+        ...allSalaryHeads.map((salaryHead) => salaryHead.head_name),
+        __('Total Salary', 'pcm'),
+    ]
+
+    const getSampleData = () => {
+        const data = [];
+        data.push(headers);
+        // Adding data row to Excel and/or CSV
+        const dataRow = tableData.map((employee) => {
+            return [
+                employee.employee_id,
+                employee.first_name + ' ' + employee.last_name,
+                departments.find((department: any) => department.id === employee.department_id)?.name || __('All', 'pcm'),
+                designations.find((designation: any) => designation.id === employee.designation_id)?.name || __('All', 'pcm'),
+                employee.basic_salary,
+                ...allSalaryHeads.map((salaryHead) => {
+                    if (parseInt(String(salaryHead.head_type)) === HeadType.Earning) {
+                        return employee.salary_details.earnings[salaryHead.id] || 0;
+                    } else if (parseInt(String(salaryHead.head_type)) === HeadType.Deduction) {
+                        return employee.salary_details.deductions[salaryHead.id] || 0;
+                    } else {
+                        return employee.salary_details.non_taxable[salaryHead.id] || 0;
+                    }
+                }),
+                rowTotalPayable(employee),
+            ];
+        });
+
+        data.push(...dataRow);
+        return data;
+    }
+    const downloadCSV = () => {
+        const csvData = getSampleData();
+
+        // Create CSV content
+        const csvContent = csvData.map(row => row.join(',')).join('\n');
+
+        // Create a Blob object from the CSV content
+        const blob = new Blob([csvContent], {type: 'text/csv'});
+
+        // Create a download link and trigger click event
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        // With date
+        a.download = 'salary_sheet_' + new Date().toISOString().slice(0, 10) + '.csv';
+        a.click();
+    };
+
+    const downloadExcel = () => {
+        const excelData = getSampleData();
+        // Create Excel Workbook
+        const workbook = XLSX.utils.book_new();
+        const sheetData = XLSX.utils.aoa_to_sheet(excelData);
+        XLSX.utils.book_append_sheet(workbook, sheetData, 'Payroll Data');
+
+        // Generate Excel file
+        const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+
+        // Convert buffer to blob
+        const blob = new Blob([excelBuffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+        // Create a download link and trigger click event
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'salary_sheet_' + new Date().toISOString().slice(0, 10) + '.xlsx';
+        a.click();
+    };
+
+    const isExportSalarySheet = applyFilters('pcm.is_export_salary_sheet', false)
+    const earningClass = applyFilters('pcm.earning_class', '')
+    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
+    const deductionClass = applyFilters('pcm.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
+    const netPayableClass = applyFilters('pcm.net_payable_class', '')
+    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
     return (
         <>
             {tableData.length > 0 ? (
@@ -177,7 +275,27 @@ const ViewPayroll = () => {
                                 </div>
                                 <div className="flex items-center no-print">
                                     <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
-                                    {/*Excel Download*/}
+                                    {isExportSalarySheet && (
+                                        <div className="ml-6 flex justify-between gap-6">
+                                            <SelectBox
+                                                className="w-24"
+                                                title=""
+                                                options={downloadOptions}
+                                                selected={selectedOption}
+                                                setSelected={(option) => setSelectedOption(option)}
+                                            />
+                                            <Button
+                                                onClick={downloadFile}
+                                                className="mt-2"
+                                            >
+                                                <DocumentArrowDownIcon
+                                                    className="w-5 h-5 mr-2 -ml-1 text-white"
+                                                    aria-hidden="true"
+                                                />
+                                                {__('Export', 'pcm')}
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="payroll-table-container">
@@ -207,46 +325,46 @@ const ViewPayroll = () => {
                                         </th>
                                         {salaryHeads.earnings.length > 0 && (
                                             <th
-                                                className="salary"
+                                                className={earningClass}
                                                 colSpan={salaryHeads.earnings.length}
                                             >Earnings</th>
                                         )}
                                         <th
-                                            className="total_salary"
+                                            className={totalEarningsClass}
                                             rowSpan={2}
                                         >
                                             {__('Total Earnings', 'pcm')}
                                         </th>
                                         {salaryHeads.deductions.length > 0 && (
                                             <th
-                                                className="deduction"
+                                                className={deductionClass}
                                                 colSpan={salaryHeads.deductions.length}
                                             >
                                                 {__('Deductions', 'pcm')}
                                             </th>
                                         )}
                                         <th
-                                            className="total_deduction"
+                                            className={totalDeductionsClass}
                                             rowSpan={2}
                                         >
                                             {__('Total Deductions', 'pcm')}
                                         </th>
                                         <th
-                                            className="net_payable"
+                                            className={netPayableClass}
                                             rowSpan={2}
                                         >
                                             {__('Net Payable', 'pcm')}
                                         </th>
                                         {salaryHeads.non_taxable.length > 0 && (
                                             <th
-                                                className="non_taxable"
+                                                className={nonTaxableClass}
                                                 colSpan={salaryHeads.non_taxable.length}
                                             >
                                                 {__('Non Taxable', 'pcm')}
                                             </th>
                                         )}
                                         <th
-                                            className="total_payable"
+                                            className={totalPayableClass}
                                             rowSpan={2}
                                         >
                                             {__('Total Payable', 'pcm')}
@@ -255,7 +373,7 @@ const ViewPayroll = () => {
                                     <tr className="second-row">
                                         {salaryHeads.earnings.map((earning) => (
                                             <th
-                                                className="salary"
+                                                className={earningClass}
                                                 key={earning.id}
                                             >
                                                 {earning.head_name}
@@ -263,7 +381,7 @@ const ViewPayroll = () => {
                                         ))}
                                         {salaryHeads.deductions.map((deduction) => (
                                             <th
-                                                className="deduction"
+                                                className={deductionClass}
                                                 key={deduction.id}
                                             >
                                                 {deduction.head_name}
@@ -325,7 +443,7 @@ const ViewPayroll = () => {
                                                 </td>
                                             ))}
                                             <td
-                                                className="text-right total_salary"
+                                                className={`text-right ${totalEarningsClass}`}
                                                 key={`total_earnings${tableDataIndex}`}
                                             >
                                                 {sumValues(data.salary_details.earnings)}
@@ -339,13 +457,13 @@ const ViewPayroll = () => {
                                                 </td>
                                             ))}
                                             <td
-                                                className="total_deduction text-right"
+                                                className={`${totalDeductionsClass} text-right`}
                                                 key={`total_deductions${tableDataIndex}`}
                                             >
                                                 {sumValues(data.salary_details.deductions)}
                                             </td>
                                             <td
-                                                className="net_payable text-right"
+                                                className={`${netPayableClass} text-right`}
                                                 key={`net_payable${tableDataIndex}`}
                                             >
                                                 {rowNetPayable(data)}
@@ -359,7 +477,7 @@ const ViewPayroll = () => {
                                                 </td>
                                             ))}
                                             <td
-                                                className="total_payable text-right"
+                                                className={`${totalPayableClass} text-right`}
                                                 key={`total_payable${tableDataIndex}`}
                                             >
                                                 {rowTotalPayable(data)}
@@ -391,7 +509,7 @@ const ViewPayroll = () => {
                                             </td>
                                         ))}
                                         <td
-                                            className="total_salary text-right"
+                                            className={`${totalEarningsClass} text-right`}
                                             key={`total_earnings`}
                                         >
                                             {totalAllowance}
@@ -405,13 +523,13 @@ const ViewPayroll = () => {
                                             </td>
                                         ))}
                                         <td
-                                            className="text-right"
+                                            className={`text-right ${totalDeductionsClass}`}
                                             key={`total_deductions`}
                                         >
                                             {totalDeductions}
                                         </td>
                                         <td
-                                            className="text-right"
+                                            className={`text-right ${netPayableClass}`}
                                             key={`non_taxable`}
                                         >
                                             {netPayable}
@@ -425,7 +543,7 @@ const ViewPayroll = () => {
                                             </td>
                                         ))}
                                         <td
-                                            className="text-right"
+                                            className={`text-right ${totalPayableClass}`}
                                             key={`total_net_payable`}
                                         >
                                             {totalNetPayable}

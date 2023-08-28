@@ -13,6 +13,11 @@ use WP_Error;
 class Model implements ModelInterface {
 
     protected static string $table_prefix = 'pay_check_mate_';
+    protected string $cache_group = 'pay_check_mate_';
+
+    public function __construct() {
+        $this->cache_group = $this->cache_group . static::$table;
+    }
 
     /**
      * The table associated with the model.
@@ -96,6 +101,13 @@ class Model implements ModelInterface {
             ]
         );
 
+        // Add caching.
+        $cache_key = md5( wp_json_encode( $args ) );
+        $cache     = wp_cache_get( $cache_key, $this->cache_group );
+        if ( false !== $cache ) {
+            return $cache;
+        }
+
         if ( ! empty( $args['mutation_fields'] ) ) {
             static::$mutation_fields = $args['mutation_fields'];
             unset( $args['mutation_fields'] );
@@ -148,19 +160,6 @@ class Model implements ModelInterface {
             $fields[ $key ] = $this->get_table() . '.' . esc_sql( $field );
         }
 
-        // If fields has column name id, then add the table name as prefix and esc_sql the fields.
-//        $fields = array_map( function ( $field ) {
-//            // E.g., id as something_id
-//            if ( strpos( $field, 'id' ) !== false ) {
-//                $field = $this->get_table() . '.' . esc_sql( $field );
-//            }
-//            if ( 'id' === $field ) {
-//                $field = $this->get_table() . '.' . esc_sql( $field );
-//            }
-//
-//            return $field;
-//        }, $fields );
-
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
@@ -178,6 +177,7 @@ class Model implements ModelInterface {
 
         $results    = $wpdb->get_results( $query );
         $this->data = $this->process_items( $results );
+        wp_cache_set( $cache_key, $this->data, $this->cache_group );
 
         return $this->data;
     }
@@ -357,6 +357,13 @@ class Model implements ModelInterface {
             ]
         );
 
+        // Add caching.
+        $cache_key = md5( wp_json_encode( $args ) );
+        $cache     = wp_cache_get( $cache_key, $this->cache_group );
+        if ( false !== $cache ) {
+            return $cache;
+        }
+
         if ( $args['fields'][0] === '*' ) {
             $args['fields'] = [ $this->get_table() . '.*' ];
         }
@@ -382,6 +389,7 @@ class Model implements ModelInterface {
         }
 
         $this->data = $this->process_item( $results );
+        wp_cache_set( $cache_key, $this->data, $this->cache_group );
 
         return $this->data;
     }
@@ -413,6 +421,13 @@ class Model implements ModelInterface {
                 'status'   => 'all',
             ]
         );
+
+        // Add caching.
+        $cache_key = md5( wp_json_encode( $args ) );
+        $cache     = wp_cache_get( $cache_key, $this->cache_group );
+        if ( false !== $cache ) {
+            return $cache;
+        }
 
         if ( ! empty( $args['order_by'] ) ) {
             $args['order_by'] = $this->get_table() . '.' . $args['order_by'];
@@ -476,6 +491,7 @@ class Model implements ModelInterface {
         }
 
         $this->data = $this->process_items( $results );
+        wp_cache_set( $cache_key, $this->data, $this->cache_group );
 
         return $this->data;
     }
@@ -507,6 +523,9 @@ class Model implements ModelInterface {
         if ( ! $last_id ) {
             return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pcm' ) );
         }
+
+        // Clear cache.
+        wp_cache_delete( $this->cache_group );
 
         return $this->find( $last_id );
     }
@@ -540,6 +559,9 @@ class Model implements ModelInterface {
             ],
         )
         ) {
+            // Clear cache.
+            wp_cache_delete( $this->cache_group );
+
             return $this->find( $id );
         }
 
@@ -572,6 +594,9 @@ class Model implements ModelInterface {
             ],
         )
         ) {
+            // Clear cache.
+            wp_cache_delete( $this->cache_group );
+
             return $this->find_by( $find_by, [] )[0];
         }
 
@@ -591,7 +616,7 @@ class Model implements ModelInterface {
     public function delete( int $id ): int {
         global $wpdb;
 
-        return $wpdb->delete(
+        if ( $wpdb->delete(
             $this->get_table(),
             [
                 'id' => $id,
@@ -599,7 +624,13 @@ class Model implements ModelInterface {
             [
                 '%d',
             ],
-        );
+        ) ) {
+            // Clear cache.
+            wp_cache_delete( $this->cache_group );
+            return $wpdb->rows_affected;
+        }
+
+        return 0;
     }
 
     /**
