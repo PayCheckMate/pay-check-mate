@@ -171,10 +171,9 @@ const ViewPayroll = () => {
         __('Department', 'pcm'),
         __('Basic Salary', 'pcm'),
         ...allSalaryHeads.map((salaryHead) => salaryHead.head_name),
+        __('Total Salary', 'pcm'),
     ]
 
-    console.log(tableData, 'tableData')
-    console.log(allSalaryHeads, 'allSalaryHeads')
     const getSampleData = () => {
         const data = [];
         data.push(headers);
@@ -195,7 +194,7 @@ const ViewPayroll = () => {
                         return employee.salary_details.non_taxable[salaryHead.id] || 0;
                     }
                 }),
-
+                rowTotalPayable(employee),
             ];
         });
 
