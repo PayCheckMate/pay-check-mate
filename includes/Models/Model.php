@@ -102,10 +102,9 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( serialize( $args ) );
+        $cache_key = md5( wp_json_encode( $args ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            error_log( print_r( 'cache hit' . $this->cache_group, true ) );
             return $cache;
         }
 
@@ -359,10 +358,9 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( serialize( $args ) );
+        $cache_key = md5( wp_json_encode( $args ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            error_log( print_r( 'cache hit' . $this->cache_group, true ) );
             return $cache;
         }
 
@@ -425,10 +423,9 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( serialize( $args ) );
+        $cache_key = md5( wp_json_encode( $args ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            error_log( print_r( 'cache hit' . $this->cache_group, true ) );
             return $cache;
         }
 
