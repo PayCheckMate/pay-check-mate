@@ -9,9 +9,9 @@ export const ColorPallets = () => {
             <div className="bg-indigo-400"></div>
             <div className="bg-gray-400"></div>
             <div className="bg-purple-400"></div>
-            <span className="bg-gradient-to-r from-green-100/10 to-green-200"></span>
-            <span className="bg-gradient-to-r from-red-100/10 to-red-200"></span>
-            <span className="bg-gradient-to-r from-gray-100/10 to-gray-200"></span>
+            <span className="bg-gradient-to-r text-green-800 from-green-100/10 to-green-200"></span>
+            <span className="bg-gradient-to-r text-red-800 from-red-100/10 to-red-200"></span>
+            <span className="bg-gradient-to-r text-gray-800 from-gray-100/10 to-gray-200"></span>
             <span className="text-green-500"></span>
             <span className="text-red-500"></span>
             <span className="text-orange-500"></span>
