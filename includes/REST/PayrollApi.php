@@ -334,14 +334,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $employees = new EmployeeModel();
         $employees = $employees->all(
             $args, [
-            'id',
-            'employee_id',
-            'first_name',
-            'last_name',
-            'designation_id',
-            'department_id',
-            'joining_date',
-        ], $salary_head_types
+				'id',
+				'employee_id',
+				'first_name',
+				'last_name',
+				'designation_id',
+				'department_id',
+				'joining_date',
+			], $salary_head_types
         );
 
         $employees         = apply_filters( 'pcm_generate_payroll_employee_response', $employees, $salary_head_types, $parameters );
@@ -428,8 +428,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $merged_array         = [];
             array_walk_recursive(
                 $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
-                $merged_array[$key] = $value;
-            }
+					$merged_array[ $key ] = $value;
+				}
             );
             $data['salary_details'] = wp_json_encode( $merged_array );
 
@@ -537,8 +537,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $merged_array         = [];
             array_walk_recursive(
                 $detail['salary_details'], function ( $value, $key ) use ( &$merged_array ) {
-                $merged_array[$key] = $value;
-            }
+					$merged_array[ $key ] = $value;
+				}
             );
             $data['salary_details'] = wp_json_encode( $merged_array );
 
