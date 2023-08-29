@@ -13,7 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {PayrollList} from "./Payroll/PayrollList";
 import {PaySlipList} from "./Payroll/PaySlip/PaySlipList";
 import {Profile} from "./Profile/Profile";
-import PayrollReport from "./Reports/PayrollReport";
+import {PayrollRegister} from "./Reports/PayrollRegister";
+import {PayrollLedger} from "./Reports/PayrollLedger";
 import {NavigationType} from "../Types/NavigationType";
 import {__} from "@wordpress/i18n";
 import {BanknotesIcon, ChartPieIcon, CogIcon, DocumentTextIcon, HomeIcon, RocketLaunchIcon, UserGroupIcon, UserIcon} from "@heroicons/react/24/outline";
@@ -55,7 +56,8 @@ export default function Main() {
         },
         {key: 'reports', title: __('Reports', 'pcm'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
-                {key: 'payroll_report', title: __('Payroll', 'pcm'), href: 'reports/payroll-report', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollReport},
+                {key: 'payroll_register', title: __('Payroll Register', 'pcm'), href: 'reports/payroll-register', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollRegister},
+                {key: 'payroll_ledger', title: __('Payroll Ledger', 'pcm'), href: 'reports/payroll-ledger', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollLedger},
                 {key: '[need_pro]pro/pf-register', title: __('P.F. Register (PRO)', 'pcm'), href: 'pro/pf-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
                 {key: '[need_pro]pro/pf-ledger', title: __('P.F. Ledger (PRO)', 'pcm'), href: 'pro/pf-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro },
                 {key: '[need_pro]pro/gratuity-register', title: __('Gratuity Register (PRO)', 'pcm'), href: 'pro/gratuity-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},

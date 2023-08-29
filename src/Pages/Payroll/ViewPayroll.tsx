@@ -246,6 +246,8 @@ const ViewPayroll = () => {
     const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
     const netPayableClass = applyFilters('pcm.net_payable_class', '')
     const totalPayableClass = applyFilters('pcm.total_payable_class', '')
+    let red = applyFilters('pcm.red', 'gray');
+
     return (
         <>
             {tableData.length > 0 ? (
@@ -584,7 +586,7 @@ const ViewPayroll = () => {
                         title={__('Payroll Sheet', 'pcm')}
                         description={__('Select department or designation and pay month to view payroll list', 'pcm')}
                         icon={<CurrencyDollarIcon
-                            className="w-6 h-6 text-red-600"
+                            className={"w-6 h-6 text-"+red+"-600"}
                             aria-hidden="true"
                         />}
                     />

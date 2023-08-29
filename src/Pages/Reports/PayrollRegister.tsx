@@ -6,7 +6,7 @@ import {Loading} from "../../Components/Loading";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon, PrinterIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
@@ -22,14 +22,15 @@ import {FormInput} from "../../Components/FormInput";
 import {Button} from "../../Components/Button";
 import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
+import {applyFilters} from "../../Helpers/Hooks";
 
-const ViewPayroll = () => {
+export const PayrollRegister = () => {
     const payrollId = useParams().id;
     const {loading,makePostRequest} = useFetchApi('');
 
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
-    const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
+    const [payDate, setPayDate] = useState('');
     const [payRoll, setPayRoll] = useState<PayrollType>({} as PayrollType);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
@@ -135,6 +136,15 @@ const ViewPayroll = () => {
         ).toFixed(2)
     );
 
+    const earningClass = applyFilters('pcm.earning_class', '')
+    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
+    const deductionClass = applyFilters('pcm.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
+    const netPayableClass = applyFilters('pcm.net_payable_class', '')
+    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
+    let red = applyFilters('pcm.red', 'gray');
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_payroll_details) ? (
@@ -167,7 +177,8 @@ const ViewPayroll = () => {
                                 </div>
                                 <div>
                                     <FormInput
-                                        type="date"
+                                        type="month"
+                                        className="mt-2"
                                         label={__('Pay month', 'pcm')}
                                         name="pay_month"
                                         id="pay_month"
@@ -215,7 +226,6 @@ const ViewPayroll = () => {
                                         </div>
                                         <div className="flex items-center no-print">
                                             <PrintButton onClick={() => handlePrint('printable')} />
-                                            {/*Excel Download*/}
                                         </div>
                                     </div>
                                     <div className="payroll-table-container">
@@ -245,46 +255,46 @@ const ViewPayroll = () => {
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         colSpan={salaryHeads.earnings.length}
                                                     >Earnings</th>
                                                 )}
                                                 <th
-                                                    className="total_salary"
+                                                    className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Earnings', 'pcm')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
                                                         {__('Deductions', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_deduction"
+                                                    className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Deductions', 'pcm')}
                                                 </th>
                                                 <th
-                                                    className="net_payable"
+                                                    className={netPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Net Payable', 'pcm')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
-                                                        className="non_taxable"
+                                                        className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
                                                         {__('Non Taxable', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_payable"
+                                                    className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Payable', 'pcm')}
@@ -293,7 +303,7 @@ const ViewPayroll = () => {
                                             <tr className="second-row">
                                                 {salaryHeads.earnings.map((earning) => (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         key={earning.id}
                                                     >
                                                         {earning.head_name}
@@ -301,7 +311,7 @@ const ViewPayroll = () => {
                                                 ))}
                                                 {salaryHeads.deductions.map((deduction) => (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         key={deduction.id}
                                                     >
                                                         {deduction.head_name}
@@ -340,13 +350,13 @@ const ViewPayroll = () => {
                                                         className="text-left"
                                                         key={`designation${tableDataIndex}`}
                                                     >
-                                                        {departments.find((department: any) => department.id === data.department_id)?.name || ''}
+                                                        {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pcm')}
                                                     </td>
                                                     <td
                                                         className="text-left"
                                                         key={`department${tableDataIndex}`}
                                                     >
-                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
+                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pcm')}
                                                     </td>
                                                     <td
                                                         className="text-right"
@@ -363,7 +373,7 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="text-right total_salary"
+                                                        className={`text-right ${totalEarningsClass}`}
                                                         key={`total_earnings${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.earnings)}
@@ -377,13 +387,13 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="total_deduction text-right"
+                                                        className={`${totalDeductionsClass} text-right`}
                                                         key={`total_deductions${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.deductions)}
                                                     </td>
                                                     <td
-                                                        className="net_payable text-right"
+                                                        className={`${netPayableClass} text-right`}
                                                         key={`net_payable${tableDataIndex}`}
                                                     >
                                                         {rowNetPayable(data)}
@@ -397,7 +407,7 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="total_payable text-right"
+                                                        className={`${totalPayableClass} text-right`}
                                                         key={`total_payable${tableDataIndex}`}
                                                     >
                                                         {rowTotalPayable(data)}
@@ -429,7 +439,7 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="total_salary text-right"
+                                                    className={`${totalEarningsClass} text-right`}
                                                     key={`total_earnings`}
                                                 >
                                                     {totalAllowance}
@@ -443,13 +453,13 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${totalDeductionsClass}`}
                                                     key={`total_deductions`}
                                                 >
                                                     {totalDeductions}
                                                 </td>
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${netPayableClass}`}
                                                     key={`non_taxable`}
                                                 >
                                                     {netPayable}
@@ -463,7 +473,7 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${totalPayableClass}`}
                                                     key={`total_net_payable`}
                                                 >
                                                     {totalNetPayable}
@@ -504,7 +514,7 @@ const ViewPayroll = () => {
                                 title={__('Payroll Sheet', 'pcm')}
                                 description={__('Select department or designation and pay month to view payroll list', 'pcm')}
                                 icon={<CurrencyDollarIcon
-                                    className="w-6 h-6 text-red-600"
+                                    className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"
                                 />}
                             />
@@ -515,5 +525,3 @@ const ViewPayroll = () => {
         </>
     );
 };
-
-export default ViewPayroll;
