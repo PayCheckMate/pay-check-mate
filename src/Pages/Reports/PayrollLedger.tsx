@@ -8,7 +8,6 @@ import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
 import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
-import {useParams} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 import department from "../../Store/Department";
@@ -27,9 +26,6 @@ export const PayrollLedger = () => {
     const {loading,makePostRequest} = useFetchApi('');
 
     const [employeeId, setEmployeeId] = useState('');
-    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
-    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
-    const [payRoll, setPayRoll] = useState<PayrollType>({} as PayrollType);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
@@ -52,7 +48,7 @@ export const PayrollLedger = () => {
                 employee_id: employeeId,
             }
             apiFetch({
-                path: '/pay-check-mate/v1/payrolls/reports-ledger',
+                path: '/pay-check-mate/v1/payrolls/payroll-ledger',
                 method: 'POST',
                 data: data,
             }).then((response: any) => {
@@ -63,41 +59,18 @@ export const PayrollLedger = () => {
                 };
                 setSalaryHeads(salary_heads as SalaryHeadsResponseType);
                 setTableData(response.employee_salary_history);
-                // @ts-ignore
-                setPayRoll(response.payroll);
             }).catch((error: any) => {
                 toast.error(error.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
                 setTableData([]);
-                setPayRoll({} as PayrollType);
                 setSalaryHeads({} as SalaryHeadsResponseType);
             })
         } catch (error) {
             console.log(error, 'error'); // Handle the error accordingly
         }
     };
-    useEffect(() => {
-        if (designations.length <= 0) return;
-        const defaultDesignation = {
-            id: 'all',
-            name: __('All', 'pcm'),
-        }
-
-        setSelectedDesignation(defaultDesignation)
-    }, [designations]);
-
-    useEffect(() => {
-        if (departments.length <= 0) return;
-
-        const defaultDepartment = {
-            id: 'all',
-            name: __('All', 'pcm'),
-        }
-
-        setSelectedDepartment(defaultDepartment)
-    }, [departments]);
     const sumValues = (values: { [key: number]: number }): number => {
         return Object.values(values).reduce((sum, value) => sum + parseFloat(String(value)), 0);
     };
@@ -189,20 +162,9 @@ export const PayrollLedger = () => {
                                         <div>
                                             <div className="sm:flex-auto">
                                                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date_string}
+                                                    {__('Payroll Ledger : ', 'pcm')} {employeeId}
                                                 </h1>
                                             </div>
-                                            {/*<div className="flex justify-between mt-2 mb-4">*/}
-                                            {/*    <div className="grid grid-cols-4 gap-4">*/}
-                                            {/*        <div>*/}
-                                            {/*            {__('Department', 'pcm')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pcm')}*/}
-                                            {/*        </div>*/}
-                                            {/*        <div>*/}
-                                            {/*            {__('Designation', 'pcm')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pcm')}*/}
-                                            {/*        </div>*/}
-
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
                                         </div>
                                         <div className="flex items-center no-print">
                                             <PrintButton onClick={() => handlePrint('printable')} />
@@ -216,19 +178,13 @@ export const PayrollLedger = () => {
                                                     {__('Sl. No.', 'pcm')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Employee ID', 'pcm')}
+                                                    {__('Pay Month', 'pcm')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
                                                     className="fixed-column"
                                                 >
                                                     {__('Employee Name', 'pcm')}
-                                                </th>
-                                                <th rowSpan={2}>
-                                                    {__('Designation', 'pcm')}
-                                                </th>
-                                                <th rowSpan={2}>
-                                                    {__('Department', 'pcm')}
                                                 </th>
                                                 <th rowSpan={3}>
                                                     {__('Basic Salary', 'pcm')}
@@ -318,25 +274,19 @@ export const PayrollLedger = () => {
                                                         className="text-right"
                                                         key={`employee_id${tableDataIndex}`}
                                                     >
-                                                        {data.employee_id}
+                                                        {
+                                                            /*@ts-ignore*/
+                                                            new Date(data.payroll_date).toLocaleString('default', {
+                                                                month: 'short',
+                                                                year: 'numeric'
+                                                            }).replace(/ /g, ', ')
+                                                        }
                                                     </td>
                                                     <td
                                                         className="text-left fixed-column"
                                                         key={`employee_name${tableDataIndex}`}
                                                     >
                                                         {data.first_name + ' ' + data.last_name}
-                                                    </td>
-                                                    <td
-                                                        className="text-left"
-                                                        key={`designation${tableDataIndex}`}
-                                                    >
-                                                        {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pcm')}
-                                                    </td>
-                                                    <td
-                                                        className="text-left"
-                                                        key={`department${tableDataIndex}`}
-                                                    >
-                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pcm')}
                                                     </td>
                                                     <td
                                                         className="text-right"
@@ -400,7 +350,7 @@ export const PayrollLedger = () => {
                                                 <td
                                                     key={`total`}
                                                     className="fixed-column text-right font-bold text-xl"
-                                                    colSpan={5}
+                                                    colSpan={3}
                                                 >
                                                     {__('Total', 'pcm')}
                                                 </td>
@@ -461,29 +411,6 @@ export const PayrollLedger = () => {
                                             </tr>
                                             </tfoot>
                                         </table>
-                                        {/*Give remarks 75% and prepared by 25%*/}
-                                        <div className="flex justify-between mt-4">
-                                            <div className="w-4/6 remarks">
-                                                <div className="flex">
-                                                        <div className="flex">
-                                                            <div className="mt-4">
-                                                                <strong>
-                                                                    {__('Remarks', 'pcm')}
-                                                                </strong>:&nbsp;
-                                                                <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div className="w-1/6 prepared_by">
-                                                <div className="flex">
-                                                        <strong className="font-bold">
-                                                            {__('Prepared By: ', 'pcm')}&nbsp;
-                                                        </strong>
-                                                        {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             )}

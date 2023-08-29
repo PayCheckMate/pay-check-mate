@@ -53,7 +53,7 @@ export const PayrollRegister = () => {
                 'designation_id': selectedDesignation.id,
             }
             apiFetch({
-                path: '/pay-check-mate/v1/payrolls/reports',
+                path: '/pay-check-mate/v1/payrolls/payroll-register',
                 method: 'POST',
                 data: data,
             }).then((response: any) => {
