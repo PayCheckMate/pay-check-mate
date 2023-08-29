@@ -13,6 +13,7 @@ export const ColorPallets = () => {
             <span className="bg-gradient-to-r text-red-800 from-red-100/10 to-red-200"></span>
             <span className="bg-gradient-to-r text-gray-800 from-gray-100/10 to-gray-200"></span>
             <span className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-red-100/40"></span>
+            <span className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-red-100/80"></span>
             <span className="text-green-500"></span>
             <span className="text-red-500"></span>
             <span className="text-orange-500"></span>
