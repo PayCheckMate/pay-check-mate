@@ -6,9 +6,8 @@ import {Loading} from "../../Components/Loading";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon, PrinterIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
-import {useParams} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
 import designation from "../../Store/Designation";
 import department from "../../Store/Department";
@@ -17,20 +16,16 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import {handlePrint} from "../../Helpers/Helpers";
-import {SelectBox} from "../../Components/SelectBox";
 import {FormInput} from "../../Components/FormInput";
 import {Button} from "../../Components/Button";
 import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
+import {applyFilters} from "../../Helpers/Hooks";
 
-const ViewPayroll = () => {
-    const payrollId = useParams().id;
+export const PayrollLedger = () => {
     const {loading,makePostRequest} = useFetchApi('');
 
-    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
-    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);
-    const [payDate, setPayDate] = useState(new Date().toISOString().slice(0, 10));
-    const [payRoll, setPayRoll] = useState<PayrollType>({} as PayrollType);
+    const [employeeId, setEmployeeId] = useState('');
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
@@ -42,17 +37,18 @@ const ViewPayroll = () => {
     const handleFilter = (e: any) => {
         e.preventDefault();
         try {
-            if (!payDate) {
-                toast.error(__('Please select a date', 'pcm'));
+            if (!employeeId) {
+                toast.error(__('Please enter employee id', 'pcm'), {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 3000
+                });
                 return;
             }
             const data = {
-                'payroll_date': payDate,
-                'department_id': selectedDepartment.id,
-                'designation_id': selectedDesignation.id,
+                employee_id: employeeId,
             }
             apiFetch({
-                path: '/pay-check-mate/v1/payrolls/reports',
+                path: '/pay-check-mate/v1/payrolls/payroll-ledger',
                 method: 'POST',
                 data: data,
             }).then((response: any) => {
@@ -63,41 +59,18 @@ const ViewPayroll = () => {
                 };
                 setSalaryHeads(salary_heads as SalaryHeadsResponseType);
                 setTableData(response.employee_salary_history);
-                // @ts-ignore
-                setPayRoll(response.payroll);
             }).catch((error: any) => {
                 toast.error(error.message, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
                 setTableData([]);
-                setPayRoll({} as PayrollType);
                 setSalaryHeads({} as SalaryHeadsResponseType);
             })
         } catch (error) {
             console.log(error, 'error'); // Handle the error accordingly
         }
     };
-    useEffect(() => {
-        if (designations.length <= 0) return;
-        const defaultDesignation = {
-            id: 'all',
-            name: __('All', 'pcm'),
-        }
-
-        setSelectedDesignation(defaultDesignation)
-    }, [designations]);
-
-    useEffect(() => {
-        if (departments.length <= 0) return;
-
-        const defaultDepartment = {
-            id: 'all',
-            name: __('All', 'pcm'),
-        }
-
-        setSelectedDepartment(defaultDepartment)
-    }, [departments]);
     const sumValues = (values: { [key: number]: number }): number => {
         return Object.values(values).reduce((sum, value) => sum + parseFloat(String(value)), 0);
     };
@@ -135,6 +108,15 @@ const ViewPayroll = () => {
         ).toFixed(2)
     );
 
+    const earningClass = applyFilters('pcm.earning_class', '')
+    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
+    const deductionClass = applyFilters('pcm.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
+    const netPayableClass = applyFilters('pcm.net_payable_class', '')
+    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
+    let red = applyFilters('pcm.red', 'gray');
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_payroll_details) ? (
@@ -150,40 +132,22 @@ const ViewPayroll = () => {
                         >
                             <div className="grid grid-cols-4 gap-4">
                                 <div>
-                                    <SelectBox
-                                        title={__('Designation', 'pcm')}
-                                        options={designations}
-                                        selected={selectedDesignation}
-                                        setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}
-                                    />
-                                </div>
-                                <div>
-                                    <SelectBox
-                                        title={__('Department', 'pcm')}
-                                        options={departments}
-                                        selected={selectedDepartment}
-                                        setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}
-                                    />
-                                </div>
-                                <div>
                                     <FormInput
-                                        type="date"
-                                        label={__('Pay month', 'pcm')}
-                                        name="pay_month"
-                                        id="pay_month"
-                                        value={payDate}
-                                        onChange={(e) => setPayDate(e.target.value)}
+                                        type="text"
+                                        className="mt-2"
+                                        label={__('Employee ID', 'pcm')}
+                                        name="employee_id"
+                                        id="employee_id"
+                                        value={employeeId}
+                                        onChange={(e) => setEmployeeId(e.target.value)}
                                     />
                                 </div>
                                 <div className="flex items-end">
-                                    {/*This button should flat and small*/}
-                                    {!payrollId && (
-                                        <Button
-                                            type="submit"
-                                        >
-                                            {__('Show report', 'pcm')}
-                                        </Button>
-                                    )}
+                                    <Button
+                                        type="submit"
+                                    >
+                                        {__('Show report', 'pcm')}
+                                    </Button>
                                 </div>
                             </div>
                         </form>
@@ -198,24 +162,12 @@ const ViewPayroll = () => {
                                         <div>
                                             <div className="sm:flex-auto">
                                                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date_string}
+                                                    {__('Payroll Ledger : ', 'pcm')} {employeeId}
                                                 </h1>
                                             </div>
-                                            {/*<div className="flex justify-between mt-2 mb-4">*/}
-                                            {/*    <div className="grid grid-cols-4 gap-4">*/}
-                                            {/*        <div>*/}
-                                            {/*            {__('Department', 'pcm')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pcm')}*/}
-                                            {/*        </div>*/}
-                                            {/*        <div>*/}
-                                            {/*            {__('Designation', 'pcm')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pcm')}*/}
-                                            {/*        </div>*/}
-
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
                                         </div>
                                         <div className="flex items-center no-print">
                                             <PrintButton onClick={() => handlePrint('printable')} />
-                                            {/*Excel Download*/}
                                         </div>
                                     </div>
                                     <div className="payroll-table-container">
@@ -226,7 +178,7 @@ const ViewPayroll = () => {
                                                     {__('Sl. No.', 'pcm')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Employee ID', 'pcm')}
+                                                    {__('Pay Month', 'pcm')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
@@ -234,57 +186,51 @@ const ViewPayroll = () => {
                                                 >
                                                     {__('Employee Name', 'pcm')}
                                                 </th>
-                                                <th rowSpan={2}>
-                                                    {__('Designation', 'pcm')}
-                                                </th>
-                                                <th rowSpan={2}>
-                                                    {__('Department', 'pcm')}
-                                                </th>
                                                 <th rowSpan={3}>
                                                     {__('Basic Salary', 'pcm')}
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         colSpan={salaryHeads.earnings.length}
                                                     >Earnings</th>
                                                 )}
                                                 <th
-                                                    className="total_salary"
+                                                    className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Earnings', 'pcm')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
                                                         {__('Deductions', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_deduction"
+                                                    className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Deductions', 'pcm')}
                                                 </th>
                                                 <th
-                                                    className="net_payable"
+                                                    className={netPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Net Payable', 'pcm')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
-                                                        className="non_taxable"
+                                                        className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
                                                         {__('Non Taxable', 'pcm')}
                                                     </th>
                                                 )}
                                                 <th
-                                                    className="total_payable"
+                                                    className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
                                                     {__('Total Payable', 'pcm')}
@@ -293,7 +239,7 @@ const ViewPayroll = () => {
                                             <tr className="second-row">
                                                 {salaryHeads.earnings.map((earning) => (
                                                     <th
-                                                        className="salary"
+                                                        className={earningClass}
                                                         key={earning.id}
                                                     >
                                                         {earning.head_name}
@@ -301,7 +247,7 @@ const ViewPayroll = () => {
                                                 ))}
                                                 {salaryHeads.deductions.map((deduction) => (
                                                     <th
-                                                        className="deduction"
+                                                        className={deductionClass}
                                                         key={deduction.id}
                                                     >
                                                         {deduction.head_name}
@@ -328,25 +274,19 @@ const ViewPayroll = () => {
                                                         className="text-right"
                                                         key={`employee_id${tableDataIndex}`}
                                                     >
-                                                        {data.employee_id}
+                                                        {
+                                                            /*@ts-ignore*/
+                                                            new Date(data.payroll_date).toLocaleString('default', {
+                                                                month: 'short',
+                                                                year: 'numeric'
+                                                            }).replace(/ /g, ', ')
+                                                        }
                                                     </td>
                                                     <td
                                                         className="text-left fixed-column"
                                                         key={`employee_name${tableDataIndex}`}
                                                     >
                                                         {data.first_name + ' ' + data.last_name}
-                                                    </td>
-                                                    <td
-                                                        className="text-left"
-                                                        key={`designation${tableDataIndex}`}
-                                                    >
-                                                        {departments.find((department: any) => department.id === data.department_id)?.name || ''}
-                                                    </td>
-                                                    <td
-                                                        className="text-left"
-                                                        key={`department${tableDataIndex}`}
-                                                    >
-                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || ''}
                                                     </td>
                                                     <td
                                                         className="text-right"
@@ -363,7 +303,7 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="text-right total_salary"
+                                                        className={`text-right ${totalEarningsClass}`}
                                                         key={`total_earnings${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.earnings)}
@@ -377,13 +317,13 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="total_deduction text-right"
+                                                        className={`${totalDeductionsClass} text-right`}
                                                         key={`total_deductions${tableDataIndex}`}
                                                     >
                                                         {sumValues(data.salary_details.deductions)}
                                                     </td>
                                                     <td
-                                                        className="net_payable text-right"
+                                                        className={`${netPayableClass} text-right`}
                                                         key={`net_payable${tableDataIndex}`}
                                                     >
                                                         {rowNetPayable(data)}
@@ -397,7 +337,7 @@ const ViewPayroll = () => {
                                                         </td>
                                                     ))}
                                                     <td
-                                                        className="total_payable text-right"
+                                                        className={`${totalPayableClass} text-right`}
                                                         key={`total_payable${tableDataIndex}`}
                                                     >
                                                         {rowTotalPayable(data)}
@@ -410,7 +350,7 @@ const ViewPayroll = () => {
                                                 <td
                                                     key={`total`}
                                                     className="fixed-column text-right font-bold text-xl"
-                                                    colSpan={5}
+                                                    colSpan={3}
                                                 >
                                                     {__('Total', 'pcm')}
                                                 </td>
@@ -429,7 +369,7 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="total_salary text-right"
+                                                    className={`${totalEarningsClass} text-right`}
                                                     key={`total_earnings`}
                                                 >
                                                     {totalAllowance}
@@ -443,13 +383,13 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${totalDeductionsClass}`}
                                                     key={`total_deductions`}
                                                 >
                                                     {totalDeductions}
                                                 </td>
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${netPayableClass}`}
                                                     key={`non_taxable`}
                                                 >
                                                     {netPayable}
@@ -463,7 +403,7 @@ const ViewPayroll = () => {
                                                     </td>
                                                 ))}
                                                 <td
-                                                    className="text-right"
+                                                    className={`text-right ${totalPayableClass}`}
                                                     key={`total_net_payable`}
                                                 >
                                                     {totalNetPayable}
@@ -471,29 +411,6 @@ const ViewPayroll = () => {
                                             </tr>
                                             </tfoot>
                                         </table>
-                                        {/*Give remarks 75% and prepared by 25%*/}
-                                        <div className="flex justify-between mt-4">
-                                            <div className="w-4/6 remarks">
-                                                <div className="flex">
-                                                        <div className="flex">
-                                                            <div className="mt-4">
-                                                                <strong>
-                                                                    {__('Remarks', 'pcm')}
-                                                                </strong>:&nbsp;
-                                                                <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                            </div>
-                                            <div className="w-1/6 prepared_by">
-                                                <div className="flex">
-                                                        <strong className="font-bold">
-                                                            {__('Prepared By: ', 'pcm')}&nbsp;
-                                                        </strong>
-                                                        {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -504,7 +421,7 @@ const ViewPayroll = () => {
                                 title={__('Payroll Sheet', 'pcm')}
                                 description={__('Select department or designation and pay month to view payroll list', 'pcm')}
                                 icon={<CurrencyDollarIcon
-                                    className="w-6 h-6 text-red-600"
+                                    className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"
                                 />}
                             />
@@ -515,5 +432,3 @@ const ViewPayroll = () => {
         </>
     );
 };
-
-export default ViewPayroll;
