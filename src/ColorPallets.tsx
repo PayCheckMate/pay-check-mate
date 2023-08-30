@@ -19,6 +19,7 @@ export const ColorPallets = () => {
             <span className="text-orange-500"></span>
             <span className="text-blue-500"></span>
             <span className="text-indigo-500"></span>
+            <button disabled className="px-4 py-1 mr-6 text-sm bg-indigo-500 text-white hover:bg-indigo-700 focus:outline-none cursor-not-allowed"></button>
             <span className="text-gray-500"></span>
             <span className="text-purple-500"></span>
         </>

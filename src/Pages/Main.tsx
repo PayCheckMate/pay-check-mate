@@ -129,6 +129,7 @@ export default function Main() {
                             </div>
                         </div>
                     </main>
+                    {applyFilters('pcm.theme_switcher', '') }
                 </div>
             )}
         </>
