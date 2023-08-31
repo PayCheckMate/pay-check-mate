@@ -5,7 +5,7 @@ import {__} from "@wordpress/i18n";
 import {useSelect} from "@wordpress/data";
 import salaryHead from "../../Store/SalaryHead";
 import {Button} from "../../Components/Button";
-import {DocumentArrowDownIcon} from "@heroicons/react/24/outline";
+import {ArrowDownTrayIcon} from "@heroicons/react/24/outline";
 import * as XLSX from 'xlsx';
 import {SelectBox} from "../../Components/SelectBox";
 import {useEffect, useState} from "@wordpress/element";
@@ -178,7 +178,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                                     onClick={downloadFile}
                                     className="mt-2"
                                 >
-                                    <DocumentArrowDownIcon
+                                    <ArrowDownTrayIcon
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
