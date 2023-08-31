@@ -11,3 +11,6 @@ export const PrintButton = ({onClick}: {onClick: () => void}) => {
         </>
     )
 }
+
+// @ts-ignore
+window.PrintButton = PrintButton;

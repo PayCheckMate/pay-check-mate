@@ -309,3 +309,6 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         </>
     );
 };
+
+// @ts-ignore
+window.Table = Table;

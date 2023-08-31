@@ -11,3 +11,6 @@ export const HelpVideo = ({onClick}: {onClick: () => void}) => {
         </>
     )
 }
+
+// @ts-ignore
+window.HelpVideo = HelpVideo;

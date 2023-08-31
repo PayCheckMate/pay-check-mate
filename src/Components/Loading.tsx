@@ -43,3 +43,6 @@ export const Loading = () => {
         </>
     )
 }
+
+// @ts-ignore
+window.Loading = Loading;

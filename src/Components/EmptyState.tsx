@@ -27,3 +27,6 @@ export const EmptyState = ({title, description, icon}: { title?: string, descrip
         </main>
     )
 }
+
+// @ts-ignore
+window.EmptyState = EmptyState;

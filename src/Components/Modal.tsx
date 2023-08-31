@@ -83,3 +83,6 @@ export const Modal = ({setShowModal, children, header, description = '', width =
         </>
     );
 };
+
+// @ts-ignore
+window.Modal = Modal;

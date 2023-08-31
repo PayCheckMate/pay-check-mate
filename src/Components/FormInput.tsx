@@ -78,3 +78,6 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
         </div>
     );
 };
+
+// @ts-ignore
+window.FormInput = FormInput;

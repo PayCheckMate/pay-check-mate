@@ -45,3 +45,8 @@ export const PermissionDenied = () => {
         </main>
     )
 }
+
+// @ts-ignore
+window.NotFound = NotFound;
+// @ts-ignore
+window.PermissionDenied = PermissionDenied;

@@ -32,3 +32,6 @@ export const Status = ({status, textMap=defaultTextMap}: StatusProps) => {
         </span>
     );
 }
+
+// @ts-ignore
+window.Status = Status;
