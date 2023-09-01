@@ -44,8 +44,8 @@ class Employee implements EmployeeInterface {
     public function set_employee( $employee = null ) {
         if ( is_numeric( $employee ) ) {
             $model          = new EmployeeModel();
-            $employee       = $model->find_employee( $employee );
-            $this->employee = $employee->get_data();
+            $found_employee = $model->find_employee( $employee );
+            $this->employee = $found_employee->get_data();
         } elseif ( is_array( $employee ) ) {
             $this->employee = $employee;
         } else {
@@ -111,7 +111,7 @@ class Employee implements EmployeeInterface {
      */
     public function get_all_employees( WP_REST_Request $request ): array {
         $args = [
-            'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 1,
+            'limit'     => $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10,
             'offset'    => $request->get_param( 'page' ) ? ( $request->get_param( 'page' ) - 1 ) * $request->get_param( 'per_page' ) : 0,
             'order'     => $request->get_param( 'order' ) ? $request->get_param( 'order' ) : 'ASC',
             'order_by'  => $request->get_param( 'order_by' ) ? $request->get_param( 'order_by' ) : 'id',
