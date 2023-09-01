@@ -8,10 +8,6 @@ import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
 import {CurrencyDollarIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
-import {useSelect} from "@wordpress/data";
-import designation from "../../Store/Designation";
-import department from "../../Store/Department";
-import {PayrollType} from "../../Types/PayrollType";
 import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
@@ -22,22 +18,26 @@ import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
 
-export const PayrollLedger = () => {
+export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: string, pageTitle?: string }) => {
     const {loading,makePostRequest} = useFetchApi('');
 
-    const [employeeId, setEmployeeId] = useState('');
+    const [searchedEmployeeId, setSearchedEmployeeId] = useState(employeeId);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);
-    const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
-    const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
     const [salaryHeads, setSalaryHeads] = useState<SalaryHeadsResponseType>({
         earnings: [],
         deductions: [],
         non_taxable: []
     });
+
+    useEffect(() => {
+        if (employeeId) {
+            handleFilter({preventDefault: () => {}})
+        }
+    }, [employeeId]);
     const handleFilter = (e: any) => {
         e.preventDefault();
         try {
-            if (!employeeId) {
+            if (!searchedEmployeeId) {
                 toast.error(__('Please enter employee id', 'pcm'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
@@ -45,7 +45,7 @@ export const PayrollLedger = () => {
                 return;
             }
             const data = {
-                employee_id: employeeId,
+                employee_id: searchedEmployeeId,
             }
             apiFetch({
                 path: '/pay-check-mate/v1/payrolls/payroll-ledger',
@@ -125,33 +125,35 @@ export const PayrollLedger = () => {
                 </Card>
             ) : (
                 <>
-                    <div className="flex justify-between">
-                        <form
-                            className="p-6"
-                            onSubmit={handleFilter}
-                        >
-                            <div className="grid grid-cols-4 gap-4">
-                                <div>
-                                    <FormInput
-                                        type="text"
-                                        className="mt-2"
-                                        label={__('Employee ID', 'pcm')}
-                                        name="employee_id"
-                                        id="employee_id"
-                                        value={employeeId}
-                                        onChange={(e) => setEmployeeId(e.target.value)}
-                                    />
+                    {!employeeId && (
+                        <div className="flex justify-between">
+                            <form
+                                className="p-6"
+                                onSubmit={handleFilter}
+                            >
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div>
+                                        <FormInput
+                                            type="text"
+                                            className="mt-2"
+                                            label={__('Employee ID', 'pcm')}
+                                            name="employee_id"
+                                            id="employee_id"
+                                            value={searchedEmployeeId}
+                                            onChange={(e) => setSearchedEmployeeId(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="flex items-end">
+                                        <Button
+                                            type="submit"
+                                        >
+                                            {__('Show report', 'pcm')}
+                                        </Button>
+                                    </div>
                                 </div>
-                                <div className="flex items-end">
-                                    <Button
-                                        type="submit"
-                                    >
-                                        {__('Show report', 'pcm')}
-                                    </Button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
+                    )}
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
@@ -162,7 +164,7 @@ export const PayrollLedger = () => {
                                         <div>
                                             <div className="sm:flex-auto">
                                                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {__('Payroll Ledger : ', 'pcm')} {employeeId}
+                                                    {pageTitle ? pageTitle : __('Payroll Ledger %s', 'pcm').replace('%s', searchedEmployeeId)}
                                                 </h1>
                                             </div>
                                         </div>
@@ -345,71 +347,73 @@ export const PayrollLedger = () => {
                                                 </tr>
                                             ))}
                                             </tbody>
-                                            <tfoot>
-                                            <tr>
-                                                <td
-                                                    key={`total`}
-                                                    className="fixed-column text-right font-bold text-xl"
-                                                    colSpan={3}
-                                                >
-                                                    {__('Total', 'pcm')}
-                                                </td>
-                                                <td
-                                                    className="text-right"
-                                                    key={`total_basic_salary`}
-                                                >
-                                                    {sumValues(tableData.map((data) => data.basic_salary))}
-                                                </td>
-                                                {salaryHeads.earnings.map((earning) => (
-                                                    <td
-                                                        className="text-right"
-                                                        key={`total_${earning.id}`}
-                                                    >
-                                                        {sumValues(tableData.map((data) => data.salary_details.earnings[earning.id] || 0))}
-                                                    </td>
-                                                ))}
-                                                <td
-                                                    className={`${totalEarningsClass} text-right`}
-                                                    key={`total_earnings`}
-                                                >
-                                                    {totalAllowance}
-                                                </td>
-                                                {salaryHeads.deductions.map((deduction) => (
-                                                    <td
-                                                        className="text-right"
-                                                        key={deduction.id}
-                                                    >
-                                                        {sumValues(tableData.map((data) => data.salary_details.deductions[deduction.id] || 0))}
-                                                    </td>
-                                                ))}
-                                                <td
-                                                    className={`text-right ${totalDeductionsClass}`}
-                                                    key={`total_deductions`}
-                                                >
-                                                    {totalDeductions}
-                                                </td>
-                                                <td
-                                                    className={`text-right ${netPayableClass}`}
-                                                    key={`non_taxable`}
-                                                >
-                                                    {netPayable}
-                                                </td>
-                                                {salaryHeads.non_taxable.map((non_taxable) => (
-                                                    <td
-                                                        className="text-right"
-                                                        key={non_taxable.id}
-                                                    >
-                                                        {sumValues(tableData.map((data) => data.salary_details.non_taxable[non_taxable.id] || 0))}
-                                                    </td>
-                                                ))}
-                                                <td
-                                                    className={`text-right ${totalPayableClass}`}
-                                                    key={`total_net_payable`}
-                                                >
-                                                    {totalNetPayable}
-                                                </td>
-                                            </tr>
-                                            </tfoot>
+                                            {!employeeId && (
+                                                <tfoot>
+                                                    <tr>
+                                                        <td
+                                                            key={`total`}
+                                                            className="fixed-column text-right font-bold text-xl"
+                                                            colSpan={3}
+                                                        >
+                                                            {__('Total', 'pcm')}
+                                                        </td>
+                                                        <td
+                                                            className="text-right"
+                                                            key={`total_basic_salary`}
+                                                        >
+                                                            {sumValues(tableData.map((data) => data.basic_salary))}
+                                                        </td>
+                                                        {salaryHeads.earnings.map((earning) => (
+                                                            <td
+                                                                className="text-right"
+                                                                key={`total_${earning.id}`}
+                                                            >
+                                                                {sumValues(tableData.map((data) => data.salary_details.earnings[earning.id] || 0))}
+                                                            </td>
+                                                        ))}
+                                                        <td
+                                                            className={`${totalEarningsClass} text-right`}
+                                                            key={`total_earnings`}
+                                                        >
+                                                            {totalAllowance}
+                                                        </td>
+                                                        {salaryHeads.deductions.map((deduction) => (
+                                                            <td
+                                                                className="text-right"
+                                                                key={deduction.id}
+                                                            >
+                                                                {sumValues(tableData.map((data) => data.salary_details.deductions[deduction.id] || 0))}
+                                                            </td>
+                                                        ))}
+                                                        <td
+                                                            className={`text-right ${totalDeductionsClass}`}
+                                                            key={`total_deductions`}
+                                                        >
+                                                            {totalDeductions}
+                                                        </td>
+                                                        <td
+                                                            className={`text-right ${netPayableClass}`}
+                                                            key={`non_taxable`}
+                                                        >
+                                                            {netPayable}
+                                                        </td>
+                                                        {salaryHeads.non_taxable.map((non_taxable) => (
+                                                            <td
+                                                                className="text-right"
+                                                                key={non_taxable.id}
+                                                            >
+                                                                {sumValues(tableData.map((data) => data.salary_details.non_taxable[non_taxable.id] || 0))}
+                                                            </td>
+                                                        ))}
+                                                        <td
+                                                            className={`text-right ${totalPayableClass}`}
+                                                            key={`total_net_payable`}
+                                                        >
+                                                            {totalNetPayable}
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            )}
                                         </table>
                                     </div>
                                 </div>
