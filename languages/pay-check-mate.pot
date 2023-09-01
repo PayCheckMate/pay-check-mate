@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-29T13:23:31+00:00\n"
+"POT-Creation-Date: 2023-09-01T18:45:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: pcm\n"
 
 #. Plugin Name of the plugin
-#: includes/Hooks/AdminMenu.php:34
 #: includes/Hooks/AdminMenu.php:35
+#: includes/Hooks/AdminMenu.php:36
 msgid "PayCheckMate"
 msgstr ""
 
@@ -48,27 +48,37 @@ msgstr ""
 msgid "PayCheckMate Admin"
 msgstr ""
 
-#: includes/Models/Model.php:322
+#: includes/Hooks/AdminMenu.php:76
+msgctxt "verb"
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: includes/Hooks/AdminMenu.php:83
+msgctxt "verb"
+msgid "Donate"
+msgstr ""
+
+#: includes/Models/Model.php:323
 msgid "To search, you need to define the search_by property in the model."
 msgstr ""
 
-#: includes/Models/Model.php:412
+#: includes/Models/Model.php:413
 msgid "Arguments cannot be empty"
 msgstr ""
 
-#: includes/Models/Model.php:524
+#: includes/Models/Model.php:526
 msgid "Could not insert row into the database table."
 msgstr ""
 
-#: includes/Models/Model.php:568
-#: includes/Models/Model.php:603
+#: includes/Models/Model.php:570
+#: includes/Models/Model.php:605
 msgid "Could not update row into the database table."
 msgstr ""
 
 #: includes/Models/SalaryHeadModel.php:87
-#: dist/index.js:13039
-#: dist/index.js:13093
-#: dist/index.js:13212
+#: dist/index.js:13483
+#: dist/index.js:13537
+#: dist/index.js:13656
 msgid "Earning"
 msgstr ""
 
@@ -115,39 +125,12 @@ msgstr ""
 
 #: includes/REST/DashboardApi.php:113
 #: includes/REST/EmployeeApi.php:493
-#: dist/index.0198039e868c1f778f8c.hot-update.js:222
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:630
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1022
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:222
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:222
-#: dist/index.21d90abc5d077062f853.hot-update.js:183
-#: dist/index.21d90abc5d077062f853.hot-update.js:212
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:590
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:619
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:341
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:630
-#: dist/index.529c72363307a07bd319.hot-update.js:906
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.529c72363307a07bd319.hot-update.js:1422
-#: dist/index.529c72363307a07bd319.hot-update.js:1803
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:180
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:209
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:222
-#: dist/index.ad8415826a4570b437a1.hot-update.js:213
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:222
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:626
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:303
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:223
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:223
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:219
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:222
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:219
-#: dist/index.js:9044
-#: dist/index.js:10964
-#: dist/index.js:12250
-#: dist/index.js:12358
-#: dist/index.js:12807
+#: dist/index.js:9107
+#: dist/index.js:11067
+#: dist/index.js:12353
+#: dist/index.js:12462
+#: dist/index.js:12857
+#: dist/index.js:13252
 msgid "Employee ID"
 msgstr ""
 
@@ -231,7 +214,7 @@ msgstr ""
 #: includes/REST/DepartmentApi.php:287
 #: includes/REST/DesignationApi.php:217
 #: includes/REST/DesignationApi.php:272
-#: includes/REST/PayrollApi.php:774
+#: includes/REST/PayrollApi.php:863
 #: includes/REST/SalaryHeadApi.php:255
 #: includes/REST/SalaryHeadApi.php:310
 msgid "Invalid data."
@@ -256,15 +239,15 @@ msgstr ""
 
 #: includes/REST/DepartmentApi.php:348
 #: includes/REST/EmployeeApi.php:508
-#: dist/index.js:7623
+#: dist/index.js:7686
 msgid "Department name"
 msgstr ""
 
 #: includes/REST/DepartmentApi.php:353
-#: dist/index.js:9597
-#: dist/index.js:9825
-#: dist/index.js:11929
-#: dist/index.js:13132
+#: dist/index.js:9660
+#: dist/index.js:9888
+#: dist/index.js:12032
+#: dist/index.js:13576
 msgid "Status"
 msgstr ""
 
@@ -333,7 +316,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/REST/EmployeeApi.php:513
-#: dist/index.js:7979
+#: dist/index.js:8042
 msgid "Designation name"
 msgstr ""
 
@@ -346,95 +329,103 @@ msgstr ""
 msgid "Employee Bank Account Number"
 msgstr ""
 
-#: includes/REST/PayrollApi.php:364
-#: includes/REST/PayrollApi.php:366
+#: includes/REST/PayrollApi.php:376
+#: includes/REST/PayrollApi.php:378
 msgid "You are not authorized to perform this action."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:397
-#: includes/REST/PayrollApi.php:399
-#: includes/REST/PayrollApi.php:497
-#: includes/REST/PayrollApi.php:499
+#: includes/REST/PayrollApi.php:409
+#: includes/REST/PayrollApi.php:411
+#: includes/REST/PayrollApi.php:509
+#: includes/REST/PayrollApi.php:511
 msgid "Payroll already exists for this Month."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:443
+#: includes/REST/PayrollApi.php:455
 msgid "Payroll saved successfully."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:464
-#: includes/REST/PayrollApi.php:466
+#: includes/REST/PayrollApi.php:476
+#: includes/REST/PayrollApi.php:478
 msgid "Payroll ID is required."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:516
-#: includes/REST/PayrollApi.php:518
+#: includes/REST/PayrollApi.php:528
+#: includes/REST/PayrollApi.php:530
 msgid "Payroll Details ID is required."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:551
+#: includes/REST/PayrollApi.php:563
 msgid "Payroll updated successfully."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:652
-#: includes/REST/PayrollApi.php:654
+#: includes/REST/PayrollApi.php:664
+#: includes/REST/PayrollApi.php:666
 msgid "Payroll Date is required."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:707
-#: includes/REST/PayrollApi.php:709
+#: includes/REST/PayrollApi.php:719
+#: includes/REST/PayrollApi.php:721
 msgid "No payroll found."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:811
+#: includes/REST/PayrollApi.php:786
+msgid "Employee ID is required."
+msgstr ""
+
+#: includes/REST/PayrollApi.php:900
 msgid "Unique identifier for the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:817
-#: includes/REST/PayrollApi.php:899
+#: includes/REST/PayrollApi.php:906
+#: includes/REST/PayrollApi.php:988
 msgid "The date of the payroll"
 msgstr ""
 
-#: includes/REST/PayrollApi.php:825
+#: includes/REST/PayrollApi.php:914
 msgid "The date of the payroll in string format"
 msgstr ""
 
-#: includes/REST/PayrollApi.php:833
-#: includes/REST/PayrollApi.php:894
+#: includes/REST/PayrollApi.php:922
+#: includes/REST/PayrollApi.php:983
 msgid "Unique identifier for the designation."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:838
-#: includes/REST/PayrollApi.php:889
+#: includes/REST/PayrollApi.php:927
+#: includes/REST/PayrollApi.php:978
 msgid "Unique identifier for the department."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:843
+#: includes/REST/PayrollApi.php:932
 msgid "Total salary for the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:848
+#: includes/REST/PayrollApi.php:937
 msgid "Remarks for the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:852
+#: includes/REST/PayrollApi.php:941
 msgid "Status of the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:856
+#: includes/REST/PayrollApi.php:945
 msgid "Unique identifier for the employee who created the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:860
+#: includes/REST/PayrollApi.php:949
 msgid "Unique identifier for the employee who approved the payroll."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:864
+#: includes/REST/PayrollApi.php:953
 msgid "The date the payroll was created."
 msgstr ""
 
-#: includes/REST/PayrollApi.php:870
+#: includes/REST/PayrollApi.php:959
 msgid "The date the payroll was last updated."
+msgstr ""
+
+#: includes/REST/PayrollApi.php:1008
+msgid "Unique identifier for the employee."
 msgstr ""
 
 #: includes/REST/RestController.php:109
@@ -546,1905 +537,1138 @@ msgstr ""
 msgid "The date the object was last updated."
 msgstr ""
 
-#: dist/index.0198039e868c1f778f8c.hot-update.js:101
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:508
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:900
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:101
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:101
-#: dist/index.21d90abc5d077062f853.hot-update.js:100
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:507
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:147
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:219
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:508
-#: dist/index.529c72363307a07bd319.hot-update.js:713
-#: dist/index.529c72363307a07bd319.hot-update.js:785
-#: dist/index.529c72363307a07bd319.hot-update.js:1690
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:101
-#: dist/index.ad8415826a4570b437a1.hot-update.js:99
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:101
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:507
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:101
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:101
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:100
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:101
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:100
-#: dist/index.js:10771
-#: dist/index.js:10843
-#: dist/index.js:12694
-msgid "Please select a date"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:141
-#: dist/index.0198039e868c1f778f8c.hot-update.js:149
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:548
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:556
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:684
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:687
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:940
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:948
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1076
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1079
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:141
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:149
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:276
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:279
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:141
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:149
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:276
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:279
-#: dist/index.21d90abc5d077062f853.hot-update.js:140
-#: dist/index.21d90abc5d077062f853.hot-update.js:148
-#: dist/index.21d90abc5d077062f853.hot-update.js:266
-#: dist/index.21d90abc5d077062f853.hot-update.js:269
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:547
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:555
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:673
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:676
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:180
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:188
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:548
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:556
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:684
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:687
-#: dist/index.529c72363307a07bd319.hot-update.js:746
-#: dist/index.529c72363307a07bd319.hot-update.js:754
-#: dist/index.529c72363307a07bd319.hot-update.js:1320
-#: dist/index.529c72363307a07bd319.hot-update.js:1395
-#: dist/index.529c72363307a07bd319.hot-update.js:1476
-#: dist/index.529c72363307a07bd319.hot-update.js:1479
-#: dist/index.529c72363307a07bd319.hot-update.js:1730
-#: dist/index.529c72363307a07bd319.hot-update.js:1738
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:137
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:145
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:263
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:266
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:141
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:149
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:276
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:279
-#: dist/index.ad8415826a4570b437a1.hot-update.js:139
-#: dist/index.ad8415826a4570b437a1.hot-update.js:147
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:141
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:149
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:547
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:555
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:680
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:683
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:200
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:276
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:357
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:360
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:141
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:149
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:277
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:280
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:141
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:149
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:277
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:280
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:140
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:148
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:273
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:276
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:141
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:149
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:276
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:279
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:140
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:148
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:273
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:276
-#: dist/index.js:10804
-#: dist/index.js:10812
-#: dist/index.js:11906
-#: dist/index.js:11914
-#: dist/index.js:12256
-#: dist/index.js:12331
-#: dist/index.js:12412
-#: dist/index.js:12415
-#: dist/index.js:12734
-#: dist/index.js:12742
-msgid "All"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:181
-#: dist/index.0198039e868c1f778f8c.hot-update.js:227
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:589
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:635
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:981
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1027
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:181
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:227
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:181
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:227
-#: dist/index.21d90abc5d077062f853.hot-update.js:217
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:624
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:294
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:346
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:589
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:635
-#: dist/index.529c72363307a07bd319.hot-update.js:859
-#: dist/index.529c72363307a07bd319.hot-update.js:911
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.529c72363307a07bd319.hot-update.js:1395
-#: dist/index.529c72363307a07bd319.hot-update.js:1427
-#: dist/index.529c72363307a07bd319.hot-update.js:1763
-#: dist/index.529c72363307a07bd319.hot-update.js:1808
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:214
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:181
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:227
-#: dist/index.ad8415826a4570b437a1.hot-update.js:172
-#: dist/index.ad8415826a4570b437a1.hot-update.js:218
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:181
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:227
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:631
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:276
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:308
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:182
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:228
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:182
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:228
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:224
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:181
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:227
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:224
-#: dist/index.js:8817
-#: dist/index.js:9084
-#: dist/index.js:9811
-#: dist/index.js:10917
-#: dist/index.js:10969
-#: dist/index.js:11911
-#: dist/index.js:12250
-#: dist/index.js:12331
-#: dist/index.js:12363
-#: dist/index.js:12767
-#: dist/index.js:12812
-msgid "Designation"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:186
-#: dist/index.0198039e868c1f778f8c.hot-update.js:229
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:594
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:637
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:986
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1029
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:186
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:229
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:186
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:229
-#: dist/index.21d90abc5d077062f853.hot-update.js:219
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:626
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:299
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:348
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:594
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:637
-#: dist/index.529c72363307a07bd319.hot-update.js:864
-#: dist/index.529c72363307a07bd319.hot-update.js:913
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.529c72363307a07bd319.hot-update.js:1395
-#: dist/index.529c72363307a07bd319.hot-update.js:1429
-#: dist/index.529c72363307a07bd319.hot-update.js:1768
-#: dist/index.529c72363307a07bd319.hot-update.js:1810
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:216
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:186
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:229
-#: dist/index.ad8415826a4570b437a1.hot-update.js:177
-#: dist/index.ad8415826a4570b437a1.hot-update.js:220
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:186
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:229
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:633
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:276
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:310
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:187
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:230
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:187
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:230
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:226
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:186
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:229
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:226
-#: dist/index.js:8795
-#: dist/index.js:9076
-#: dist/index.js:9818
-#: dist/index.js:10922
-#: dist/index.js:10971
-#: dist/index.js:11903
-#: dist/index.js:12250
-#: dist/index.js:12331
-#: dist/index.js:12365
-#: dist/index.js:12772
-#: dist/index.js:12814
-msgid "Department"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:193
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:601
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:993
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:193
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:193
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:305
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:601
-#: dist/index.529c72363307a07bd319.hot-update.js:870
-#: dist/index.529c72363307a07bd319.hot-update.js:1774
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:193
-#: dist/index.ad8415826a4570b437a1.hot-update.js:184
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:193
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:597
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:194
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:194
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:190
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:193
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:190
-#: dist/index.js:10928
-#: dist/index.js:12778
-msgid "Pay month"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:202
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:610
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1002
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:202
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:202
-#: dist/index.21d90abc5d077062f853.hot-update.js:192
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:599
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:610
-#: dist/index.529c72363307a07bd319.hot-update.js:1783
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:189
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:202
-#: dist/index.ad8415826a4570b437a1.hot-update.js:193
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:202
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:606
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:203
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:203
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:199
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:202
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:199
-#: dist/index.js:12787
-msgid "Show report"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:210
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:618
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1010
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:210
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:210
-#: dist/index.21d90abc5d077062f853.hot-update.js:200
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:607
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:618
-#: dist/index.529c72363307a07bd319.hot-update.js:1391
-#: dist/index.529c72363307a07bd319.hot-update.js:1791
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:197
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:210
-#: dist/index.ad8415826a4570b437a1.hot-update.js:201
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:210
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:614
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:272
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:211
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:211
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:207
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:210
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:207
-#: dist/index.js:12327
-#: dist/index.js:12795
-msgid "Payroll for : "
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:220
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:628
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1020
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:220
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:220
-#: dist/index.21d90abc5d077062f853.hot-update.js:210
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:617
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:339
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:628
-#: dist/index.529c72363307a07bd319.hot-update.js:904
-#: dist/index.529c72363307a07bd319.hot-update.js:1420
-#: dist/index.529c72363307a07bd319.hot-update.js:1801
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:207
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:220
-#: dist/index.ad8415826a4570b437a1.hot-update.js:211
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:220
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:624
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:301
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:221
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:221
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:217
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:220
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:217
-#: dist/index.js:10962
-#: dist/index.js:12356
-#: dist/index.js:12805
-msgid "Sl. No."
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:225
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:633
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1025
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:225
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:225
-#: dist/index.21d90abc5d077062f853.hot-update.js:215
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:622
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:344
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:633
-#: dist/index.529c72363307a07bd319.hot-update.js:909
-#: dist/index.529c72363307a07bd319.hot-update.js:1425
-#: dist/index.529c72363307a07bd319.hot-update.js:1806
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:212
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:225
-#: dist/index.ad8415826a4570b437a1.hot-update.js:216
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:225
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:629
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:306
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:226
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:226
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:222
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:225
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:222
-#: dist/index.js:10967
-#: dist/index.js:12361
-#: dist/index.js:12810
-msgid "Employee Name"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:231
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:639
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1031
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:231
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:231
-#: dist/index.21d90abc5d077062f853.hot-update.js:221
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:628
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:350
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:639
-#: dist/index.529c72363307a07bd319.hot-update.js:915
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.529c72363307a07bd319.hot-update.js:1431
-#: dist/index.529c72363307a07bd319.hot-update.js:1812
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:218
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:231
-#: dist/index.ad8415826a4570b437a1.hot-update.js:222
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:231
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:635
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:312
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:232
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:232
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:228
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:231
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:228
-#: dist/index.js:9319
-#: dist/index.js:9643
-#: dist/index.js:10973
-#: dist/index.js:12250
-#: dist/index.js:12367
-#: dist/index.js:12816
-msgid "Basic Salary"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:237
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:645
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1037
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:237
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:237
-#: dist/index.21d90abc5d077062f853.hot-update.js:227
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:634
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:356
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:645
-#: dist/index.529c72363307a07bd319.hot-update.js:921
-#: dist/index.529c72363307a07bd319.hot-update.js:1437
-#: dist/index.529c72363307a07bd319.hot-update.js:1818
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:224
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:237
-#: dist/index.ad8415826a4570b437a1.hot-update.js:228
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:237
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:641
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:318
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:238
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:238
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:234
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:237
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:234
-#: dist/index.js:10979
-#: dist/index.js:12373
-#: dist/index.js:12822
-msgid "Total Earnings"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:240
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:648
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1040
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:240
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:240
-#: dist/index.21d90abc5d077062f853.hot-update.js:230
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:637
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:359
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:648
-#: dist/index.529c72363307a07bd319.hot-update.js:924
-#: dist/index.529c72363307a07bd319.hot-update.js:1440
-#: dist/index.529c72363307a07bd319.hot-update.js:1821
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:227
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:240
-#: dist/index.ad8415826a4570b437a1.hot-update.js:231
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:240
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:644
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:321
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:241
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:241
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:237
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:240
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:237
-#: dist/index.js:10982
-#: dist/index.js:12376
-#: dist/index.js:12825
-msgid "Deductions"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:243
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:651
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1043
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:243
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:243
-#: dist/index.21d90abc5d077062f853.hot-update.js:233
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:640
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:362
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:651
-#: dist/index.529c72363307a07bd319.hot-update.js:927
-#: dist/index.529c72363307a07bd319.hot-update.js:1443
-#: dist/index.529c72363307a07bd319.hot-update.js:1824
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:230
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:243
-#: dist/index.ad8415826a4570b437a1.hot-update.js:234
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:243
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:647
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:324
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:244
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:244
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:240
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:243
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:240
-#: dist/index.js:10985
-#: dist/index.js:12379
-#: dist/index.js:12828
-msgid "Total Deductions"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:246
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:654
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1046
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:246
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:246
-#: dist/index.21d90abc5d077062f853.hot-update.js:236
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:643
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:365
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:654
-#: dist/index.529c72363307a07bd319.hot-update.js:930
-#: dist/index.529c72363307a07bd319.hot-update.js:1446
-#: dist/index.529c72363307a07bd319.hot-update.js:1827
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:233
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:246
-#: dist/index.ad8415826a4570b437a1.hot-update.js:237
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:246
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:650
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:327
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:247
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:247
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:243
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:246
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:243
-#: dist/index.js:10988
-#: dist/index.js:12382
-#: dist/index.js:12831
-msgid "Net Payable"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:249
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:657
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1049
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:249
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:249
-#: dist/index.21d90abc5d077062f853.hot-update.js:239
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:646
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:368
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:657
-#: dist/index.529c72363307a07bd319.hot-update.js:933
-#: dist/index.529c72363307a07bd319.hot-update.js:1449
-#: dist/index.529c72363307a07bd319.hot-update.js:1830
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:236
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:249
-#: dist/index.ad8415826a4570b437a1.hot-update.js:240
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:249
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:653
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:330
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:250
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:250
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:246
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:249
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:246
-#: dist/index.js:10991
-#: dist/index.js:12385
-#: dist/index.js:12834
-msgid "Non Taxable"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:252
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:660
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1052
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:252
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:252
-#: dist/index.21d90abc5d077062f853.hot-update.js:242
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:649
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:371
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:660
-#: dist/index.529c72363307a07bd319.hot-update.js:936
-#: dist/index.529c72363307a07bd319.hot-update.js:1452
-#: dist/index.529c72363307a07bd319.hot-update.js:1833
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:239
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:252
-#: dist/index.ad8415826a4570b437a1.hot-update.js:243
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:252
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:656
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:333
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:253
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:253
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:249
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:252
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:249
-#: dist/index.js:10994
-#: dist/index.js:12388
-#: dist/index.js:12837
-msgid "Total Payable"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:307
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:715
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1107
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:307
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:307
-#: dist/index.21d90abc5d077062f853.hot-update.js:297
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:704
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:474
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:715
-#: dist/index.529c72363307a07bd319.hot-update.js:1039
-#: dist/index.529c72363307a07bd319.hot-update.js:1507
-#: dist/index.529c72363307a07bd319.hot-update.js:1888
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:294
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:307
-#: dist/index.ad8415826a4570b437a1.hot-update.js:298
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:307
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:711
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:388
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:308
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:308
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:304
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:307
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:304
-#: dist/index.js:11097
-#: dist/index.js:12443
-#: dist/index.js:12892
-msgid "Total"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:341
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:749
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1141
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:341
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:341
-#: dist/index.21d90abc5d077062f853.hot-update.js:331
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:738
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:504
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:749
-#: dist/index.529c72363307a07bd319.hot-update.js:1069
-#: dist/index.529c72363307a07bd319.hot-update.js:1541
-#: dist/index.529c72363307a07bd319.hot-update.js:1922
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:328
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:341
-#: dist/index.ad8415826a4570b437a1.hot-update.js:332
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:341
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:745
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:422
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:342
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:342
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:338
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:341
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:338
-#: dist/index.js:9671
-#: dist/index.js:10003
-#: dist/index.js:10177
-#: dist/index.js:11127
-#: dist/index.js:12477
-#: dist/index.js:12926
-msgid "Remarks"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:351
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:759
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1151
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:351
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:351
-#: dist/index.21d90abc5d077062f853.hot-update.js:341
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:748
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:759
-#: dist/index.529c72363307a07bd319.hot-update.js:1551
-#: dist/index.529c72363307a07bd319.hot-update.js:1932
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:338
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:351
-#: dist/index.ad8415826a4570b437a1.hot-update.js:342
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:351
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:755
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:432
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:352
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:352
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:348
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:351
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:348
-#: dist/index.js:12487
-#: dist/index.js:12936
-msgid "Prepared By: "
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:352
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:760
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1152
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:352
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:352
-#: dist/index.21d90abc5d077062f853.hot-update.js:342
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:749
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:516
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:760
-#: dist/index.529c72363307a07bd319.hot-update.js:1081
-#: dist/index.529c72363307a07bd319.hot-update.js:1552
-#: dist/index.529c72363307a07bd319.hot-update.js:1933
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:339
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:352
-#: dist/index.ad8415826a4570b437a1.hot-update.js:343
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:352
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:756
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:433
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:353
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:353
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:349
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:352
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:349
-#: dist/index.js:11139
-#: dist/index.js:12488
-#: dist/index.js:12937
-msgid "Payroll Sheet"
-msgstr ""
-
-#: dist/index.0198039e868c1f778f8c.hot-update.js:353
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:761
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:1153
-#: dist/index.6d116ad285b5a4f30dd9.hot-update.js:353
-#: dist/index.7b6c287316f231e90b4d.hot-update.js:353
-#: dist/index.21d90abc5d077062f853.hot-update.js:343
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:750
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:517
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:761
-#: dist/index.529c72363307a07bd319.hot-update.js:1082
-#: dist/index.529c72363307a07bd319.hot-update.js:1553
-#: dist/index.529c72363307a07bd319.hot-update.js:1934
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:340
-#: dist/index.40148e7a9c34fd7c3a4c.hot-update.js:353
-#: dist/index.ad8415826a4570b437a1.hot-update.js:344
-#: dist/index.b1a7f0bc0542d6264067.hot-update.js:353
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:757
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:434
-#: dist/index.d3c9a6d32f828156d4d9.hot-update.js:354
-#: dist/index.d757b8713376a37f0dbd.hot-update.js:354
-#: dist/index.eab06fbd25174ba417d6.hot-update.js:350
-#: dist/index.f4f2cf361a513238bc5c.hot-update.js:353
-#: dist/index.f216f82dc7a098d7c2f6.hot-update.js:350
-#: dist/index.js:11140
-#: dist/index.js:12489
-#: dist/index.js:12938
-msgid "Select department or designation and pay month to view payroll list"
-msgstr ""
-
-#: dist/index.050a9f770cff4c574cc8.hot-update.js:49
-#: dist/index.091acd405d268e3c4e13.hot-update.js:49
-#: dist/index.529c72363307a07bd319.hot-update.js:135
-#: dist/index.744cb869714110339c4b.hot-update.js:49
-#: dist/index.871d8102d4df70a2aed3.hot-update.js:49
-#: dist/index.3507829eb080587d303b.hot-update.js:49
-#: dist/index.a7a0c00ebb71736d5853.hot-update.js:49
-#: dist/index.a7e55f70e9a75f43d08e.hot-update.js:49
-#: dist/index.ab16e5e44e278dbb9227.hot-update.js:49
-#: dist/index.b51499c87b2cd94ba87d.hot-update.js:49
-#: dist/index.ba92d41ccd0f29e7cfc1.hot-update.js:49
-#: dist/index.js:5083
-msgid "No results found"
-msgstr ""
-
-#: dist/index.050a9f770cff4c574cc8.hot-update.js:51
-#: dist/index.091acd405d268e3c4e13.hot-update.js:51
-#: dist/index.529c72363307a07bd319.hot-update.js:137
-#: dist/index.744cb869714110339c4b.hot-update.js:51
-#: dist/index.871d8102d4df70a2aed3.hot-update.js:51
-#: dist/index.3507829eb080587d303b.hot-update.js:51
-#: dist/index.a7a0c00ebb71736d5853.hot-update.js:51
-#: dist/index.a7e55f70e9a75f43d08e.hot-update.js:51
-#: dist/index.ab16e5e44e278dbb9227.hot-update.js:51
-#: dist/index.b51499c87b2cd94ba87d.hot-update.js:51
-#: dist/index.ba92d41ccd0f29e7cfc1.hot-update.js:51
-#: dist/index.js:5085
-msgid "Try adjusting your search or filter to find what you are looking for."
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:92
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:90
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:92
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:90
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:92
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:92
-#: dist/index.529c72363307a07bd319.hot-update.js:259
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:92
-#: dist/index.js:7457
-#: dist/index.js:10316
-msgid "Dashboard"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:100
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:98
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:100
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:98
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:100
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:100
-#: dist/index.529c72363307a07bd319.hot-update.js:267
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:100
-#: dist/index.js:10324
-msgid "Employees"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:108
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:106
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:108
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:106
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:108
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:108
-#: dist/index.529c72363307a07bd319.hot-update.js:275
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:108
-#: dist/index.js:10332
-msgid "Profile"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:116
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:114
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:116
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:114
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:116
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:116
-#: dist/index.529c72363307a07bd319.hot-update.js:283
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:116
-#: dist/index.js:10340
-msgid "Pay Slip"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:124
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:122
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:124
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:122
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:124
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:124
-#: dist/index.529c72363307a07bd319.hot-update.js:291
-#: dist/index.529c72363307a07bd319.hot-update.js:383
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:124
-#: dist/index.js:10348
-#: dist/index.js:10440
-msgid "Payroll"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:132
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:130
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:132
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:130
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:132
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:132
-#: dist/index.529c72363307a07bd319.hot-update.js:299
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:132
-#: dist/index.js:10356
-msgid "Payroll Importer (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:140
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:138
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:140
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:138
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:140
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:140
-#: dist/index.529c72363307a07bd319.hot-update.js:307
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:140
-#: dist/index.js:10364
-msgid "Loans (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:148
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:146
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:148
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:146
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:148
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:148
-#: dist/index.529c72363307a07bd319.hot-update.js:315
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:148
-#: dist/index.js:10372
-msgid "Final Payment (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:156
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:154
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:156
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:154
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:156
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:156
-#: dist/index.529c72363307a07bd319.hot-update.js:323
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:156
-#: dist/index.js:10380
-msgid "Settings"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:163
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:161
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:163
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:161
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:163
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:163
-#: dist/index.529c72363307a07bd319.hot-update.js:330
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:163
-#: dist/index.js:10387
-msgid "Departments"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:170
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:168
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:170
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:168
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:170
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:170
-#: dist/index.529c72363307a07bd319.hot-update.js:337
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:170
-#: dist/index.js:10394
-msgid "Designations"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:177
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:175
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:177
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:175
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:177
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:177
-#: dist/index.529c72363307a07bd319.hot-update.js:344
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:177
-#: dist/index.js:10401
-msgid "Salary Heads"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:184
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:182
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:184
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:182
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:184
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:184
-#: dist/index.529c72363307a07bd319.hot-update.js:351
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:184
-#: dist/index.js:10408
-msgid "Setup Gratuity (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:192
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:190
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:192
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:190
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:192
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:192
-#: dist/index.529c72363307a07bd319.hot-update.js:359
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:192
-#: dist/index.js:10416
-msgid "Setup Loans (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:200
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:198
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:200
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:198
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:200
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:200
-#: dist/index.529c72363307a07bd319.hot-update.js:367
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:200
-#: dist/index.js:10424
-msgid "Setup P.F. (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:209
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:207
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:209
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:207
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:209
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:209
-#: dist/index.529c72363307a07bd319.hot-update.js:376
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:209
-#: dist/index.js:10433
-msgid "Reports"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:216
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:214
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:216
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:214
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:216
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:216
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:216
-msgid "Payroll Register"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:224
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:224
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:224
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:224
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:224
-msgid "Payroll Ledger"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:232
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:222
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:232
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:222
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:232
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:232
-#: dist/index.529c72363307a07bd319.hot-update.js:391
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:232
-#: dist/index.js:10448
-msgid "P.F. Register (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:240
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:230
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:240
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:230
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:240
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:240
-#: dist/index.529c72363307a07bd319.hot-update.js:399
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:240
-#: dist/index.js:10456
-msgid "P.F. Ledger (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:248
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:238
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:248
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:238
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:248
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:248
-#: dist/index.529c72363307a07bd319.hot-update.js:407
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:248
-#: dist/index.js:10464
-msgid "Gratuity Register (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:256
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:246
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:256
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:246
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:256
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:256
-#: dist/index.529c72363307a07bd319.hot-update.js:415
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:256
-#: dist/index.js:10472
-msgid "Gratuity Ledger (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:264
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:254
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:264
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:254
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:264
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:264
-#: dist/index.529c72363307a07bd319.hot-update.js:423
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:264
-#: dist/index.js:10480
-msgid "Loan Register (PRO)"
-msgstr ""
-
-#: dist/index.05035e4706cdde8bf478.hot-update.js:272
-#: dist/index.2f9a613eaa977dfcbc68.hot-update.js:262
-#: dist/index.6a509979b64eb8644b7e.hot-update.js:272
-#: dist/index.6fb685df2863b5941bfa.hot-update.js:262
-#: dist/index.289b9cc2d97353aa0537.hot-update.js:272
-#: dist/index.358dbaa0c24ce84f0840.hot-update.js:272
-#: dist/index.529c72363307a07bd319.hot-update.js:431
-#: dist/index.b19f7f76e12e233ce932.hot-update.js:272
-#: dist/index.js:10488
-msgid "Loan Ledger (PRO)"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:135
-#: dist/index.529c72363307a07bd319.hot-update.js:701
-#: dist/index.529c72363307a07bd319.hot-update.js:1225
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:105
-#: dist/index.js:10759
-#: dist/index.js:12161
-msgid "Something went wrong while fetching payroll"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:247
-#: dist/index.529c72363307a07bd319.hot-update.js:813
-#: dist/index.js:10871
-msgid "Payroll saved successfully"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:315
-#: dist/index.529c72363307a07bd319.hot-update.js:880
-#: dist/index.js:10938
-msgid "Generate"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:323
-#: dist/index.529c72363307a07bd319.hot-update.js:888
-#: dist/index.js:10946
-#: dist/index.js:11372
-msgid "Import Variable Salary"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:353
-#: dist/index.529c72363307a07bd319.hot-update.js:918
-#: dist/index.js:10976
-#: dist/index.js:11571
-msgid "Earnings"
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:515
-#: dist/index.529c72363307a07bd319.hot-update.js:1080
-#: dist/index.js:11138
-msgid "Submitting..."
-msgstr ""
-
-#: dist/index.344eafd99c40a62aa16f.hot-update.js:515
-#: dist/index.529c72363307a07bd319.hot-update.js:1080
-#: dist/index.js:7636
-#: dist/index.js:11138
-msgid "Save"
-msgstr ""
-
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.js:12250
-msgid "Employee name"
-msgstr ""
-
-#: dist/index.529c72363307a07bd319.hot-update.js:1314
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:194
-#: dist/index.js:12250
-msgid "Total Salary"
-msgstr ""
-
-#: dist/index.529c72363307a07bd319.hot-update.js:1414
-#: dist/index.c505d35c8c0377769ca8.hot-update.js:295
-#: dist/index.js:12350
-msgid "Export"
-msgstr ""
-
-#: dist/index.1255dc55b1aa55df4ae1.hot-update.js:96
-msgid "Please enter employee id"
-msgstr ""
-
-#: dist/index.js:4652
+#: dist/index.js:4659
 msgid "404"
 msgstr ""
 
-#: dist/index.js:4654
+#: dist/index.js:4661
 msgid "Page not found"
 msgstr ""
 
-#: dist/index.js:4656
+#: dist/index.js:4663
 msgid "Sorry, we couldn’t find the page you’re looking for."
 msgstr ""
 
-#: dist/index.js:4663
-#: dist/index.js:4683
+#: dist/index.js:4670
+#: dist/index.js:4690
 msgid "Go back home"
 msgstr ""
 
-#: dist/index.js:4672
+#: dist/index.js:4679
 msgid "403"
 msgstr ""
 
-#: dist/index.js:4674
+#: dist/index.js:4681
 msgid "Permission denied!"
 msgstr ""
 
-#: dist/index.js:4676
+#: dist/index.js:4683
 msgid "Sorry, you don’t have permission to access this page."
 msgstr ""
 
-#: dist/index.js:4954
+#: dist/index.js:4972
 msgid "Please upload a CSV or Excel file only"
 msgstr ""
 
-#: dist/index.js:4986
+#: dist/index.js:5004
 msgid "Analyzing file"
 msgstr ""
 
-#: dist/index.js:4995
+#: dist/index.js:5013
 msgid "Click to upload"
 msgstr ""
 
-#: dist/index.js:4995
+#: dist/index.js:5013
 msgid "or drag and drop file here"
 msgstr ""
 
-#: dist/index.js:4997
+#: dist/index.js:5015
 msgid "CSV and Excel files only"
 msgstr ""
 
-#: dist/index.js:6553
+#: dist/index.js:5107
+msgid "No results found"
+msgstr ""
+
+#: dist/index.js:5109
+msgid "Try adjusting your search or filter to find what you are looking for."
+msgstr ""
+
+#: dist/index.js:6607
 msgid "Previous"
 msgstr ""
 
-#: dist/index.js:6555
+#: dist/index.js:6609
 msgid "Go to page"
 msgstr ""
 
-#: dist/index.js:6573
+#: dist/index.js:6627
 msgid "Showing per page"
 msgstr ""
 
-#: dist/index.js:6585
+#: dist/index.js:6639
 msgid "Next"
 msgstr ""
 
-#: dist/index.js:6821
+#: dist/index.js:6884
 msgid "This field is required"
 msgstr ""
 
-#: dist/index.js:7393
+#: dist/index.js:7456
 msgid "Month"
 msgstr ""
 
-#: dist/index.js:7400
-#: dist/index.js:11577
+#: dist/index.js:7463
+#: dist/index.js:11680
 msgid "Amount"
 msgstr ""
 
-#: dist/index.js:7444
-#: dist/index.js:7488
+#: dist/index.js:7507
+#: dist/index.js:7551
 msgid "Payroll Summary"
 msgstr ""
 
-#: dist/index.js:7480
+#: dist/index.js:7520
+#: dist/index.js:10381
+msgid "Dashboard"
+msgstr ""
+
+#: dist/index.js:7543
 msgid "View all"
 msgstr ""
 
-#: dist/index.js:7584
-#: dist/index.js:7940
-#: dist/index.js:13237
+#: dist/index.js:7647
+#: dist/index.js:8003
+#: dist/index.js:13681
 msgid "Please fill all required fields"
 msgstr ""
 
-#: dist/index.js:7592
+#: dist/index.js:7655
 msgid "Department updated successfully"
 msgstr ""
 
-#: dist/index.js:7595
-#: dist/index.js:7797
+#: dist/index.js:7658
+#: dist/index.js:7860
 msgid "Something went wrong while updating department"
 msgstr ""
 
-#: dist/index.js:7603
+#: dist/index.js:7666
 msgid "Department created successfully"
 msgstr ""
 
-#: dist/index.js:7606
+#: dist/index.js:7669
 msgid "Something went wrong while creating department"
 msgstr ""
 
-#: dist/index.js:7616
-#: dist/index.js:7828
+#: dist/index.js:7679
+#: dist/index.js:7891
 msgid "Add department"
 msgstr ""
 
-#: dist/index.js:7636
-#: dist/index.js:13454
+#: dist/index.js:7699
+#: dist/index.js:13898
 msgid "Update"
 msgstr ""
 
-#: dist/index.js:7768
-#: dist/index.js:8124
-#: dist/index.js:9855
-#: dist/index.js:11973
-#: dist/index.js:13148
+#: dist/index.js:7699
+#: dist/index.js:11241
+msgid "Save"
+msgstr ""
+
+#: dist/index.js:7831
+#: dist/index.js:8187
+#: dist/index.js:9918
+#: dist/index.js:12076
+#: dist/index.js:13592
 msgid "Edit"
 msgstr ""
 
-#: dist/index.js:7773
-#: dist/index.js:8129
-#: dist/index.js:13153
+#: dist/index.js:7836
+#: dist/index.js:8192
+#: dist/index.js:13597
 msgid "Inactive"
 msgstr ""
 
-#: dist/index.js:7778
-#: dist/index.js:8134
-#: dist/index.js:9832
-#: dist/index.js:13158
+#: dist/index.js:7841
+#: dist/index.js:8197
+#: dist/index.js:9895
+#: dist/index.js:13602
 msgid "Active"
 msgstr ""
 
-#: dist/index.js:7794
+#: dist/index.js:7857
 msgid "Department status updated successfully"
 msgstr ""
 
-#: dist/index.js:7820
+#: dist/index.js:7883
 msgid "Department list"
 msgstr ""
 
-#: dist/index.js:7948
+#: dist/index.js:8011
 msgid "Designation updated successfully"
 msgstr ""
 
-#: dist/index.js:7951
-#: dist/index.js:8153
+#: dist/index.js:8014
+#: dist/index.js:8216
 msgid "Something went wrong while updating designation"
 msgstr ""
 
-#: dist/index.js:7959
+#: dist/index.js:8022
 msgid "Designation created successfully"
 msgstr ""
 
-#: dist/index.js:7962
+#: dist/index.js:8025
 msgid "Something went wrong while creating designation"
 msgstr ""
 
-#: dist/index.js:7972
-#: dist/index.js:7992
-#: dist/index.js:8184
+#: dist/index.js:8035
+#: dist/index.js:8055
+#: dist/index.js:8247
 msgid "Add designation"
 msgstr ""
 
-#: dist/index.js:8150
+#: dist/index.js:8213
 msgid "Designation status updated successfully"
 msgstr ""
 
-#: dist/index.js:8176
+#: dist/index.js:8239
 msgid "Designation list"
 msgstr ""
 
-#: dist/index.js:8333
-#: dist/index.js:8486
-#: dist/index.js:9514
+#: dist/index.js:8396
+#: dist/index.js:8549
+#: dist/index.js:9577
 msgid "Something went wrong"
 msgstr ""
 
-#: dist/index.js:8363
+#: dist/index.js:8426
 msgid "Please fill personal information"
 msgstr ""
 
-#: dist/index.js:8367
+#: dist/index.js:8430
 msgid "Please select designation"
 msgstr ""
 
-#: dist/index.js:8371
+#: dist/index.js:8434
 msgid "Please select department"
 msgstr ""
 
-#: dist/index.js:8375
+#: dist/index.js:8438
 msgid "Please fill employee id"
 msgstr ""
 
-#: dist/index.js:8379
+#: dist/index.js:8442
 msgid "Please fill first name"
 msgstr ""
 
-#: dist/index.js:8383
+#: dist/index.js:8446
 msgid "Please fill last name"
 msgstr ""
 
-#: dist/index.js:8387
+#: dist/index.js:8450
 msgid "Please fill email"
 msgstr ""
 
-#: dist/index.js:8394
+#: dist/index.js:8457
 msgid "Please fill salary information"
 msgstr ""
 
-#: dist/index.js:8399
+#: dist/index.js:8462
 msgid "Please fill basic salary"
 msgstr ""
 
-#: dist/index.js:8404
+#: dist/index.js:8467
 msgid "Please fill gross salary"
 msgstr ""
 
-#: dist/index.js:8450
+#: dist/index.js:8513
 msgid "Employee updated successfully"
 msgstr ""
 
-#: dist/index.js:8453
+#: dist/index.js:8516
 msgid "Employee added successfully"
 msgstr ""
 
-#: dist/index.js:8481
+#: dist/index.js:8544
 msgid "User not found"
 msgstr ""
 
-#: dist/index.js:8511
-#: dist/index.js:9539
+#: dist/index.js:8574
+#: dist/index.js:9602
 msgid "Personal Information"
 msgstr ""
 
-#: dist/index.js:8513
+#: dist/index.js:8576
 msgid "Search from existing user"
 msgstr ""
 
-#: dist/index.js:8514
+#: dist/index.js:8577
 msgid "Enter user id"
 msgstr ""
 
-#: dist/index.js:8528
-#: dist/index.js:9118
+#: dist/index.js:8591
+#: dist/index.js:9181
 msgid "Salary Information"
 msgstr ""
 
-#: dist/index.js:8540
-#: dist/index.js:8561
+#: dist/index.js:8603
+#: dist/index.js:8624
 msgid "Back"
 msgstr ""
 
-#: dist/index.js:8543
-#: dist/index.js:8918
+#: dist/index.js:8606
+#: dist/index.js:8981
 msgid "Save & Continue"
 msgstr ""
 
-#: dist/index.js:8553
+#: dist/index.js:8616
 msgid "Submit"
 msgstr ""
 
-#: dist/index.js:8557
+#: dist/index.js:8620
 msgid "Please fill all the information"
 msgstr ""
 
-#: dist/index.js:8658
-#: dist/index.js:8662
+#: dist/index.js:8721
+#: dist/index.js:8725
 msgid "Select one"
 msgstr ""
 
-#: dist/index.js:8775
-#: dist/index.js:9052
-#: dist/index.js:9547
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:8838
+#: dist/index.js:9115
+#: dist/index.js:9610
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "First name"
 msgstr ""
 
-#: dist/index.js:8785
-#: dist/index.js:9060
-#: dist/index.js:9553
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:8848
+#: dist/index.js:9123
+#: dist/index.js:9616
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Last name"
 msgstr ""
 
-#: dist/index.js:8813
-msgid "Create a new department"
-msgstr ""
-
-#: dist/index.js:8835
-msgid "Create a new designation"
-msgstr ""
-
-#: dist/index.js:8838
-#: dist/index.js:10003
-#: dist/index.js:10177
-#: dist/index.js:11265
-#: dist/index.js:11402
-msgid "Employee id"
-msgstr ""
-
-#: dist/index.js:8849
-#: dist/index.js:9068
-#: dist/index.js:9559
-msgid "Email address"
-msgstr ""
-
 #: dist/index.js:8858
-#: dist/index.js:9565
-msgid "Phone number"
-msgstr ""
-
-#: dist/index.js:8867
-#: dist/index.js:10003
-#: dist/index.js:10177
-msgid "Bank name"
+#: dist/index.js:9139
+#: dist/index.js:9881
+#: dist/index.js:11025
+#: dist/index.js:11074
+#: dist/index.js:12006
+#: dist/index.js:12353
+#: dist/index.js:12435
+#: dist/index.js:12469
+#: dist/index.js:13216
+#: dist/index.js:13259
+msgid "Department"
 msgstr ""
 
 #: dist/index.js:8876
-#: dist/index.js:10003
-#: dist/index.js:10177
+msgid "Create a new department"
+msgstr ""
+
+#: dist/index.js:8880
+#: dist/index.js:9147
+#: dist/index.js:9874
+#: dist/index.js:11020
+#: dist/index.js:11072
+#: dist/index.js:12014
+#: dist/index.js:12353
+#: dist/index.js:12435
+#: dist/index.js:12467
+#: dist/index.js:13211
+#: dist/index.js:13257
+msgid "Designation"
+msgstr ""
+
+#: dist/index.js:8898
+msgid "Create a new designation"
+msgstr ""
+
+#: dist/index.js:8901
+#: dist/index.js:10066
+#: dist/index.js:10240
+#: dist/index.js:11368
+#: dist/index.js:11505
+msgid "Employee id"
+msgstr ""
+
+#: dist/index.js:8912
+#: dist/index.js:9131
+#: dist/index.js:9622
+msgid "Email address"
+msgstr ""
+
+#: dist/index.js:8921
+#: dist/index.js:9628
+msgid "Phone number"
+msgstr ""
+
+#: dist/index.js:8930
+#: dist/index.js:10066
+#: dist/index.js:10240
+msgid "Bank name"
+msgstr ""
+
+#: dist/index.js:8939
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Bank account number"
 msgstr ""
 
-#: dist/index.js:8885
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:8948
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Tax number"
 msgstr ""
 
-#: dist/index.js:8896
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:8959
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Joining date"
 msgstr ""
 
-#: dist/index.js:8905
-#: dist/index.js:9100
-#: dist/index.js:9571
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:8968
+#: dist/index.js:9163
+#: dist/index.js:9634
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Address"
 msgstr ""
 
-#: dist/index.js:9036
+#: dist/index.js:9099
 msgid "Review Information"
 msgstr ""
 
-#: dist/index.js:9048
+#: dist/index.js:9111
 msgid "Employee ID cannot be empty."
 msgstr ""
 
-#: dist/index.js:9056
+#: dist/index.js:9119
 msgid "First name cannot be empty."
 msgstr ""
 
-#: dist/index.js:9064
+#: dist/index.js:9127
 msgid "Last name cannot be empty."
 msgstr ""
 
-#: dist/index.js:9072
+#: dist/index.js:9135
 msgid "Email address cannot be empty."
 msgstr ""
 
-#: dist/index.js:9080
+#: dist/index.js:9143
 msgid "Department cannot be empty."
 msgstr ""
 
-#: dist/index.js:9088
+#: dist/index.js:9151
 msgid "Designation cannot be empty."
 msgstr ""
 
-#: dist/index.js:9092
-#: dist/index.js:9577
-#: dist/index.js:9783
+#: dist/index.js:9155
+#: dist/index.js:9640
+#: dist/index.js:9846
 msgid "Joining Date"
 msgstr ""
 
-#: dist/index.js:9096
+#: dist/index.js:9159
 msgid "Joining date cannot be empty."
 msgstr ""
 
-#: dist/index.js:9106
+#: dist/index.js:9169
 msgid "Salary Active From"
 msgstr ""
 
-#: dist/index.js:9114
+#: dist/index.js:9177
 msgid "Salary active from cannot be empty."
 msgstr ""
 
-#: dist/index.js:9308
-#: dist/index.js:9665
+#: dist/index.js:9371
+#: dist/index.js:9728
 msgid "Gross Salary"
 msgstr ""
 
-#: dist/index.js:9314
+#: dist/index.js:9377
 msgid "Set gross salary to auto calculate basic salary and other salary heads."
 msgstr ""
 
-#: dist/index.js:9340
+#: dist/index.js:9382
+#: dist/index.js:9706
+#: dist/index.js:11076
+#: dist/index.js:12353
+#: dist/index.js:12471
+#: dist/index.js:12891
+#: dist/index.js:13261
+msgid "Basic Salary"
+msgstr ""
+
+#: dist/index.js:9403
 msgid "Active from"
 msgstr ""
 
-#: dist/index.js:9350
+#: dist/index.js:9413
 msgid "Salary in hand"
 msgstr ""
 
-#: dist/index.js:9380
+#: dist/index.js:9443
 msgid "Total Salary in hand"
 msgstr ""
 
-#: dist/index.js:9531
+#: dist/index.js:9594
 msgid "Employee Details"
 msgstr ""
 
-#: dist/index.js:9587
+#: dist/index.js:9650
 msgid "Resignation Date"
 msgstr ""
 
-#: dist/index.js:9605
+#: dist/index.js:9668
 msgid "Salary History"
 msgstr ""
 
-#: dist/index.js:9623
+#: dist/index.js:9686
 msgid "Initial salary"
 msgstr ""
 
-#: dist/index.js:9626
+#: dist/index.js:9689
 msgid "Increment"
 msgstr ""
 
-#: dist/index.js:9629
+#: dist/index.js:9692
 msgid "Promotion"
 msgstr ""
 
-#: dist/index.js:9633
+#: dist/index.js:9696
 msgid "Active from: "
 msgstr ""
 
-#: dist/index.js:9794
+#: dist/index.js:9734
+#: dist/index.js:10066
+#: dist/index.js:10240
+#: dist/index.js:11230
+#: dist/index.js:12581
+#: dist/index.js:13371
+msgid "Remarks"
+msgstr ""
+
+#: dist/index.js:9857
 msgid "Name"
 msgstr ""
 
-#: dist/index.js:9808
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:9871
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Email"
 msgstr ""
 
-#: dist/index.js:9833
-#: dist/index.js:9846
+#: dist/index.js:9896
+#: dist/index.js:9909
 msgid "Resigned"
 msgstr ""
 
-#: dist/index.js:9838
-#: dist/index.js:11718
-#: dist/index.js:11960
-#: dist/index.js:13141
+#: dist/index.js:9901
+#: dist/index.js:11821
+#: dist/index.js:12063
+#: dist/index.js:13585
 msgid "Action"
 msgstr ""
 
-#: dist/index.js:9864
+#: dist/index.js:9927
 msgid "Employee List"
 msgstr ""
 
-#: dist/index.js:9874
-#: dist/index.js:10147
+#: dist/index.js:9937
+#: dist/index.js:10210
 msgid "Import Employee"
 msgstr ""
 
-#: dist/index.js:9880
+#: dist/index.js:9943
 msgid "Add Employee"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Designation id"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Department id"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "User id"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Phone"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Gross salary"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Basic salary"
 msgstr ""
 
-#: dist/index.js:10003
-#: dist/index.js:10177
+#: dist/index.js:10066
+#: dist/index.js:10240
 msgid "Salary active from"
 msgstr ""
 
-#: dist/index.js:10020
-#: dist/index.js:11279
+#: dist/index.js:10083
+#: dist/index.js:11382
 msgid "File is not formatted properly. Please check the sample file."
 msgstr ""
 
-#: dist/index.js:10153
+#: dist/index.js:10216
 msgid "Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads."
 msgstr ""
 
-#: dist/index.js:10155
-#: dist/index.js:11380
+#: dist/index.js:10218
+#: dist/index.js:11483
 msgid "Note: The first row of the CSV file must be the column name."
 msgstr ""
 
-#: dist/index.js:10169
+#: dist/index.js:10232
 msgid "Download sample file"
 msgstr ""
 
-#: dist/index.js:10177
-#: dist/index.js:11402
+#: dist/index.js:10240
+#: dist/index.js:11505
 msgid "SL"
 msgstr ""
 
-#: dist/index.js:10190
-#: dist/index.js:11417
+#: dist/index.js:10253
+#: dist/index.js:11520
 msgid "Reset"
 msgstr ""
 
-#: dist/index.js:10193
-#: dist/index.js:11420
+#: dist/index.js:10256
+#: dist/index.js:11523
 msgid "Import"
 msgstr ""
 
-#: dist/index.js:11361
+#: dist/index.js:10389
+msgid "Employees"
+msgstr ""
+
+#: dist/index.js:10397
+msgid "Profile"
+msgstr ""
+
+#: dist/index.js:10405
+msgid "Pay Slip"
+msgstr ""
+
+#: dist/index.js:10413
+msgid "Payroll"
+msgstr ""
+
+#: dist/index.js:10421
+msgid "Payroll Importer (PRO)"
+msgstr ""
+
+#: dist/index.js:10429
+msgid "Loans (PRO)"
+msgstr ""
+
+#: dist/index.js:10437
+msgid "Final Payment (PRO)"
+msgstr ""
+
+#: dist/index.js:10445
+msgid "Settings"
+msgstr ""
+
+#: dist/index.js:10452
+msgid "Departments"
+msgstr ""
+
+#: dist/index.js:10459
+msgid "Designations"
+msgstr ""
+
+#: dist/index.js:10466
+msgid "Salary Heads"
+msgstr ""
+
+#: dist/index.js:10473
+msgid "Setup Gratuity (PRO)"
+msgstr ""
+
+#: dist/index.js:10481
+msgid "Setup Loans (PRO)"
+msgstr ""
+
+#: dist/index.js:10489
+msgid "Setup P.F. (PRO)"
+msgstr ""
+
+#: dist/index.js:10498
+msgid "Reports"
+msgstr ""
+
+#: dist/index.js:10505
+msgid "Payroll Register"
+msgstr ""
+
+#: dist/index.js:10513
+msgid "Payroll Ledger"
+msgstr ""
+
+#: dist/index.js:10521
+msgid "P.F. Register (PRO)"
+msgstr ""
+
+#: dist/index.js:10529
+msgid "P.F. Ledger (PRO)"
+msgstr ""
+
+#: dist/index.js:10537
+msgid "Gratuity Register (PRO)"
+msgstr ""
+
+#: dist/index.js:10545
+msgid "Gratuity Ledger (PRO)"
+msgstr ""
+
+#: dist/index.js:10553
+msgid "Loan Register (PRO)"
+msgstr ""
+
+#: dist/index.js:10561
+msgid "Loan Ledger (PRO)"
+msgstr ""
+
+#: dist/index.js:10616
+msgid "B&W Theme"
+msgstr ""
+
+#: dist/index.js:10861
+#: dist/index.js:12264
+msgid "Something went wrong while fetching payroll"
+msgstr ""
+
+#: dist/index.js:10873
+#: dist/index.js:10945
+#: dist/index.js:13130
+msgid "Please select a date"
+msgstr ""
+
+#: dist/index.js:10906
+#: dist/index.js:10914
+#: dist/index.js:12009
+#: dist/index.js:12017
+#: dist/index.js:12359
+#: dist/index.js:12435
+#: dist/index.js:12516
+#: dist/index.js:12519
+#: dist/index.js:13170
+#: dist/index.js:13178
+#: dist/index.js:13306
+#: dist/index.js:13309
+msgid "All"
+msgstr ""
+
+#: dist/index.js:10973
+msgid "Payroll saved successfully"
+msgstr ""
+
+#: dist/index.js:11031
+#: dist/index.js:13223
+msgid "Pay month"
+msgstr ""
+
+#: dist/index.js:11041
+msgid "Generate"
+msgstr ""
+
+#: dist/index.js:11049
+#: dist/index.js:11475
+msgid "Import Variable Salary"
+msgstr ""
+
+#: dist/index.js:11065
+#: dist/index.js:12460
+#: dist/index.js:12884
+#: dist/index.js:13250
+msgid "Sl. No."
+msgstr ""
+
+#: dist/index.js:11070
+#: dist/index.js:12465
+#: dist/index.js:12889
+#: dist/index.js:13255
+msgid "Employee Name"
+msgstr ""
+
+#: dist/index.js:11079
+#: dist/index.js:11674
+msgid "Earnings"
+msgstr ""
+
+#: dist/index.js:11082
+#: dist/index.js:12477
+#: dist/index.js:12897
+#: dist/index.js:13267
+msgid "Total Earnings"
+msgstr ""
+
+#: dist/index.js:11085
+#: dist/index.js:12480
+#: dist/index.js:12900
+#: dist/index.js:13270
+msgid "Deductions"
+msgstr ""
+
+#: dist/index.js:11088
+#: dist/index.js:12483
+#: dist/index.js:12903
+#: dist/index.js:13273
+msgid "Total Deductions"
+msgstr ""
+
+#: dist/index.js:11091
+#: dist/index.js:12486
+#: dist/index.js:12906
+#: dist/index.js:13276
+msgid "Net Payable"
+msgstr ""
+
+#: dist/index.js:11094
+#: dist/index.js:12489
+#: dist/index.js:12909
+#: dist/index.js:13279
+msgid "Non Taxable"
+msgstr ""
+
+#: dist/index.js:11097
+#: dist/index.js:12492
+#: dist/index.js:12912
+#: dist/index.js:13282
+msgid "Total Payable"
+msgstr ""
+
+#: dist/index.js:11200
+#: dist/index.js:12547
+#: dist/index.js:12965
+#: dist/index.js:13337
+msgid "Total"
+msgstr ""
+
+#: dist/index.js:11241
+msgid "Submitting..."
+msgstr ""
+
+#: dist/index.js:11242
+#: dist/index.js:12592
+#: dist/index.js:12990
+#: dist/index.js:13382
+msgid "Payroll Sheet"
+msgstr ""
+
+#: dist/index.js:11243
+#: dist/index.js:12593
+#: dist/index.js:12991
+#: dist/index.js:13383
+msgid "Select department or designation and pay month to view payroll list"
+msgstr ""
+
+#: dist/index.js:11464
 msgid "Please upload a file first."
 msgstr ""
 
-#: dist/index.js:11378
+#: dist/index.js:11481
 msgid "Import salary data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads."
 msgstr ""
 
-#: dist/index.js:11394
+#: dist/index.js:11497
 msgid "Download sample"
 msgstr ""
 
-#: dist/index.js:11575
+#: dist/index.js:11678
 msgid "Description"
 msgstr ""
 
-#: dist/index.js:11607
+#: dist/index.js:11710
 msgid "Basic Salary:"
 msgstr ""
 
-#: dist/index.js:11611
+#: dist/index.js:11714
 msgid "Total Earnings:"
 msgstr ""
 
-#: dist/index.js:11615
+#: dist/index.js:11718
 msgid "Total Deductions:"
 msgstr ""
 
-#: dist/index.js:11619
+#: dist/index.js:11722
 msgid "Net Pay:"
 msgstr ""
 
-#: dist/index.js:11709
+#: dist/index.js:11812
 msgid "Salary date"
 msgstr ""
 
-#: dist/index.js:11727
-#: dist/index.js:11968
+#: dist/index.js:11830
+#: dist/index.js:12071
 msgid "View"
 msgstr ""
 
-#: dist/index.js:11740
+#: dist/index.js:11843
 msgid "Payslip List"
 msgstr ""
 
-#: dist/index.js:11882
+#: dist/index.js:11985
 msgid "Payroll updated successfully"
 msgstr ""
 
-#: dist/index.js:11882
-#: dist/index.js:11885
+#: dist/index.js:11985
+#: dist/index.js:11988
 msgid "Something went wrong while updating payroll"
 msgstr ""
 
-#: dist/index.js:11896
+#: dist/index.js:11999
 msgid "Payroll date"
 msgstr ""
 
-#: dist/index.js:11919
+#: dist/index.js:12022
 msgid "Prepared by"
 msgstr ""
 
-#: dist/index.js:11925
+#: dist/index.js:12028
 msgid "Total salary"
 msgstr ""
 
-#: dist/index.js:11938
+#: dist/index.js:12041
 msgid "Approved"
 msgstr ""
 
-#: dist/index.js:11944
+#: dist/index.js:12047
 msgid "Rejected"
 msgstr ""
 
-#: dist/index.js:11950
+#: dist/index.js:12053
 msgid "Cancelled"
 msgstr ""
 
-#: dist/index.js:11956
+#: dist/index.js:12059
 msgid "Pending"
 msgstr ""
 
-#: dist/index.js:11978
+#: dist/index.js:12081
 msgid "Approve"
 msgstr ""
 
-#: dist/index.js:11983
+#: dist/index.js:12086
 msgid "Reject"
 msgstr ""
 
-#: dist/index.js:11988
+#: dist/index.js:12091
 msgid "Cancel"
 msgstr ""
 
-#: dist/index.js:12003
+#: dist/index.js:12106
 msgid "Payroll List"
 msgstr ""
 
-#: dist/index.js:12011
+#: dist/index.js:12114
 msgid "Generate Payroll"
 msgstr ""
 
-#: dist/index.js:12561
+#: dist/index.js:12353
+msgid "Employee name"
+msgstr ""
+
+#: dist/index.js:12353
+msgid "Total Salary"
+msgstr ""
+
+#: dist/index.js:12431
+#: dist/index.js:13240
+msgid "Payroll for : "
+msgstr ""
+
+#: dist/index.js:12454
+msgid "Export"
+msgstr ""
+
+#: dist/index.js:12591
+#: dist/index.js:13381
+msgid "Prepared By: "
+msgstr ""
+
+#: dist/index.js:12669
 msgid "My Profile"
 msgstr ""
 
-#: dist/index.js:13042
-#: dist/index.js:13093
-#: dist/index.js:13212
+#: dist/index.js:12674
+msgid "My Payroll Ledger"
+msgstr ""
+
+#: dist/index.js:12792
+msgid "Please enter employee id"
+msgstr ""
+
+#: dist/index.js:12866
+#: dist/index.js:13232
+msgid "Show report"
+msgstr ""
+
+#: dist/index.js:12874
+msgid "Payroll Ledger %s"
+msgstr ""
+
+#: dist/index.js:12886
+msgid "Pay Month"
+msgstr ""
+
+#: dist/index.js:13486
+#: dist/index.js:13537
+#: dist/index.js:13656
 msgid "Deduction"
 msgstr ""
 
-#: dist/index.js:13046
-#: dist/index.js:13053
-#: dist/index.js:13108
-#: dist/index.js:13117
-#: dist/index.js:13129
-#: dist/index.js:13216
+#: dist/index.js:13490
+#: dist/index.js:13497
+#: dist/index.js:13552
+#: dist/index.js:13561
+#: dist/index.js:13573
+#: dist/index.js:13660
 msgid "No"
 msgstr ""
 
-#: dist/index.js:13049
-#: dist/index.js:13056
-#: dist/index.js:13108
-#: dist/index.js:13117
-#: dist/index.js:13129
-#: dist/index.js:13216
+#: dist/index.js:13493
+#: dist/index.js:13500
+#: dist/index.js:13552
+#: dist/index.js:13561
+#: dist/index.js:13573
+#: dist/index.js:13660
 msgid "Yes"
 msgstr ""
 
-#: dist/index.js:13082
+#: dist/index.js:13526
 msgid "Salary Head"
 msgstr ""
 
-#: dist/index.js:13086
+#: dist/index.js:13530
 msgid "Head Type"
 msgstr ""
 
-#: dist/index.js:13096
+#: dist/index.js:13540
 msgid "Head Amount"
 msgstr ""
 
-#: dist/index.js:13099
+#: dist/index.js:13543
 msgid " and variable"
 msgstr ""
 
-#: dist/index.js:13102
-#: dist/index.js:13401
+#: dist/index.js:13546
+#: dist/index.js:13845
 msgid "Is Taxable"
 msgstr ""
 
-#: dist/index.js:13111
+#: dist/index.js:13555
 msgid "Is Personal Savings"
 msgstr ""
 
-#: dist/index.js:13120
-#: dist/index.js:13443
+#: dist/index.js:13564
+#: dist/index.js:13887
 msgid "Priority"
 msgstr ""
 
-#: dist/index.js:13124
+#: dist/index.js:13568
 msgid "Variable"
 msgstr ""
 
-#: dist/index.js:13189
+#: dist/index.js:13633
 msgid "Salary head status updated successfully"
 msgstr ""
 
-#: dist/index.js:13192
-#: dist/index.js:13266
+#: dist/index.js:13636
+#: dist/index.js:13710
 msgid "Something went wrong while creating salary head"
 msgstr ""
 
-#: dist/index.js:13245
+#: dist/index.js:13689
 msgid "Successfully updated salary head"
 msgstr ""
 
-#: dist/index.js:13248
+#: dist/index.js:13692
 msgid "Something went wrong while updating salary head"
 msgstr ""
 
-#: dist/index.js:13263
+#: dist/index.js:13707
 msgid "Successfully created salary head"
 msgstr ""
 
-#: dist/index.js:13290
+#: dist/index.js:13734
 msgid "Salary Head list"
 msgstr ""
 
-#: dist/index.js:13298
-#: dist/index.js:13300
+#: dist/index.js:13742
+#: dist/index.js:13744
 msgid "Add salary head"
 msgstr ""
 
-#: dist/index.js:13301
+#: dist/index.js:13745
 msgid "No need to add Basic as salary head. It will be added automatically."
 msgstr ""
 
-#: dist/index.js:13308
+#: dist/index.js:13752
 msgid "Salary Head name"
 msgstr ""
 
-#: dist/index.js:13316
+#: dist/index.js:13760
 msgid "Head amount"
 msgstr ""
 
-#: dist/index.js:13327
+#: dist/index.js:13771
 msgid "Is percentage?"
 msgstr ""
 
-#: dist/index.js:13354
+#: dist/index.js:13798
 msgid "If you want to add this head as percentage, please check this box."
 msgstr ""
 
-#: dist/index.js:13356
+#: dist/index.js:13800
 msgid "Is changeable in every payroll?"
 msgstr ""
 
-#: dist/index.js:13384
+#: dist/index.js:13828
 msgid "If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc."
 msgstr ""
 
-#: dist/index.js:13386
+#: dist/index.js:13830
 msgid "Head type"
 msgstr ""
 
-#: dist/index.js:13420
+#: dist/index.js:13864
 msgid "If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc."
 msgstr ""
 
-#: dist/index.js:13422
+#: dist/index.js:13866
 msgid "Is personal savings?"
 msgstr ""
 
-#: dist/index.js:13441
+#: dist/index.js:13885
 msgid "If this is a personal savings, then check this. Eg: PF, Gratuity, etc."
 msgstr ""
 
-#: dist/index.js:13454
+#: dist/index.js:13898
 msgid "Add"
 msgstr ""
 
-#: dist/index.js:13581
+#: dist/index.js:14025
 msgid "Close sidebar"
 msgstr ""
 
-#: dist/index.js:13618
+#: dist/index.js:14062
 msgid "Open sidebar"
 msgstr ""

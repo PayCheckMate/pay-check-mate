@@ -45,6 +45,9 @@ class Databases {
         $this->create_table_employee_salary_history();
         $this->create_table_employee_payroll();
         $this->create_table_employee_payroll_details();
+
+        // Update option that all tables are created for this version.
+        update_option( 'pay_check_mate_tables_created', PAY_CHECK_MATE_PLUGIN_VERSION );
     }
 
     /**

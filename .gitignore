@@ -50,6 +50,7 @@ wp-config.php
 phpcs.xml
 .idea
 build/
+/assets
 dist
 .phpunit.result.cache
 node_modules/

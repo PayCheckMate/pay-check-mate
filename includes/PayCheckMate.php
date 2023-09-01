@@ -166,6 +166,12 @@ final class PayCheckMate {
      * @return void
      */
     public function load_plugin_hooks(): void {
+        // Check option that all tables are created for this version.
+        $tables_created = get_option( 'pay_check_mate_tables_created', false );
+        if ( ! $tables_created || version_compare( $tables_created, PAY_CHECK_MATE_PLUGIN_VERSION, '<' ) ) {
+            new Installer();
+        }
+
         $this->load_hook_classes();
         $this->load_classes( $this->classes );
         $this->load_classes( $this->model_classes );

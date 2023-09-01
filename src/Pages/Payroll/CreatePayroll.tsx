@@ -331,7 +331,7 @@ const CreatePayroll = () => {
                             </div>
                         ) }
                         {(isVariableSalaryImporter && tableData.length > 0 && variableSalaryModal) && (
-                            <Modal setShowModal={setVariableSalaryModal} zIndex={'50'} width={'w-3/4'}>
+                            <Modal setShowModal={setVariableSalaryModal} zIndex={'z-50'} width={'w-3/4'}>
                                 <ImportSalary setVariableSalary={(data: any) => handleImportSalary(data)} />
                             </Modal>
                         )}

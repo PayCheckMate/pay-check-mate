@@ -20,10 +20,10 @@ class Assets implements HookAbleInterface {
      * @return void
      */
     public function register_scripts(): void {
-        $file = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_DIR . '/dist/index.asset.php' : PAY_CHECK_MATE_DIR . '/assets/index.asset.php';
+        $file       = PAY_CHECK_MATE_DIR . '/assets/index.asset.php';
         $asset_file = require_once $file;
-        $src_js        = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.js' : PAY_CHECK_MATE_URL . '/assets/index.js';
-        $src_css       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? PAY_CHECK_MATE_URL . '/dist/index.css' : PAY_CHECK_MATE_URL . '/assets/index.css';
+        $src_js     = PAY_CHECK_MATE_URL . '/assets/index.js';
+        $src_css    = PAY_CHECK_MATE_URL . '/assets/index.css';
         wp_register_script(
             'pay-check-mate-js',
             $src_js,
@@ -66,7 +66,7 @@ class Assets implements HookAbleInterface {
      * @return void
      */
     public function register_localize_script(): void {
-        $user = wp_get_current_user();
+        $user     = wp_get_current_user();
         $employee = new Employee();
 
         $employee = $employee->get_employee_by_user_id( $user->ID );

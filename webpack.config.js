@@ -10,7 +10,7 @@ const updatedConfig = {
     // Change the output path to `dist` in development or `build` in production
     output: {
         ...defaultConfig.output,
-        path: __dirname + (isProduction ? '/build/assets' : '/dist'),
+        path: __dirname + (isProduction ? '/build/assets' : '/assets'),
     },
 };
 
