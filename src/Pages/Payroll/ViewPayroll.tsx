@@ -6,7 +6,7 @@ import {Loading} from "../../Components/Loading";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
-import {CurrencyDollarIcon, DocumentArrowDownIcon, PrinterIcon} from "@heroicons/react/24/outline";
+import {CurrencyDollarIcon, ArrowUpTrayIcon, PrinterIcon} from "@heroicons/react/24/outline";
 import {toast} from "react-toastify";
 import {useParams} from "react-router-dom";
 import {useSelect} from "@wordpress/data";
@@ -290,7 +290,7 @@ const ViewPayroll = () => {
                                                 onClick={downloadFile}
                                                 className="mt-2"
                                             >
-                                                <DocumentArrowDownIcon
+                                                <ArrowUpTrayIcon
                                                     className="w-5 h-5 mr-2 -ml-1 text-white"
                                                     aria-hidden="true"
                                                 />

@@ -252,7 +252,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     <Button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`px-4 py-1 mr-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === 1 ? "cursor-not-allowed" : "")}
+                        className={`px-4 py-1 mr-6 text-sm text-white focus:outline-none ` + (currentPage === 1 ? `cursor-not-allowed bg-${color}-500` : "")}
                     >
                         <ArrowLeftIcon className="w-4 h-4" />
                         {__("Previous", "pcm")}
@@ -299,7 +299,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     <Button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === parseInt(String(totalPages))}
-                        className={`px-4 py-1 ml-6 text-sm bg-${color}-500 text-white hover:bg-${color}-700 focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? "cursor-not-allowed" : "")}
+                        className={`px-4 py-1 ml-6 text-sm text-white focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? `cursor-not-allowed bg-${color}-500` : "")}
                     >
                     {__("Next", "pcm")}
                         <ArrowRightIcon className="w-4 h-4" />
@@ -309,3 +309,6 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         </>
     );
 };
+
+// @ts-ignore
+window.Table = Table;

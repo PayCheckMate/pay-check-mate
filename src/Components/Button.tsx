@@ -43,3 +43,6 @@ export const Button = ({className, children, onClick, path, type = 'button', dis
         </button>
     );
 };
+
+// @ts-ignore
+window.Button = Button;

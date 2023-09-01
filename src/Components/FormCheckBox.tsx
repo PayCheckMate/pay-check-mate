@@ -64,3 +64,6 @@ export const FormCheckBox = ({label, name, id, className = '', value, checked, o
         </div>
     );
 };
+
+// @ts-ignore
+window.FormCheckBox = FormCheckBox;

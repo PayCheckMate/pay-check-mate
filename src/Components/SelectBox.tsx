@@ -92,3 +92,6 @@ export const SelectBox = ({title, options, selected, setSelected, error, require
         </div>
     );
 };
+
+// @ts-ignore
+window.SelectBox = SelectBox;

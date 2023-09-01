@@ -5,3 +5,6 @@ export const Card = ({children, className}: any) => {
         </div>
     )
 }
+
+// @ts-ignore
+window.Card = Card;

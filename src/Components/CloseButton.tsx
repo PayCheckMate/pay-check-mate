@@ -12,3 +12,6 @@ export const CloseButton = ({ onClick }: CloseButtonProps) => (
         <XMarkIcon className="w-5 h-5" aria-hidden="true" />
     </button>
 );
+
+// @ts-ignore
+window.CloseButton = CloseButton;

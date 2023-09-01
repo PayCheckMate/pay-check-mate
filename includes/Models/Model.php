@@ -102,10 +102,11 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( wp_json_encode( $args ) );
+        $cache_key = md5( wp_json_encode( $args ) . wp_json_encode( $fields ) . wp_json_encode( $additional_logical_data ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            return $cache;
+            $this->data = $cache;
+            return $this->data;
         }
 
         if ( ! empty( $args['mutation_fields'] ) ) {
@@ -350,7 +351,6 @@ class Model implements ModelInterface {
      */
     public function find( int $id, array $args = [] ): object {
         global $wpdb;
-
         $args = wp_parse_args(
             $args, [
                 'fields' => [ '*' ],
@@ -358,10 +358,11 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( wp_json_encode( $args ) );
+        $cache_key = md5( $id . wp_json_encode( $args ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            return $cache;
+            $this->data = $cache;
+            return $this->data;
         }
 
         if ( $args['fields'][0] === '*' ) {
@@ -423,10 +424,11 @@ class Model implements ModelInterface {
         );
 
         // Add caching.
-        $cache_key = md5( wp_json_encode( $args ) );
+        $cache_key = md5( wp_json_encode( $args ) . wp_json_encode( $fields ) . wp_json_encode( $find_by ) );
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
-            return $cache;
+            $this->data = $cache;
+            return $this->data;
         }
 
         if ( ! empty( $args['order_by'] ) ) {

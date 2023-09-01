@@ -141,4 +141,6 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
     );
 }
 
+// @ts-ignore
+window.DragAndDrop = DragAndDrop;
 export default DragAndDrop;

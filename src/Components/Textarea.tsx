@@ -31,3 +31,6 @@ export const Textarea=({label, name, id, className='', placeholder, value, onCha
         </div>
     )
 }
+
+// @ts-ignore
+window.Textarea = Textarea;

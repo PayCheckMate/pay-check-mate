@@ -18,3 +18,6 @@ export const HOC = ({role, children}: HOCProps) => {
 
     return <>{children}</>;
 }
+
+// @ts-ignore
+window.HOC = HOC;

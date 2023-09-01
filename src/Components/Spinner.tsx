@@ -22,3 +22,6 @@ export const Spinner = () => {
       </svg>
     )
 }
+
+// @ts-ignore
+window.Spinner = Spinner;

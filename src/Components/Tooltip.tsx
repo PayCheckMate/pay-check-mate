@@ -42,4 +42,6 @@ const ToolTip = ({ children, text }: Props) => {
     );
 };
 
+// @ts-ignore
+window.ToolTip = ToolTip;
 export default ToolTip;
