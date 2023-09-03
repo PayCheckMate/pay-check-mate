@@ -42,10 +42,14 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
     }
 
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
-    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>(defaultDesignation as SelectBoxType);
+    const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>(designations.find((designation: DesignationType) => {
+        return designation.id === initialValues.designation_id
+    }) || defaultDesignation as SelectBoxType);
 
     const {departments} = useSelect((select) => select(department).getDepartments({per_page: '-1', status: '1'}), []);
-    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>(defaultDepartment as SelectBoxType);
+    const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>(departments.find((department: DepartmentType) => {
+        return department.id === initialValues.department_id
+    }) || defaultDepartment as SelectBoxType);
 
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
     const [formError, setFormError] = useState({} as { [key: string]: string});
@@ -67,18 +71,6 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
             }
         }, [models]);
     }
-
-        useEffect(() => {
-            setSelectedDepartment(departments.find((department: DepartmentType) => {
-                return department.id === initialValues.department_id
-            }) || defaultDepartment);
-        }, [initialValues.department_id]);
-
-        useEffect(() => {
-            setSelectedDesignation(designations.find((designation: DesignationType) => {
-                return designation.id === initialValues.designation_id
-            }) || defaultDesignation);
-        }, [initialValues.designation_id]);
 
     useEffect(() => {
         setFormValues((prevState: EmployeeType) => ({
