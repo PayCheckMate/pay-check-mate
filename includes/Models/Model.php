@@ -527,7 +527,7 @@ class Model implements ModelInterface {
         }
 
         // Clear cache.
-        wp_cache_delete( $this->cache_group );
+        wp_cache_flush_group( $this->cache_group );
 
         return $this->find( $last_id );
     }
@@ -562,7 +562,7 @@ class Model implements ModelInterface {
         )
         ) {
             // Clear cache.
-            wp_cache_delete( $this->cache_group );
+            wp_cache_flush_group( $this->cache_group );
 
             return $this->find( $id );
         }
@@ -597,7 +597,7 @@ class Model implements ModelInterface {
         )
         ) {
             // Clear cache.
-            wp_cache_delete( $this->cache_group );
+            wp_cache_flush_group( $this->cache_group );
 
             return $this->find_by( $find_by, [] )[0];
         }
@@ -628,7 +628,7 @@ class Model implements ModelInterface {
             ],
         ) ) {
             // Clear cache.
-            wp_cache_delete( $this->cache_group );
+            wp_cache_flush_group( $this->cache_group );
             return $wpdb->rows_affected;
         }
 

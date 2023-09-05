@@ -1,5 +1,5 @@
-import {useEffect, useState} from "@wordpress/element";
-import {useNavigate, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "@wordpress/element";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {Card} from "../../Components/Card";
 import {Steps} from "../../Components/Steps";
 import {PersonalInformation} from "./Components/PersonalInformation";
@@ -29,7 +29,6 @@ export const AddEmployee = () => {
 
     const navigate = useNavigate();
     const [error, setError] = useState(false);
-    const [userId, setUserId] = useState('');
     let savedPersonalInformation = {} as EmployeeType
     let savedSalaryInformation = {} as SalaryInformationType
     if (!employeeId) {
@@ -45,7 +44,7 @@ export const AddEmployee = () => {
     const [step, setStep] = useState(1);
     const [personalInformation, setPersonalInformation] = useState(savedPersonalInformation as EmployeeType);
     const [salaryInformation, setSalaryInformation] = useState(savedSalaryInformation);
-
+    const [userId, setUserId] = useState(personalInformation?.user_id || '');
     useEffect(() => {
         if (employeeId) {
             makeGetRequest<SingleEmployeeResponseType>('/pay-check-mate/v1/employees/' + employeeId, {}, true).then((response) => {
@@ -228,7 +227,7 @@ export const AddEmployee = () => {
             toast.error(error.message);
         })
     }
-    const [salaryFormError, setSalaryFormError] = useState({} as { [key: string]: string});
+    const [salaryFormError, setSalaryFormError] = useState({} as { [key: string]: string });
 
     const goToReview = () => {
         const requiredFields = ['gross_salary', 'basic_salary', 'active_from'];
@@ -238,6 +237,7 @@ export const AddEmployee = () => {
         }
         setStep(3)
     }
+    let indigo = applyFilters('pcm.indigo', 'gray');
 
     return (
         <>
@@ -260,7 +260,16 @@ export const AddEmployee = () => {
                                         <h2 className="text-2xl font-medium mb-4">
                                             {__('Personal Information', 'pcm')}
                                         </h2>
-                                        {!employeeId && <FormInput type={"number"} label={__('Search from existing user', 'pcm')} placeholder={__("Enter user id", "pcm")} name='employee_id' id='user_id' value={userId} onChange={(e)=>handleImportEmployee(e) } className='mb-4' />}
+                                        {!employeeId && <FormInput
+                                            type={"number"}
+                                            label={__('Search from existing user', 'pcm')}
+                                            placeholder={__("Enter user id", "pcm")}
+                                            name="employee_id"
+                                            id="user_id"
+                                            value={userId}
+                                            onChange={(e) => handleImportEmployee(e)}
+                                            className="mb-4"
+                                        />}
                                     </div>
                                     <div className="mx-auto w-3/4">
                                         <PersonalInformation
@@ -274,9 +283,20 @@ export const AddEmployee = () => {
 
                             {step === 2 && (
                                 <div>
-                                    <h2 className="text-2xl font-medium mb-4 border-b-2 border-gray-500">
-                                        {__('Salary Information', 'pcm')}
-                                    </h2>
+                                    <div className="flex items-center justify-between border-b-2 border-gray-500">
+                                        <h2 className="text-2xl font-medium mb-4">
+                                            {__('Salary Information', 'pcm')}
+                                        </h2>
+                                        <div className="mt-1 text-sm text-gray-500">
+                                            <Link
+                                                to={'/salary-heads'}
+                                                target={'_blank'}
+                                                className={"font-medium text-" + indigo + "-600 hover:text-" + indigo + "-500"}
+                                            >
+                                                {__('Add Salary Heads', 'pcm')}
+                                            </Link>
+                                        </div>
+                                    </div>
                                     <div className="mx-auto w-3/4">
                                         <SalaryInformation
                                             initialValues={salaryInformation}

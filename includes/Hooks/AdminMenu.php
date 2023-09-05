@@ -19,6 +19,7 @@ class AdminMenu implements HookAbleInterface {
         }
 
         add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+        add_filter( 'plugin_row_meta', [ $this, 'add_plugin_row_meta' ], 10, 2 );
     }
 
     /**
@@ -50,5 +51,38 @@ class AdminMenu implements HookAbleInterface {
      */
     public function menu_page(): void {
         echo '<div id="pcm-root" class="h-full wrap custom-font"></div>';
+    }
+
+    /**
+     * Add plugin row meta. Upgrade to pro link.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $plugin_meta
+     * @param string               $plugin_file
+     *
+     * @return mixed
+     */
+    public function add_plugin_row_meta( array $plugin_meta, string $plugin_file ) {
+        if ( 'pay-check-mate/pay-check-mate.php' !== $plugin_file ) {
+            return $plugin_meta;
+        }
+
+        $ref           = 'plugin-row-meta';
+        $medium        = 'plugin';
+        $plugin_meta[] = sprintf(
+            '<a href="%1$s"><span class="dashicons dashicons-star-filled" aria-hidden="true" style="font-size: 14px; line-height: 1.3"></span>%2$s</a>',
+            "https://paycheckmate.com/?ref={$ref}&utm_source=wp-plugin&utm_medium={$medium}",
+            esc_html_x( 'Upgrade to Pro', 'verb', 'pcm' )
+        );
+
+        // Add donation link
+        $plugin_meta[] = sprintf(
+            '<a href="%1$s" target="_blank"><span class="dashicons dashicons-heart" aria-hidden="true" style="font-size: 14px; line-height: 1.3"></span>%2$s</a>',
+            "https://paycheckmate.com/donate/?ref={$ref}&utm_source=wp-plugin&utm_medium={$medium}",
+            esc_html_x( 'Donate', 'verb', 'pcm' )
+        );
+
+        return $plugin_meta;
     }
 }

@@ -12,7 +12,7 @@ type ModalProps = {
 };
 
 export const Modal = ({setShowModal, children, header, description = '', width = 'sm:w-full sm:max-w-lg', ...props}: ModalProps) => {
-    props.zIndex = props.zIndex ? ' z-'+props.zIndex : ' z-auto'
+    props.zIndex = props.zIndex ? props.zIndex : ' z-auto'
     return (
         <>
             <Transition.Root show={true} as={Fragment}>
@@ -33,7 +33,7 @@ export const Modal = ({setShowModal, children, header, description = '', width =
                         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                     </Transition.Child>
 
-                    <div className={"fixed inset-0 overflow-y-auto" + props.zIndex}>
+                    <div className={"fixed inset-0 overflow-y-auto " + props.zIndex}>
                         <div className="flex mt-2 items-end justify-center p-4 text-center sm:items-center sm:p-0">
                             <Transition.Child
                                 as={Fragment}

@@ -263,9 +263,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                 }
 
                 // Update the user meta.
-                update_user_meta( $user_id, 'phone', $data['phone'] );
-                update_user_meta( $user_id, 'address', $data['address'] );
-
+                if ( ! empty( $data['phone'] ) ) {
+                    update_user_meta( $user_id, 'phone', $data['phone'] );
+                }
+                if ( ! empty( $data['address'] ) ) {
+                    update_user_meta( $user_id, 'address', $data['address'] );
+                }
                 $validated_data->set_data( 'user_id', $user_id );
 
                 // Send the email to the user to set the password.
@@ -411,7 +414,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employee = new Employee();
         $employee = $employee->get_employee_by_user_id( $user_id );
         // Check if there is any employee with this user id, then return, cause employee exists.
-        if ( '' !== $employee->get_employee_id() ) {
+        if ( '0' === $employee->get_employee_id() || empty( $employee->get_employee_id() ) ) {
             return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pcm' ), [ 'status' => 302 ] );
         }
         $user = new \WP_User( $user_id );
