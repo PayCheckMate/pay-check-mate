@@ -414,7 +414,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employee = new Employee();
         $employee = $employee->get_employee_by_user_id( $user_id );
         // Check if there is any employee with this user id, then return, cause employee exists.
-        if ( 0 === $employee->get_employee_id() ) {
+        if ( '0' === $employee->get_employee_id() || empty( $employee->get_employee_id() ) ) {
             return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pcm' ), [ 'status' => 302 ] );
         }
         $user = new \WP_User( $user_id );
