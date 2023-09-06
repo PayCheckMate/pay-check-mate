@@ -60,7 +60,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                 setSalaryHeads(salary_heads as SalaryHeadsResponseType);
                 setTableData(response.employee_salary_history);
             }).catch((error: any) => {
-                toast.error(error.message, {
+                toast.error(error.data, {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
