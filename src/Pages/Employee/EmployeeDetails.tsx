@@ -16,6 +16,7 @@ import {SalaryHistoryType, SalaryPurposeType} from "../../Types/SalaryHistoryTyp
 import {HeadType} from "../../Types/SalaryHeadType";
 import {Status} from "../../Components/Status";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 type EmployeeDetailsProps = {
     employee_id?: number|string,
@@ -63,7 +64,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                     <PermissionDenied />
                 </Card>
             ) : (
-                <div>
+                <HOC role={UserCapNames.pay_check_mate_view_employee_details}>
                     <div className="sm:flex-auto mb-6">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
                             {
@@ -270,7 +271,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                             </div>
                         </Card>
                     </div>
-                </div>
+                </HOC>
             )}
         </>
     )

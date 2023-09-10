@@ -36,7 +36,7 @@ addAction('pcm_notification', 'pcm_notification', (message: string, type: string
 });
 export default function Main() {
     let navigations: NavigationType[] = [
-        {key: 'dashboard', title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: Dashboard},
+        {key: 'dashboard', title: __('Dashboard', 'pcm'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant'], component: Dashboard},
         {key: 'employees', title: __('Employees', 'pcm'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
         {key: 'profile', title: __('Profile', 'pcm'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pcm'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},

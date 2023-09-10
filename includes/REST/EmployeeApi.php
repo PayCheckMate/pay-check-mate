@@ -163,9 +163,17 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      *
      * @since PAY_CHECK_MATE_SINCE
      *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     *
      * @return bool
      */
-    public function get_employee_salary_details_permissions_check(): bool {
+    public function get_employee_salary_details_permissions_check( WP_REST_Request $request ): bool {
+        $current_user_id = get_current_user_id();
+        $employee_id    = $request->get_param( 'employee_id' );
+        // phpcs:ignore
+        if ( ! current_user_can( 'pay_check_mate_accountant' ) && $current_user_id !== $employee_id ) {
+            return false;
+        }
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_employee' );
     }
@@ -414,7 +422,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employee = new Employee();
         $employee = $employee->get_employee_by_user_id( $user_id );
         // Check if there is any employee with this user id, then return, cause employee exists.
-        if ( '0' === $employee->get_employee_id() || empty( $employee->get_employee_id() ) ) {
+        if ( '0' !== (string) $employee->get_employee_id() || ! empty( $employee->get_employee_id() ) ) {
             return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pcm' ), [ 'status' => 302 ] );
         }
         $user = new \WP_User( $user_id );

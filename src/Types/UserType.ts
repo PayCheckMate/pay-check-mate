@@ -17,6 +17,9 @@ export interface UserCaps {
 }
 
 export enum UserCapNames {
+    pay_check_mate_employee = "pay_check_mate_employee",
+    pay_check_mate_accountant = "pay_check_mate_accountant",
+    pay_check_mate_admin = "pay_check_mate_admin",
     pay_check_mate_manage_menu = "pay_check_mate_manage_menu",
 
     // Employee capabilities.
@@ -56,4 +59,8 @@ export enum UserCapNames {
     pay_check_mate_add_salary_head = "pay_check_mate_add_salary_head",
     pay_check_mate_edit_salary_head = "pay_check_mate_edit_salary_head",
     pay_check_mate_change_salary_head_status = "pay_check_mate_change_salary_head_status",
+
+    // Reports capabilities.
+    pay_check_mate_payroll_register = "pay_check_mate_payroll_register",
+    pay_check_mate_payroll_ledger = "pay_check_mate_payroll_ledger",
 }

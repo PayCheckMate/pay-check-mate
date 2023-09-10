@@ -17,6 +17,7 @@ import {Button} from "../../Components/Button";
 import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: string, pageTitle?: string }) => {
     const {loading} = useFetchApi('');
@@ -124,7 +125,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                     <PermissionDenied />
                 </Card>
             ) : (
-                <>
+                <HOC role={UserCapNames.pay_check_mate_payroll_ledger}>
                     {!employeeId && (
                         <div className="flex justify-between">
                             <form
@@ -431,7 +432,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                             />
                         </Card>
                     )}
-                </>
+                </HOC>
             )}
         </>
     );

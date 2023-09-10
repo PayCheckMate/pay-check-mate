@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
 import {useDispatch} from "@wordpress/data";
 import designation from "../../Store/Designation";
+import {HOC} from "../../Components/HOC";
+import {UserCapNames} from "../../Types/UserType";
 
 type CreateDesignationProps = {
     showModal: boolean;
@@ -63,22 +65,24 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
     }
     return(
         <Modal setShowModal={setShowModal} header={__('Add designation', 'pcm')}>
-            <div className="mt-5 md:mt-0 md:col-span-2">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <FormInput
-                        label={__('Designation name', 'pcm')}
-                        name="name"
-                        id="name"
-                        value={formData.name}
-                        error={formError.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        required={true}
-                    />
-                    <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                        {__('Add designation', 'pcm')}
-                    </Button>
-                </form>
-            </div>
+            <HOC role={UserCapNames.pay_check_mate_add_designation}>
+                <div className="mt-5 md:mt-0 md:col-span-2">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <FormInput
+                            label={__('Designation name', 'pcm')}
+                            name="name"
+                            id="name"
+                            value={formData.name}
+                            error={formError.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            required={true}
+                        />
+                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
+                            {__('Add designation', 'pcm')}
+                        </Button>
+                    </form>
+                </div>
+            </HOC>
         </Modal>
     )
 }
