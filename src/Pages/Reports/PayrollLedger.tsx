@@ -19,7 +19,7 @@ import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
 
 export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: string, pageTitle?: string }) => {
-    const {loading,makePostRequest} = useFetchApi('');
+    const {loading} = useFetchApi('');
 
     const [searchedEmployeeId, setSearchedEmployeeId] = useState(employeeId);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);

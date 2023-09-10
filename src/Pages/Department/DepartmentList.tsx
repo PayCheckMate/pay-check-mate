@@ -1,22 +1,20 @@
 import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
-import {CheckCircleIcon, PlusIcon} from "@heroicons/react/24/outline";
+import {PlusIcon} from "@heroicons/react/24/outline";
 import {Table} from "../../Components/Table";
 import React, {useState} from "@wordpress/element";
 import {DepartmentStatus, DepartmentType} from "../../Types/DepartmentType";
-import {Modal} from "../../Components/Modal";
-import {FormInput} from "../../Components/FormInput";
 import {useDispatch, useSelect} from "@wordpress/data";
 import department from "../../Store/Department";
 import {toast} from "react-toastify";
 import useNotify from "../../Helpers/useNotify";
-import {validateRequiredFields} from "../../Helpers/Helpers";
 import {filtersType} from "../../Store/Store";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {CreateDepartment} from "./CreateDepartment";
 import {Status} from "../../Components/Status";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 export const DepartmentList = () => {
     const dispatch = useDispatch();
@@ -131,7 +129,7 @@ export const DepartmentList = () => {
 
 
     return (
-        <>
+        <HOC role={UserCapNames.pay_check_mate_view_department_list}>
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -149,7 +147,7 @@ export const DepartmentList = () => {
                                 {__('Add department', 'pcm')}
                             </Button>
                         )}
-                        {showModal && (
+                        {(userCan(UserCapNames.pay_check_mate_add_department) && showModal) && (
                             <CreateDepartment
                                 showModal={showModal}
                                 setShowModal={setShowModal}
@@ -175,6 +173,6 @@ export const DepartmentList = () => {
                     search={true}
                 />
             </div>
-        </>
+        </HOC>
     )
 }

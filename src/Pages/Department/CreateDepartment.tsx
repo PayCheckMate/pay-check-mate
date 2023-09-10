@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import department from "../../Store/Department";
 import useNotify from "../../Helpers/useNotify";
 import {useDispatch} from "@wordpress/data";
+import {HOC} from "../../Components/HOC";
+import {UserCapNames} from "../../Types/UserType";
 
 type CreateDepartmentProps = {
     showModal: boolean;
@@ -63,22 +65,24 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
     }
     return(
         <Modal setShowModal={setShowModal} header={__('Add department', 'pcm')}>
-            <div className="mt-5 md:mt-0 md:col-span-2">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <FormInput
-                        label={__('Department name', 'pcm')}
-                        name="name"
-                        id="name"
-                        value={formData.name}
-                        error={formError.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        required={true}
-                    />
-                    <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                        {formData.id ? __('Update', 'pcm') : __('Save', 'pcm')}
-                    </Button>
-                </form>
-            </div>
+            <HOC role={UserCapNames.pay_check_mate_add_department}>
+                <div className="mt-5 md:mt-0 md:col-span-2">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <FormInput
+                            label={__('Department name', 'pcm')}
+                            name="name"
+                            id="name"
+                            value={formData.name}
+                            error={formError.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            required={true}
+                        />
+                        <Button className="mt-4" onClick={() => handleSubmit(event)}>
+                            {formData.id ? __('Update', 'pcm') : __('Save', 'pcm')}
+                        </Button>
+                    </form>
+                </div>
+            </HOC>
         </Modal>
     )
 }
