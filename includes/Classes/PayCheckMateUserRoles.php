@@ -107,4 +107,26 @@ class PayCheckMateUserRoles {
             'pay_check_mate_payroll_ledger'            => true,
         ];
     }
+
+    /**
+     * Get all the roles for the plugin.
+     *
+     * @param string $role Role name.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, string>|string
+     */
+    public static function get_pcm_roles( string $role = '' ) {
+        $roles = [
+            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pcm' ),
+            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pcm' ),
+            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pcm' ),
+        ];
+        if ( ! empty( $role ) ) {
+            return $roles[ $role ];
+        }
+
+        return $roles;
+    }
 }
