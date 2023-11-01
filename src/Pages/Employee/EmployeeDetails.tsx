@@ -192,6 +192,15 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                             </>
                                                         )
                                                     }
+                                                    {SalaryPurposeType.Permanent === parseInt(String(salary.salary_purpose)) &&
+                                                        (
+                                                            <>
+                                                                <span key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
+                                                                    {__('On Permanent', 'pcm')}
+                                                                </span>
+                                                            </>
+                                                        )
+                                                    }
                                                     {SalaryPurposeType.Increment === parseInt(String(salary.salary_purpose)) && (
                                                         <>
                                                             <span key={'increment'+salary.id} className="ml-2 font-normal text-gray-600">
