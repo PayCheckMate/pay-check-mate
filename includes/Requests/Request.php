@@ -213,7 +213,7 @@ class Request implements FormRequestInterface {
      */
     public static function get_nonce(): string {
         if ( empty( static::$nonce ) ) {
-            throw new Exception( __( 'Nonce is not defined for this form request.', 'pcm' ) );
+            throw new Exception( esc_html__( 'Nonce is not defined for this form request.', 'pcm' ) );
         }
 
         return static::$nonce;
@@ -230,7 +230,7 @@ class Request implements FormRequestInterface {
      */
     public static function get_rules(): array {
         if ( empty( static::$rules ) ) {
-            throw new Exception( __( 'Make sure you have defined rules for this form request.', 'pcm' ) );
+            throw new Exception( esc_html__( 'Make sure you have defined rules for this form request.', 'pcm' ) );
         }
 
         return static::$rules;
@@ -247,7 +247,7 @@ class Request implements FormRequestInterface {
      */
     public static function get_fillable(): array {
         if ( empty( static::$fillable ) ) {
-            throw new Exception( __( 'Fillable are not defined for this form request.', 'pcm' ) );
+            throw new Exception( esc_html__( 'Fillable are not defined for this form request.', 'pcm' ) );
         }
 
         return static::$fillable;
