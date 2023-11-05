@@ -225,7 +225,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
         // Check if employee id exists.
         $employee = new Employee( $data['employee_id'] );
-        if ( ! empty( $employee->get_employee_id() ) ) {
+        if ( empty( $data['id'] ) && ! empty( $employee->get_employee_id() ) ) {
             wp_send_json_error( __( 'Employee already exists', 'pcm' ), 400 );
         }
 

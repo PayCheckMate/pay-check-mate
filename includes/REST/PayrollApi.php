@@ -837,6 +837,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+        $payroll_details   = apply_filters( 'pcm_get_payroll_ledger_response', $payroll_details, $salary_head_types, $request->get_params() );
+        $salary_head_types = apply_filters( 'pcm_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         if ( empty( $payroll_details ) ) {
             wp_send_json_error( __( 'No payroll found.', 'pcm' ), 400 );
