@@ -10,7 +10,7 @@ type HOCProps = {
 export const HOC = ({role, children}: HOCProps) => {
     if (!userCan(role)) {
         return (
-            <Card>
+            <Card className="overflow-hidden bg-white shadow sm:rounded-lg py-8 px-8 w-full mt-2">
                 <PermissionDenied />
             </Card>
         );

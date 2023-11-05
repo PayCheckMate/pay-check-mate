@@ -59,7 +59,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                 }
                 if (parseInt(String(head.head_type)) === HeadType.Earning) {
                     updatedBasicSalary -= updatedHeadAmount;
-                } else if (parseInt(String(head.head_type)) === HeadType.Deduction) {
+                } else if (parseInt(String(head.head_type)) === HeadType.Deduction && parseInt(String(head.is_personal_savings)) === 1) {
                     updatedBasicSalary += updatedHeadAmount;
                 }
             });

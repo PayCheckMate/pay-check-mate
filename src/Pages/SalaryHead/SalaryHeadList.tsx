@@ -18,6 +18,7 @@ import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {Status} from "../../Components/Status";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 const headType = [
     {id: HeadType.Earning, name: __('Earning', 'pcm')},
@@ -273,7 +274,7 @@ export const SalaryHeadList = () => {
         setFormData({...formData, [name]: value});
     }
     return (
-        <>
+        <HOC role={UserCapNames.pay_check_mate_view_salary_head_list}>
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -446,6 +447,6 @@ export const SalaryHeadList = () => {
                     search={true}
                 />
             </div>
-        </>
+        </HOC>
     )
 }

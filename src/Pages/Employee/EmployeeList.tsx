@@ -11,6 +11,7 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {applyFilters} from "../../Helpers/Hooks";
 import {Status} from "../../Components/Status";
+import {HOC} from "../../Components/HOC";
 
 export const EmployeeList = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -135,7 +136,7 @@ export const EmployeeList = () => {
     ];
 
     return (
-        <>
+        <HOC role={UserCapNames.pay_check_mate_view_employee_list}>
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -184,6 +185,6 @@ export const EmployeeList = () => {
                     search={true}
                 />
             </div>
-        </>
+        </HOC>
     )
 }

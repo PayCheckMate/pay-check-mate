@@ -28,6 +28,7 @@ import apiFetch from "@wordpress/api-fetch";
 import {addAction, applyFilters} from "../../Helpers/Hooks";
 import {Modal} from "../../Components/Modal";
 import {ImportSalary} from "./ImportSalary";
+import {HOC} from "../../Components/HOC";
 
 const CreatePayroll = () => {
     const payrollId = useParams().id;
@@ -272,7 +273,7 @@ const CreatePayroll = () => {
                     <PermissionDenied />
                 </Card>
             ) : (
-                <>
+                <HOC role={UserCapNames.pay_check_mate_add_payroll}>
                     <div className="flex justify-between">
                         <form
                             className="p-6"
@@ -701,7 +702,7 @@ const CreatePayroll = () => {
                             />
                         </Card>
                     )}
-                </>
+                </HOC>
             )}
         </>
     );

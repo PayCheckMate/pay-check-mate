@@ -17,6 +17,7 @@ import {FormInput} from "../../Components/FormInput";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 type ResponseType = {
     data: EmployeeType,
@@ -246,7 +247,7 @@ export const AddEmployee = () => {
                     <PermissionDenied />
                 </Card>
             ) : (
-                <div>
+                <HOC role={UserCapNames.pay_check_mate_add_employee}>
                     <Steps
                         steps={steps}
                         currentStep={step}
@@ -364,7 +365,7 @@ export const AddEmployee = () => {
                             )}
                         </form>
                     </Card>
-                </div>
+                </HOC>
             )}
         </>
     )

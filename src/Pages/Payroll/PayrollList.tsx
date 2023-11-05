@@ -16,6 +16,7 @@ import {CheckIcon} from "@heroicons/react/20/solid";
 import {UserCapNames} from "../../Types/UserType";
 import {userCan} from "../../Helpers/User";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 export const PayrollList = () => {
     const dispatch = useDispatch();
@@ -195,7 +196,7 @@ export const PayrollList = () => {
         setCurrentPage(filterObject.page);
     };
     return (
-        <>
+        <HOC role={UserCapNames.pay_check_mate_view_payroll_list}>
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -231,6 +232,6 @@ export const PayrollList = () => {
                     search={true}
                 />
             </div>
-        </>
+        </HOC>
     )
 }

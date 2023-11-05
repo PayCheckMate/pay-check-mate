@@ -17,6 +17,7 @@ import {userCan} from "../../Helpers/User";
 import {CreateDesignation} from "./CreateDesignation";
 import {Status} from "../../Components/Status";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 export const DesignationList = () => {
     const dispatch = useDispatch();
@@ -129,7 +130,7 @@ export const DesignationList = () => {
     };
 
     return (
-        <>
+        <HOC role={UserCapNames.pay_check_mate_view_designation_list}>
             <div>
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
@@ -138,6 +139,7 @@ export const DesignationList = () => {
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        {userCan(UserCapNames.pay_check_mate_add_designation) && (
                         <Button
                             onClick={() => handleModal({} as DesignationType)}
                             className="hover:text-white active:text-white"
@@ -145,7 +147,8 @@ export const DesignationList = () => {
                             <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
                             {__('Add designation', 'pcm')}
                         </Button>
-                        {showModal && (
+                        )}
+                        {(userCan(UserCapNames.pay_check_mate_add_designation) && showModal) && (
                             <CreateDesignation
                                 showModal={showModal}
                                 setShowModal={setShowModal}
@@ -171,6 +174,6 @@ export const DesignationList = () => {
                     search={true}
                 />
             </div>
-        </>
+        </HOC>
     )
 }

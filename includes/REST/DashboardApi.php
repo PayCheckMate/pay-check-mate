@@ -46,7 +46,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
      */
     public function get_dashboard_permissions_check(): bool {
         // phpcs:ignore
-        return current_user_can( 'pay_check_mate_admin' );
+        return current_user_can( 'pay_check_mate_admin' ) || current_user_can( 'pay_check_mate_accountant' );
     }
 
     /**

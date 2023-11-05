@@ -201,7 +201,7 @@ export const ImportEmployee = () => {
         });
     }
     return (
-        <HOC role={UserCapNames.pay_check_mate_approve_payroll}>
+        <HOC role={UserCapNames.pay_check_mate_add_employee}>
             <div>
                 <div className="sm:flex-auto mb-6">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">

@@ -23,6 +23,7 @@ import {Button} from "../../Components/Button";
 import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
+import {HOC} from "../../Components/HOC";
 
 export const PayrollRegister = () => {
     const payrollId = useParams().id;
@@ -152,7 +153,7 @@ export const PayrollRegister = () => {
                     <PermissionDenied />
                 </Card>
             ) : (
-                <>
+                <HOC role={UserCapNames.pay_check_mate_payroll_register}>
                     <div className="flex justify-between">
                         <form
                             className="p-6"
@@ -520,7 +521,7 @@ export const PayrollRegister = () => {
                             />
                         </Card>
                     )}
-                </>
+                </HOC>
             )}
         </>
     );

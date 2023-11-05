@@ -22,6 +22,7 @@ final class PayCheckMate {
     protected array $hook_classes = [
         'PayCheckMate\Hooks\AdminMenu',
         'PayCheckMate\Hooks\Assets',
+        'PayCheckMate\Hooks\User',
     ];
 
     /**

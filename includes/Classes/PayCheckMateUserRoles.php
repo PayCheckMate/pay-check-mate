@@ -8,14 +8,14 @@ class PayCheckMateUserRoles {
      * Constructor, Here we're adding AccountantRole with required capabilities.
      */
     public function __construct() {
-        // Add an accountant role if it doesn't exist.
-        if ( ! get_role( 'pay_check_mate_accountant' ) ) {
-            add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pcm' ), $this->get_accountant_capabilities() );
-        }
-
         // Add an employee role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_employee' ) ) {
             add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pcm' ), $this->get_employee_capabilities() );
+        }
+
+        // Add an accountant role if it doesn't exist.
+        if ( ! get_role( 'pay_check_mate_accountant' ) ) {
+            add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pcm' ), $this->get_all_capabilities() );
         }
 
         // Add an admin role if it doesn't exist.
@@ -35,19 +35,6 @@ class PayCheckMateUserRoles {
     }
 
     /**
-     * Get capabilities for the `accountant` role.
-     *
-     * @since  PAY_CHECK_MATE_SINCE
-     * @return array<string, bool>
-     */
-    protected function get_accountant_capabilities(): array {
-        $employee_capabilities = $this->get_employee_capabilities();
-        $employee_capabilities['pay_check_mate_accountant'] = true;
-
-        return $employee_capabilities;
-    }
-
-    /**
      * Get capabilities for the `employee` role.
      *
      * @since  PAY_CHECK_MATE_SINCE
@@ -55,10 +42,12 @@ class PayCheckMateUserRoles {
      */
     protected function get_employee_capabilities(): array {
         return [
-            'read'                       => true,
-            'pay_check_mate_employee'    => true,
-            'pay_check_mate_manage_menu' => true,
-            'pay_check_mate_view_payslip_list' => true,
+            'read'                                 => true,
+            'pay_check_mate_employee'              => true,
+            'pay_check_mate_view_employee_details' => true,
+            'pay_check_mate_payroll_ledger'        => true,
+            'pay_check_mate_manage_menu'           => true,
+            'pay_check_mate_view_payslip_list'     => true,
         ];
     }
 
@@ -112,6 +101,32 @@ class PayCheckMateUserRoles {
             'pay_check_mate_add_salary_head'           => true,
             'pay_check_mate_edit_salary_head'          => true,
             'pay_check_mate_change_salary_head_status' => true,
+
+            // Report capabilities.
+            'pay_check_mate_payroll_register'          => true,
+            'pay_check_mate_payroll_ledger'            => true,
         ];
+    }
+
+    /**
+     * Get all the roles for the plugin.
+     *
+     * @param string $role Role name.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return array<string, string>|string
+     */
+    public static function get_pcm_roles( string $role = '' ) {
+        $roles = [
+            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pcm' ),
+            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pcm' ),
+            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pcm' ),
+        ];
+        if ( ! empty( $role ) ) {
+            return $roles[ $role ];
+        }
+
+        return $roles;
     }
 }
