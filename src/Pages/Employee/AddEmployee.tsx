@@ -14,10 +14,11 @@ import {userCan} from "../../Helpers/User";
 import {UserCapNames} from "../../Types/UserType";
 import {PermissionDenied} from "../../Components/404";
 import {FormInput} from "../../Components/FormInput";
-import {validateRequiredFields} from "../../Helpers/Helpers";
+import {getPayCheckMateUserRoles, validateRequiredFields} from "../../Helpers/Helpers";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
 import {HOC} from "../../Components/HOC";
+import {FormCheckBox} from "../../Components/FormCheckBox";
 
 type ResponseType = {
     data: EmployeeType,
@@ -26,7 +27,9 @@ type ResponseType = {
 }
 export const AddEmployee = () => {
     const employeeId = useParams().id;
-    const {makePostRequest, makeGetRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
+    const {makeGetRequest} = useFetchApi('/pay-check-mate/v1/payrolls', {}, false);
+    const PayCheckMateUserRoles = getPayCheckMateUserRoles() as string[]
+    const [pay_check_mate_user_role, setPay_check_mate_user_role] = useState({} as { [key: string]: string });
 
     const navigate = useNavigate();
     const [error, setError] = useState(false);
@@ -333,14 +336,52 @@ export const AddEmployee = () => {
                                             />
                                             {!error && (
                                                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-                                                    <Button
-                                                        type="submit"
-                                                        onClick={() => {
-                                                        }}
-                                                        className="btn-primary"
-                                                    >
-                                                        {__('Submit', 'pcm')}
-                                                    </Button>
+                                                    <>
+                                                        <div className="grid grid-cols-3 gap-4">
+                                                            {Object.keys(PayCheckMateUserRoles).length > 0 && Object.keys(PayCheckMateUserRoles).map((role: any) => {
+                                                                return (
+                                                                    <>
+                                                                        <div className="flex items-center">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                name="user_roles[]"
+                                                                                id={role}
+                                                                                value={pay_check_mate_user_role[role]}
+                                                                                checked={parseInt(String(pay_check_mate_user_role[role])) === 1}
+                                                                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                                                                onChange={(e) => {
+                                                                                    if (e.target.checked) {
+                                                                                        setPay_check_mate_user_role({
+                                                                                            ...pay_check_mate_user_role,
+                                                                                            [role]: 1
+                                                                                        });
+                                                                                    } else {
+                                                                                        setPay_check_mate_user_role({
+                                                                                            ...pay_check_mate_user_role,
+                                                                                            [role]: 0
+                                                                                        });
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                            <label htmlFor={role}
+                                                                                   className="ml-3 block text-sm font-medium text-gray-700">
+                                                                                {PayCheckMateUserRoles[role]}
+                                                                            </label>
+                                                                        </div>
+                                                                    </>
+                                                                )
+                                                            }
+                                                            )}
+                                                        </div>
+                                                        <Button
+                                                            type="submit"
+                                                            onClick={() => {
+                                                            }}
+                                                            className="btn-primary"
+                                                        >
+                                                            {__('Submit', 'pcm')}
+                                                        </Button>
+                                                    </>
                                                 </div>
                                             )
                                             }

@@ -3,6 +3,7 @@
 namespace PayCheckMate\Hooks;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\Contracts\HookAbleInterface;
 
 class Assets implements HookAbleInterface {
@@ -76,9 +77,10 @@ class Assets implements HookAbleInterface {
         $user->employee = $employee->get_employee();
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
-				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),
-				'pay_check_mate_nonce' => wp_create_nonce( 'pay_check_mate_nonce' ),
-				'currentUser'          => $user,
+				'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
+				'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
+				'currentUser'           => $user,
+				'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pcm_roles(),
 			],
         );
     }

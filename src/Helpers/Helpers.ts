@@ -20,6 +20,12 @@ export const getCurrentEmployee = () => {
     // @ts-ignore
     return  payCheckMate.currentUser.data.employee;
 }
+
+export const getPayCheckMateUserRoles = () => {
+    // @ts-ignore
+    return payCheckMate.payCheckMateUserRoles;
+}
+
 export const handlePrint = (divID: string) => {
     const divToPrint = document.getElementById(divID);
     const iframe = document.createElement('iframe')
