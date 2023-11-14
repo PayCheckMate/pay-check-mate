@@ -129,19 +129,9 @@ class Model implements ModelInterface {
             $relational_fields = $relational->fields;
         }
 
-        if ( ! empty( $args['where'] ) ) {
-            foreach ( $args['where'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
-            }
-        }
-
-        if ( ! empty( $args['where_between'] ) ) {
-            foreach ( $args['where_between'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
-            }
-        }
+        $where .= $this->get_where( $args );
+        $where .= $this->get_where_between( $args );
+        $where .= $this->get_status( $args );
 
         if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
             $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
@@ -181,6 +171,42 @@ class Model implements ModelInterface {
         wp_cache_set( $cache_key, $this->data, $this->cache_group );
 
         return $this->data;
+    }
+
+    private function get_where( array $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
+
+        return $where;
+    }
+
+    private function get_where_between( array $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['where_between'] ) ) {
+            foreach ( $args['where_between'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
+            }
+        }
+
+        return $where;
+    }
+
+    private function get_status( $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+        }
+
+        return $where;
     }
 
     /**
@@ -436,23 +462,9 @@ class Model implements ModelInterface {
         }
 
         $where = 'WHERE 1=1';
-        if ( ! empty( $args['where'] ) ) {
-            foreach ( $args['where'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
-            }
-        }
-
-        if ( ! empty( $args['where_between'] ) ) {
-            foreach ( $args['where_between'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
-            }
-        }
-
-        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
-        }
+        $where .= $this->get_where( $args );
+        $where .= $this->get_where_between( $args );
+        $where .= $this->get_status( $args );
 
         $relational_fields = [];
         $relations         = '';
