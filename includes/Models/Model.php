@@ -148,7 +148,7 @@ class Model implements ModelInterface {
 
         // Add table name as prefix and esc_sql the fields for the base table.
         foreach ( $fields as $key => $field ) {
-            $fields[ $key ] = $this->get_table() . '.' . esc_sql( $field );
+            $fields[$key] = $this->get_table() . '.' . esc_sql( $field );
         }
 
         $relational_fields = array_merge( ...$relational_fields );
@@ -173,6 +173,16 @@ class Model implements ModelInterface {
         return $this->data;
     }
 
+    /**
+     * Get the where clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
     private function get_where( array $args ): string {
         global $wpdb;
         $where = '';
@@ -186,6 +196,16 @@ class Model implements ModelInterface {
         return $where;
     }
 
+    /**
+     * Get the where between clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
     private function get_where_between( array $args ): string {
         global $wpdb;
         $where = '';
@@ -199,6 +219,16 @@ class Model implements ModelInterface {
         return $where;
     }
 
+    /**
+     * Get the status clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param mixed $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
     private function get_status( $args ): string {
         global $wpdb;
         $where = '';
@@ -232,7 +262,7 @@ class Model implements ModelInterface {
             }
 
             // Add table prefix on the table name.
-            $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
+            $relations .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
 
             if ( ! empty( $relation['where'] ) ) {
                 foreach ( $relation['where'] as $key => $value ) {
@@ -388,6 +418,7 @@ class Model implements ModelInterface {
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
             $this->data = $cache;
+
             return $this->data;
         }
 
@@ -454,6 +485,7 @@ class Model implements ModelInterface {
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
             $this->data = $cache;
+
             return $this->data;
         }
 
@@ -558,7 +590,7 @@ class Model implements ModelInterface {
     public function update( int $id, Request $data ): object {
         global $wpdb;
 
-        $data         = $data->to_array();
+        $data          = $data->to_array();
         $filtered_data = $this->filter_data( $data );
 
         if ( $wpdb->update(
@@ -638,9 +670,11 @@ class Model implements ModelInterface {
             [
                 '%d',
             ],
-        ) ) {
+        )
+        ) {
             // Clear cache.
             wp_cache_flush_group( $this->cache_group );
+
             return $wpdb->rows_affected;
         }
 
@@ -719,8 +753,8 @@ class Model implements ModelInterface {
         // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
             if ( method_exists( $this, "set_$key" ) ) {
-                $args           = $data[ "$key" ] ?? '';
-                $data[ "$key" ] = call_user_func( [ $this, "set_$key" ], $args );
+                $args         = $data["$key"] ?? '';
+                $data["$key"] = call_user_func( [ $this, "set_$key" ], $args );
             }
         }
 
@@ -763,7 +797,7 @@ class Model implements ModelInterface {
         $this->data = $item;
         foreach ( (array) $item as $column => $type ) {
             $method = "get_$column";
-            if ( method_exists( $this, $method ) ) {
+            if ( method_exists( get_class( $this ), $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
                 $value = call_user_func( [ $this, $method ], $item->$column, static::$additional_logical_data );
                 if ( is_array( $value ) ) {
