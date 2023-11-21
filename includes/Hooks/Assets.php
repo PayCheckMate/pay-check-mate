@@ -77,6 +77,7 @@ class Assets implements HookAbleInterface {
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
 				'ajaxUrl'              => admin_url( 'admin-ajax.php' ),
+                'pluginUrl'            => PAY_CHECK_MATE_URL,
 				'pay_check_mate_nonce' => wp_create_nonce( 'pay_check_mate_nonce' ),
 				'currentUser'          => $user,
 			],
