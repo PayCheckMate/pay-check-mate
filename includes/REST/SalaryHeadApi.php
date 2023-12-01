@@ -52,7 +52,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'get_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -64,52 +64,52 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
 						'id'                  => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
 						'head_name'           => [
-							'description' => __( 'Salary head name.', 'pcm' ),
+							'description' => __( 'Salary head name.', 'pay_check_mate' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
 						'head_type'           => [
-							'description' => __( 'Salary head type.', 'pcm' ),
+							'description' => __( 'Salary head type.', 'pay_check_mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
 						'head_amount'         => [
-							'description' => __( 'Salary head amount.', 'pcm' ),
+							'description' => __( 'Salary head amount.', 'pay_check_mate' ),
 							'type'        => 'number',
 							'required'    => true,
 						],
 						'is_percentage'       => [
-							'description' => __( 'Salary head is percentage.', 'pcm' ),
+							'description' => __( 'Salary head is percentage.', 'pay_check_mate' ),
 							'type'        => 'boolean',
 							'required'    => true,
 						],
 						'is_variable'         => [
-							'description' => __( 'Is Changeable in every month?', 'pcm' ),
+							'description' => __( 'Is Changeable in every month?', 'pay_check_mate' ),
 							'type'        => 'boolean',
 							'required'    => true,
 						],
 						'is_taxable'          => [
-							'description' => __( 'Salary head is taxable.', 'pcm' ),
+							'description' => __( 'Salary head is taxable.', 'pay_check_mate' ),
 							'type'        => 'boolean',
 							'required'    => true,
 						],
 						'is_personal_savings' => [
-							'description' => __( 'Salary head is personal savings.', 'pcm' ),
+							'description' => __( 'Salary head is personal savings.', 'pay_check_mate' ),
 							'type'        => 'boolean',
 							'required'    => true,
 						],
 						'priority'            => [
-							'description' => __( 'Salary head priority.', 'pcm' ),
+							'description' => __( 'Salary head priority.', 'pay_check_mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
 						'status'              => [
-							'description' => __( 'Department status.', 'pcm' ),
+							'description' => __( 'Department status.', 'pay_check_mate' ),
 							'type'        => 'boolean',
 							'required'    => true,
 						],
@@ -121,7 +121,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pcm' ),
+							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -252,13 +252,13 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $salary_head    = new SalaryHeadModel();
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
         }
 
         $head = $salary_head->create( $validated_data );
 
         if ( is_wp_error( $head ) ) {
-            return new WP_Error( 500, __( 'Could not create salary head.', 'pcm' ) );
+            return new WP_Error( 500, __( 'Could not create salary head.', 'pay_check_mate' ) );
         }
 
         $item     = $this->prepare_item_for_response( $head, $request );
@@ -307,7 +307,7 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $salary_head    = new SalaryHeadModel();
         $validated_data = new SalaryHeadRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
         }
 
         $updated = $salary_head->update( $request->get_param( 'id' ), $validated_data );
@@ -338,10 +338,10 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
         $department = $department->delete( $request->get_param( 'id' ) );
 
         if ( ! $department ) {
-            return new WP_Error( 500, __( 'Could not delete designation.', 'pcm' ) );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pay_check_mate' ) );
         }
 
-        return new WP_REST_Response( __( 'Department deleted', 'pcm' ), 200 );
+        return new WP_REST_Response( __( 'Department deleted', 'pay_check_mate' ), 200 );
     }
 
     /**
@@ -358,72 +358,72 @@ class SalaryHeadApi extends RestController implements HookAbleApiInterface {
             'type'       => 'object',
             'properties' => [
                 'id'                  => [
-                    'description' => __( 'Unique identifier for the object.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'head_name'           => [
-                    'description' => __( 'Salary Head Name', 'pcm' ),
+                    'description' => __( 'Salary Head Name', 'pay_check_mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
                 'head_type'           => [
-                    'description' => __( 'Salary Head Type', 'pcm' ),
+                    'description' => __( 'Salary Head Type', 'pay_check_mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'head_type_text'      => [
-                    'description' => __( 'Salary Head Type in Text', 'pcm' ),
+                    'description' => __( 'Salary Head Type in Text', 'pay_check_mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
                     'readonly'    => true,
                 ],
                 'head_amount'         => [
-                    'description' => __( 'Salary Head Amount', 'pcm' ),
+                    'description' => __( 'Salary Head Amount', 'pay_check_mate' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
                 'is_percentage'       => [
-                    'description' => __( 'Salary Head is Percentage', 'pcm' ),
+                    'description' => __( 'Salary Head is Percentage', 'pay_check_mate' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
                 'is_variable'         => [
-                    'description' => __( 'Is Changeable in every month?', 'pcm' ),
+                    'description' => __( 'Is Changeable in every month?', 'pay_check_mate' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
                 'is_taxable'          => [
-                    'description' => __( 'Salary Head is Taxable', 'pcm' ),
+                    'description' => __( 'Salary Head is Taxable', 'pay_check_mate' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
                 'is_personal_savings' => [
-                    'description' => __( 'Salary Head is Personal Savings', 'pcm' ),
+                    'description' => __( 'Salary Head is Personal Savings', 'pay_check_mate' ),
                     'type'        => 'boolean',
                     'required'    => true,
                 ],
                 'priority'            => [
-                    'description' => __( 'Salary Head Priority', 'pcm' ),
+                    'description' => __( 'Salary Head Priority', 'pay_check_mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'status'              => [
-                    'description' => __( 'Salary Head Status', 'pcm' ),
+                    'description' => __( 'Salary Head Status', 'pay_check_mate' ),
                     'type'        => 'boolean',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'created_on'          => [
-                    'description' => __( 'The date the object was created.', 'pcm' ),
+                    'description' => __( 'The date the object was created.', 'pay_check_mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'updated_at'          => [
-                    'description' => __( 'The date the object was last updated.', 'pcm' ),
+                    'description' => __( 'The date the object was last updated.', 'pay_check_mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                     'context'     => [ 'view', 'edit' ],

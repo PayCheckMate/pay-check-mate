@@ -94,19 +94,19 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                         <div className="sm:col-span-3">
                             <FormInput
                                 required={true}
-                                label={__('Gross Salary', 'pcm')}
+                                label={__('Gross Salary', 'pay_check_mate')}
                                 name="gross_salary"
                                 id="gross_salary"
                                 value={grossSalary}
                                 onChange={handleFormInputChange}
                                 error={formErrors.gross_salary}
-                                helpText={__('Set gross salary to auto calculate basic salary and other salary heads.', 'pcm')}
+                                helpText={__('Set gross salary to auto calculate basic salary and other salary heads.', 'pay_check_mate')}
                             />
                         </div>
                         <div className="sm:col-span-3">
                             <FormInput
                                 required={true}
-                                label={__('Basic Salary', 'pcm')}
+                                label={__('Basic Salary', 'pay_check_mate')}
                                 name="basic_salary"
                                 id="basic_salary"
                                 value={formValues.basic_salary}
@@ -134,7 +134,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                             <FormInput
                                 required={true}
                                 type={'date'}
-                                label={__('Active from', 'pcm')}
+                                label={__('Active from', 'pay_check_mate')}
                                 name="active_from"
                                 id="active_from"
                                 error={formErrors.active_from}
@@ -145,7 +145,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                         <div className="col-span-full">
                             <div>
                                 <h3 className="font-bold text-2xl leading-6 text-gray-600">
-                                    {__('Salary in hand', 'pcm')}
+                                    {__('Salary in hand', 'pay_check_mate')}
                                 </h3>
                                 {Object.keys(formValues).map((head) => {
                                     if (head === 'gross_salary' || head === 'remarks') {
@@ -179,7 +179,7 @@ export const SalaryInformation = ({setSalaryData, initialValues = {}, children, 
                                 })}
 
                                 <div className="flex items-center justify-between mt-2 border-t-2 border-gray-400 pt-2">
-                                    <span className="font-bold text-xl text-gray-500">{__('Total Salary in hand', 'pcm')}</span>
+                                    <span className="font-bold text-xl text-gray-500">{__('Total Salary in hand', 'pay_check_mate')}</span>
                                     <span className="text-sm text-gray-500">{TotalSalaryInHand}</span>
                                 </div>
                             </div>

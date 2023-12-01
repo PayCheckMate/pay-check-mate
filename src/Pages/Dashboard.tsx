@@ -38,14 +38,14 @@ const options = {
             display: true,
             title: {
                 display: true,
-                text: __('Month', 'pcm'),
+                text: __('Month', 'pay_check_mate'),
             },
         },
         y: {
             display: true,
             title: {
                 display: true,
-                text: __('Amount', 'pcm'),
+                text: __('Amount', 'pay_check_mate'),
             }
         },
     },
@@ -66,8 +66,8 @@ export const Dashboard = () => {
         {id: 2, name: 'Last Payroll Total', stat: lastPayroll, icon: CurrencyDollarIcon, link: '/payroll'},
     ]
     useEffect(() => {
-        const backgroundColor = applyFilters('pcm.chart_background_color', 'rgba(110,114,114,0.7)');
-        const borderColor = applyFilters('pcm.chart_border_color', 'rgb(48,49,49)');
+        const backgroundColor = applyFilters('pay_check_mate.chart_background_color', 'rgba(110,114,114,0.7)');
+        const borderColor = applyFilters('pay_check_mate.chart_border_color', 'rgb(48,49,49)');
         makeGetRequest<DashboardResponse>('/pay-check-mate/v1/dashboard').then((response) => {
             if (response.all_payrolls) {
                 setTotalEmployees(response.total_employees);
@@ -82,7 +82,7 @@ export const Dashboard = () => {
                     labels: labels,
                     datasets: [
                         {
-                            label: __('Payroll Summary', 'pcm'),
+                            label: __('Payroll Summary', 'pay_check_mate'),
                             data: response.all_payrolls.map((model: any) => model.total_salary),
                             backgroundColor: [
                                 backgroundColor,
@@ -98,12 +98,12 @@ export const Dashboard = () => {
         })
     }, []);
 
-    let indigo = applyFilters('pcm.indigo', 'gray');
+    let indigo = applyFilters('pay_check_mate.indigo', 'gray');
     return (
         <>
             <div>
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                    {__('Dashboard', 'pcm')}
+                    {__('Dashboard', 'pay_check_mate')}
                 </h1>
                 {stats && (
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -129,7 +129,7 @@ export const Dashboard = () => {
                                                 to={item.link || '#'}
                                                 className={"font-medium text-" + indigo + "-500 hover:text-" + indigo + "-500"}
                                             >
-                                                {__('View all', 'pcm')}
+                                                {__('View all', 'pay_check_mate')}
                                                 <span className="sr-only"> {item.name} stats</span>
                                             </Link>
                                         </div>
@@ -147,7 +147,7 @@ export const Dashboard = () => {
                         <Card>
                             <>
                                 <div className="header">
-                                    <h1 className="title">{__('Payroll Summary', 'pcm')}</h1>
+                                    <h1 className="title">{__('Payroll Summary', 'pay_check_mate')}</h1>
                                 </div>
                                 <Bar
                                     options={options}

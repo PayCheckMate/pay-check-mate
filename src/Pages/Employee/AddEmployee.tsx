@@ -62,7 +62,7 @@ export const AddEmployee = () => {
                     setPersonalInformation(response.data);
                     setSalaryInformation(salaryInformation as SalaryInformationType);
                 } else {
-                    toast.error(__('Something went wrong', 'pcm'));
+                    toast.error(__('Something went wrong', 'pay_check_mate'));
                 }
             }).catch(error => {
                 toast.error(error.message);
@@ -92,48 +92,48 @@ export const AddEmployee = () => {
 
     const validatePersonalInformation = () => {
         if (personalInformation === null || Object.keys(personalInformation).length === 0) {
-            alert(__('Please fill personal information', 'pcm'));
+            alert(__('Please fill personal information', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.designation_id === null || personalInformation.designation_id === 0) {
-            alert(__('Please select designation', 'pcm'));
+            alert(__('Please select designation', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.department_id === null || personalInformation.department_id === 0) {
-            alert(__('Please select department', 'pcm'));
+            alert(__('Please select department', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.employee_id === null || personalInformation.employee_id === '') {
-            alert(__('Please fill employee id', 'pcm'));
+            alert(__('Please fill employee id', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.first_name === null || personalInformation.first_name === '') {
-            alert(__('Please fill first name', 'pcm'));
+            alert(__('Please fill first name', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.last_name === null || personalInformation.last_name === '') {
-            alert(__('Please fill last name', 'pcm'));
+            alert(__('Please fill last name', 'pay_check_mate'));
             return false;
         }
         if (personalInformation.email === null || personalInformation.email === '') {
-            alert(__('Please fill email', 'pcm'));
+            alert(__('Please fill email', 'pay_check_mate'));
             return false;
         }
         return true;
     }
     const validateSalaryInformation = () => {
         if (salaryInformation === null || Object.keys(salaryInformation).length === 0) {
-            alert(__('Please fill salary information', 'pcm'));
+            alert(__('Please fill salary information', 'pay_check_mate'));
             return false;
         }
         // @ts-ignore
         if (salaryInformation.basic_salary === null || salaryInformation.basic_salary === 0) {
-            alert(__('Please fill basic salary', 'pcm'));
+            alert(__('Please fill basic salary', 'pay_check_mate'));
             return false;
         }
         // @ts-ignore
         if (salaryInformation.gross_salary === null || salaryInformation.gross_salary === 0) {
-            alert(__('Please fill gross salary', 'pcm'));
+            alert(__('Please fill gross salary', 'pay_check_mate'));
             return false;
         }
 
@@ -182,11 +182,11 @@ export const AddEmployee = () => {
                 employeeKeysToRemove.forEach(key => localStorage.removeItem(key));
                 navigate('/employees');
                 if (employeeId) {
-                    toast.success(__('Employee updated successfully', 'pcm'));
+                    toast.success(__('Employee updated successfully', 'pay_check_mate'));
                     return;
                 }
 
-                toast.success(__('Employee added successfully', 'pcm'));
+                toast.success(__('Employee added successfully', 'pay_check_mate'));
             }
         }).catch(error => {
             const employeeKeysToRemove = Object.keys(localStorage).filter(key => key.startsWith('Employee.'));
@@ -217,12 +217,12 @@ export const AddEmployee = () => {
 
                 // @ts-ignore
                 if (response.data.user_id === 0) {
-                    toast.error(__('User not found', 'pcm'));
+                    toast.error(__('User not found', 'pay_check_mate'));
                     return;
                 }
             } else {
                 console.log(response, 'error')
-                toast.error(__('Something went wrong', 'pcm'));
+                toast.error(__('Something went wrong', 'pay_check_mate'));
             }
         }).catch(error => {
             toast.error(error.message);
@@ -238,7 +238,7 @@ export const AddEmployee = () => {
         }
         setStep(3)
     }
-    let indigo = applyFilters('pcm.indigo', 'gray');
+    let indigo = applyFilters('pay_check_mate.indigo', 'gray');
 
     return (
         <>
@@ -259,12 +259,12 @@ export const AddEmployee = () => {
                                 <>
                                     <div className="flex items-center justify-between border-b-2 border-gray-500">
                                         <h2 className="text-2xl font-medium mb-4">
-                                            {__('Personal Information', 'pcm')}
+                                            {__('Personal Information', 'pay_check_mate')}
                                         </h2>
                                         {!employeeId && <FormInput
                                             type={"number"}
-                                            label={__('Search from existing user', 'pcm')}
-                                            placeholder={__("Enter user id", "pcm")}
+                                            label={__('Search from existing user', 'pay_check_mate')}
+                                            placeholder={__("Enter user id", "pay_check_mate")}
                                             name="employee_id"
                                             id="user_id"
                                             value={userId}
@@ -286,7 +286,7 @@ export const AddEmployee = () => {
                                 <div>
                                     <div className="flex items-center justify-between border-b-2 border-gray-500">
                                         <h2 className="text-2xl font-medium mb-4">
-                                            {__('Salary Information', 'pcm')}
+                                            {__('Salary Information', 'pay_check_mate')}
                                         </h2>
                                         <div className="mt-1 text-sm text-gray-500">
                                             <Link
@@ -294,7 +294,7 @@ export const AddEmployee = () => {
                                                 target={'_blank'}
                                                 className={"font-medium text-" + indigo + "-600 hover:text-" + indigo + "-500"}
                                             >
-                                                {__('Add Salary Heads', 'pcm')}
+                                                {__('Add Salary Heads', 'pay_check_mate')}
                                             </Link>
                                         </div>
                                     </div>
@@ -310,13 +310,13 @@ export const AddEmployee = () => {
                                                 onClick={() => setStep(1)}
                                                 className="text-sm font-semibold leading-6 text-gray-900"
                                             >
-                                                {__('Back', 'pcm')}
+                                                {__('Back', 'pay_check_mate')}
                                             </button>
                                             <Button
                                                 onClick={() => goToReview()}
                                                 className="btn-primary"
                                             >
-                                                {__('Save & Continue', 'pcm')}
+                                                {__('Save & Continue', 'pay_check_mate')}
                                             </Button>
                                         </div>
                                     </div>
@@ -339,7 +339,7 @@ export const AddEmployee = () => {
                                                         }}
                                                         className="btn-primary"
                                                     >
-                                                        {__('Submit', 'pcm')}
+                                                        {__('Submit', 'pay_check_mate')}
                                                     </Button>
                                                 </div>
                                             )
@@ -349,14 +349,14 @@ export const AddEmployee = () => {
                                         <>
                                             <div className="flex items-center justify-center gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                                                 <div className="text-sm font-semibold leading-6 text-gray-900">
-                                                    {__('Please fill all the information', 'pcm')}
+                                                    {__('Please fill all the information', 'pay_check_mate')}
                                                 </div>
                                                 <button
                                                     type="button"
                                                     onClick={() => setStep(1)}
                                                     className="text-sm font-semibold leading-6 text-gray-900"
                                                 >
-                                                    {__('Back', 'pcm')}
+                                                    {__('Back', 'pay_check_mate')}
                                                 </button>
                                             </div>
                                         </>

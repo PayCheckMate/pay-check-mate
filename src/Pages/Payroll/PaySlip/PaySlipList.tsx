@@ -20,10 +20,10 @@ export const PaySlipList = () => {
         }
     }, [models]);
 
-    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
+    let anchorClass = applyFilters('pay_check_mate.anchor_class', 'anchor-link-gray')
     const columns = [
         {
-            title: __('Salary date', 'pcm'), dataIndex: 'payroll_date',
+            title: __('Salary date', 'pay_check_mate'), dataIndex: 'payroll_date',
             render: (text: any, record: PayrollType) => {
                 return (
                     <>
@@ -36,7 +36,7 @@ export const PaySlipList = () => {
             }
         },
         {
-            title: __('Action', 'pcm'), dataIndex: 'action',
+            title: __('Action', 'pay_check_mate'), dataIndex: 'action',
             render: (value: any, record: PayrollType) => {
                 return (
                     <>
@@ -45,7 +45,7 @@ export const PaySlipList = () => {
                             state={{data: record}}
                             className={anchorClass}
                         >
-                            {__('View', 'pcm')}
+                            {__('View', 'pay_check_mate')}
                         </Link>
                     </>
                 )
@@ -62,7 +62,7 @@ export const PaySlipList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Payslip List', 'pcm')}
+                            {__('Payslip List', 'pay_check_mate')}
                         </h1>
                     </div>
                 </div>

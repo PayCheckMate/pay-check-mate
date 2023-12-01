@@ -39,22 +39,22 @@ export const PayrollList = () => {
             _wpnonce
         }
         dispatch(payroll).updatePayroll(data).then((response: any) => {
-            useNotify(response, __('Payroll updated successfully', 'pcm'), __('Something went wrong while updating payroll', 'pcm'));
+            useNotify(response, __('Payroll updated successfully', 'pay_check_mate'), __('Something went wrong while updating payroll', 'pay_check_mate'));
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while updating payroll', 'pcm'), {
+            toast.error(__('Something went wrong while updating payroll', 'pay_check_mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
         })
     }
-    const orange = applyFilters('pcm.orange', 'gray');
-    const red = applyFilters('pcm.red', 'gray');
-    const green = applyFilters('pcm.green', 'gray');
-    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
+    const orange = applyFilters('pay_check_mate.orange', 'gray');
+    const red = applyFilters('pay_check_mate.red', 'gray');
+    const green = applyFilters('pay_check_mate.green', 'gray');
+    let anchorClass = applyFilters('pay_check_mate.anchor_class', 'anchor-link-gray')
     const columns = [
         {
-            title: __('Payroll date', 'pcm'), dataIndex: 'payroll_date', sortable: true,
+            title: __('Payroll date', 'pay_check_mate'), dataIndex: 'payroll_date', sortable: true,
             render: (text: string, record: PayrollType) => {
                 return (
                     <span>{record.payroll_date_string}</span>
@@ -62,9 +62,9 @@ export const PayrollList = () => {
             }
         },
         {
-            title: __('Department', 'pcm'), dataIndex: 'department_id',
+            title: __('Department', 'pay_check_mate'), dataIndex: 'department_id',
             render: (text: string, record: PayrollType) => {
-                if (parseInt(String(record.department_id)) === 0) return <span>{__('All', 'pcm')}</span>
+                if (parseInt(String(record.department_id)) === 0) return <span>{__('All', 'pay_check_mate')}</span>
                 const departmentData = departments?.find((department) => department.id === record.department_id);
                 return (
                     <span>{departmentData?.name}</span>
@@ -72,9 +72,9 @@ export const PayrollList = () => {
             }
         },
         {
-            title: __('Designation', 'pcm'), dataIndex: 'designation_id',
+            title: __('Designation', 'pay_check_mate'), dataIndex: 'designation_id',
             render: (text: string, record: PayrollType) => {
-                if (parseInt(String(record.designation_id)) === 0) return <span>{__('All', 'pcm')}</span>
+                if (parseInt(String(record.designation_id)) === 0) return <span>{__('All', 'pay_check_mate')}</span>
                 const designationData = designations?.find((designation) => designation.id === record.designation_id);
                 return (
                     <span>{designationData?.name}</span>
@@ -82,50 +82,50 @@ export const PayrollList = () => {
             }
         },
         {
-            title: __('Prepared by', 'pcm'), dataIndex: 'prepared_by',
+            title: __('Prepared by', 'pay_check_mate'), dataIndex: 'prepared_by',
             render: (text: string, record: PayrollType) => {
                 return (
                     <span>{record.created_employee_id}</span>
                 )
             }
         },
-        {title: __('Total salary', 'pcm'), dataIndex: 'total_salary', sortable: true},
+        {title: __('Total salary', 'pay_check_mate'), dataIndex: 'total_salary', sortable: true},
         {
-            title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
+            title: __('Status', 'pay_check_mate'), dataIndex: 'status', sortable: true,
             render: (text: string, record: PayrollType) => {
                 if (parseInt(String(record.status)) === PayrollStatus.Approved) {
                     return (
                         <span className={"flex items-center text-"+green+"-500"}>
                             <CheckIcon className="h-5 w-5 mr-1"/>
-                            {__('Approved', 'pcm')}
+                            {__('Approved', 'pay_check_mate')}
                         </span>
                     )
                 } else if (parseInt(String(record.status)) === PayrollStatus.Rejected) {
                     return (
                         <span className={"flex items-center text-" + red + "-500"}>
                             <XMarkIcon className="h-5 w-5 mr-1"/>
-                            {__('Rejected', 'pcm')}
+                            {__('Rejected', 'pay_check_mate')}
                         </span>
                     )
                 } else if (parseInt(String(record.status)) === PayrollStatus.Cancelled) {
                     return (
                         <span className="flex items-center text-gray-500">
                             <ExclamationTriangleIcon className="h-5 w-5 mr-1"/>
-                            {__('Cancelled', 'pcm')}
+                            {__('Cancelled', 'pay_check_mate')}
                         </span>
                     )
                 } else {
                     return (
                         <span className={"flex items-center text-" + orange + "-500"}>
                             <PencilSquareIcon className="h-5 w-5 mr-1"/>
-                            {__('Pending', 'pcm')}
+                            {__('Pending', 'pay_check_mate')}
                         </span>
                     )
                 }
             }
         },
         {
-            title: __('Action', 'pcm'), dataIndex: 'action',
+            title: __('Action', 'pay_check_mate'), dataIndex: 'action',
             render: (text: string, record: PayrollType) => {
                 return (
                     <div className="flex">
@@ -133,7 +133,7 @@ export const PayrollList = () => {
                             to={`/payroll/${record.id}`}
                             className={anchorClass}
                         >
-                            {__('View', 'pcm')}
+                            {__('View', 'pay_check_mate')}
                         </Link>
                         {parseInt(String(record.status)) === PayrollStatus.NotApproved && (
                             <>
@@ -145,7 +145,7 @@ export const PayrollList = () => {
                                             to={`/payroll/edit/${record.id}`}
                                             className={"text-" + orange + "-400 hover:text-" + orange + "-600"}
                                         >
-                                            {__('Edit', 'pcm')}
+                                            {__('Edit', 'pay_check_mate')}
                                         </Link>
                                     </>
                                 )}
@@ -156,7 +156,7 @@ export const PayrollList = () => {
                                             onClick={() => handleStatus(record, 1)}
                                             className={"text-" + green + "-600 hover:text-" + green + "-900"}
                                         >
-                                            {__('Approve', 'pcm')}
+                                            {__('Approve', 'pay_check_mate')}
                                         </button>
                                     </>
                                 )}
@@ -167,7 +167,7 @@ export const PayrollList = () => {
                                             onClick={() => handleStatus(record, 2)}
                                             className={"text-" + red + "-600 hover:text-" + red + "-900"}
                                         >
-                                            {__('Reject', 'pcm')}
+                                            {__('Reject', 'pay_check_mate')}
                                         </button>
                                     </>
                                 )}
@@ -178,7 +178,7 @@ export const PayrollList = () => {
                                             onClick={() => handleStatus(record, 3)}
                                             className="text-gray-400 hover:text-gray-700"
                                         >
-                                            {__('Cancel', 'pcm')}
+                                            {__('Cancel', 'pay_check_mate')}
                                         </button>
                                     </>
                                 )}
@@ -201,7 +201,7 @@ export const PayrollList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Payroll List', 'pcm')}
+                            {__('Payroll List', 'pay_check_mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -212,7 +212,7 @@ export const PayrollList = () => {
                                     path="/generate-payroll"
                                 >
                                     <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
-                                    {__('Generate Payroll', 'pcm')}
+                                    {__('Generate Payroll', 'pay_check_mate')}
                                 </Button>
                             </>
                         )}

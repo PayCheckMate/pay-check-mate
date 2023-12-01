@@ -28,9 +28,9 @@ export const DesignationList = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentPage, setCurrentPage] = useState(filters.page);
 
-    let indigo = applyFilters('pcm.indigo', 'gray');
-    let green = applyFilters('pcm.green', 'gray');
-    let red = applyFilters('pcm.red', 'gray');
+    let indigo = applyFilters('pay_check_mate.indigo', 'gray');
+    let green = applyFilters('pay_check_mate.green', 'gray');
+    let red = applyFilters('pay_check_mate.red', 'gray');
     const columns = [
         {title: 'Designation name', dataIndex: 'name', sortable: true},
         {
@@ -62,7 +62,7 @@ export const DesignationList = () => {
                             className={"text-"+indigo+"-600 hover:text-"+indigo+"-900 font-semibold"}
                             onClick={() => handleModal(record)}
                         >
-                        {__('Edit', 'pcm')}
+                        {__('Edit', 'pay_check_mate')}
                     </button>
                     )}
                     {userCan(UserCapNames.pay_check_mate_change_designation_status) && (
@@ -74,7 +74,7 @@ export const DesignationList = () => {
                                         onClick={() => handleStatus(record.id, 0)}
                                         className={"text-"+red+"-600 hover:text-"+red+"-900 font-semibold"}
                                     >
-                                        {__('Inactive', 'pcm')}
+                                        {__('Inactive', 'pay_check_mate')}
                                     </button>
                                 </>
                             )}
@@ -85,7 +85,7 @@ export const DesignationList = () => {
                                         onClick={() => handleStatus(record.id, 1)}
                                         className={"text-"+green+"-600 hover:text-"+green+"-900 font-semibold"}
                                     >
-                                        {__('Active', 'pcm')}
+                                        {__('Active', 'pay_check_mate')}
                                     </button>
                                 </>
                             )}
@@ -106,10 +106,10 @@ export const DesignationList = () => {
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
         dispatch(designation).updateDesignation(data).then((response: any) => {
-            useNotify(response, __('Designation status updated successfully', 'pcm'));
+            useNotify(response, __('Designation status updated successfully', 'pay_check_mate'));
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while updating designation', 'pcm'), {
+            toast.error(__('Something went wrong while updating designation', 'pay_check_mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
@@ -135,7 +135,7 @@ export const DesignationList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Designation list', 'pcm')}
+                            {__('Designation list', 'pay_check_mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -145,7 +145,7 @@ export const DesignationList = () => {
                             className="hover:text-white active:text-white"
                         >
                             <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
-                            {__('Add designation', 'pcm')}
+                            {__('Add designation', 'pay_check_mate')}
                         </Button>
                         )}
                         {(userCan(UserCapNames.pay_check_mate_add_designation) && showModal) && (

@@ -10,7 +10,7 @@
  * Author URI:          https://ratuljh.wordpress.com
  * License:             GPL-3.0-or-later
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:         pcm
+ * Text Domain:         pay_check_mate
  * Domain Path:         /languages
  *
  * @package WordPress
@@ -60,7 +60,7 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
  *
  * @return PayCheckMate
  */
-function pcm(): PayCheckMate {
+function pay_check_mate(): PayCheckMate {
     return PayCheckMate::get_instance();
 }
 
@@ -69,4 +69,4 @@ function pcm(): PayCheckMate {
  *
  * @since PAY_CHECK_MATE_SINCE
  */
-pcm();
+pay_check_mate();
