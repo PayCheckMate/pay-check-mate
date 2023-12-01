@@ -10,17 +10,17 @@ class PayCheckMateUserRoles {
     public function __construct() {
         // Add an employee role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_employee' ) ) {
-            add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pcm' ), $this->get_employee_capabilities() );
+            add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pay_check_mate' ), $this->get_employee_capabilities() );
         }
 
         // Add an accountant role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_accountant' ) ) {
-            add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pcm' ), $this->get_all_capabilities() );
+            add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pay_check_mate' ), $this->get_all_capabilities() );
         }
 
         // Add an admin role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_admin' ) ) {
-            add_role( 'pay_check_mate_admin', __( 'PayCheckMate Admin', 'pcm' ), $this->get_all_capabilities() );
+            add_role( 'pay_check_mate_admin', __( 'PayCheckMate Admin', 'pay_check_mate' ), $this->get_all_capabilities() );
         }
 
         // Add capabilities to all admin users.
@@ -117,11 +117,11 @@ class PayCheckMateUserRoles {
      *
      * @return array<string, string>|string
      */
-    public static function get_pcm_roles( string $role = '' ) {
+    public static function get_pay_check_mate_roles( string $role = '' ) {
         $roles = [
-            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pcm' ),
-            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pcm' ),
-            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pcm' ),
+            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pay_check_mate' ),
+            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pay_check_mate' ),
+            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pay_check_mate' ),
         ];
         if ( ! empty( $role ) ) {
             return $roles[ $role ];

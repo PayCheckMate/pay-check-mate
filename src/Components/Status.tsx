@@ -22,9 +22,9 @@ export const Status = ({status, textMap=defaultTextMap}: StatusProps) => {
         }
     };
 
-    let colorActive = applyFilters('pcm.status_color_active', 'gray');
+    let colorActive = applyFilters('pay_check_mate.status_color_active', 'gray');
     colorActive = `text-${colorActive}-800 bg-gradient-to-r from-${colorActive}-100/10 to-${colorActive}-200`
-    let colorInactive = applyFilters('pcm.status_color_inactive', 'gray');
+    let colorInactive = applyFilters('pay_check_mate.status_color_inactive', 'gray');
     colorInactive = `text-${colorInactive}-800 bg-gradient-to-l from-${colorInactive}-100/10 to-${colorInactive}-200`
     return (
         <span className={`px-2 inline-flex text-xs leading-5 font-semibold ${parseInt(String(status)) ? colorActive : colorInactive}`}>

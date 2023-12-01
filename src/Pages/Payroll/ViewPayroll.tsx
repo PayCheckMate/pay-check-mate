@@ -52,7 +52,7 @@ const ViewPayroll = () => {
             setPayRoll(response.payroll);
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
+            toast.error(__('Something went wrong while fetching payroll', 'pay_check_mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
@@ -167,13 +167,13 @@ const ViewPayroll = () => {
     // Adding header row to Excel
     const allSalaryHeads = salaryHeads.earnings.concat(salaryHeads.deductions, salaryHeads.non_taxable);
     const headers = [
-        __('Employee ID', 'pcm'),
-        __('Employee name', 'pcm'),
-        __('Designation', 'pcm'),
-        __('Department', 'pcm'),
-        __('Basic Salary', 'pcm'),
+        __('Employee ID', 'pay_check_mate'),
+        __('Employee name', 'pay_check_mate'),
+        __('Designation', 'pay_check_mate'),
+        __('Department', 'pay_check_mate'),
+        __('Basic Salary', 'pay_check_mate'),
         ...allSalaryHeads.map((salaryHead) => salaryHead.head_name),
-        __('Total Salary', 'pcm'),
+        __('Total Salary', 'pay_check_mate'),
     ]
 
     const getSampleData = () => {
@@ -184,8 +184,8 @@ const ViewPayroll = () => {
             return [
                 employee.employee_id,
                 employee.first_name + ' ' + employee.last_name,
-                departments.find((department: any) => department.id === employee.department_id)?.name || __('All', 'pcm'),
-                designations.find((designation: any) => designation.id === employee.designation_id)?.name || __('All', 'pcm'),
+                departments.find((department: any) => department.id === employee.department_id)?.name || __('All', 'pay_check_mate'),
+                designations.find((designation: any) => designation.id === employee.designation_id)?.name || __('All', 'pay_check_mate'),
                 employee.basic_salary,
                 ...allSalaryHeads.map((salaryHead) => {
                     if (parseInt(String(salaryHead.head_type)) === HeadType.Earning) {
@@ -240,15 +240,15 @@ const ViewPayroll = () => {
         a.click();
     };
 
-    const isExportSalarySheet = applyFilters('pcm.is_export_salary_sheet', false)
-    const earningClass = applyFilters('pcm.earning_class', '')
-    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
-    const deductionClass = applyFilters('pcm.deduction_class', '')
-    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
-    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
-    const netPayableClass = applyFilters('pcm.net_payable_class', '')
-    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
-    let red = applyFilters('pcm.red', 'gray');
+    const isExportSalarySheet = applyFilters('pay_check_mate.is_export_salary_sheet', false)
+    const earningClass = applyFilters('pay_check_mate.earning_class', '')
+    const totalEarningsClass = applyFilters('pay_check_mate.total_earnings_class', '')
+    const deductionClass = applyFilters('pay_check_mate.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pay_check_mate.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pay_check_mate.non_taxable_class', '')
+    const netPayableClass = applyFilters('pay_check_mate.net_payable_class', '')
+    const totalPayableClass = applyFilters('pay_check_mate.total_payable_class', '')
+    let red = applyFilters('pay_check_mate.red', 'gray');
 
     return (
         <>
@@ -263,16 +263,16 @@ const ViewPayroll = () => {
                                     <div>
                                         <div className="sm:flex-auto">
                                             <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                {__('Payroll for : ', 'pcm')} {payRoll?.payroll_date_string}
+                                                {__('Payroll for : ', 'pay_check_mate')} {payRoll?.payroll_date_string}
                                             </h1>
                                         </div>
                                         <div className="flex justify-between mt-2 mb-4">
                                             <div className="grid grid-cols-4 gap-4">
                                                 <div>
-                                                    {__('Department', 'pcm')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pcm')}
+                                                    {__('Department', 'pay_check_mate')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pay_check_mate')}
                                                 </div>
                                                 <div>
-                                                    {__('Designation', 'pcm')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pcm')}
+                                                    {__('Designation', 'pay_check_mate')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pay_check_mate')}
                                                 </div>
 
                                             </div>
@@ -297,7 +297,7 @@ const ViewPayroll = () => {
                                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                                         aria-hidden="true"
                                                     />
-                                                    {__('Export', 'pcm')}
+                                                    {__('Export', 'pay_check_mate')}
                                                 </Button>
                                             </div>
                                         )}
@@ -308,25 +308,25 @@ const ViewPayroll = () => {
                                         <thead>
                                         <tr>
                                             <th rowSpan={2}>
-                                                {__('Sl. No.', 'pcm')}
+                                                {__('Sl. No.', 'pay_check_mate')}
                                             </th>
                                             <th rowSpan={2}>
-                                                {__('Employee ID', 'pcm')}
+                                                {__('Employee ID', 'pay_check_mate')}
                                             </th>
                                             <th
                                                 rowSpan={2}
                                                 className="fixed-column"
                                             >
-                                                {__('Employee Name', 'pcm')}
+                                                {__('Employee Name', 'pay_check_mate')}
                                             </th>
                                             <th rowSpan={2}>
-                                                {__('Designation', 'pcm')}
+                                                {__('Designation', 'pay_check_mate')}
                                             </th>
                                             <th rowSpan={2}>
-                                                {__('Department', 'pcm')}
+                                                {__('Department', 'pay_check_mate')}
                                             </th>
                                             <th rowSpan={3}>
-                                                {__('Basic Salary', 'pcm')}
+                                                {__('Basic Salary', 'pay_check_mate')}
                                             </th>
                                             {salaryHeads.earnings.length > 0 && (
                                                 <th
@@ -338,41 +338,41 @@ const ViewPayroll = () => {
                                                 className={totalEarningsClass}
                                                 rowSpan={2}
                                             >
-                                                {__('Total Earnings', 'pcm')}
+                                                {__('Total Earnings', 'pay_check_mate')}
                                             </th>
                                             {salaryHeads.deductions.length > 0 && (
                                                 <th
                                                     className={deductionClass}
                                                     colSpan={salaryHeads.deductions.length}
                                                 >
-                                                    {__('Deductions', 'pcm')}
+                                                    {__('Deductions', 'pay_check_mate')}
                                                 </th>
                                             )}
                                             <th
                                                 className={totalDeductionsClass}
                                                 rowSpan={2}
                                             >
-                                                {__('Total Deductions', 'pcm')}
+                                                {__('Total Deductions', 'pay_check_mate')}
                                             </th>
                                             <th
                                                 className={netPayableClass}
                                                 rowSpan={2}
                                             >
-                                                {__('Net Payable', 'pcm')}
+                                                {__('Net Payable', 'pay_check_mate')}
                                             </th>
                                             {salaryHeads.non_taxable.length > 0 && (
                                                 <th
                                                     className={nonTaxableClass}
                                                     colSpan={salaryHeads.non_taxable.length}
                                                 >
-                                                    {__('Non Taxable', 'pcm')}
+                                                    {__('Non Taxable', 'pay_check_mate')}
                                                 </th>
                                             )}
                                             <th
                                                 className={totalPayableClass}
                                                 rowSpan={2}
                                             >
-                                                {__('Total Payable', 'pcm')}
+                                                {__('Total Payable', 'pay_check_mate')}
                                             </th>
                                         </tr>
                                         <tr className="second-row">
@@ -425,13 +425,13 @@ const ViewPayroll = () => {
                                                     className="text-left"
                                                     key={`designation${tableDataIndex}`}
                                                 >
-                                                    {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pcm')}
+                                                    {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pay_check_mate')}
                                                 </td>
                                                 <td
                                                     className="text-left"
                                                     key={`department${tableDataIndex}`}
                                                 >
-                                                    {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pcm')}
+                                                    {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pay_check_mate')}
                                                 </td>
                                                 <td
                                                     className="text-right"
@@ -497,7 +497,7 @@ const ViewPayroll = () => {
                                                 className="fixed-column text-right font-bold text-xl"
                                                 colSpan={5}
                                             >
-                                                {__('Total', 'pcm')}
+                                                {__('Total', 'pay_check_mate')}
                                             </td>
                                             <td
                                                 className="text-right"
@@ -563,7 +563,7 @@ const ViewPayroll = () => {
                                                     <div className="flex">
                                                         <div className="mt-4">
                                                             <strong>
-                                                                {__('Remarks', 'pcm')}
+                                                                {__('Remarks', 'pay_check_mate')}
                                                             </strong>:&nbsp;
                                                             <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
                                                         </div>
@@ -573,7 +573,7 @@ const ViewPayroll = () => {
                                         <div className="w-1/6 prepared_by">
                                             <div className="flex">
                                                     <strong className="font-bold">
-                                                        {__('Prepared By: ', 'pcm')}&nbsp;
+                                                        {__('Prepared By: ', 'pay_check_mate')}&nbsp;
                                                     </strong>
                                                 {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
                                             </div>
@@ -587,8 +587,8 @@ const ViewPayroll = () => {
             ) : (
                 <Card>
                     <EmptyState
-                        title={__('Payroll Sheet', 'pcm')}
-                        description={__('Select department or designation and pay month to view payroll list', 'pcm')}
+                        title={__('Payroll Sheet', 'pay_check_mate')}
+                        description={__('Select department or designation and pay month to view payroll list', 'pay_check_mate')}
                         icon={<CurrencyDollarIcon
                             className={"w-6 h-6 text-"+red+"-600"}
                             aria-hidden="true"

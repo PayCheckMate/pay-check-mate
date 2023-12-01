@@ -5,7 +5,7 @@ import selectors from './selectors';
 import controls from './controls';
 import resolvers from './resolvers';
 
-const DESIGNATION_STORE = 'pcm/designation';
+const DESIGNATION_STORE = 'pay_check_mate/designation';
 
 const designations = createReduxStore( DESIGNATION_STORE, {
     reducer,

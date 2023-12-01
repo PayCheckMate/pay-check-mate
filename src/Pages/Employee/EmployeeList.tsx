@@ -36,7 +36,7 @@ export const EmployeeList = () => {
         setCurrentPage(filterObject.page || 1);
     };
 
-    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
+    let anchorClass = applyFilters('pay_check_mate.anchor_class', 'anchor-link-gray')
     const columns = [
         {
             title: 'Employee ID',
@@ -44,7 +44,7 @@ export const EmployeeList = () => {
             sortable: true,
         },
         {
-            title: __('Joining Date', 'pcm'), dataIndex: 'joining_date', sortable: true,
+            title: __('Joining Date', 'pay_check_mate'), dataIndex: 'joining_date', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>
@@ -58,7 +58,7 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Name', 'pcm'),
+            title: __('Name', 'pay_check_mate'),
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
@@ -78,9 +78,9 @@ export const EmployeeList = () => {
                 }
             }
         },
-        {title: __('Email', 'pcm'), dataIndex: 'email'},
+        {title: __('Email', 'pay_check_mate'), dataIndex: 'email'},
         {
-            title: __('Designation', 'pcm'), dataIndex: 'designation_id', sortable: true,
+            title: __('Designation', 'pay_check_mate'), dataIndex: 'designation_id', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>{record.designation_name}</span>
@@ -88,7 +88,7 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Department', 'pcm'), dataIndex: 'department_id', sortable: true,
+            title: __('Department', 'pay_check_mate'), dataIndex: 'department_id', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>{record.department_name}</span>
@@ -96,28 +96,28 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Status', 'pcm'), dataIndex: 'status', sortable: true,
+            title: __('Status', 'pay_check_mate'), dataIndex: 'status', sortable: true,
             render: (text: string, record: any) => {
                 return (<Status
                     status={record.status}
-                    textMap={{active: __('Active', 'pcm'), inactive: __('Resigned', 'pcm')}}
+                    textMap={{active: __('Active', 'pay_check_mate'), inactive: __('Resigned', 'pay_check_mate')}}
                 />)
             }
         },
         {
-            title: __('Action', 'pcm'),
+            title: __('Action', 'pay_check_mate'),
             dataIndex: 'action',
             render: (text: string, record: any) => {
                 if (parseInt(String(record.status)) === 0){
                     return (
                         <div className="flex">
-                            <span className="text-gray-300">{__('Resigned', 'pcm')}</span>
+                            <span className="text-gray-300">{__('Resigned', 'pay_check_mate')}</span>
                         </div>
                     )
                 }
                 return (
                     <div className="flex">
-                        {applyFilters('pcm.employee_list_filter', null, record)}
+                        {applyFilters('pay_check_mate.employee_list_filter', null, record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
                                 <span className="mx-2 text-gray-300">|</span>
@@ -125,7 +125,7 @@ export const EmployeeList = () => {
                                     to={`/employee/edit/${record.employee_id}`}
                                     className={anchorClass}
                                 >
-                                    {__('Edit', 'pcm')}
+                                    {__('Edit', 'pay_check_mate')}
                                 </Link>
                             </>
                         )}
@@ -141,7 +141,7 @@ export const EmployeeList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Employee List', 'pcm')}
+                            {__('Employee List', 'pay_check_mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -155,7 +155,7 @@ export const EmployeeList = () => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Import Employee', 'pcm')}
+                                    {__('Import Employee', 'pay_check_mate')}
                                 </Button>
                                 <Button
                                     className="hover:text-white"
@@ -165,7 +165,7 @@ export const EmployeeList = () => {
                                         className="w-5 h-5 mr-2"
                                         aria-hidden="true"
                                     />
-                                    {__('Add Employee', 'pcm')}
+                                    {__('Add Employee', 'pay_check_mate')}
                                 </Button>
                             </div>
                         )}
