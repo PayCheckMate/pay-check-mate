@@ -2,17 +2,17 @@
 
 namespace PayCheckMate\REST;
 
-use PayCheckMate\Classes\Employee;
-use PayCheckMate\REST\RestController;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
+use PayCheckMate\Classes\Employee;
+use PayCheckMate\Models\EmployeeModel;
 use PayCheckMate\Requests\EmployeeRequest;
+use PayCheckMate\Models\SalaryHistoryModel;
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\Requests\SalaryHistoryRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
-use PayCheckMate\Models\EmployeeModel;
-use PayCheckMate\Models\SalaryHistoryModel;
 
 class EmployeeApi extends RestController implements HookAbleApiInterface {
 
@@ -169,11 +169,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
      */
     public function get_employee_salary_details_permissions_check( WP_REST_Request $request ): bool {
         $current_user_id = get_current_user_id();
-        $employee_id    = $request->get_param( 'employee_id' );
+        $employee_id     = $request->get_param( 'employee_id' );
         // phpcs:ignore
         if ( ! current_user_can( 'pay_check_mate_accountant' ) && $current_user_id !== $employee_id ) {
             return false;
         }
+
         // phpcs:ignore
         return current_user_can( 'pay_check_mate_employee' );
     }
@@ -197,8 +198,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employees[] = $this->prepare_response_for_collection( $item );
         }
 
-        $total = $employee->count_employee( $request );
-        $limit = $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10;
+        $total     = $employee->count_employee( $request );
+        $limit     = $request->get_param( 'per_page' ) ? $request->get_param( 'per_page' ) : 10;
         $max_pages = ceil( $total / (int) $limit );
 
         $response = new WP_REST_Response( $employees );
@@ -265,7 +266,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     }
 
                     $user = new \WP_User( $user_id );
-                    $user->set_role( 'pay_check_mate_employee' );
+                    $user->set_role( PayCheckMateUserRoles::get_pay_check_mate_employee_role_name() );
                 } else {
                     $user_id = $user->ID;
                 }
@@ -311,8 +312,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $keys_to_remove     = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details     = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-				return ! in_array( $key, $keys_to_remove, true );
-			}, ARRAY_FILTER_USE_KEY
+            return ! in_array( $key, $keys_to_remove, true );
+        }, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
@@ -371,7 +372,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employee_request->set_default_params( $employee );
             // @phpstan-ignore-next-line
             $this->create_employee( $employee_request );
-            ++$count;
+            ++ $count;
         }
 
         // translators: %d: number of employees.

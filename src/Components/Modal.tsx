@@ -12,7 +12,7 @@ type ModalProps = {
 };
 
 export const Modal = ({setShowModal, children, header, description = '', width = 'sm:w-full sm:max-w-lg', ...props}: ModalProps) => {
-    props.zIndex = props.zIndex ? props.zIndex : ' z-auto'
+    props.zIndex = props.zIndex ? props.zIndex : ' z-50'
     return (
         <>
             <Transition.Root show={true} as={Fragment}>

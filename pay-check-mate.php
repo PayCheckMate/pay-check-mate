@@ -41,10 +41,6 @@ if ( ! defined( 'PAY_CHECK_MATE_DIR' ) ) {
     define( 'PAY_CHECK_MATE_DIR', __DIR__ );
 }
 
-if ( ! defined( 'PAY_CHECK_MATE_VERSION' ) ) {
-    define( 'PAY_CHECK_MATE_VERSION', '1.0.0' );
-}
-
 if ( ! defined( 'PAY_CHECK_MATE_BASE_NAME' ) ) {
     define( 'PAY_CHECK_MATE_BASE_NAME', plugin_basename( __FILE__ ) );
 }
