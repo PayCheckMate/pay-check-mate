@@ -2,7 +2,7 @@ import {useEffect, useState} from "@wordpress/element";
 import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType,} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
-import {Loading} from "../../Components/Loading";
+import TableSkeleton from "../../Components/TableSkeleton";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
@@ -39,7 +39,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
         e.preventDefault();
         try {
             if (!searchedEmployeeId) {
-                toast.error(__('Please enter employee id', 'pay_check_mate'), {
+                toast.error(__('Please enter employee id', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -137,7 +137,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                                         <FormInput
                                             type="text"
                                             className="mt-2"
-                                            label={__('Employee ID', 'pay_check_mate')}
+                                            label={__('Employee ID', 'pay-check-mate')}
                                             name="employee_id"
                                             id="employee_id"
                                             value={searchedEmployeeId}
@@ -148,7 +148,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                                         <Button
                                             type="submit"
                                         >
-                                            {__('Show report', 'pay_check_mate')}
+                                            {__('Show report', 'pay-check-mate')}
                                         </Button>
                                     </div>
                                 </div>
@@ -158,14 +158,14 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
-                                <Loading />
+                                <TableSkeleton rows={10} columns={4} />
                             ) : (
                                 <div id='printable'>
                                     <div className="flex justify-between">
                                         <div>
                                             <div className="sm:flex-auto">
                                                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {pageTitle ? pageTitle : __('Payroll Ledger %s', 'pay_check_mate').replace('%s', searchedEmployeeId)}
+                                                    {pageTitle ? pageTitle : __('Payroll Ledger %s', 'pay-check-mate').replace('%s', searchedEmployeeId)}
                                                 </h1>
                                             </div>
                                         </div>
@@ -178,19 +178,19 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                                             <thead>
                                             <tr>
                                                 <th rowSpan={2}>
-                                                    {__('Sl. No.', 'pay_check_mate')}
+                                                    {__('Sl. No.', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Pay Month', 'pay_check_mate')}
+                                                    {__('Pay Month', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
                                                     className="fixed-column"
                                                 >
-                                                    {__('Employee Name', 'pay_check_mate')}
+                                                    {__('Employee Name', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={3}>
-                                                    {__('Basic Salary', 'pay_check_mate')}
+                                                    {__('Basic Salary', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
@@ -202,41 +202,41 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                                                     className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Earnings', 'pay_check_mate')}
+                                                    {__('Total Earnings', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
                                                         className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
-                                                        {__('Deductions', 'pay_check_mate')}
+                                                        {__('Deductions', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Deductions', 'pay_check_mate')}
+                                                    {__('Total Deductions', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     className={netPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Net Payable', 'pay_check_mate')}
+                                                    {__('Net Payable', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
                                                         className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
-                                                        {__('Non Taxable', 'pay_check_mate')}
+                                                        {__('Non Taxable', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Payable', 'pay_check_mate')}
+                                                    {__('Total Payable', 'pay-check-mate')}
                                                 </th>
                                             </tr>
                                             <tr className="second-row">
@@ -356,7 +356,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                                                             className="fixed-column text-right font-bold text-xl"
                                                             colSpan={3}
                                                         >
-                                                            {__('Total', 'pay_check_mate')}
+                                                            {__('Total', 'pay-check-mate')}
                                                         </td>
                                                         <td
                                                             className="text-right"
@@ -423,8 +423,8 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                     ) : (
                         <Card>
                             <EmptyState
-                                title={__('Payroll Sheet', 'pay_check_mate')}
-                                description={__('Select department or designation and pay month to view payroll list', 'pay_check_mate')}
+                                title={__('Payroll Sheet', 'pay-check-mate')}
+                                description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                                 icon={<CurrencyDollarIcon
                                     className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"

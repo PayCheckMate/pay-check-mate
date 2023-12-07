@@ -70,16 +70,16 @@ export const PaySlipDetails = () => {
               <div className="grid grid-cols-2 gap-4">
                   <div>
                       <h3 className="text-lg font-bold">
-                          {__('Earnings', 'pay_check_mate')}
+                          {__('Earnings', 'pay-check-mate')}
                       </h3>
                       <table className="table-auto w-full">
                     <thead>
                       <tr>
                         <th className="border px-4 py-2">
-                          {__('Description', 'pay_check_mate')}
+                          {__('Description', 'pay-check-mate')}
                         </th>
                         <th className="border px-4 py-2">
-                          {__('Amount', 'pay_check_mate')}
+                          {__('Amount', 'pay-check-mate')}
                         </th>
                       </tr>
                     </thead>
@@ -128,7 +128,7 @@ export const PaySlipDetails = () => {
                 <div className="pt-4">
                     <div className="flex justify-between">
                       <p className="text-gray-500">
-                          {__('Basic Salary:', 'pay_check_mate')}
+                          {__('Basic Salary:', 'pay-check-mate')}
                       </p>
                       <p>
                             {data.basic_salary || 0}
@@ -136,19 +136,19 @@ export const PaySlipDetails = () => {
                     </div>
                     <div className="flex justify-between">
                       <p className="text-gray-500">
-                          {__('Total Earnings:', 'pay_check_mate')}
+                          {__('Total Earnings:', 'pay-check-mate')}
                       </p>
                       <p>{totalEarning}</p>
                     </div>
                     <div className="flex justify-between">
                       <p className="text-gray-500">
-                          {__('Total Deductions:', 'pay_check_mate')}
+                          {__('Total Deductions:', 'pay-check-mate')}
                       </p>
                       <p>{totalDeduction}</p>
                     </div>
                     <div className="flex justify-between mt-2 border-t border-gray-200">
                       <h3 className="text-lg font-semibold">
-                          {__('Net Pay:', 'pay_check_mate')}
+                          {__('Net Pay:', 'pay-check-mate')}
                       </h3>
                       <h3>
                           {

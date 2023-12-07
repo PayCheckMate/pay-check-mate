@@ -30,7 +30,7 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
         const requiredFields = ['name'];
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill all required fields', 'pay_check_mate'), {
+            toast.error(__('Please fill all required fields', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: false
             });
@@ -40,10 +40,10 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
 
         if (formData.id) {
             dispatch(designation).updateDesignation(data).then((response: any) => {
-                useNotify(response, __('Designation updated successfully', 'pay_check_mate'));
+                useNotify(response, __('Designation updated successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while updating designation', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while updating designation', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -52,10 +52,10 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
             setShowModal(false);
         } else {
             dispatch(designation).createDesignation(data).then((response: any) => {
-                useNotify(response, __('Designation created successfully', 'pay_check_mate'));
+                useNotify(response, __('Designation created successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while creating designation', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while creating designation', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -64,12 +64,12 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
         }
     }
     return(
-        <Modal setShowModal={setShowModal} header={__('Add designation', 'pay_check_mate')}>
+        <Modal setShowModal={setShowModal} header={__('Add designation', 'pay-check-mate')}>
             <HOC role={UserCapNames.pay_check_mate_add_designation}>
                 <div className="mt-5 md:mt-0 md:col-span-2">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <FormInput
-                            label={__('Designation name', 'pay_check_mate')}
+                            label={__('Designation name', 'pay-check-mate')}
                             name="name"
                             id="name"
                             value={formData.name}
@@ -78,7 +78,7 @@ export const CreateDesignation = ({showModal, setShowModal, formData, setFormDat
                             required={true}
                         />
                         <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                            {__('Add designation', 'pay_check_mate')}
+                            {__('Add designation', 'pay-check-mate')}
                         </Button>
                     </form>
                 </div>

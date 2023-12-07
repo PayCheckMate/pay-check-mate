@@ -7,7 +7,7 @@ import {
 } from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
-import {Loading} from "../../Components/Loading";
+import TableSkeleton from "../../Components/TableSkeleton";
 import {SelectBox} from "../../Components/SelectBox";
 import {__} from "@wordpress/i18n";
 import {FormInput} from "../../Components/FormInput";
@@ -79,7 +79,7 @@ const CreatePayroll = () => {
                 setPayDate(response.payroll.payroll_date);
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while fetching payroll', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while fetching payroll', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -92,7 +92,7 @@ const CreatePayroll = () => {
         setIsSubmitting(false)
         try {
             if (!payDate) {
-                toast.error(__('Please select a date', 'pay_check_mate'));
+                toast.error(__('Please select a date', 'pay-check-mate'));
                 return;
             }
             const data = {
@@ -121,7 +121,7 @@ const CreatePayroll = () => {
         if (designations.length <= 0) return;
         const defaultDesignation = {
             id: 0,
-            name: __('All', 'pay_check_mate'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDesignation(defaultDesignation)
@@ -132,7 +132,7 @@ const CreatePayroll = () => {
 
         const defaultDepartment = {
             id: 0,
-            name: __('All', 'pay_check_mate'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDepartment(defaultDepartment)
@@ -190,7 +190,7 @@ const CreatePayroll = () => {
 
     const handleSubmit = () => {
         if (payDate === '') {
-            toast.error(__('Please select a date', 'pay_check_mate'));
+            toast.error(__('Please select a date', 'pay-check-mate'));
             return;
         }
         setIsSubmitting(true);
@@ -218,7 +218,7 @@ const CreatePayroll = () => {
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
                 navigate('/payroll');
-                toast.success(__('Payroll saved successfully', 'pay_check_mate'));
+                toast.success(__('Payroll saved successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 localStorage.removeItem('Payroll.TableData');
                 navigate('/payroll');
@@ -233,11 +233,11 @@ const CreatePayroll = () => {
         }
     }
 
-    addAction('pay_check_mate.payroll_edit_action', 'pay_check_mate.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
+    addAction('pay_check_mate.payroll_edit_action', 'pay-check-mate'.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
     })
 
-    const text = __('Turn on edit mode (PRO)', 'pay_check_mate-pro');
+    const text = __('Turn on edit mode (PRO)', 'pay-check-mate'-pro');
     const editSalaryHead = applyFilters( 'pay_check_mate.payroll_edit_filter',
         <>
             {text}
@@ -282,7 +282,7 @@ const CreatePayroll = () => {
                             <div className="grid grid-cols-4 gap-4">
                                 <div>
                                     <SelectBox
-                                        title={__('Designation', 'pay_check_mate')}
+                                        title={__('Designation', 'pay-check-mate')}
                                         options={designations}
                                         selected={selectedDesignation}
                                         setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}
@@ -290,7 +290,7 @@ const CreatePayroll = () => {
                                 </div>
                                 <div>
                                     <SelectBox
-                                        title={__('Department', 'pay_check_mate')}
+                                        title={__('Department', 'pay-check-mate')}
                                         options={departments}
                                         selected={selectedDepartment}
                                         setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}
@@ -299,7 +299,7 @@ const CreatePayroll = () => {
                                 <div>
                                     <FormInput
                                         type="month"
-                                        label={__('Pay month', 'pay_check_mate')}
+                                        label={__('Pay month', 'pay-check-mate')}
                                         className="mt-2"
                                         name="pay_month"
                                         id="pay_month"
@@ -311,7 +311,7 @@ const CreatePayroll = () => {
                                     {/*This button should flat and small*/}
                                     {!payrollId && (
                                         <Button type="submit">
-                                            {__('Generate', 'pay_check_mate')}
+                                            {__('Generate', 'pay-check-mate')}
                                         </Button>
                                     )}
                                 </div>
@@ -327,7 +327,7 @@ const CreatePayroll = () => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Import Variable Salary', 'pay_check_mate')}
+                                    {__('Import Variable Salary', 'pay-check-mate')}
                                 </Button>
                             </div>
                         ) }
@@ -340,7 +340,7 @@ const CreatePayroll = () => {
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
-                                <Loading />
+                                <TableSkeleton rows={10} columns={4} />
                             ) : (
                                 <>
                                     <div className="flex justify-between">
@@ -353,73 +353,73 @@ const CreatePayroll = () => {
                                             <thead>
                                             <tr>
                                                 <th rowSpan={2}>
-                                                    {__('Sl. No.', 'pay_check_mate')}
+                                                    {__('Sl. No.', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Employee ID', 'pay_check_mate')}
+                                                    {__('Employee ID', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
                                                     className="fixed-column"
                                                 >
-                                                    {__('Employee Name', 'pay_check_mate')}
+                                                    {__('Employee Name', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Designation', 'pay_check_mate')}
+                                                    {__('Designation', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Department', 'pay_check_mate')}
+                                                    {__('Department', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={3}>
-                                                    {__('Basic Salary', 'pay_check_mate')}
+                                                    {__('Basic Salary', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
                                                         className={earningClass}
                                                         colSpan={salaryHeads.earnings.length}
                                                     >
-                                                        {__('Earnings', 'pay_check_mate')}
+                                                        {__('Earnings', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Earnings', 'pay_check_mate')}
+                                                    {__('Total Earnings', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
                                                         className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
-                                                        {__('Deductions', 'pay_check_mate')}
+                                                        {__('Deductions', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Deductions', 'pay_check_mate')}
+                                                    {__('Total Deductions', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     className={netPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Net Payable', 'pay_check_mate')}
+                                                    {__('Net Payable', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
                                                         className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
-                                                        {__('Non Taxable', 'pay_check_mate')}
+                                                        {__('Non Taxable', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Payable', 'pay_check_mate')}
+                                                    {__('Total Payable', 'pay-check-mate')}
                                                 </th>
                                             </tr>
                                             <tr className="second-row">
@@ -604,7 +604,7 @@ const CreatePayroll = () => {
                                                     className="fixed-column text-right font-bold text-xl"
                                                     colSpan={5}
                                                 >
-                                                    {__('Total', 'pay_check_mate')}
+                                                    {__('Total', 'pay-check-mate')}
                                                 </td>
                                                 <td
                                                     className="text-right"
@@ -671,7 +671,7 @@ const CreatePayroll = () => {
                                     className="form-input w-full"
                                     name="remarks"
                                     id="remarks"
-                                    placeholder={__('Remarks', 'pay_check_mate')}
+                                    placeholder={__('Remarks', 'pay-check-mate')}
                                     value={remarks}
                                     onChange={(event) => setRemarks(event.target.value)}
                                 />
@@ -685,16 +685,16 @@ const CreatePayroll = () => {
                                     }}
                                 >
                                     {isSubmitting ? (
-                                        <>{__('Submitting...', 'pay_check_mate')}<Spinner /></>
-                                    ) : __('Save', 'pay_check_mate')}
+                                        <>{__('Submitting...', 'pay-check-mate')}<Spinner /></>
+                                    ) : __('Save', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </>
                     ) : (
                         <Card>
                             <EmptyState
-                                title={__('Payroll Sheet', 'pay_check_mate')}
-                                description={__('Select department or designation and pay month to view payroll list', 'pay_check_mate')}
+                                title={__('Payroll Sheet', 'pay-check-mate')}
+                                description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                                 icon={<CurrencyDollarIcon
                                     className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"
