@@ -222,12 +222,12 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         global $wpdb;
         $data = $request->get_params();
         if ( empty( $data['employee_id'] ) ) {
-            wp_send_json_error( __( 'Employee ID is required', 'pay_check_mate' ), 400 );
+            wp_send_json_error( __( 'Employee ID is required', 'pay-check-mate' ), 400 );
         }
         // Check if employee id exists.
         $employee = new Employee( $data['employee_id'] );
         if ( empty( $data['id'] ) && ! empty( $employee->get_employee_id() ) ) {
-            wp_send_json_error( __( 'Employee already exists', 'pay_check_mate' ), 400 );
+            wp_send_json_error( __( 'Employee already exists', 'pay-check-mate' ), 400 );
         }
 
         $salary_information                = $data['salaryInformation'];
@@ -238,7 +238,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $validated_data = new EmployeeRequest( $data );
         if ( $validated_data->error ) {
             return new WP_Error(
-                'rest_invalid_employee_data', __( 'Invalid employee data', 'pay_check_mate' ), [
+                'rest_invalid_employee_data', __( 'Invalid employee data', 'pay-check-mate' ), [
                     'data'   => $validated_data->error,
                     'status' => 400,
                 ]
@@ -286,7 +286,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
 
             // @phpstan-ignore-next-line
             if ( empty( (string) $validated_data->user_id ) ) {
-                wp_send_json_error( __( 'Unable to create user, please try again.', 'pay_check_mate' ), 400 );
+                wp_send_json_error( __( 'Unable to create user, please try again.', 'pay-check-mate' ), 400 );
             }
 
             $employee = $employee_model->create( $validated_data );
@@ -320,7 +320,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $validate_salary_data                 = new SalaryHistoryRequest( $salary_information );
         if ( $validate_salary_data->error ) {
             return new WP_Error(
-                'rest_invalid_salary_data', __( 'Invalid salary data', 'pay_check_mate' ), [
+                'rest_invalid_salary_data', __( 'Invalid salary data', 'pay-check-mate' ), [
                     'data'   => $validate_salary_data->error,
                     'status' => 400,
                 ]
@@ -363,7 +363,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data = $request->get_params();
         unset( $data['_locale'] );
         if ( empty( $data ) ) {
-            wp_send_json_error( __( 'No data found', 'pay_check_mate' ), 400 );
+            wp_send_json_error( __( 'No data found', 'pay-check-mate' ), 400 );
         }
 
         $count = 0;
@@ -376,7 +376,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         // translators: %d: number of employees.
-        wp_send_json_success( sprintf( _n( 'Successfully created %d employee.', 'Successfully created %d employees.', $count, 'pay_check_mate' ), $count ), 200 );
+        wp_send_json_success( sprintf( _n( 'Successfully created %d employee.', 'Successfully created %d employees.', $count, 'pay-check-mate' ), $count ), 200 );
     }
 
     /**
@@ -424,7 +424,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employee = $employee->get_employee_by_user_id( $user_id );
         // Check if there is any employee with this user id, then return, cause employee exists.
         if ( '0' !== (string) $employee->get_employee_id() || ! empty( $employee->get_employee_id() ) ) {
-            return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pay_check_mate' ), [ 'status' => 302 ] );
+            return new WP_Error( 'rest_invalid_data', __( 'Employee already exists', 'pay-check-mate' ), [ 'status' => 302 ] );
         }
         $user = new \WP_User( $user_id );
 
@@ -496,99 +496,99 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             'type'       => 'object',
             'properties' => [
                 'id'                  => [
-                    'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+                    'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'employee_id'         => [
-                    'description' => __( 'Employee ID', 'pay_check_mate' ),
+                    'description' => __( 'Employee ID', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
                 'department_id'       => [
-                    'description' => __( 'Department ID', 'pay_check_mate' ),
+                    'description' => __( 'Department ID', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
                 'designation_id'      => [
-                    'description' => __( 'Designation ID', 'pay_check_mate' ),
+                    'description' => __( 'Designation ID', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
                 'department_name'     => [
-                    'description' => __( 'Department name', 'pay_check_mate' ),
+                    'description' => __( 'Department name', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
                 ],
                 'designation_name'    => [
-                    'description' => __( 'Designation name', 'pay_check_mate' ),
+                    'description' => __( 'Designation name', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view' ],
                 ],
                 'first_name'          => [
-                    'description' => __( 'Employee First Name', 'pay_check_mate' ),
+                    'description' => __( 'Employee First Name', 'pay-check-mate' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
                 'last_name'           => [
-                    'description' => __( 'Employee Last Name', 'pay_check_mate' ),
+                    'description' => __( 'Employee Last Name', 'pay-check-mate' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
                 'email'               => [
-                    'description' => __( 'Employee Email', 'pay_check_mate' ),
+                    'description' => __( 'Employee Email', 'pay-check-mate' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
                 'phone'               => [
-                    'description' => __( 'Employee Phone Number', 'pay_check_mate' ),
+                    'description' => __( 'Employee Phone Number', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'bank_name'           => [
-                    'description' => __( 'Employee Bank Name', 'pay_check_mate' ),
+                    'description' => __( 'Employee Bank Name', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'bank_account_number' => [
-                    'description' => __( 'Employee Bank Account Number', 'pay_check_mate' ),
+                    'description' => __( 'Employee Bank Account Number', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'tax_number'          => [
-                    'description' => __( 'Employee Bank Account Number', 'pay_check_mate' ),
+                    'description' => __( 'Employee Bank Account Number', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'address'             => [
-                    'description' => __( 'Employee Address', 'pay_check_mate' ),
+                    'description' => __( 'Employee Address', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'joining_date'        => [
-                    'description' => __( 'Employee Joining Date', 'pay_check_mate' ),
+                    'description' => __( 'Employee Joining Date', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                     'required'    => true,
                 ],
                 'joining_date_string' => [
-                    'description' => __( 'Employee Joining Date String', 'pay_check_mate' ),
+                    'description' => __( 'Employee Joining Date String', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'resign_date'         => [
-                    'description' => __( 'Employee Regine Date', 'pay_check_mate' ),
+                    'description' => __( 'Employee Regine Date', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                 ],
                 'status'              => [
-                    'description' => __( 'Employee Status', 'pay_check_mate' ),
+                    'description' => __( 'Employee Status', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
                 'created_on'          => [
-                    'description' => __( 'Employee Created On', 'pay_check_mate' ),
+                    'description' => __( 'Employee Created On', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                 ],
                 'updated_at'          => [
-                    'description' => __( 'Employee Updated At', 'pay_check_mate' ),
+                    'description' => __( 'Employee Updated At', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date',
                 ],

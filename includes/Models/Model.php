@@ -134,7 +134,7 @@ class Model implements ModelInterface {
         $where .= $this->get_status( $args );
 
         if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+            $where .= $wpdb->prepare( " AND %i.status = %d", $this->get_table(), $args['status'] );
         }
 
         if ( ! empty( $args['search'] ) ) {
@@ -156,11 +156,13 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
+                "SELECT $fields FROM %i {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
+                $this->get_table()
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM %i {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
+                $this->get_table(),
                 $args['limit'],
                 $args['offset']
             );
@@ -359,7 +361,7 @@ class Model implements ModelInterface {
         }
 
         // As we prepared the where clause before, we can directly use it.
-        $query = "SELECT COUNT(*) FROM {$this->get_table()} {$where}";
+        $query = $wpdb->prepare( "SELECT COUNT(*) FROM %i {$where}", $this->get_table());
 
         return $wpdb->get_var( $query );
     }
@@ -376,7 +378,7 @@ class Model implements ModelInterface {
      */
     public function get_search_query( string $search ) {
         if ( empty( static::$search_by ) ) {
-            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pay_check_mate' ) );
+            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pay-check-mate' ) );
         }
 
         global $wpdb;
@@ -439,7 +441,7 @@ class Model implements ModelInterface {
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
-        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.{$this->get_find_key()} = %d", $id );
+        $query             = $wpdb->prepare( "SELECT {$fields} FROM %i {$relations} {$where} AND {$this->get_table()}.{$this->get_find_key()} = %d", $this->get_table(), $id );
         $results           = $wpdb->get_row( $query );
 
         if ( empty( $results ) ) {
@@ -467,7 +469,7 @@ class Model implements ModelInterface {
     public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): array {
         global $wpdb;
         if ( empty( $find_by ) ) {
-            throw new \Exception( __( 'Arguments cannot be empty', 'pay_check_mate' ) );
+            throw new \Exception( __( 'Arguments cannot be empty', 'pay-check-mate' ) );
         }
 
         $args = wp_parse_args(
@@ -525,9 +527,9 @@ class Model implements ModelInterface {
         }
 
         if ( '-1' === "$args[limit]" ) {
-            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ";
+            $query = $wpdb->prepare("SELECT {$fields} FROM %i {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ", $this->get_table());
         } else {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+            $query = $wpdb->prepare( "SELECT {$fields} FROM %i {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $this->get_table(), $args['limit'], $args['offset'] );
         }
 
         $results = $wpdb->get_results( $query );
@@ -567,7 +569,7 @@ class Model implements ModelInterface {
         $last_id = $wpdb->insert_id;
 
         if ( ! $last_id ) {
-            return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pay_check_mate' ) );
+            return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pay-check-mate' ) );
         }
 
         // Clear cache.
@@ -611,7 +613,7 @@ class Model implements ModelInterface {
             return $this->find( $id );
         }
 
-        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay_check_mate' ) );
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay-check-mate' ) );
     }
 
     /**
@@ -646,7 +648,7 @@ class Model implements ModelInterface {
             return $this->find_by( $find_by, [] )[0];
         }
 
-        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay_check_mate' ) );
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay-check-mate' ) );
     }
 
     /**

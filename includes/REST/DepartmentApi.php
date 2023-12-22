@@ -53,7 +53,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'get_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -65,17 +65,17 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
 						'id'              => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
 						'name' => [
-							'description' => __( 'Department name.', 'pay_check_mate' ),
+							'description' => __( 'Department name.', 'pay-check-mate' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
 						'status'          => [
-							'description' => __( 'Department status.', 'pay_check_mate' ),
+							'description' => __( 'Department status.', 'pay-check-mate' ),
 							'type'        => 'integer',
 						],
 					],
@@ -86,7 +86,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -223,13 +223,13 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $department     = new DepartmentModel();
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
         }
 
         $department = $department->create( $validated_data );
 
         if ( is_wp_error( $department ) ) {
-            return new WP_Error( 500, __( 'Could not create department.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not create department.', 'pay-check-mate' ) );
         }
 
         $department = $this->prepare_item_for_response( $department, $request );
@@ -284,7 +284,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         $department     = new DepartmentModel();
         $validated_data = new DepartmentRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
         }
 
         $updated = $department->update( $request->get_param( 'id' ), $validated_data );
@@ -315,11 +315,11 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
         try {
             $department = $department->delete( $request->get_param( 'id' ) );
         } catch ( Exception $e ) {
-            return new WP_Error( 500, __( 'Could not delete designation.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pay-check-mate' ) );
         }
 
         if ( ! $department ) {
-            return new WP_Error( 500, __( 'Could not delete designation.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pay-check-mate' ) );
         }
 
         return new WP_REST_Response( $department, 200 );
@@ -339,28 +339,28 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
             'type'       => 'object',
             'properties' => [
                 'id'              => [
-                    'description' => __( 'Unique identifier for the object', 'pay_check_mate' ),
+                    'description' => __( 'Unique identifier for the object', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'name' => [
-                    'description' => __( 'Department name', 'pay_check_mate' ),
+                    'description' => __( 'Department name', 'pay-check-mate' ),
                     'type'        => 'string',
                     'required'    => true,
                 ],
                 'status'          => [
-                    'description' => __( 'Status', 'pay_check_mate' ),
+                    'description' => __( 'Status', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'created_on'      => [
-                    'description' => __( 'Created on', 'pay_check_mate' ),
+                    'description' => __( 'Created on', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'updated_at'      => [
-                    'description' => __( 'Updated on', 'pay_check_mate' ),
+                    'description' => __( 'Updated on', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
