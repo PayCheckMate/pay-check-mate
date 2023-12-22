@@ -233,11 +233,11 @@ const CreatePayroll = () => {
         }
     }
 
-    addAction('pay_check_mate.payroll_edit_action', 'pay-check-mate'.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
+    addAction('pay_check_mate.payroll_edit_action', 'pay_check_mate.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
     })
 
-    const text = __('Turn on edit mode (PRO)', 'pay-check-mate'-pro');
+    const text = __('Turn on edit mode (PRO)', 'pay-check-mate');
     const editSalaryHead = applyFilters( 'pay_check_mate.payroll_edit_filter',
         <>
             {text}
@@ -539,7 +539,7 @@ const CreatePayroll = () => {
                                                                     type="number"
                                                                     key={deduction.id}
                                                                     name={`deductions[${data.id}][${deduction.id}]`}
-                                                                    value={salary || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.deductions[deduction.id] : 0)}
+                                                                    value={salary || (TableData && TableData.length > 0 ? TableData[tableDataIndex].salary_details.deductions[deduction.id] : 0)}
                                                                     onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                                                 />
                                                             ) : (
