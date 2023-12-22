@@ -77,11 +77,11 @@ class AdminMenu implements HookAbleInterface {
         );
 
         // Add donation link
-        $plugin_meta[] = sprintf(
-            '<a href="%1$s" target="_blank"><span class="dashicons dashicons-heart" aria-hidden="true" style="font-size: 14px; line-height: 1.3"></span>%2$s</a>',
-            "https://paycheckmate.com/donate/?ref={$ref}&utm_source=wp-plugin&utm_medium={$medium}",
-            esc_html_x( 'Donate', 'verb', 'pay-check-mate' )
-        );
+//        $plugin_meta[] = sprintf(
+//            '<a href="%1$s" target="_blank"><span class="dashicons dashicons-heart" aria-hidden="true" style="font-size: 14px; line-height: 1.3"></span>%2$s</a>',
+//            "https://paycheckmate.com/donate/?ref={$ref}&utm_source=wp-plugin&utm_medium={$medium}",
+//            esc_html_x( 'Donate', 'verb', 'pay-check-mate' )
+//        );
 
         return $plugin_meta;
     }
