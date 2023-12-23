@@ -18,6 +18,7 @@ import {PrintButton} from "../../Components/PrintButton";
 import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
 import {HOC} from "../../Components/HOC";
+import EmployeeSearch from "../../Components/EmployeeSearch";
 
 export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: string, pageTitle?: string }) => {
     const {loading} = useFetchApi('');
@@ -134,15 +135,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                             >
                                 <div className="grid grid-cols-4 gap-4">
                                     <div>
-                                        <FormInput
-                                            type="text"
-                                            className="mt-2"
-                                            label={__('Employee ID', 'pay-check-mate')}
-                                            name="employee_id"
-                                            id="employee_id"
-                                            value={searchedEmployeeId}
-                                            onChange={(e) => setSearchedEmployeeId(e.target.value)}
-                                        />
+                                        <EmployeeSearch />
                                     </div>
                                     <div className="flex items-end">
                                         <Button
