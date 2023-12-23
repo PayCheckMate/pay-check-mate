@@ -32,7 +32,7 @@ export const PaySlipDetails = () => {
 
     // Sample data for demonstration
     const companyName = 'ABC Company';
-    const companyLogo = 'https://picsum.photos/200';
+    const companyLogo = '';
 
     return (
         <Card>
