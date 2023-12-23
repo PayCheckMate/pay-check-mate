@@ -2,7 +2,7 @@ import {useEffect, useState} from "@wordpress/element";
 import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType,} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
-import {Loading} from "../../Components/Loading";
+import TableSkeleton from "../../Components/TableSkeleton";
 import {__} from "@wordpress/i18n";
 import {EmptyState} from "../../Components/EmptyState";
 import {Card} from "../../Components/Card";
@@ -45,7 +45,7 @@ export const PayrollRegister = () => {
         e.preventDefault();
         try {
             if (!payDate) {
-                toast.error(__('Please select a date', 'pay_check_mate'));
+                toast.error(__('Please select a date', 'pay-check-mate'));
                 return;
             }
             const data = {
@@ -84,7 +84,7 @@ export const PayrollRegister = () => {
         if (designations.length <= 0) return;
         const defaultDesignation = {
             id: 'all',
-            name: __('All', 'pay_check_mate'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDesignation(defaultDesignation)
@@ -95,7 +95,7 @@ export const PayrollRegister = () => {
 
         const defaultDepartment = {
             id: 'all',
-            name: __('All', 'pay_check_mate'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDepartment(defaultDepartment)
@@ -162,7 +162,7 @@ export const PayrollRegister = () => {
                             <div className="grid grid-cols-4 gap-4">
                                 <div>
                                     <SelectBox
-                                        title={__('Designation', 'pay_check_mate')}
+                                        title={__('Designation', 'pay-check-mate')}
                                         options={designations}
                                         selected={selectedDesignation}
                                         setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}
@@ -170,7 +170,7 @@ export const PayrollRegister = () => {
                                 </div>
                                 <div>
                                     <SelectBox
-                                        title={__('Department', 'pay_check_mate')}
+                                        title={__('Department', 'pay-check-mate')}
                                         options={departments}
                                         selected={selectedDepartment}
                                         setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}
@@ -180,7 +180,7 @@ export const PayrollRegister = () => {
                                     <FormInput
                                         type="month"
                                         className="mt-2"
-                                        label={__('Pay month', 'pay_check_mate')}
+                                        label={__('Pay month', 'pay-check-mate')}
                                         name="pay_month"
                                         id="pay_month"
                                         value={payDate}
@@ -193,7 +193,7 @@ export const PayrollRegister = () => {
                                         <Button
                                             type="submit"
                                         >
-                                            {__('Show report', 'pay_check_mate')}
+                                            {__('Show report', 'pay-check-mate')}
                                         </Button>
                                     )}
                                 </div>
@@ -203,23 +203,23 @@ export const PayrollRegister = () => {
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
-                                <Loading />
+                                <TableSkeleton rows={10} columns={4} />
                             ) : (
                                 <div id='printable'>
                                     <div className="flex justify-between">
                                         <div>
                                             <div className="sm:flex-auto">
                                                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {__('Payroll for : ', 'pay_check_mate')} {payRoll?.payroll_date_string}
+                                                    {__('Payroll for : ', 'pay-check-mate')} {payRoll?.payroll_date_string}
                                                 </h1>
                                             </div>
                                             {/*<div className="flex justify-between mt-2 mb-4">*/}
                                             {/*    <div className="grid grid-cols-4 gap-4">*/}
                                             {/*        <div>*/}
-                                            {/*            {__('Department', 'pay_check_mate')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pay_check_mate')}*/}
+                                            {/*            {__('Department', 'pay-check-mate')} : {designations.find((designation: any) => designation.id === payRoll?.designation_id)?.name || __('All', 'pay-check-mate')}*/}
                                             {/*        </div>*/}
                                             {/*        <div>*/}
-                                            {/*            {__('Designation', 'pay_check_mate')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pay_check_mate')}*/}
+                                            {/*            {__('Designation', 'pay-check-mate')} : {departments.find((department: any) => department.id === payRoll?.department_id)?.name || __('All', 'pay-check-mate')}*/}
                                             {/*        </div>*/}
 
                                             {/*    </div>*/}
@@ -234,25 +234,25 @@ export const PayrollRegister = () => {
                                             <thead>
                                             <tr>
                                                 <th rowSpan={2}>
-                                                    {__('Sl. No.', 'pay_check_mate')}
+                                                    {__('Sl. No.', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Employee ID', 'pay_check_mate')}
+                                                    {__('Employee ID', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
                                                     className="fixed-column"
                                                 >
-                                                    {__('Employee Name', 'pay_check_mate')}
+                                                    {__('Employee Name', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Designation', 'pay_check_mate')}
+                                                    {__('Designation', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Department', 'pay_check_mate')}
+                                                    {__('Department', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={3}>
-                                                    {__('Basic Salary', 'pay_check_mate')}
+                                                    {__('Basic Salary', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
@@ -264,41 +264,41 @@ export const PayrollRegister = () => {
                                                     className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Earnings', 'pay_check_mate')}
+                                                    {__('Total Earnings', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
                                                         className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
-                                                        {__('Deductions', 'pay_check_mate')}
+                                                        {__('Deductions', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Deductions', 'pay_check_mate')}
+                                                    {__('Total Deductions', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     className={netPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Net Payable', 'pay_check_mate')}
+                                                    {__('Net Payable', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
                                                         className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
-                                                        {__('Non Taxable', 'pay_check_mate')}
+                                                        {__('Non Taxable', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Payable', 'pay_check_mate')}
+                                                    {__('Total Payable', 'pay-check-mate')}
                                                 </th>
                                             </tr>
                                             <tr className="second-row">
@@ -351,13 +351,13 @@ export const PayrollRegister = () => {
                                                         className="text-left"
                                                         key={`designation${tableDataIndex}`}
                                                     >
-                                                        {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pay_check_mate')}
+                                                        {departments.find((department: any) => department.id === data.department_id)?.name || __('All', 'pay-check-mate')}
                                                     </td>
                                                     <td
                                                         className="text-left"
                                                         key={`department${tableDataIndex}`}
                                                     >
-                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pay_check_mate')}
+                                                        {designations.find((designation: any) => designation.id === data.designation_id)?.name || __('All', 'pay-check-mate')}
                                                     </td>
                                                     <td
                                                         className="text-right"
@@ -423,7 +423,7 @@ export const PayrollRegister = () => {
                                                     className="fixed-column text-right font-bold text-xl"
                                                     colSpan={5}
                                                 >
-                                                    {__('Total', 'pay_check_mate')}
+                                                    {__('Total', 'pay-check-mate')}
                                                 </td>
                                                 <td
                                                     className="text-right"
@@ -489,7 +489,7 @@ export const PayrollRegister = () => {
                                                         <div className="flex">
                                                             <div className="mt-4">
                                                                 <strong>
-                                                                    {__('Remarks', 'pay_check_mate')}
+                                                                    {__('Remarks', 'pay-check-mate')}
                                                                 </strong>:&nbsp;
                                                                 <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
                                                             </div>
@@ -499,7 +499,7 @@ export const PayrollRegister = () => {
                                             <div className="w-1/6 prepared_by">
                                                 <div className="flex">
                                                         <strong className="font-bold">
-                                                            {__('Prepared By: ', 'pay_check_mate')}&nbsp;
+                                                            {__('Prepared By: ', 'pay-check-mate')}&nbsp;
                                                         </strong>
                                                         {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
                                                 </div>
@@ -512,8 +512,8 @@ export const PayrollRegister = () => {
                     ) : (
                         <Card>
                             <EmptyState
-                                title={__('Payroll Sheet', 'pay_check_mate')}
-                                description={__('Select department or designation and pay month to view payroll list', 'pay_check_mate')}
+                                title={__('Payroll Sheet', 'pay-check-mate')}
+                                description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                                 icon={<CurrencyDollarIcon
                                     className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"

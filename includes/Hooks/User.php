@@ -25,11 +25,11 @@ class User implements HookAbleInterface {
      */
     public function display_user_role( $user ): void {
         ?>
-        <h3><?php esc_html_e( 'Pay Check Mate', 'pay_check_mate' ); ?></h3>
+        <h3><?php esc_html_e( 'Pay Check Mate', 'pay-check-mate' ); ?></h3>
         <table class="form-table">
             <tbody>
                 <tr>
-                    <th><label for="pay_check_mate_user_role"><?php esc_html_e( 'Pay Check Mate Role', 'pay_check_mate' ); ?></label></th>
+                    <th><label for="pay_check_mate_user_role"><?php esc_html_e( 'Pay Check Mate Role', 'pay-check-mate' ); ?></label></th>
                     <td>
                         <?php
                         $roles = PayCheckMateUserRoles::get_pay_check_mate_roles();

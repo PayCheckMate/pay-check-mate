@@ -41,7 +41,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                     setPersonalInformation(response.data);
                     setSalaryInformation(response.data.salaryInformation as SalaryHistoryType[]);
                 } else {
-                    toast.error(__('Something went wrong', 'pay_check_mate'));
+                    toast.error(__('Something went wrong', 'pay-check-mate'));
                 }
             });
         }
@@ -68,7 +68,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                     <div className="sm:flex-auto mb-6">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
                             {
-                                page_title !== '' ? page_title : __('Employee Details', 'pay_check_mate')
+                                page_title !== '' ? page_title : __('Employee Details', 'pay-check-mate')
                             }
                         </h1>
                     </div>
@@ -78,14 +78,14 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                 <div>
                                     <div className="px-4 sm:px-0">
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">
-                                        {__('Personal Information', 'pay_check_mate')}
+                                        {__('Personal Information', 'pay-check-mate')}
                                     </h3>
                                   </div>
                                   <div className="mt-6 border-t border-gray-100">
                                     <dl className="divide-y divide-gray-100">
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('First name', 'pay_check_mate')}
+                                            {__('First name', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {personalInformation.first_name}
@@ -93,7 +93,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Last name', 'pay_check_mate')}
+                                            {__('Last name', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {personalInformation.last_name}
@@ -101,7 +101,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Email address', 'pay_check_mate')}
+                                            {__('Email address', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {personalInformation.email}
@@ -109,7 +109,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Phone number', 'pay_check_mate')}
+                                            {__('Phone number', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {personalInformation.phone}
@@ -117,7 +117,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Address', 'pay_check_mate')}
+                                            {__('Address', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {personalInformation.address}
@@ -125,7 +125,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Joining Date', 'pay_check_mate')}
+                                            {__('Joining Date', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {
@@ -139,7 +139,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Resignation Date', 'pay_check_mate')}
+                                            {__('Resignation Date', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {
@@ -154,7 +154,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                       </div>
                                       <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">
-                                            {__('Status', 'pay_check_mate')}
+                                            {__('Status', 'pay-check-mate')}
                                         </dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             {<Status status={personalInformation.status} />}
@@ -169,7 +169,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                             <div>
                                 <div className="px-4 sm:px-0">
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">
-                                        {__('Salary History', 'pay_check_mate')}
+                                        {__('Salary History', 'pay-check-mate')}
                                     </h3>
                                 </div>
                                 <ol className="relative border-l border-gray-300 mt-10">
@@ -188,7 +188,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                         (
                                                             <>
                                                                 <span key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
-                                                                    {__('Initial salary', 'pay_check_mate')}
+                                                                    {__('Initial salary', 'pay-check-mate')}
                                                                 </span>
                                                             </>
                                                         )
@@ -197,7 +197,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                         (
                                                             <>
                                                                 <span key={'initial_salary'+salary.id} className="ml-2 font-normal text-gray-600">
-                                                                    {__('On Permanent', 'pay_check_mate')}
+                                                                    {__('On Permanent', 'pay-check-mate')}
                                                                 </span>
                                                             </>
                                                         )
@@ -205,14 +205,14 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                     {SalaryPurposeType.Increment === parseInt(String(salary.salary_purpose)) && (
                                                         <>
                                                             <span key={'increment'+salary.id} className="ml-2 font-normal text-gray-600">
-                                                                {__('Increment', 'pay_check_mate')}
+                                                                {__('Increment', 'pay-check-mate')}
                                                             </span>
                                                       </>
                                                     )}
                                                     {SalaryPurposeType.Promotion === parseInt(String(salary.salary_purpose)) && (
                                                         <>
                                                             <span key={'Promotion'+salary.id} className="ml-2 font-normal text-gray-600">
-                                                                {__('Promotion', 'pay_check_mate')}
+                                                                {__('Promotion', 'pay-check-mate')}
                                                             </span>
                                                       </>
                                                     )}
@@ -220,7 +220,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                 </h3>
                                                 <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
                                                     {
-                                                        __('Active from: ', 'pay_check_mate') + new Date(salary.active_from).toLocaleDateString('en-US', {
+                                                        __('Active from: ', 'pay-check-mate') + new Date(salary.active_from).toLocaleDateString('en-US', {
                                                             year: 'numeric',
                                                             month: 'short',
                                                             day: 'numeric'
@@ -232,7 +232,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                         <div className="mt-6 border-b border-gray-100">
                                                             <dl className="flex flex-col sm:flex-row sm:justify-between">
                                                                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                                                                    {__('Basic Salary', 'pay_check_mate')}
+                                                                    {__('Basic Salary', 'pay-check-mate')}
                                                                 </dt>
                                                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
                                                                     + {salary.basic_salary}
@@ -257,7 +257,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                         <div className="mt-4 border-b border-gray-100">
                                                             <dl className="flex flex-col sm:flex-row sm:justify-between">
                                                                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                                                                    {__('Gross Salary', 'pay_check_mate')}
+                                                                    {__('Gross Salary', 'pay-check-mate')}
                                                                 </dt>
                                                                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
                                                                     {salary.gross_salary}
@@ -267,7 +267,7 @@ export const EmployeeDetails = ({employee_id = '', page_title=''}: EmployeeDetai
                                                         {/*Remarks*/}
                                                         <div className="mt-6">
                                                             <h3 className="text-base font-semibold leading-7 text-gray-900">
-                                                                {__('Remarks', 'pay_check_mate')}
+                                                                {__('Remarks', 'pay-check-mate')}
                                                             </h3>
                                                             <p dangerouslySetInnerHTML={{__html: salary.remarks}} />
                                                         </div>

@@ -5,7 +5,7 @@ export const validateRequiredFields = (data: any, requiredFields: string[], setF
     setFormError({});
     requiredFields.forEach((field) => {
         if (!data[field] && data[field] !== 0) {
-            errors[field] = __('This field is required', 'pay_check_mate');
+            errors[field] = __('This field is required', 'pay-check-mate');
         }
     });
     setFormError(errors);

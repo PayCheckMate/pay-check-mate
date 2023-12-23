@@ -1,5 +1,4 @@
 import React, {useMemo, useState} from "@wordpress/element";
-import {Loading} from "./Loading";
 import {EmptyState} from "./EmptyState";
 import {Card} from "./Card";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "@heroicons/react/24/outline";
@@ -14,6 +13,7 @@ import {userCan} from "../Helpers/User";
 import {debounce} from "lodash";
 import {applyFilters} from "../Helpers/Hooks";
 import {Button} from "./Button";
+import TableSkeleton from "./TableSkeleton";
 
 type SortDirection = "asc" | "desc" | "";
 
@@ -156,7 +156,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
     return (
         <>
             {isLoading ? (
-                <Loading />
+                <TableSkeleton rows={10} columns={columns.length} />
             ) : (
                 <div className="overflow-x-auto">
                     {search && (
@@ -255,7 +255,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                         className={`px-4 py-1 mr-6 text-sm text-white focus:outline-none ` + (currentPage === 1 ? `cursor-not-allowed bg-${color}-500` : "")}
                     >
                         <ArrowLeftIcon className="w-4 h-4" />
-                        {__("Previous", "pay_check_mate")}
+                        {__("Previous", "pay-check-mate")}
                     </Button>
                     {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
                     {/*    Page {currentPage} of {totalPages}*/}
@@ -263,7 +263,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     {totalPages > 1 && (
                         <>
                         <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("Go to page", 'pay_check_mate')}
+                        {__("Go to page", 'pay-check-mate')}
                         </span>
                         <FormInput
                             type="number"
@@ -285,7 +285,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                     </span>
                     <span className="mx-2 text-gray-600">|</span>
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("Showing per page", "pay_check_mate")}
+                        {__("Showing per page", "pay-check-mate")}
                     </span>
                     <span className="px-1 py-1 text-sm font-medium text-gray-900">
                         <SelectBox
@@ -301,7 +301,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                         disabled={currentPage === parseInt(String(totalPages))}
                         className={`px-4 py-1 ml-6 text-sm text-white focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? `cursor-not-allowed bg-${color}-500` : "")}
                     >
-                    {__("Next", "pay_check_mate")}
+                    {__("Next", "pay-check-mate")}
                         <ArrowRightIcon className="w-4 h-4" />
                     </Button>
                 </nav>

@@ -60,7 +60,7 @@ export const DepartmentList = () => {
                             className={"text-"+indigo+"-600 hover:text-"+indigo+"-900 font-semibold"}
                             onClick={() => handleModal(record)}
                         >
-                            {__('Edit', 'pay_check_mate')}
+                            {__('Edit', 'pay-check-mate')}
                         </button>
                     )}
                     {userCan(UserCapNames.pay_check_mate_change_department_status) && (
@@ -72,7 +72,7 @@ export const DepartmentList = () => {
                                         onClick={() => handleStatus(record.id, 0)}
                                         className={"text-"+red+"-600 hover:text-"+red+"-900 font-semibold"}
                                     >
-                                        {__('Inactive', 'pay_check_mate')}
+                                        {__('Inactive', 'pay-check-mate')}
                                     </button>
                                 </>
                             )}
@@ -83,7 +83,7 @@ export const DepartmentList = () => {
                                         onClick={() => handleStatus(record.id, 1)}
                                         className={"text-"+green+"-600 hover:text-"+green+"-900 font-semibold"}
                                     >
-                                        {__('Active', 'pay_check_mate')}
+                                        {__('Active', 'pay-check-mate')}
                                     </button>
                                 </>
                             )}
@@ -104,10 +104,10 @@ export const DepartmentList = () => {
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, name, status, _wpnonce};
         dispatch(department).updateDepartment(data).then((response: any) => {
-            useNotify(response, __('Department status updated successfully', 'pay_check_mate'));
+            useNotify(response, __('Department status updated successfully', 'pay-check-mate'));
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while updating department', 'pay_check_mate'), {
+            toast.error(__('Something went wrong while updating department', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
@@ -134,7 +134,7 @@ export const DepartmentList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="heading text-base font-semibold leading-6 text-gray-900">
-                            {__('Department list', 'pay_check_mate')}
+                            {__('Department list', 'pay-check-mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -144,7 +144,7 @@ export const DepartmentList = () => {
                                 className="hover:text-white active:text-white"
                             >
                                 <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
-                                {__('Add department', 'pay_check_mate')}
+                                {__('Add department', 'pay-check-mate')}
                             </Button>
                         )}
                         {(userCan(UserCapNames.pay_check_mate_add_department) && showModal) && (

@@ -30,7 +30,7 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
         const requiredFields = ['name'];
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill all required fields', 'pay_check_mate'), {
+            toast.error(__('Please fill all required fields', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: false
             });
@@ -40,10 +40,10 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
 
         if (formData.id) {
             dispatch(department).updateDepartment(data).then((response: any) => {
-                useNotify(response, __('Department updated successfully', 'pay_check_mate'));
+                useNotify(response, __('Department updated successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while updating department', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while updating department', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -52,10 +52,10 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
             setShowModal(false);
         } else {
             dispatch(department).createDepartment(data).then((response: any) => {
-                useNotify(response, __('Department created successfully', 'pay_check_mate'));
+                useNotify(response, __('Department created successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while creating department', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while creating department', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -64,12 +64,12 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
         }
     }
     return(
-        <Modal setShowModal={setShowModal} header={__('Add department', 'pay_check_mate')}>
+        <Modal setShowModal={setShowModal} header={__('Add department', 'pay-check-mate')}>
             <HOC role={UserCapNames.pay_check_mate_add_department}>
                 <div className="mt-5 md:mt-0 md:col-span-2">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <FormInput
-                            label={__('Department name', 'pay_check_mate')}
+                            label={__('Department name', 'pay-check-mate')}
                             name="name"
                             id="name"
                             value={formData.name}
@@ -78,7 +78,7 @@ export const CreateDepartment = ({showModal, setShowModal, formData, setFormData
                             required={true}
                         />
                         <Button className="mt-4" onClick={() => handleSubmit(event)}>
-                            {formData.id ? __('Update', 'pay_check_mate') : __('Save', 'pay_check_mate')}
+                            {formData.id ? __('Update', 'pay-check-mate') : __('Save', 'pay-check-mate')}
                         </Button>
                     </form>
                 </div>

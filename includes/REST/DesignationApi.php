@@ -52,7 +52,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'get_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -64,17 +64,17 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'update_item_permissions_check' ],
 					'args'                => [
 						'id'     => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
 						'name'   => [
-							'description' => __( 'Designation name.', 'pay_check_mate' ),
+							'description' => __( 'Designation name.', 'pay-check-mate' ),
 							'type'        => 'string',
 							'required'    => true,
 						],
 						'status' => [
-							'description' => __( 'Designation status.', 'pay_check_mate' ),
+							'description' => __( 'Designation status.', 'pay-check-mate' ),
 							'type'        => 'number',
 						],
 					],
@@ -85,7 +85,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
 					'permission_callback' => [ $this, 'delete_item_permissions_check' ],
 					'args'                => [
 						'id' => [
-							'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+							'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
 							'type'        => 'integer',
 							'required'    => true,
 						],
@@ -214,12 +214,12 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         $designation    = new DesignationModel();
         $validated_data = new DesignationRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
         }
 
         $designation = $designation->create( $validated_data );
         if ( is_wp_error( $designation ) ) {
-            return new WP_Error( 500, __( 'Could not create department.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not create department.', 'pay-check-mate' ) );
         }
 
         $designation = $this->prepare_item_for_response( $designation, $request );
@@ -269,7 +269,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         $designation    = new DesignationModel();
         $validated_data = new DesignationRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pay_check_mate' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
         }
 
         $updated = $designation->update( $request->get_param( 'id' ), $validated_data );
@@ -300,11 +300,11 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
         try {
             $designation = $designation->delete( $request['id'] );
         } catch ( Exception $e ) {
-            return new WP_Error( 500, __( 'Could not delete designation.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pay-check-mate' ) );
         }
 
         if ( ! $designation ) {
-            return new WP_Error( 500, __( 'Could not delete designation.', 'pay_check_mate' ) );
+            return new WP_Error( 500, __( 'Could not delete designation.', 'pay-check-mate' ) );
         }
 
         return new WP_REST_Response( $designation, 200 );
@@ -324,31 +324,31 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
             'type'       => 'object',
             'properties' => [
                 'id'         => [
-                    'description' => __( 'Unique identifier for the object.', 'pay_check_mate' ),
+                    'description' => __( 'Unique identifier for the object.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'name'       => [
-                    'description' => __( 'The name for the designation.', 'pay_check_mate' ),
+                    'description' => __( 'The name for the designation.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => true,
                 ],
                 'status'     => [
-                    'description' => __( 'The status for the designation.', 'pay_check_mate' ),
+                    'description' => __( 'The status for the designation.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'required'    => false,
                 ],
                 'created_on' => [
-                    'description' => __( 'The date the designation was created.', 'pay_check_mate' ),
+                    'description' => __( 'The date the designation was created.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => false,
                 ],
                 'updated_at' => [
-                    'description' => __( 'The date the designation was last updated.', 'pay_check_mate' ),
+                    'description' => __( 'The date the designation was last updated.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => false,

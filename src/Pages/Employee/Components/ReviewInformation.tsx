@@ -44,20 +44,20 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
         <div className="overflow-hidden bg-white sm:rounded-lg">
             <div className="px-4 py-6 sm:px-6">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    {__('Review Information', 'pay_check_mate')}
+                    {__('Review Information', 'pay-check-mate')}
                 </h2>
             </div>
             <div className="border-t border-gray-100">
                 <dl className="divide-y divide-gray-100">
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Employee ID', 'pay_check_mate')}
+                            {__('Employee ID', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!personalInformation.employee_id ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Employee ID cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Employee ID cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -70,13 +70,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('First name', 'pay_check_mate')}
+                            {__('First name', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!personalInformation.first_name ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('First name cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('First name cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -88,13 +88,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Last name', 'pay_check_mate')}
+                            {__('Last name', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!personalInformation.last_name ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Last name cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Last name cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -106,13 +106,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Email address', 'pay_check_mate')}
+                            {__('Email address', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!personalInformation.email ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Email address cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Email address cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -124,13 +124,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Department', 'pay_check_mate')}
+                            {__('Department', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!employeeDepartment || Object.keys(employeeDepartment).length === 0 ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Department cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Department cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -142,13 +142,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Designation', 'pay_check_mate')}
+                            {__('Designation', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!employeeDesignation || Object.keys(employeeDesignation).length === 0 ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Designation cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Designation cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -160,13 +160,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Joining Date', 'pay_check_mate')}
+                            {__('Joining Date', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {!personalInformation.joining_date ? (
                                 <>
                                     {setError(true)}
-                                    <span className="text-red-500">{__('Joining date cannot be empty.', 'pay_check_mate')}</span>
+                                    <span className="text-red-500">{__('Joining date cannot be empty.', 'pay-check-mate')}</span>
                                 </>
                             ) : (
                                 <>
@@ -178,13 +178,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Address', 'pay_check_mate')}
+                            {__('Address', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{personalInformation.address}</dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Salary Active From', 'pay_check_mate')}
+                            {__('Salary Active From', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {(salaryInformation.active_from !== undefined && salaryInformation.active_from !== null)? new Date(salaryInformation.active_from).toLocaleDateString('en-US', {
@@ -195,14 +195,14 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                 (
                                     <>
                                     {setError(true)}
-                                        <span className="text-red-500">{__('Salary active from cannot be empty.', 'pay_check_mate')}</span>
+                                        <span className="text-red-500">{__('Salary active from cannot be empty.', 'pay-check-mate')}</span>
                                     </>
                                 )}
                         </dd>
                     </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
-                            {__('Salary Information', 'pay_check_mate')}
+                            {__('Salary Information', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                             {salaryInformation && Object.keys(salaryInformation).map((key, index) => {

@@ -16,10 +16,10 @@ export const EmptyState = ({title, description, icon}: { title?: string, descrip
                             />}
                         </div>
                         <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-700 sm:text-5xl">
-                            {title ? title : __('No results found', 'pay_check_mate')}
+                            {title ? title : __('No results found', 'pay-check-mate')}
                         </h1>
                         <p className="mt-6 text-base leading-7 text-gray-400">
-                            {description ? description : __('Try adjusting your search or filter to find what you are looking for.', 'pay_check_mate')}
+                            {description ? description : __('Try adjusting your search or filter to find what you are looking for.', 'pay-check-mate')}
                         </p>
                     </div>
                 </div>

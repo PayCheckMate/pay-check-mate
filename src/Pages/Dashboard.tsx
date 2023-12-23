@@ -38,14 +38,14 @@ const options = {
             display: true,
             title: {
                 display: true,
-                text: __('Month', 'pay_check_mate'),
+                text: __('Month', 'pay-check-mate'),
             },
         },
         y: {
             display: true,
             title: {
                 display: true,
-                text: __('Amount', 'pay_check_mate'),
+                text: __('Amount', 'pay-check-mate'),
             }
         },
     },
@@ -82,7 +82,7 @@ export const Dashboard = () => {
                     labels: labels,
                     datasets: [
                         {
-                            label: __('Payroll Summary', 'pay_check_mate'),
+                            label: __('Payroll Summary', 'pay-check-mate'),
                             data: response.all_payrolls.map((model: any) => model.total_salary),
                             backgroundColor: [
                                 backgroundColor,
@@ -103,7 +103,7 @@ export const Dashboard = () => {
         <>
             <div>
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                    {__('Dashboard', 'pay_check_mate')}
+                    {__('Dashboard', 'pay-check-mate')}
                 </h1>
                 {stats && (
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -129,7 +129,7 @@ export const Dashboard = () => {
                                                 to={item.link || '#'}
                                                 className={"font-medium text-" + indigo + "-500 hover:text-" + indigo + "-500"}
                                             >
-                                                {__('View all', 'pay_check_mate')}
+                                                {__('View all', 'pay-check-mate')}
                                                 <span className="sr-only"> {item.name} stats</span>
                                             </Link>
                                         </div>
@@ -147,7 +147,7 @@ export const Dashboard = () => {
                         <Card>
                             <>
                                 <div className="header">
-                                    <h1 className="title">{__('Payroll Summary', 'pay_check_mate')}</h1>
+                                    <h1 className="title">{__('Payroll Summary', 'pay-check-mate')}</h1>
                                 </div>
                                 <Bar
                                     options={options}

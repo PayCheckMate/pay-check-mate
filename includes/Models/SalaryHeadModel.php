@@ -84,7 +84,7 @@ class SalaryHeadModel extends Model {
     public function get_head_type( string $head_type ): array {
         return [
             'head_type'      => $head_type,
-            'head_type_text' => $head_type === '1' ? __( 'Earning', 'pay_check_mate' ) : __( 'Deduction', 'pay-check-mate' ),
+            'head_type_text' => $head_type === '1' ? __( 'Earning', 'pay-check-mate' ) : __( 'Deduction', 'pay-check-mate' ),
         ];
     }
 

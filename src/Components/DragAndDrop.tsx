@@ -67,7 +67,7 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
                 reader.readAsArrayBuffer(files[0]);
             }
         } else {
-            toast.error(__('Please upload a CSV or Excel file only', 'pay_check_mate'));
+            toast.error(__('Please upload a CSV or Excel file only', 'pay-check-mate'));
         }
     };
 
@@ -105,16 +105,16 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
                         <div>
                             {isLoading ? (
                                 <div className="flex flex-col items-center justify-center w-full">
-                                    <p className="mt-2 text-sm text-gray-500">{uploadProgress}% {__('Analyzing file', 'pay_check_mate')}</p>
+                                    <p className="mt-2 text-sm text-gray-500">{uploadProgress}% {__('Analyzing file', 'pay-check-mate')}</p>
                                 </div>
                                 ) : (
                                 <>
                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                         <CloudArrowUpIcon className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" />
                                         <p className="mb-2 text-sm text-gray-500">
-                                            <span className="font-semibold">{__('Click to upload', 'pay_check_mate')}</span> {__('or drag and drop file here', 'pay_check_mate')}
+                                            <span className="font-semibold">{__('Click to upload', 'pay-check-mate')}</span> {__('or drag and drop file here', 'pay-check-mate')}
                                         </p>
-                                        <p className="text-xs text-gray-500">{__('CSV and Excel files only', 'pay_check_mate')}</p>
+                                        <p className="text-xs text-gray-500">{__('CSV and Excel files only', 'pay-check-mate')}</p>
                                     </div>
                                     <input
                                         id="dropzone-file"
@@ -133,7 +133,7 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
                 {/*    <div className="w-full bg-blue-100 h-2 rounded-md">*/}
                 {/*        <div style={progressBarStyle} className="h-2 rounded-md" />*/}
                 {/*    </div>*/}
-                {/*    <p className="mt-2 text-xs text-gray-500">{uploadProgress}% {__('Uploaded', 'pay_check_mate')}</p>*/}
+                {/*    <p className="mt-2 text-xs text-gray-500">{uploadProgress}% {__('Uploaded', 'pay-check-mate')}</p>*/}
                 {/*</div>*/}
                 {/*)}*/}
             </label>

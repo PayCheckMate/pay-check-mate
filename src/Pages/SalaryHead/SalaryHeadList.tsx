@@ -21,18 +21,18 @@ import {applyFilters} from "../../Helpers/Hooks";
 import {HOC} from "../../Components/HOC";
 
 const headType = [
-    {id: HeadType.Earning, name: __('Earning', 'pay_check_mate')},
-    {id: HeadType.Deduction, name: __('Deduction', 'pay_check_mate')},
+    {id: HeadType.Earning, name: __('Earning', 'pay-check-mate')},
+    {id: HeadType.Deduction, name: __('Deduction', 'pay-check-mate')},
 ]
 
 const is_percentage = [
-    {id: 0, name: __('No', 'pay_check_mate')},
-    {id: 1, name: __('Yes', 'pay_check_mate')},
+    {id: 0, name: __('No', 'pay-check-mate')},
+    {id: 1, name: __('Yes', 'pay-check-mate')},
 ]
 
 const is_variable = [
-    {id: 0, name: __('No', 'pay_check_mate')},
-    {id: 1, name: __('Yes', 'pay_check_mate')},
+    {id: 0, name: __('No', 'pay-check-mate')},
+    {id: 1, name: __('Yes', 'pay-check-mate')},
 ]
 
 export const SalaryHeadList = () => {
@@ -52,66 +52,66 @@ export const SalaryHeadList = () => {
     let green = applyFilters('pay_check_mate.green', 'gray');
     let red = applyFilters('pay_check_mate.red', 'gray');
     const columns = [
-        {title: __('Salary Head', 'pay_check_mate'), dataIndex: 'head_name', sortable: true},
+        {title: __('Salary Head', 'pay-check-mate'), dataIndex: 'head_name', sortable: true},
         {
-            title: __('Head Type', 'pay_check_mate'), dataIndex: 'head_type', sortable: true,
+            title: __('Head Type', 'pay-check-mate'), dataIndex: 'head_type', sortable: true,
             render: (text: string, record: SalaryHeadType) => {
                 const headType = parseInt(String(record.head_type))
                 return (
                     <span className={`${headType === HeadType.Earning ? `text-${green}-600` : `text-${red}-600`}`}>
-                        {headType === HeadType.Earning ? __('Earning', 'pay_check_mate') : __('Deduction', 'pay_check_mate')}
+                        {headType === HeadType.Earning ? __('Earning', 'pay-check-mate') : __('Deduction', 'pay-check-mate')}
                     </span>
                 )
             }
         },
         {
-            title: __('Head Amount', 'pay_check_mate'), dataIndex: 'head_amount',
+            title: __('Head Amount', 'pay-check-mate'), dataIndex: 'head_amount',
             render: (text: string, record: SalaryHeadType) => {
                 return (
                     <span>
                         {record.head_amount}
                         {parseInt(String(record.is_percentage)) === 1 ? ' %' : ''}
-                        {parseInt(String(record.is_variable)) === 1 ? __(' and variable', 'pay_check_mate') : ''}
+                        {parseInt(String(record.is_variable)) === 1 ? __(' and variable', 'pay-check-mate') : ''}
                     </span>
                 )
             }
 
         },
         {
-            title: __('Is Taxable', 'pay_check_mate'), dataIndex: 'is_taxable',
+            title: __('Is Taxable', 'pay-check-mate'), dataIndex: 'is_taxable',
             render: (text: string, record: SalaryHeadType) => {
                 const isTaxable = parseInt(String(record.is_taxable))
                 return (
                     <span className={`${isTaxable === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
-                        {isTaxable === 1 ? __('Yes', 'pay_check_mate') : __('No', 'pay_check_mate')}
+                        {isTaxable === 1 ? __('Yes', 'pay-check-mate') : __('No', 'pay-check-mate')}
                     </span>
                 )
             }
         },
         {
-            title: __('Is Personal Savings', 'pay_check_mate'), dataIndex: 'is_personal_savings',
+            title: __('Is Personal Savings', 'pay-check-mate'), dataIndex: 'is_personal_savings',
             render: (text: string, record: SalaryHeadType) => {
                 const isPersonalSavings = parseInt(String(record.is_personal_savings))
                 return (
                     <span className={`${isPersonalSavings === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
-                        {isPersonalSavings === 1 ? __('Yes', 'pay_check_mate') : __('No', 'pay_check_mate')}
+                        {isPersonalSavings === 1 ? __('Yes', 'pay-check-mate') : __('No', 'pay-check-mate')}
                     </span>
                 )
             }
         },
-        {title: __('Priority', 'pay_check_mate'), dataIndex: 'priority', sortable: true},
+        {title: __('Priority', 'pay-check-mate'), dataIndex: 'priority', sortable: true},
         {
-            title: __('Variable', 'pay_check_mate'), dataIndex: 'is_variable',
+            title: __('Variable', 'pay-check-mate'), dataIndex: 'is_variable',
             render: (text: string, record: SalaryHeadType) => {
                 return (
                     <span className={`${parseInt(String(record.is_variable)) === 1 ? `text-${green}-600` : `text-${red}-600`}`}>
-                        {parseInt(String(record.is_variable)) === 1 ? __('Yes', 'pay_check_mate') : __('No', 'pay_check_mate')}
+                        {parseInt(String(record.is_variable)) === 1 ? __('Yes', 'pay-check-mate') : __('No', 'pay-check-mate')}
                     </span>
                 )
             }
         },
         {
-            title: __('Status', 'pay_check_mate'), dataIndex: 'status',
+            title: __('Status', 'pay-check-mate'), dataIndex: 'status',
             render: (text: string, record: SalaryHeadType) => {
                 const status = parseInt(String(record.status))
                 return (
@@ -120,7 +120,7 @@ export const SalaryHeadList = () => {
             }
         },
         {
-            title: __('Action', 'pay_check_mate'),
+            title: __('Action', 'pay-check-mate'),
             dataIndex: 'action',
             render: (text: string, record: SalaryHeadType) => (
                 <div className="flex">
@@ -129,7 +129,7 @@ export const SalaryHeadList = () => {
                         className={"text-"+indigo+"-600 hover:text-"+indigo+"-900 font-semibold"}
                         onClick={() => handleModal(record)}
                     >
-                        {__('Edit', 'pay_check_mate')}
+                        {__('Edit', 'pay-check-mate')}
                     </button>
                     )}
                     {userCan(UserCapNames.pay_check_mate_change_salary_head_status) && (
@@ -141,7 +141,7 @@ export const SalaryHeadList = () => {
                                         onClick={() => handleStatus(record.id, 0)}
                                         className={"text-"+red+"-600 hover:text-"+red+"-900 font-semibold"}
                                     >
-                                        {__('Inactive', 'pay_check_mate')}
+                                        {__('Inactive', 'pay-check-mate')}
                                     </button>
                                 </>
                             )}
@@ -152,7 +152,7 @@ export const SalaryHeadList = () => {
                                         onClick={() => handleStatus(record.id, 1)}
                                         className={"text-"+green+"-600 hover:text-"+green+"-900 font-semibold"}
                                     >
-                                        {__('Active', 'pay_check_mate')}
+                                        {__('Active', 'pay-check-mate')}
                                     </button>
                                 </>
                             )}
@@ -181,10 +181,10 @@ export const SalaryHeadList = () => {
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {id, head_name, status, head_type, is_percentage, is_variable, head_amount, is_taxable, priority, is_personal_savings, _wpnonce};
         dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
-            useNotify(response, __('Salary head status updated successfully', 'pay_check_mate'));
+            useNotify(response, __('Salary head status updated successfully', 'pay-check-mate'));
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while creating salary head', 'pay_check_mate'), {
+            toast.error(__('Something went wrong while creating salary head', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
@@ -203,8 +203,8 @@ export const SalaryHeadList = () => {
                 status: 1
             }
         }
-        setSelectedHeadType({id: data.head_type, name: parseInt(String(data.head_type)) === HeadType.Earning ? __('Earning', 'pay_check_mate') : __('Deduction', 'pay_check_mate')})
-        setIsPercentage({id: data.is_percentage, name: parseInt(String(data.is_percentage)) === 1 ? __('Yes', 'pay_check_mate') : __('No', 'pay_check_mate')})
+        setSelectedHeadType({id: data.head_type, name: parseInt(String(data.head_type)) === HeadType.Earning ? __('Earning', 'pay-check-mate') : __('Deduction', 'pay-check-mate')})
+        setIsPercentage({id: data.is_percentage, name: parseInt(String(data.is_percentage)) === 1 ? __('Yes', 'pay-check-mate') : __('No', 'pay-check-mate')})
         setFormData(data)
         setShowModal(true)
     };
@@ -227,7 +227,7 @@ export const SalaryHeadList = () => {
         const requiredFields = ['head_name', 'head_amount', 'head_type'];
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill all required fields', 'pay_check_mate'), {
+            toast.error(__('Please fill all required fields', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
@@ -237,10 +237,10 @@ export const SalaryHeadList = () => {
 
         if (formData.id) {
             dispatch(salaryHead).updateSalaryHead(data).then((response: any) => {
-                useNotify(response, __('Successfully updated salary head', 'pay_check_mate'));
+                useNotify(response, __('Successfully updated salary head', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while updating salary head', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while updating salary head', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -256,10 +256,10 @@ export const SalaryHeadList = () => {
             data.is_personal_savings = formData.is_personal_savings ?? 0;
             // @ts-ignore
             dispatch(salaryHead).createSalaryHead(data).then((response: any) => {
-                useNotify(response, __('Successfully created salary head', 'pay_check_mate'));
+                useNotify(response, __('Successfully created salary head', 'pay-check-mate'));
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while creating salary head', 'pay_check_mate'), {
+                toast.error(__('Something went wrong while creating salary head', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -279,7 +279,7 @@ export const SalaryHeadList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Salary Head list', 'pay_check_mate')}
+                            {__('Salary Head list', 'pay-check-mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -288,13 +288,13 @@ export const SalaryHeadList = () => {
                             className="hover:text-white active:text-white"
                         >
                             <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
-                            {__('Add salary head', 'pay_check_mate')}
+                            {__('Add salary head', 'pay-check-mate')}
                         </Button>
                         {showModal && (
                             <Modal
                                 setShowModal={setShowModal}
-                                header={__('Add salary head', 'pay_check_mate')}
-                                description={__('No need to add Basic as salary head. It will be added automatically.', 'pay_check_mate')}
+                                header={__('Add salary head', 'pay-check-mate')}
+                                description={__('No need to add Basic as salary head. It will be added automatically.', 'pay-check-mate')}
                             >
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form
@@ -302,7 +302,7 @@ export const SalaryHeadList = () => {
                                         className="space-y-6"
                                     >
                                         <FormInput
-                                            label={__('Salary Head name', 'pay_check_mate')}
+                                            label={__('Salary Head name', 'pay-check-mate')}
                                             name="head_name"
                                             id="head_name"
                                             required={true}
@@ -313,7 +313,7 @@ export const SalaryHeadList = () => {
                                             error={formError.head_name}
                                         />
                                         <FormInput
-                                            label={__('Head amount', 'pay_check_mate')}
+                                            label={__('Head amount', 'pay-check-mate')}
                                             type="text"
                                             required={true}
                                             name="head_amount"
@@ -326,7 +326,7 @@ export const SalaryHeadList = () => {
                                         />
                                         <div className="flex items-center justify-between">
                                             <FormCheckBox
-                                                label={__('Is percentage?', 'pay_check_mate')}
+                                                label={__('Is percentage?', 'pay-check-mate')}
                                                 name="is_percentage"
                                                 id="is_percentage"
                                                 value={formData.is_percentage}
@@ -341,10 +341,10 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                tooltip={__('If you want to add this head as percentage, please check this box.', 'pay_check_mate')}
+                                                tooltip={__('If you want to add this head as percentage, please check this box.', 'pay-check-mate')}
                                             />
                                             <FormCheckBox
-                                                label={__('Is changeable in every payroll?', 'pay_check_mate')}
+                                                label={__('Is changeable in every payroll?', 'pay-check-mate')}
                                                 name="is_variable"
                                                 id="is_variable"
                                                 value={formData.is_variable}
@@ -363,11 +363,11 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                tooltip={__('If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc.', 'pay_check_mate')}
+                                                tooltip={__('If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc.', 'pay-check-mate')}
                                             />
                                         </div>
                                         <SelectBox
-                                            title={__('Head type', 'pay_check_mate')}
+                                            title={__('Head type', 'pay-check-mate')}
                                             options={headType}
                                             selected={selectedHeadType}
                                             setSelected={(value: any) => {
@@ -379,7 +379,7 @@ export const SalaryHeadList = () => {
                                         />
                                         <div className="flex items-center justify-between">
                                             <FormCheckBox
-                                                label={__('Is Taxable', 'pay_check_mate')}
+                                                label={__('Is Taxable', 'pay-check-mate')}
                                                 name="is_taxable"
                                                 id="is_taxable"
                                                 value={formData.is_taxable}
@@ -392,10 +392,10 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                tooltip={__("If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc.", 'pay_check_mate')}
+                                                tooltip={__("If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc.", 'pay-check-mate')}
                                             />
                                             <FormCheckBox
-                                                label={__('Is personal savings?', 'pay_check_mate')}
+                                                label={__('Is personal savings?', 'pay-check-mate')}
                                                 name="is_personal_savings"
                                                 id="is_personal_savings"
                                                 value={formData.is_personal_savings}
@@ -408,11 +408,11 @@ export const SalaryHeadList = () => {
                                                     }
                                                 }}
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                tooltip={__("If this is a personal savings, then check this. Eg: PF, Gratuity, etc.", 'pay_check_mate')}
+                                                tooltip={__("If this is a personal savings, then check this. Eg: PF, Gratuity, etc.", 'pay-check-mate')}
                                             />
                                         </div>
                                         <FormInput
-                                            label={__('Priority', 'pay_check_mate')}
+                                            label={__('Priority', 'pay-check-mate')}
                                             type="number"
                                             name="priority"
                                             id="priority"
@@ -424,7 +424,7 @@ export const SalaryHeadList = () => {
                                                 className="mt-4"
                                                 onClick={() => handleSubmit(event)}
                                             >
-                                                {formData.id ? __('Update', 'pay_check_mate') : __('Add', 'pay_check_mate')}
+                                                {formData.id ? __('Update', 'pay-check-mate') : __('Add', 'pay-check-mate')}
                                             </Button>
                                         </div>
                                     </form>

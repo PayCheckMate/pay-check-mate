@@ -36,34 +36,34 @@ addAction('pay_check_mate_notification', 'pay_check_mate_notification', (message
 });
 export default function Main() {
     let navigations: NavigationType[] = [
-        {key: 'dashboard', title: __('Dashboard', 'pay_check_mate'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant'], component: Dashboard},
-        {key: 'employees', title: __('Employees', 'pay_check_mate'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
-        {key: 'profile', title: __('Profile', 'pay_check_mate'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
-        {key: 'payslip', title: __('Pay Slip', 'pay_check_mate'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
-        {key: 'payroll', title: __('Payroll', 'pay_check_mate'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
-        {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pay_check_mate'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
-        {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pay_check_mate'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
-        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay_check_mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
-        {key: 'settings', title: __('Settings', 'pay_check_mate'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
+        {key: 'dashboard', title: __('Dashboard', 'pay-check-mate'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant'], component: Dashboard},
+        {key: 'employees', title: __('Employees', 'pay-check-mate'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
+        {key: 'profile', title: __('Profile', 'pay-check-mate'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
+        {key: 'payslip', title: __('Pay Slip', 'pay-check-mate'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
+        {key: 'payroll', title: __('Payroll', 'pay-check-mate'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
+        {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pay-check-mate'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pay-check-mate'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay-check-mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: 'settings', title: __('Settings', 'pay-check-mate'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
-                {key: 'departments', title: __('Departments', 'pay_check_mate'), href: 'departments', current: false, roles: ['pay_check_mate_accountant'], component: DepartmentList},
-                {key: 'designations', title: __('Designations', 'pay_check_mate'), href: 'designations', current: false, roles: ['pay_check_mate_accountant'], component: DesignationList},
-                {key: 'salary_heads', title: __('Salary Heads', 'pay_check_mate'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant'], component: SalaryHeadList},
-                {key: '[need_pro]pro/setup-gratuity', title: __('Setup Gratuity (PRO)', 'pay_check_mate'), href: 'pro/setup-gratuity', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/setup-loans', title: __('Setup Loans (PRO)', 'pay_check_mate'), href: 'pro/setup-loans', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/setup-pf', title: __('Setup P.F. (PRO)', 'pay_check_mate'), href: 'pro/setup-pf', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro}
+                {key: 'departments', title: __('Departments', 'pay-check-mate'), href: 'departments', current: false, roles: ['pay_check_mate_accountant'], component: DepartmentList},
+                {key: 'designations', title: __('Designations', 'pay-check-mate'), href: 'designations', current: false, roles: ['pay_check_mate_accountant'], component: DesignationList},
+                {key: 'salary_heads', title: __('Salary Heads', 'pay-check-mate'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant'], component: SalaryHeadList},
+                {key: '[need_pro]pro/setup-gratuity', title: __('Setup Gratuity (PRO)', 'pay-check-mate'), href: 'pro/setup-gratuity', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/setup-loans', title: __('Setup Loans (PRO)', 'pay-check-mate'), href: 'pro/setup-loans', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/setup-pf', title: __('Setup P.F. (PRO)', 'pay-check-mate'), href: 'pro/setup-pf', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro}
             ]
         },
-        {key: 'reports', title: __('Reports', 'pay_check_mate'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
+        {key: 'reports', title: __('Reports', 'pay-check-mate'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
-                {key: 'payroll_register', title: __('Payroll Register', 'pay_check_mate'), href: 'reports/payroll-register', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollRegister},
-                {key: 'payroll_ledger', title: __('Payroll Ledger', 'pay_check_mate'), href: 'reports/payroll-ledger', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollLedger},
-                {key: '[need_pro]pro/pf-register', title: __('P.F. Register (PRO)', 'pay_check_mate'), href: 'pro/pf-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/pf-ledger', title: __('P.F. Ledger (PRO)', 'pay_check_mate'), href: 'pro/pf-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro },
-                {key: '[need_pro]pro/gratuity-register', title: __('Gratuity Register (PRO)', 'pay_check_mate'), href: 'pro/gratuity-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/gratuity-ledger', title: __('Gratuity Ledger (PRO)', 'pay_check_mate'), href: 'pro/gratuity-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/loan-register', title: __('Loan Register (PRO)', 'pay_check_mate'), href: 'pro/loan-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/loan-ledger', title: __('Loan Ledger (PRO)', 'pay_check_mate'), href: 'pro/loan-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: 'payroll_register', title: __('Payroll Register', 'pay-check-mate'), href: 'reports/payroll-register', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollRegister},
+                {key: 'payroll_ledger', title: __('Payroll Ledger', 'pay-check-mate'), href: 'reports/payroll-ledger', current: false, roles: ['pay_check_mate_accountant'], icon: null, component: PayrollLedger},
+                {key: '[need_pro]pro/pf-register', title: __('P.F. Register (PRO)', 'pay-check-mate'), href: 'pro/pf-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/pf-ledger', title: __('P.F. Ledger (PRO)', 'pay-check-mate'), href: 'pro/pf-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro },
+                {key: '[need_pro]pro/gratuity-register', title: __('Gratuity Register (PRO)', 'pay-check-mate'), href: 'pro/gratuity-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/gratuity-ledger', title: __('Gratuity Ledger (PRO)', 'pay-check-mate'), href: 'pro/gratuity-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/loan-register', title: __('Loan Register (PRO)', 'pay-check-mate'), href: 'pro/loan-register', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: '[need_pro]pro/loan-ledger', title: __('Loan Ledger (PRO)', 'pay-check-mate'), href: 'pro/loan-ledger', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
             ]
         },
     ] as NavigationType[];

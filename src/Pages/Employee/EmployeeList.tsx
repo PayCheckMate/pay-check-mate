@@ -44,7 +44,7 @@ export const EmployeeList = () => {
             sortable: true,
         },
         {
-            title: __('Joining Date', 'pay_check_mate'), dataIndex: 'joining_date', sortable: true,
+            title: __('Joining Date', 'pay-check-mate'), dataIndex: 'joining_date', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>
@@ -58,7 +58,7 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Name', 'pay_check_mate'),
+            title: __('Name', 'pay-check-mate'),
             dataIndex: 'first_name',
             sortable: true,
             render: (text: string, record: any) => {
@@ -78,9 +78,9 @@ export const EmployeeList = () => {
                 }
             }
         },
-        {title: __('Email', 'pay_check_mate'), dataIndex: 'email'},
+        {title: __('Email', 'pay-check-mate'), dataIndex: 'email'},
         {
-            title: __('Designation', 'pay_check_mate'), dataIndex: 'designation_id', sortable: true,
+            title: __('Designation', 'pay-check-mate'), dataIndex: 'designation_id', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>{record.designation_name}</span>
@@ -88,7 +88,7 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Department', 'pay_check_mate'), dataIndex: 'department_id', sortable: true,
+            title: __('Department', 'pay-check-mate'), dataIndex: 'department_id', sortable: true,
             render: (text: string, record: any) => {
                 return (
                     <span>{record.department_name}</span>
@@ -96,22 +96,22 @@ export const EmployeeList = () => {
             }
         },
         {
-            title: __('Status', 'pay_check_mate'), dataIndex: 'status', sortable: true,
+            title: __('Status', 'pay-check-mate'), dataIndex: 'status', sortable: true,
             render: (text: string, record: any) => {
                 return (<Status
                     status={record.status}
-                    textMap={{active: __('Active', 'pay_check_mate'), inactive: __('Resigned', 'pay_check_mate')}}
+                    textMap={{active: __('Active', 'pay-check-mate'), inactive: __('Resigned', 'pay-check-mate')}}
                 />)
             }
         },
         {
-            title: __('Action', 'pay_check_mate'),
+            title: __('Action', 'pay-check-mate'),
             dataIndex: 'action',
             render: (text: string, record: any) => {
                 if (parseInt(String(record.status)) === 0){
                     return (
                         <div className="flex">
-                            <span className="text-gray-300">{__('Resigned', 'pay_check_mate')}</span>
+                            <span className="text-gray-300">{__('Resigned', 'pay-check-mate')}</span>
                         </div>
                     )
                 }
@@ -125,7 +125,7 @@ export const EmployeeList = () => {
                                     to={`/employee/edit/${record.employee_id}`}
                                     className={anchorClass}
                                 >
-                                    {__('Edit', 'pay_check_mate')}
+                                    {__('Edit', 'pay-check-mate')}
                                 </Link>
                             </>
                         )}
@@ -141,7 +141,7 @@ export const EmployeeList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Employee List', 'pay_check_mate')}
+                            {__('Employee List', 'pay-check-mate')}
                         </h1>
                     </div>
                     <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -155,7 +155,7 @@ export const EmployeeList = () => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Import Employee', 'pay_check_mate')}
+                                    {__('Import Employee', 'pay-check-mate')}
                                 </Button>
                                 <Button
                                     className="hover:text-white"
@@ -165,7 +165,7 @@ export const EmployeeList = () => {
                                         className="w-5 h-5 mr-2"
                                         aria-hidden="true"
                                     />
-                                    {__('Add Employee', 'pay_check_mate')}
+                                    {__('Add Employee', 'pay-check-mate')}
                                 </Button>
                             </div>
                         )}

@@ -6,11 +6,12 @@
  * Version:             1.0.0
  * Requires PHP:        7.4
  * Requires at least:   5.6
+ * Tested up to:        6.4.2
  * Author:              Ratul Hasan
  * Author URI:          https://ratuljh.wordpress.com
  * License:             GPL-3.0-or-later
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:         pay_check_mate
+ * Text Domain:         pay-check-mate
  * Domain Path:         /languages
  *
  * @package WordPress
@@ -39,10 +40,6 @@ if ( ! defined( 'PAY_CHECK_MATE_FILE' ) ) {
 
 if ( ! defined( 'PAY_CHECK_MATE_DIR' ) ) {
     define( 'PAY_CHECK_MATE_DIR', __DIR__ );
-}
-
-if ( ! defined( 'PAY_CHECK_MATE_VERSION' ) ) {
-    define( 'PAY_CHECK_MATE_VERSION', '1.0.0' );
 }
 
 if ( ! defined( 'PAY_CHECK_MATE_BASE_NAME' ) ) {

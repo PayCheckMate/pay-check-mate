@@ -8,17 +8,17 @@ export const NotFound = ({goBackUrl='/'}: {goBackUrl?: string}) => {
         <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="text-center">
                 <p className="text-base font-semibold text-indigo-600">
-                    {__('404', 'pay_check_mate')}
+                    {__('404', 'pay-check-mate')}
                 </p>
                 <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                    {__('Page not found', 'pay_check_mate')}
+                    {__('Page not found', 'pay-check-mate')}
                 </h1>
                 <p className="mt-6 text-base leading-7 text-gray-600">
-                    {__('Sorry, we couldn’t find the page you’re looking for.', 'pay_check_mate')}
+                    {__('Sorry, we couldn’t find the page you’re looking for.', 'pay-check-mate')}
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Link to={goBackUrl} className="text-sm font-semibold text-gray-900">
-                        <span aria-hidden="true">&larr;</span> {__('Go back home', 'pay_check_mate')}
+                        <span aria-hidden="true">&larr;</span> {__('Go back home', 'pay-check-mate')}
                     </Link>
                 </div>
             </div>
@@ -30,17 +30,17 @@ export const PermissionDenied = () => {
         <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="text-center">
                 <p className={"text-base font-semibold text-"+red+"-600"}>
-                    {__('403', 'pay_check_mate')}
+                    {__('403', 'pay-check-mate')}
                 </p>
                 <h1 className={"mt-4 text-3xl font-bold tracking-tight text-"+red+"-600 sm:text-5xl"}>
-                    {__('Permission denied!', 'pay_check_mate')}
+                    {__('Permission denied!', 'pay-check-mate')}
                 </h1>
                 <p className="mt-6 text-base leading-7 text-gray-600">
-                    {__('Sorry, you don’t have permission to access this page.', 'pay_check_mate')}
+                    {__('Sorry, you don’t have permission to access this page.', 'pay-check-mate')}
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Link to={'/'} className="text-sm font-semibold text-gray-900">
-                        <span aria-hidden="true">&larr;</span> {__('Go back home', 'pay_check_mate')}
+                        <span aria-hidden="true">&larr;</span> {__('Go back home', 'pay-check-mate')}
                     </Link>
                 </div>
             </div>
