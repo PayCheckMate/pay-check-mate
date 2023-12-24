@@ -79,6 +79,7 @@ final class PayCheckMate {
         'PayCheckMate\REST\EmployeeApi',
         'PayCheckMate\REST\PaySlipApi',
         'PayCheckMate\REST\DashboardApi',
+        'PayCheckMate\REST\SettingsApi',
     ];
 
     /**

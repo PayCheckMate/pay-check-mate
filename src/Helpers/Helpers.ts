@@ -100,11 +100,7 @@ export const handlePrint = (divID: string) => {
         print.print()
     }
 }
-// export const debounce = (callback: any, wait: number) => {
-//     let timeout: any = null;
-//     return (...args: any) => {
-//         const next = () => callback(...args);
-//         clearTimeout(timeout);
-//         timeout = setTimeout(next, wait);
-//     };
-// }
+
+export function replaceUnderscoreAndCapitalize(string: string) {
+    return string.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
+}

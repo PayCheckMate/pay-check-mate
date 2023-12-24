@@ -52,6 +52,7 @@ class Assets implements HookAbleInterface {
             return;
         }
 
+        wp_enqueue_media();
         $this->register_localize_script();
         wp_enqueue_script( 'pay-check-mate-js' );
         wp_enqueue_style( 'pay-check-mate-css' );

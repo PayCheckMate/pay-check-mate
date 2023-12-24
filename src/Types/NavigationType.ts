@@ -1,9 +1,11 @@
+import {RoleType} from "./UserType";
+
 export interface NavigationType {
     key: string;
     title: string;
     href: string;
     icon: any;
-    roles: string[];
+    roles: RoleType[];
     current?: boolean;
     children?: NavigationType[];
     component?: any;

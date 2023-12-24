@@ -16,6 +16,8 @@ export interface UserCaps {
     [key: string]: boolean;
 }
 
+export type RoleType = "pay_check_mate_employee" | "pay_check_mate_accountant" | "pay_check_mate_admin";
+
 export enum UserCapNames {
     pay_check_mate_employee = "pay_check_mate_employee",
     pay_check_mate_accountant = "pay_check_mate_accountant",

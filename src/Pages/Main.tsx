@@ -29,6 +29,7 @@ import {addAction} from "../Helpers/Hooks";
 import ViewPayroll from "./Payroll/ViewPayroll";
 import {NeedPro} from "../Components/NeedPro/NeedPro";
 import {ImportEmployee} from "./Employee/ImportEmployee";
+import {GeneralSettings} from "./Settings/GeneralSettings";
 
 addAction('pay_check_mate_notification', 'pay_check_mate_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
@@ -46,6 +47,7 @@ export default function Main() {
         {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay-check-mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
         {key: 'settings', title: __('Settings', 'pay-check-mate'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
+                {key: 'general', title: __('General', 'pay-check-mate'), href: 'general', current: false, roles: ['pay_check_mate_admin'], component: GeneralSettings},
                 {key: 'departments', title: __('Departments', 'pay-check-mate'), href: 'departments', current: false, roles: ['pay_check_mate_accountant'], component: DepartmentList},
                 {key: 'designations', title: __('Designations', 'pay-check-mate'), href: 'designations', current: false, roles: ['pay_check_mate_accountant'], component: DesignationList},
                 {key: 'salary_heads', title: __('Salary Heads', 'pay-check-mate'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant'], component: SalaryHeadList},
