@@ -36,6 +36,15 @@ export const handlePrint = (divID: string) => {
                         width: 66.666667%;
                         margin-top: 1rem;
                     }
+                    .w-20{
+                        width: 5rem;
+                    }
+                    .text-center {
+                        text-align: center;
+                    }
+                    .mr-4{
+                        margin-right: 1rem;
+                    }
                     .prepared_by{
                         width: 20%;
                         margin-top: 1rem;

@@ -45,7 +45,7 @@ const MediaGallery = ({title, settingsData, setSettingsData}: MediaGalleryProps)
 
     return (
         <div key={`div-${title}`} className="flex items-center">
-            <button key={title} id={title} onClick={(e) => openMediaGallery(e)}>
+            <button className="button-primary" key={title} id={title} onClick={(e) => openMediaGallery(e)}>
                 {__('Open Media Gallery', 'pay-check-mate')}
             </button>
         </div>

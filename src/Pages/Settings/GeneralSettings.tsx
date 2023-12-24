@@ -3,43 +3,21 @@ import {FormInput} from "../../Components/FormInput";
 import {__} from "@wordpress/i18n";
 import {Button} from "../../Components/Button";
 import {HOC} from "../../Components/HOC";
-import React, {useEffect, useState} from "@wordpress/element";
 import {Card} from "../../Components/Card";
 import {SettingsType} from "../../Types/Settings";
 import {Textarea} from "../../Components/Textarea";
 import MediaGallery from "../../Components/MediaGallery";
 import {replaceUnderscoreAndCapitalize} from "../../Helpers/Helpers";
 import apiFetch from "@wordpress/api-fetch";
-import useNotify from "../../Helpers/useNotify";
 import {toast} from "react-toastify";
+import {useSettings} from "../../Helpers/useSettings";
 
 export const GeneralSettings = () => {
-    const [settingsData, setSettingsData] = useState<SettingsType>({
-        company_name: '',
-        company_address: '',
-        company_phone: '',
-        company_email: '',
-        company_website: '',
-        company_logo: '',
-    });
-
-    useEffect(() => {
-        apiFetch({
-            path: '/pay-check-mate/v1/settings',
-            method: 'GET',
-        }).then((response: any) => {
-            if (response) {
-                setSettingsData(response);
-            }
-        }).catch((error: any) => {
-            console.log(error)
-        })
-    }, []);
+    const {settingsData, setSettingsData} = useSettings();
 
     const handleSubmit = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        // return;
         apiFetch({
             path: '/pay-check-mate/v1/settings',
             method: 'PATCH',
@@ -107,16 +85,18 @@ export const GeneralSettings = () => {
                                                             <label key={`label-${settingsKey}`} htmlFor={settingsKey} className="block text-sm font-medium leading-6 text-gray-900">
                                                                 {replaceUnderscoreAndCapitalize(settingsKey)}
                                                             </label>
-                                                            <MediaGallery
-                                                                key={`media-gallery-${settingsKey}`}
-                                                                title={replaceUnderscoreAndCapitalize(settingsKey)}
-                                                                settingsData={settingsData}
-                                                                setSettingsData={setSettingsData}
-                                                            />
-                                                            {
-                                                                settingsData[settingsKey] &&
-                                                                <img key={`img-${settingsKey}`} src={settingsData[settingsKey]} alt={replaceUnderscoreAndCapitalize(settingsKey)} className="w-20" />
-                                                            }
+                                                            <div className="flex items-center">
+                                                                <MediaGallery
+                                                                    key={`media-gallery-${settingsKey}`}
+                                                                    title={replaceUnderscoreAndCapitalize(settingsKey)}
+                                                                    settingsData={settingsData}
+                                                                    setSettingsData={setSettingsData}
+                                                                />
+                                                                {
+                                                                    settingsData[settingsKey] &&
+                                                                    <img key={`img-${settingsKey}`} src={settingsData[settingsKey]} alt={replaceUnderscoreAndCapitalize(settingsKey)} className="w-20 ml-4" />
+                                                                }
+                                                            </div>
                                                         </div>
                                                     );
                                                 default:
