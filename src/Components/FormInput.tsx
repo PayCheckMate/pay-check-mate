@@ -10,7 +10,7 @@ interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     type?: "text" | "number" | "email" | "password" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "range" | "color";
     className?: string;
     placeholder?: string;
-    value: string | number;
+    value: string | number | undefined;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: any;
     required?: boolean;

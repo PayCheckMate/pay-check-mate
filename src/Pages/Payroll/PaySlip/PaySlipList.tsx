@@ -12,7 +12,7 @@ import {applyFilters} from "../../../Helpers/Hooks";
 export const PaySlipList = () => {
     let per_page = '10';
     const [paySlipList, setPaySlipList] = useState<EmployeeSalary[]>([]);
-    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/payslip', {per_page: per_page, status: '1'}, true);
+    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/payslip', {per_page: per_page, status: '1', order_by: 'id', order: 'desc'}, true);
     const [currentPage, setCurrentPage] = useState(1);
     useEffect(() => {
         if (models) {
