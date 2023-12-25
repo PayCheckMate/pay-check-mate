@@ -253,6 +253,22 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $wpdb->query( 'START TRANSACTION' );
         if ( ! empty( $data['id'] ) ) {
             $employee = $employee_model->update( $data['id'], $validated_data );
+            $updated_employee = new Employee( $data['employee_id'] );
+            $user = new \WP_User( $updated_employee->get_user_id() );
+            // Remove all the roles.
+            foreach ( $user->roles as $role ) {
+                $user->remove_role( $role );
+            }
+
+            if ( ! empty( $data['roles'] ) ) {
+                foreach ( $data['roles'] as $role ) {
+                    if ( call_user_func( [ PayCheckMateUserRoles::class, "get_{$role}_role_name" ] ) ) {
+                        $user->add_role( $role );
+                    }
+                }
+            } else {
+                $user->set_role( PayCheckMateUserRoles::get_pay_check_mate_employee_role_name() );
+            }
         } else {
             // @phpstan-ignore-next-line
             if ( empty( (string) $validated_data->user_id ) ) {
@@ -266,7 +282,15 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
                     }
 
                     $user = new \WP_User( $user_id );
-                    $user->set_role( PayCheckMateUserRoles::get_pay_check_mate_employee_role_name() );
+                    if ( ! empty( $data['roles'] ) ) {
+                        foreach ( $data['roles'] as $role ) {
+                            if ( call_user_func( [ PayCheckMateUserRoles::class, "get_{$role}_role_name" ] ) ) {
+								$user->add_role( $role );
+                            }
+                        }
+                    } else {
+                        $user->set_role( PayCheckMateUserRoles::get_pay_check_mate_employee_role_name() );
+                    }
                 } else {
                     $user_id = $user->ID;
                 }
@@ -312,8 +336,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $keys_to_remove     = [ 'basic_salary', 'remarks', 'active_from', '_wpnonce', 'employee_id', 'gross_salary', 'salary_history_id' ];
         $salary_details     = array_filter(
             $head_details, function ( $key ) use ( $keys_to_remove ) {
-            return ! in_array( $key, $keys_to_remove, true );
-        }, ARRAY_FILTER_USE_KEY
+                return ! in_array( $key, $keys_to_remove, true );
+            }, ARRAY_FILTER_USE_KEY
         );
 
         $salary_information['salary_details'] = wp_json_encode( $salary_details );
@@ -372,7 +396,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             $employee_request->set_default_params( $employee );
             // @phpstan-ignore-next-line
             $this->create_employee( $employee_request );
-            ++ $count;
+            ++$count;
         }
 
         // translators: %d: number of employees.
@@ -393,6 +417,8 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $employee_id  = $request->get_param( 'employee_id' );
         $employee_obj = new Employee();
         $employee     = $employee_obj->get_an_employee_with_salary_history( $employee_id, $request );
+        $user         = new \WP_User( $employee->user_id );
+        unset( $user->user_pass, $user->user_activation_key, $user->user_url, $user->user_registered, $user->user_status );
 
         $item                                           = $this->prepare_item_for_response( $employee, $request );
         $data                                           = $this->prepare_response_for_collection( $item );
@@ -402,6 +428,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         $data['salaryInformation']['gross_salary']      = $employee->gross_salary;
         $data['salaryInformation']['active_from']       = $employee->active_from;
         $data['salaryInformation']['remarks']           = $employee->remarks;
+        $data['user']                                   = $user;
         $response                                       = new WP_REST_Response( $data );
 
         return new WP_REST_Response( $response, 200 );

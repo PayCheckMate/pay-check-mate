@@ -1,4 +1,5 @@
 import {SalaryHistoryType} from "./SalaryHistoryType";
+import {UserType} from "./UserType";
 
 export interface EmployeeType {
     id: number;
@@ -20,6 +21,7 @@ export interface EmployeeType {
     created_on: string;
     updated_at: string;
     salaryInformation?: SalaryHistoryType | SalaryHistoryType[];
+    user?: UserType;
 }
 
 export enum EmployeeStatus {
