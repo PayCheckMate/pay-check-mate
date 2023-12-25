@@ -34,11 +34,6 @@ export const PaySlipDetails = () => {
     let totalDeduction = 0;
     const {settingsData} = useSettings();
 
-
-    // Sample data for demonstration
-    const companyName = settingsData.company_name;
-    const companyLogo = settingsData.company_logo;
-
     return (
         <Card>
             <div className="flex justify-between no-print">
@@ -59,15 +54,15 @@ export const PaySlipDetails = () => {
                 <div className="flex items-center justify-between mb-8">
                     <div className="items-center">
                           <img
-                              src={companyLogo}
+                              src={settingsData.company_logo}
                               alt="Company Logo"
                               className="w-20"
                           />
-                            <h2 className="text-2xl font-bold">{companyName}</h2>
-                            <p className="text-gray-500">{settingsData.company_address}</p>
-                            <p className="text-gray-500">{settingsData.company_phone}</p>
-                            <p className="text-gray-500">{settingsData.company_email}</p>
-                            <p className="text-gray-500">{settingsData.company_website}</p>
+                            <h2 className="text-2xl font-bold">{settingsData.company_name}</h2>
+                            <p className="text-gray-500">{__('Address:', 'pay-check-mate')} {settingsData.company_address}</p>
+                            <p className="text-gray-500">{__('Phone:', 'pay-check-mate')} {settingsData.company_phone}</p>
+                            <p className="text-gray-500">{__('Email:', 'pay-check-mate')} {settingsData.company_email}</p>
+                            <p className="text-gray-500">{__('Website:', 'pay-check-mate')} {settingsData.company_website}</p>
                     </div>
                     <div>
                         <p className="text-gray-500">{__('Employee Name:', 'pay-check-mate')} {employee.first_name} {employee.last_name}</p>
