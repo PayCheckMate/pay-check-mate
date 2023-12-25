@@ -73,16 +73,16 @@ class Assets implements HookAbleInterface {
 
         $employee = $employee->get_employee_by_user_id( $user->ID );
 
-        unset( $employee->user_pass );
+        unset( $user->user_pass, $user->user_activation_key, $user->user_url, $user->user_registered, $user->user_status );
         // @phpstan-ignore-next-line
         $user->employee = $employee->get_employee();
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
-              'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
-              'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
-              'pluginUrl'            => PAY_CHECK_MATE_URL,
-              'currentUser'           => $user,
-              'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pcm_roles(),
+                'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
+                'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
+                'pluginUrl'            => PAY_CHECK_MATE_URL,
+                'currentUser'           => $user,
+                'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pay_check_mate_roles(),
             ],
         );
     }
