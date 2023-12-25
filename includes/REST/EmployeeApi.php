@@ -250,7 +250,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
             return $employee;
         }
 
-//        $wpdb->query( 'START TRANSACTION' );
+        $wpdb->query( 'START TRANSACTION' );
         if ( ! empty( $data['id'] ) ) {
             $employee = $employee_model->update( $data['id'], $validated_data );
         } else {
@@ -339,7 +339,7 @@ class EmployeeApi extends RestController implements HookAbleApiInterface {
         }
 
         // If everything is fine, then commit the data.
-//        $wpdb->query( 'COMMIT' );
+        $wpdb->query( 'COMMIT' );
 
         $item     = $this->prepare_item_for_response( $employee, $request );
         $data     = $this->prepare_response_for_collection( $item );
