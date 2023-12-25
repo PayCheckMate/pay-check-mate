@@ -36,7 +36,7 @@ class PayrollDetailsModel extends Model {
     /**
      * Make crated on mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -47,7 +47,7 @@ class PayrollDetailsModel extends Model {
     /**
      * Make updated at mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -58,7 +58,7 @@ class PayrollDetailsModel extends Model {
     /**
      * Get created at mutated date.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *
@@ -71,7 +71,7 @@ class PayrollDetailsModel extends Model {
     /**
      * Get employee salary heads
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string               $salary_details
      * @param array<array<string>> $salary_head_types
@@ -109,7 +109,7 @@ class PayrollDetailsModel extends Model {
     /**
      * Count employee payroll details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $employee_id
      *

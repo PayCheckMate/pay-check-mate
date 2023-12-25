@@ -7,7 +7,7 @@ interface FillableInterface {
     /**
      * Get the fillable attributes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string>
      */

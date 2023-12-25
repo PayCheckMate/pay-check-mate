@@ -40,7 +40,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Get the employee permissions check.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return bool
      */
@@ -52,7 +52,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Get a collection of items
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -93,7 +93,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Get item schema.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed> Item schema data.
      */

@@ -9,7 +9,7 @@ class Helper {
     /**
      * Get all salary heads.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $args
      *

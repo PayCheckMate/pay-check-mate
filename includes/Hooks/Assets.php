@@ -17,7 +17,7 @@ class Assets implements HookAbleInterface {
     /**
      * Register scripts.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function register_scripts(): void {
@@ -62,7 +62,7 @@ class Assets implements HookAbleInterface {
     /**
      * Register translations.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws \Exception
      * @return void

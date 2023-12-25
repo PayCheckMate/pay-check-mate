@@ -7,7 +7,7 @@ interface HookAbleInterface {
     /**
      * Call the necessary hooks.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function hooks(): void;

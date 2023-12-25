@@ -27,7 +27,7 @@ class Salary {
     /**
      * Get salary history of the employee.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $args
      *
@@ -54,7 +54,7 @@ class Salary {
     /**
      * Get date wise last salary.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *

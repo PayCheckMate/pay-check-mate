@@ -53,7 +53,7 @@ if ( ! defined( 'PAY_CHECK_MATE_URL' ) ) {
 /*
  * Main function to initialize the plugin.
  *
- * @since PAY_CHECK_MATE_SINCE
+ * @since 1.0.0
  *
  * @return PayCheckMate
  */
@@ -64,6 +64,6 @@ function pay_check_mate(): PayCheckMate {
 /**
  * Run the plugin.
  *
- * @since PAY_CHECK_MATE_SINCE
+ * @since 1.0.0
  */
 pay_check_mate();

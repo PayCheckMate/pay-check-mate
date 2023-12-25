@@ -34,7 +34,7 @@ class Employee implements EmployeeInterface {
     /**
      * Set employee.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed>|int|null $employee
      *
@@ -56,7 +56,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get employee data.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed>
      */
@@ -68,7 +68,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get employee salary history.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $args
      *
@@ -84,7 +84,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get employee by user id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int $user_id
      *
@@ -102,7 +102,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get all employees.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -159,7 +159,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get employee id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -174,7 +174,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get user id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return int
      */
@@ -189,7 +189,7 @@ class Employee implements EmployeeInterface {
     /**
      * Count all employees.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -214,7 +214,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get an employee with salary history.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int                             $employee_id
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
@@ -305,7 +305,7 @@ class Employee implements EmployeeInterface {
     /**
      * Update employee.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int    $employee_id
      * @param string $status
@@ -320,7 +320,7 @@ class Employee implements EmployeeInterface {
     /**
      * Resign employee.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int    $employee_id
      * @param string $resign_date
@@ -340,7 +340,7 @@ class Employee implements EmployeeInterface {
     /**
      * Get employee find by.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string> $args
      * @param string[]      $fields
