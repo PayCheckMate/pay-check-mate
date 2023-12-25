@@ -29,6 +29,10 @@ export const handlePrint = (divID: string) => {
     if (print && divToPrint) {
         let htmlToPrint = `
                 <style type="text/css">
+                    body{
+                        font-family: sans-serif;
+                        line-height: 1;
+                    }
                     .no-print, .no-print * {
                         display: none !important;
                     }

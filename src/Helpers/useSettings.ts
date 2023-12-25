@@ -13,7 +13,7 @@ export const useSettings = () => {
     });
     useEffect(() => {
         apiFetch({
-            path: '/pay-check-mate/v1/settings',
+            path: '/pay-check-mate/v1/general-settings',
             method: 'GET',
         }).then((response: any) => {
             if (response) {

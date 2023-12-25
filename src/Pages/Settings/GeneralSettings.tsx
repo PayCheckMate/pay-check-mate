@@ -19,7 +19,7 @@ export const GeneralSettings = () => {
         // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         apiFetch({
-            path: '/pay-check-mate/v1/settings',
+            path: '/pay-check-mate/v1/general-settings',
             method: 'PATCH',
             data: {
                 settings: settingsData,

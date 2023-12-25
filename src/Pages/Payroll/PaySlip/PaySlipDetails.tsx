@@ -56,23 +56,12 @@ export const PaySlipDetails = () => {
                 className="p-8"
                 id="printable"
             >
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">
-                        {__('Pay Slip for', 'pay-check-mate')}
-                    </h1>
-                    <p className="text-gray-500">
-                        {new Date(data.payroll_date).toLocaleDateString('default', {
-                            year: 'numeric',
-                            month: 'short',
-                        })}
-                    </p>
-                </div>
                 <div className="flex items-center justify-between mb-8">
                     <div className="items-center">
                           <img
                               src={companyLogo}
                               alt="Company Logo"
-                              className="w-20 mr-4"
+                              className="w-20"
                           />
                             <h2 className="text-2xl font-bold">{companyName}</h2>
                             <p className="text-gray-500">{settingsData.company_address}</p>
@@ -81,10 +70,15 @@ export const PaySlipDetails = () => {
                             <p className="text-gray-500">{settingsData.company_website}</p>
                     </div>
                     <div>
-                        <p className="text-gray-500">Employee Name: {employee.first_name} {employee.last_name}</p>
-                        <p className="text-gray-500">Employee ID: {employee.employee_id}</p>
-                        <p className="text-gray-500">Department: {departments.find((department: any) => department.id === employee.department_id)?.name}</p>
-                        <p className="text-gray-500">Designation: {designations.find((designation: any) => designation.id === employee.designation_id)?.name}</p>
+                        <p className="text-gray-500">{__('Employee Name:', 'pay-check-mate')} {employee.first_name} {employee.last_name}</p>
+                        <p className="text-gray-500">{__('Employee ID:', 'pay-check-mate')} {employee.employee_id}</p>
+                        <p className="text-gray-500">{__('Department:', 'pay-check-mate')} {departments.find((department: any) => department.id === employee.department_id)?.name}</p>
+                        <p className="text-gray-500">{__('Designation:', 'pay-check-mate')} {designations.find((designation: any) => designation.id === employee.designation_id)?.name}</p>
+                        <p className="text-gray-500">{__('Pay Slip for:', 'pay-check-mate')} {new Date(data.payroll_date).toLocaleDateString('default', {
+                                year: 'numeric',
+                                month: 'short',
+                            })}
+                        </p>
                     </div>
                   </div>
                 <div className="grid grid-cols-2 gap-4">

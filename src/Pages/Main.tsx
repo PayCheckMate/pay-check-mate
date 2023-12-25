@@ -42,9 +42,9 @@ export default function Main() {
         {key: 'profile', title: __('Profile', 'pay-check-mate'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pay-check-mate'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
         {key: 'payroll', title: __('Payroll', 'pay-check-mate'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
-        {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pay-check-mate'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
-        {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pay-check-mate'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
-        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay-check-mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: NeedPro},
+        {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pay-check-mate'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},
+        {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pay-check-mate'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},
+        {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay-check-mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},
         {key: 'settings', title: __('Settings', 'pay-check-mate'), href: 'settings', icon: CogIcon, current: false, roles: ['pay_check_mate_accountant'],
             children: [
                 {key: 'general', title: __('General', 'pay-check-mate'), href: 'general', current: false, roles: ['pay_check_mate_admin'], component: GeneralSettings},

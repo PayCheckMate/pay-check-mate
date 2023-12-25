@@ -8,7 +8,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
 
     public function __construct() {
         $this->namespace = 'pay-check-mate/v1';
-        $this->rest_base = 'settings';
+        $this->rest_base = 'general-settings';
     }
 
     public function register_api_routes(): void {
@@ -36,7 +36,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_settings_permissions_check(): bool {
-        return current_user_can( 'manage_options' );
+        return current_user_can( 'pay_check_mate_admin' );
     }
 
     /**
@@ -47,7 +47,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
      * @return \WP_REST_Response
      */
     public function get_settings(): \WP_REST_Response {
-        $settings = get_option( 'pay_check_mate_settings' );
+        $settings = get_option( 'pay_check_mate_general_settings' );
         return rest_ensure_response( $settings );
     }
 
@@ -59,7 +59,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function update_settings_permissions_check(): bool {
-        return current_user_can( 'manage_options' );
+        return current_user_can( 'pay_check_mate_admin' );
     }
 
     /**
@@ -77,7 +77,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
         }
 
         $settings = $request->get_param( 'settings' );
-        update_option( 'pay_check_mate_settings', $settings );
+        update_option( 'pay_check_mate_general_settings', $settings );
 
         return rest_ensure_response( $settings );
     }
