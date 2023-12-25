@@ -1,14 +1,14 @@
 <?php
 /**
  * Plugin Name:         PayCheckMate
- * Plugin URI:          https://github.com/PayCheckMate/pay-check-mate
+ * Plugin URI:          https://paycheckmate.com/
  * Description:         Pay Check Mate is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors.
  * Version:             1.0.0
  * Requires PHP:        7.4
  * Requires at least:   5.6
  * Tested up to:        6.4.2
  * Author:              Ratul Hasan
- * Author URI:          https://ratuljh.wordpress.com
+ * Author URI:          https://www.ratulhasan.com/
  * License:             GPL-3.0-or-later
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:         pay-check-mate
