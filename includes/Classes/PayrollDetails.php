@@ -24,7 +24,7 @@ class PayrollDetails {
     /**
      * __get.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $name
      *
@@ -41,7 +41,7 @@ class PayrollDetails {
     /**
      * Get employee payroll details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, string> $args
      *
@@ -73,7 +73,7 @@ class PayrollDetails {
     /**
      * Count employee payroll details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws \Exception
      * @return int

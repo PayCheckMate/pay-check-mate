@@ -21,7 +21,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Register the necessary Routes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -99,7 +99,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Checks if a given request has access to read designations.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -112,7 +112,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Checks if a given request has access to create a designation.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -125,7 +125,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Checks if a given request has access to read a designation.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -138,7 +138,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Checks if a given request has access to update a designation.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -151,7 +151,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Checks if a given request has access to delete a designation.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -164,7 +164,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves a collection of designations.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -203,7 +203,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Creates one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -233,7 +233,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -258,7 +258,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Updates one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -289,7 +289,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Deletes one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string, mixed>> $request Full details about the request.
      *
@@ -313,7 +313,7 @@ class DesignationApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves the item's schema, conforming to JSON Schema.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed> Item schema data.
      */

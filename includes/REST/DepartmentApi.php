@@ -22,7 +22,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Register the necessary Routes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -100,7 +100,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Check if a given request has access to get items.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -114,7 +114,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Check if a given request has access to create items.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -128,7 +128,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Check if a given request has access to get a specific item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -142,7 +142,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Check if a given request has access to update a specific item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -156,7 +156,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Check if a given request has access to delete a specific item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -170,7 +170,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Get a collection of items.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
@@ -211,7 +211,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Create a new item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -243,7 +243,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Get one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
@@ -272,7 +272,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Update one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
@@ -304,7 +304,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Delete one item from the collection.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Request object.
      *
@@ -328,7 +328,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
     /**
      * Get the query params for collections. These are query params that are used for every collection request.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, array<string, array<string, array<int, string>|bool|string>>|string> Collection parameters.
      */

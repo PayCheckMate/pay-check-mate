@@ -40,7 +40,7 @@ class SalaryHeadModel extends Model {
     /**
      * Make crated on mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class SalaryHeadModel extends Model {
     /**
      * Make updated at mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class SalaryHeadModel extends Model {
     /**
      * Get created at mutated date.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *
@@ -75,7 +75,7 @@ class SalaryHeadModel extends Model {
     /**
      * Get head type string
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $head_type
      *

@@ -7,7 +7,7 @@ interface FormRequestInterface {
     /**
      * Validate the request.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return mixed
      */

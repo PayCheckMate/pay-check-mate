@@ -64,7 +64,7 @@ class Request implements FormRequestInterface {
     /**
      * To get data like $request->title dynamically, we introduced this magic method.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $name property name.
      *
@@ -77,7 +77,7 @@ class Request implements FormRequestInterface {
     /**
      * Set data.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string> $data Post Super Global.
      *
@@ -94,7 +94,7 @@ class Request implements FormRequestInterface {
     /**
      * Set data.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $key   Key name.
      * @param mixed  $value Value.
@@ -112,7 +112,7 @@ class Request implements FormRequestInterface {
     /**
      * Validate nonce.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws Exception
      *
@@ -133,7 +133,7 @@ class Request implements FormRequestInterface {
     /**
      * Validate fillable.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @throws Exception
      * @return void
      */
@@ -156,7 +156,7 @@ class Request implements FormRequestInterface {
     /**
      * Sanitize data.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws Exception
      * @return void
@@ -181,7 +181,7 @@ class Request implements FormRequestInterface {
     /**
      * Convert to array.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string>
      */
@@ -192,7 +192,7 @@ class Request implements FormRequestInterface {
     /**
      * Add error.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $error Error message.
      *
@@ -205,7 +205,7 @@ class Request implements FormRequestInterface {
     /**
      * Get nonce.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws Exception
      *
@@ -222,7 +222,7 @@ class Request implements FormRequestInterface {
     /**
      * Get rules.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws Exception
      *
@@ -239,7 +239,7 @@ class Request implements FormRequestInterface {
     /**
      * Get fillable.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws Exception
      *
