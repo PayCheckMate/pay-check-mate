@@ -37,7 +37,7 @@ addAction('pay_check_mate_notification', 'pay_check_mate_notification', (message
 });
 export default function Main() {
     let navigations: NavigationType[] = [
-        {key: 'dashboard', title: __('Dashboard', 'pay-check-mate'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_accountant'], component: Dashboard},
+        {key: 'dashboard', title: __('Dashboard', 'pay-check-mate'), href: '/', icon: HomeIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: Dashboard},
         {key: 'employees', title: __('Employees', 'pay-check-mate'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
         {key: 'profile', title: __('Profile', 'pay-check-mate'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pay-check-mate'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},

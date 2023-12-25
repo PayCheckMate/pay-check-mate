@@ -13,8 +13,9 @@ import {
 import {Bar} from 'react-chartjs-2';
 import React, {useEffect, useState} from "@wordpress/element";
 import useFetchApi from "../Helpers/useFetchApi";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import {applyFilters} from "../Helpers/Hooks";
+import {userCan, userIs} from "../Helpers/User";
 
 // ChartJS.register
 ChartJS.register(
@@ -57,6 +58,9 @@ type DashboardResponse = {
     last_payroll: any,
 }
 export const Dashboard = () => {
+    if (!userIs('pay_check_mate_admin') || !userIs('pay_check_mate_accountant')) {
+        return <Navigate to={'/profile'} />
+    }
     const {makeGetRequest} = useFetchApi('', {}, false);
     const [data, setData] = useState<any>(null);
     const [totalEmployees, setTotalEmployees] = useState(0);
