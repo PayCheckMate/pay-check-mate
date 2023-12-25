@@ -348,6 +348,9 @@ export const AddEmployee = () => {
                                             {!error && (
                                                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                                                     <>
+                                                        <h2 className="text-xl font-medium">
+                                                            {__('User Roles:', 'pay-check-mate')}
+                                                        </h2>
                                                         <div className="grid grid-cols-3 gap-4">
                                                             {Object.keys(PayCheckMateUserRoles).length > 0 && Object.keys(PayCheckMateUserRoles).map((role: any) => {
                                                                 return (
@@ -374,13 +377,15 @@ export const AddEmployee = () => {
                                                                                 }
                                                                             }}
                                                                         />
-                                                                        <label htmlFor={role}
-                                                                               className="ml-3 block text-sm font-medium text-gray-700">
+                                                                        <label
+                                                                            htmlFor={role}
+                                                                            className="ml-3 block text-sm font-medium text-gray-700"
+                                                                        >
                                                                             {PayCheckMateUserRoles[role]}
                                                                         </label>
                                                                     </div>
-                                                                )
-                                                            }
+                                                                    )
+                                                                }
                                                             )}
                                                         </div>
                                                         <Button
