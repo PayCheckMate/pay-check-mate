@@ -13,6 +13,14 @@ import {toast} from "react-toastify";
 import {useSettings} from "../../Helpers/useSettings";
 
 export const GeneralSettings = () => {
+    const settingsFields = [
+        'company_name',
+        'company_address',
+        'company_phone',
+        'company_email',
+        'company_website',
+        'company_logo',
+    ];
     const {settingsData, setSettingsData} = useSettings();
 
     const handleSubmit = () => {
@@ -52,7 +60,7 @@ export const GeneralSettings = () => {
                                         onSubmit={handleSubmit}
                                         className="space-y-6"
                                     >
-                                        {Object.keys(settingsData).map((key: string) => {
+                                        {settingsFields.map((key: string) => {
                                             const settingsKey = key as (keyof SettingsType)
                                             switch (settingsKey) {
                                                 case 'company_address':
@@ -115,12 +123,14 @@ export const GeneralSettings = () => {
                                             }
                                         })}
 
-                                        <Button
-                                            className="mt-4"
-                                            onClick={() => handleSubmit()}
-                                        >
-                                            {__('Save', 'pay-check-mate')}
-                                        </Button>
+                                        <div className="flex justify-end">
+                                            <Button
+                                                className="mt-4"
+                                                onClick={() => handleSubmit()}
+                                            >
+                                                {__('Save', 'pay-check-mate')}
+                                            </Button>
+                                        </div>
                                     </form>
                                 </div>
                             </Card>

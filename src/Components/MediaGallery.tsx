@@ -1,5 +1,6 @@
 import React from '@wordpress/element';
 import {__} from "@wordpress/i18n";
+import {Button} from "./Button";
 
 export type MediaGalleryProps = {
     title: string;
@@ -12,9 +13,7 @@ const MediaGallery = ({title, settingsData, setSettingsData}: MediaGalleryProps)
     const WP = window.wp;
     let mediaFrame: any = null;
 
-    const openMediaGallery = (e: any) => {
-        e.preventDefault();
-
+    const openMediaGallery = () => {
         if (WP && WP.media) {
             if (mediaFrame) {
                 mediaFrame.open();
@@ -45,9 +44,9 @@ const MediaGallery = ({title, settingsData, setSettingsData}: MediaGalleryProps)
 
     return (
         <div key={`div-${title}`} className="flex items-center">
-            <button className="button-primary" key={title} id={title} onClick={(e) => openMediaGallery(e)}>
+            <Button className="button-secondary" key={title} id={title} onClick={() => openMediaGallery()}>
                 {__('Open Media Gallery', 'pay-check-mate')}
-            </button>
+            </Button>
         </div>
     );
 };
