@@ -5,7 +5,7 @@ namespace PayCheckMate\Classes;
 /**
  * Installer class
  *
- * @since PAY_CHECK_MATE_SINCE
+ * @since 1.0.0
  */
 class Installer {
 

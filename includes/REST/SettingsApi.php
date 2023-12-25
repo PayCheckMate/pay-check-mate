@@ -31,7 +31,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
     /**
      * Get settings permissions check.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return bool
      */
@@ -42,7 +42,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
     /**
      * Get settings.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return \WP_REST_Response
      */
@@ -54,7 +54,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
     /**
      * Update settings permissions check.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return bool
      */
@@ -65,7 +65,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
     /**
      * Update settings.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *

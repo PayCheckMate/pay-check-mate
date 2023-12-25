@@ -27,7 +27,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Register routes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -156,7 +156,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Get a collection of items
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -198,7 +198,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Create payroll.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -358,7 +358,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Saves the payroll.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -460,7 +460,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Updates the payroll and payroll details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -568,7 +568,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Gets the payroll.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param WP_REST_Request<array<string>> $request
      *
@@ -650,7 +650,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Gets the payroll report.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request
      *
@@ -773,7 +773,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Get the payroll ledger.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -855,7 +855,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Updates the payroll.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      *
@@ -891,7 +891,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves the item's schema, conforming to JSON Schema.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed> Item schema data.
      */
@@ -973,7 +973,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves the query params for the collections.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<array<string, mixed>> Collection parameters.
      */
@@ -1003,7 +1003,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     /**
      * Retrieves the query params for the collections.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<array<string, mixed>> Collection parameters.
      */

@@ -32,7 +32,7 @@ class SalaryHistoryModel extends Model {
     /**
      * Make crated on mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class SalaryHistoryModel extends Model {
     /**
      * Make updated at mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class SalaryHistoryModel extends Model {
     /**
      * Get created at mutated date.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *
@@ -76,7 +76,7 @@ class SalaryHistoryModel extends Model {
     /**
      * Get salary details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed>
      */
@@ -90,7 +90,7 @@ class SalaryHistoryModel extends Model {
     /**
      * Employee salary increment.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param SalaryHistoryRequest $request
      *

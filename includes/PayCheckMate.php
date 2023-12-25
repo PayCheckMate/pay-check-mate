@@ -92,7 +92,7 @@ final class PayCheckMate {
     /**
      * Get the single instance of the class
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return PayCheckMate
      */
     public static function get_instance(): PayCheckMate {
@@ -133,7 +133,7 @@ final class PayCheckMate {
     /**
      * Set Transaction Text Domain
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function set_translation(): void {
@@ -143,7 +143,7 @@ final class PayCheckMate {
     /**
      * On activate this plugin.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function activate_this_plugin(): void {
@@ -161,7 +161,7 @@ final class PayCheckMate {
     /**
      * Main point of loading the plugin.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @throws \ReflectionException
      *
@@ -185,7 +185,7 @@ final class PayCheckMate {
     /**
      * Load all the hook classes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -205,7 +205,7 @@ final class PayCheckMate {
     /**
      * Load all the classes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $classes Classes to load.
      *
@@ -232,7 +232,7 @@ final class PayCheckMate {
     /**
      * Register REST API routes.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function register_rest_routes(): void {
@@ -251,7 +251,7 @@ final class PayCheckMate {
     /**
      * Load necessary hooks.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param HookAbleInterface $hook_able HookAble Interface.
      *

@@ -34,7 +34,7 @@ class Databases {
     /**
      * Create tables.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return void
      */
     public function create_tables() {
@@ -53,7 +53,7 @@ class Databases {
     /**
      * Create table departments.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -75,7 +75,7 @@ class Databases {
     /**
      * Create table designation.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class Databases {
     /**
      * Create table salary head.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -127,7 +127,7 @@ class Databases {
     /**
      * Create table employees.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -162,7 +162,7 @@ class Databases {
     /**
      * Create table employee salary.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -190,7 +190,7 @@ class Databases {
     /**
      * Create table employee payroll.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
@@ -218,7 +218,7 @@ class Databases {
     /**
      * Create table employee payroll details.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */

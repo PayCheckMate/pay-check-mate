@@ -9,7 +9,7 @@ interface ModelInterface {
     /**
      * Get all the items.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $args
      *
@@ -20,7 +20,7 @@ interface ModelInterface {
     /**
      * Get a single item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int   $id
      * @param array<string, mixed> $args
@@ -32,7 +32,7 @@ interface ModelInterface {
     /**
      * Get the items from the database by.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string, mixed> $find_by
      * @param array<string, mixed> $args
@@ -45,7 +45,7 @@ interface ModelInterface {
     /**
      * Create a new item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param Request $data
      *
@@ -56,7 +56,7 @@ interface ModelInterface {
     /**
      * Update an item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int     $id
      * @param Request $data
@@ -68,7 +68,7 @@ interface ModelInterface {
     /**
      * Delete an item.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int $id
      *
@@ -79,7 +79,7 @@ interface ModelInterface {
     /**
      * Count the number of items.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param array<string> $args
      *

@@ -31,7 +31,7 @@ class DesignationModel extends Model {
     /**
      * Make crated on mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -42,7 +42,7 @@ class DesignationModel extends Model {
     /**
      * Make updated at mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -53,7 +53,7 @@ class DesignationModel extends Model {
     /**
      * Get created at mutated date.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *

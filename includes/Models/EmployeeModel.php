@@ -39,7 +39,7 @@ class EmployeeModel extends Model {
     /**
      * Find employee by id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int $employee_id
      *
@@ -55,7 +55,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee data.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return array<string, mixed>
      */
@@ -73,7 +73,7 @@ class EmployeeModel extends Model {
     /**
      * Make crated on mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -84,7 +84,7 @@ class EmployeeModel extends Model {
     /**
      * Make updated at mutation
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -95,7 +95,7 @@ class EmployeeModel extends Model {
     /**
      * Get created at mutated date.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *
@@ -108,7 +108,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee full name
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -120,7 +120,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee joining date
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $date
      *
@@ -136,7 +136,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee regine date
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string|null $date
      *
@@ -154,7 +154,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee salary heads
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string               $salary_details
      * @param array<array<string>> $salary_head_types
@@ -191,7 +191,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee Id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -208,7 +208,7 @@ class EmployeeModel extends Model {
     /**
      * Get employee by user id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int $user_id
      *

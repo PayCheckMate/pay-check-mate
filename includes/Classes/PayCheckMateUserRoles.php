@@ -37,7 +37,7 @@ class PayCheckMateUserRoles {
     /**
      * Get the admin role.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -48,7 +48,7 @@ class PayCheckMateUserRoles {
     /**
      * Get the accountant role.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -59,7 +59,7 @@ class PayCheckMateUserRoles {
     /**
      * Get the employee role.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return string
      */
@@ -70,7 +70,7 @@ class PayCheckMateUserRoles {
     /**
      * Get capabilities for the `employee` role.
      *
-     * @since  PAY_CHECK_MATE_SINCE
+     * @since  1.0.0
      * @return array<string, bool>
      */
     protected function get_employee_capabilities(): array {
@@ -87,7 +87,7 @@ class PayCheckMateUserRoles {
     /**
      * Get all capabilities for the plugin.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      * @return true[]
      */
     protected function get_all_capabilities(): array {
@@ -144,7 +144,7 @@ class PayCheckMateUserRoles {
     /**
      * Get all the roles for the plugin.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param string $role Role name.
      *
