@@ -5,7 +5,7 @@ export const validateRequiredFields = (data: any, requiredFields: string[], setF
     setFormError({});
     requiredFields.forEach((field) => {
         if (!data[field] && data[field] !== 0) {
-            errors[field] = __('This field is required', 'pcm');
+            errors[field] = __('This field is required', 'pay-check-mate');
         }
     });
     setFormError(errors);
@@ -35,12 +35,25 @@ export const handlePrint = (divID: string) => {
     if (print && divToPrint) {
         let htmlToPrint = `
                 <style type="text/css">
+                    body{
+                        font-family: sans-serif;
+                        line-height: 1;
+                    }
                     .no-print, .no-print * {
                         display: none !important;
                     }
                     .remarks{
                         width: 66.666667%;
                         margin-top: 1rem;
+                    }
+                    .w-20{
+                        width: 5rem;
+                    }
+                    .text-center {
+                        text-align: center;
+                    }
+                    .mr-4{
+                        margin-right: 1rem;
                     }
                     .prepared_by{
                         width: 20%;
@@ -106,11 +119,7 @@ export const handlePrint = (divID: string) => {
         print.print()
     }
 }
-// export const debounce = (callback: any, wait: number) => {
-//     let timeout: any = null;
-//     return (...args: any) => {
-//         const next = () => callback(...args);
-//         clearTimeout(timeout);
-//         timeout = setTimeout(next, wait);
-//     };
-// }
+
+export function replaceUnderscoreAndCapitalize(string: string) {
+    return string.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
+}

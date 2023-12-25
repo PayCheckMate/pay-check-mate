@@ -1,5 +1,5 @@
 import {useEffect, useState} from "@wordpress/element";
-import {Loading} from "../Loading";
+import TableSkeleton from "../TableSkeleton";
 
 interface ProgressiveImgProps {
     placeholderSrc: string;
@@ -21,7 +21,7 @@ const ProgressiveImg = ({ placeholderSrc, src, ...props }: ProgressiveImgProps) 
     }, [src]);
 
     return (
-        loading ? <Loading/> :
+        loading ? <TableSkeleton rows={10} columns={4} /> :
             <img
                 {...{ src: imgSrc, ...props }}
                 alt={props.alt || ""}

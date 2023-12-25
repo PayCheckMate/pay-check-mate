@@ -7,7 +7,7 @@ import {
 } from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
-import {Loading} from "../../Components/Loading";
+import TableSkeleton from "../../Components/TableSkeleton";
 import {SelectBox} from "../../Components/SelectBox";
 import {__} from "@wordpress/i18n";
 import {FormInput} from "../../Components/FormInput";
@@ -79,7 +79,7 @@ const CreatePayroll = () => {
                 setPayDate(response.payroll.payroll_date);
             }).catch((error: any) => {
                 console.log(error, 'error')
-                toast.error(__('Something went wrong while fetching payroll', 'pcm'), {
+                toast.error(__('Something went wrong while fetching payroll', 'pay-check-mate'), {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 3000
                 });
@@ -92,7 +92,7 @@ const CreatePayroll = () => {
         setIsSubmitting(false)
         try {
             if (!payDate) {
-                toast.error(__('Please select a date', 'pcm'));
+                toast.error(__('Please select a date', 'pay-check-mate'));
                 return;
             }
             const data = {
@@ -121,7 +121,7 @@ const CreatePayroll = () => {
         if (designations.length <= 0) return;
         const defaultDesignation = {
             id: 0,
-            name: __('All', 'pcm'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDesignation(defaultDesignation)
@@ -132,7 +132,7 @@ const CreatePayroll = () => {
 
         const defaultDepartment = {
             id: 0,
-            name: __('All', 'pcm'),
+            name: __('All', 'pay-check-mate'),
         }
 
         setSelectedDepartment(defaultDepartment)
@@ -190,7 +190,7 @@ const CreatePayroll = () => {
 
     const handleSubmit = () => {
         if (payDate === '') {
-            toast.error(__('Please select a date', 'pcm'));
+            toast.error(__('Please select a date', 'pay-check-mate'));
             return;
         }
         setIsSubmitting(true);
@@ -218,7 +218,7 @@ const CreatePayroll = () => {
                 setTableData([])
                 localStorage.removeItem('Payroll.TableData');
                 navigate('/payroll');
-                toast.success(__('Payroll saved successfully', 'pcm'));
+                toast.success(__('Payroll saved successfully', 'pay-check-mate'));
             }).catch((error: any) => {
                 localStorage.removeItem('Payroll.TableData');
                 navigate('/payroll');
@@ -233,12 +233,12 @@ const CreatePayroll = () => {
         }
     }
 
-    addAction('pcm.payroll_edit_action', 'pcm.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
+    addAction('pay_check_mate.payroll_edit_action', 'pay_check_mate.payroll_edit_action', (salaryHeads: SalaryHeadsResponseType) => {
         setSalaryHeads(salaryHeads)
     })
 
-    const text = __('Turn on edit mode (PRO)', 'pcm-pro');
-    const editSalaryHead = applyFilters( 'pcm.payroll_edit_filter',
+    const text = __('Turn on edit mode (PRO)', 'pay-check-mate');
+    const editSalaryHead = applyFilters( 'pay_check_mate.payroll_edit_filter',
         <>
             {text}
             <LockClosedIcon className="h-5 w-5 text-gray-400" />
@@ -257,15 +257,15 @@ const CreatePayroll = () => {
         setVariableSalaryModal(false)
     }
 
-    const isVariableSalaryImporter = applyFilters('pcm.is_variable_salary_importer', false)
-    const earningClass = applyFilters('pcm.earning_class', '')
-    const totalEarningsClass = applyFilters('pcm.total_earnings_class', '')
-    const deductionClass = applyFilters('pcm.deduction_class', '')
-    const totalDeductionsClass = applyFilters('pcm.total_deductions_class', '')
-    const nonTaxableClass = applyFilters('pcm.non_taxable_class', '')
-    const netPayableClass = applyFilters('pcm.net_payable_class', '')
-    const totalPayableClass = applyFilters('pcm.total_payable_class', '')
-    let red = applyFilters('pcm.red', 'gray');
+    const isVariableSalaryImporter = applyFilters('pay_check_mate.is_variable_salary_importer', false)
+    const earningClass = applyFilters('pay_check_mate.earning_class', '')
+    const totalEarningsClass = applyFilters('pay_check_mate.total_earnings_class', '')
+    const deductionClass = applyFilters('pay_check_mate.deduction_class', '')
+    const totalDeductionsClass = applyFilters('pay_check_mate.total_deductions_class', '')
+    const nonTaxableClass = applyFilters('pay_check_mate.non_taxable_class', '')
+    const netPayableClass = applyFilters('pay_check_mate.net_payable_class', '')
+    const totalPayableClass = applyFilters('pay_check_mate.total_payable_class', '')
+    let red = applyFilters('pay_check_mate.red', 'gray');
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_add_payroll) ? (
@@ -282,7 +282,7 @@ const CreatePayroll = () => {
                             <div className="grid grid-cols-4 gap-4">
                                 <div>
                                     <SelectBox
-                                        title={__('Designation', 'pcm')}
+                                        title={__('Designation', 'pay-check-mate')}
                                         options={designations}
                                         selected={selectedDesignation}
                                         setSelected={(selectedDesignation) => setSelectedDesignation(selectedDesignation)}
@@ -290,7 +290,7 @@ const CreatePayroll = () => {
                                 </div>
                                 <div>
                                     <SelectBox
-                                        title={__('Department', 'pcm')}
+                                        title={__('Department', 'pay-check-mate')}
                                         options={departments}
                                         selected={selectedDepartment}
                                         setSelected={(selectedDepartment) => setSelectedDepartment(selectedDepartment)}
@@ -299,7 +299,7 @@ const CreatePayroll = () => {
                                 <div>
                                     <FormInput
                                         type="month"
-                                        label={__('Pay month', 'pcm')}
+                                        label={__('Pay month', 'pay-check-mate')}
                                         className="mt-2"
                                         name="pay_month"
                                         id="pay_month"
@@ -311,7 +311,7 @@ const CreatePayroll = () => {
                                     {/*This button should flat and small*/}
                                     {!payrollId && (
                                         <Button type="submit">
-                                            {__('Generate', 'pcm')}
+                                            {__('Generate', 'pay-check-mate')}
                                         </Button>
                                     )}
                                 </div>
@@ -327,7 +327,7 @@ const CreatePayroll = () => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Import Variable Salary', 'pcm')}
+                                    {__('Import Variable Salary', 'pay-check-mate')}
                                 </Button>
                             </div>
                         ) }
@@ -340,7 +340,7 @@ const CreatePayroll = () => {
                     {tableData.length > 0 ? (
                         <>
                             {loading ? (
-                                <Loading />
+                                <TableSkeleton rows={10} columns={4} />
                             ) : (
                                 <>
                                     <div className="flex justify-between">
@@ -353,73 +353,73 @@ const CreatePayroll = () => {
                                             <thead>
                                             <tr>
                                                 <th rowSpan={2}>
-                                                    {__('Sl. No.', 'pcm')}
+                                                    {__('Sl. No.', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Employee ID', 'pcm')}
+                                                    {__('Employee ID', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     rowSpan={2}
                                                     className="fixed-column"
                                                 >
-                                                    {__('Employee Name', 'pcm')}
+                                                    {__('Employee Name', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Designation', 'pcm')}
+                                                    {__('Designation', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={2}>
-                                                    {__('Department', 'pcm')}
+                                                    {__('Department', 'pay-check-mate')}
                                                 </th>
                                                 <th rowSpan={3}>
-                                                    {__('Basic Salary', 'pcm')}
+                                                    {__('Basic Salary', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.earnings.length > 0 && (
                                                     <th
                                                         className={earningClass}
                                                         colSpan={salaryHeads.earnings.length}
                                                     >
-                                                        {__('Earnings', 'pcm')}
+                                                        {__('Earnings', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalEarningsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Earnings', 'pcm')}
+                                                    {__('Total Earnings', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.deductions.length > 0 && (
                                                     <th
                                                         className={deductionClass}
                                                         colSpan={salaryHeads.deductions.length}
                                                     >
-                                                        {__('Deductions', 'pcm')}
+                                                        {__('Deductions', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalDeductionsClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Deductions', 'pcm')}
+                                                    {__('Total Deductions', 'pay-check-mate')}
                                                 </th>
                                                 <th
                                                     className={netPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Net Payable', 'pcm')}
+                                                    {__('Net Payable', 'pay-check-mate')}
                                                 </th>
                                                 {salaryHeads.non_taxable.length > 0 && (
                                                     <th
                                                         className={nonTaxableClass}
                                                         colSpan={salaryHeads.non_taxable.length}
                                                     >
-                                                        {__('Non Taxable', 'pcm')}
+                                                        {__('Non Taxable', 'pay-check-mate')}
                                                     </th>
                                                 )}
                                                 <th
                                                     className={totalPayableClass}
                                                     rowSpan={2}
                                                 >
-                                                    {__('Total Payable', 'pcm')}
+                                                    {__('Total Payable', 'pay-check-mate')}
                                                 </th>
                                             </tr>
                                             <tr className="second-row">
@@ -539,7 +539,7 @@ const CreatePayroll = () => {
                                                                     type="number"
                                                                     key={deduction.id}
                                                                     name={`deductions[${data.id}][${deduction.id}]`}
-                                                                    value={salary || (TableData.length > 0 ? TableData[tableDataIndex].salary_details.deductions[deduction.id] : 0)}
+                                                                    value={salary || (TableData && TableData.length > 0 ? TableData[tableDataIndex].salary_details.deductions[deduction.id] : 0)}
                                                                     onChange={(event) => handleVariableSalary(parseInt(event.target.value), tableDataIndex, deduction.id, 'deductions')}
                                                                 />
                                                             ) : (
@@ -604,7 +604,7 @@ const CreatePayroll = () => {
                                                     className="fixed-column text-right font-bold text-xl"
                                                     colSpan={5}
                                                 >
-                                                    {__('Total', 'pcm')}
+                                                    {__('Total', 'pay-check-mate')}
                                                 </td>
                                                 <td
                                                     className="text-right"
@@ -671,7 +671,7 @@ const CreatePayroll = () => {
                                     className="form-input w-full"
                                     name="remarks"
                                     id="remarks"
-                                    placeholder={__('Remarks', 'pcm')}
+                                    placeholder={__('Remarks', 'pay-check-mate')}
                                     value={remarks}
                                     onChange={(event) => setRemarks(event.target.value)}
                                 />
@@ -685,16 +685,16 @@ const CreatePayroll = () => {
                                     }}
                                 >
                                     {isSubmitting ? (
-                                        <>{__('Submitting...', 'pcm')}<Spinner /></>
-                                    ) : __('Save', 'pcm')}
+                                        <>{__('Submitting...', 'pay-check-mate')}<Spinner /></>
+                                    ) : __('Save', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </>
                     ) : (
                         <Card>
                             <EmptyState
-                                title={__('Payroll Sheet', 'pcm')}
-                                description={__('Select department or designation and pay month to view payroll list', 'pcm')}
+                                title={__('Payroll Sheet', 'pay-check-mate')}
+                                description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                                 icon={<CurrencyDollarIcon
                                     className={"w-6 h-6 text-"+red+"-600"}
                                     aria-hidden="true"

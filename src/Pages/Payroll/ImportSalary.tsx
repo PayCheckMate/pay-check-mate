@@ -39,7 +39,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
     // Set salary head which is variable
     const headerRow = salaryHeads.filter((head) => parseInt(String(head.is_variable)) === 1).map((head) => head.head_name);
     const headers = [
-        __('Employee id', 'pcm'),
+        __('Employee id', 'pay-check-mate'),
         ...headerRow,
     ]
 
@@ -61,7 +61,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
     const [fileDataError, setFileDataError] = useState(false);
     useEffect(() => {
         if (fileDataError) {
-            toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
+            toast.error(__('File is not formatted properly. Please check the sample file.', 'pay-check-mate'));
         }
     }, [fileDataError]);
     const [exportSalaries, setExportSalaries] = useState([] as any);
@@ -142,7 +142,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
 
     const importVariableSalary = () => {
         if (salaries.length === 0) {
-            toast.error(__('Please upload a file first.', 'pcm'));
+            toast.error(__('Please upload a file first.', 'pay-check-mate'));
             return;
         }
         setVariableSalary(exportSalaries);
@@ -152,7 +152,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
             <div>
                 <div className="flex justify-start sm:flex-auto mb-6">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">
-                        {__('Import Variable Salary', 'pcm')}
+                        {__('Import Variable Salary', 'pay-check-mate')}
                     </h1>
                 </div>
                 <Card>
@@ -160,10 +160,10 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                         <div className="flex justify-between mb-6 gap-4">
                             <div>
                                 <p className="text-base leading-6 text-gray-900">
-                                    {__('Import salary data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads.', 'pcm')}
+                                    {__('Import salary data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads.', 'pay-check-mate')}
                                 </p>
                                 <p className="text-gray-600">
-                                    {__('Note: The first row of the CSV file must be the column name.', 'pcm')}
+                                    {__('Note: The first row of the CSV file must be the column name.', 'pay-check-mate')}
                                 </p>
                             </div>
                             <div className="flex justify-between gap-6">
@@ -182,7 +182,7 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Download sample', 'pcm')}
+                                    {__('Download sample', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </div>
@@ -196,8 +196,8 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                                 <table className="payroll-table">
                                 <thead>
                                     <tr>
-                                        <th>{__('SL', 'pcm')}</th>
-                                        <th>{__('Employee id', 'pcm')}</th>
+                                        <th>{__('SL', 'pay-check-mate')}</th>
+                                        <th>{__('Employee id', 'pay-check-mate')}</th>
                                         {headerRow.map((head, index) => (
                                             <th key={index}>{head}</th>
                                         ))}
@@ -228,13 +228,13 @@ export const ImportSalary = ({setVariableSalary}: ImportSalaryProps) => {
                                     }}
                                     className="text-sm font-semibold leading-6 text-gray-900 btn-cancel"
                                 >
-                                    {__('Reset', 'pcm')}
+                                    {__('Reset', 'pay-check-mate')}
                                 </button>
                                 <Button
                                     onClick={() => importVariableSalary()}
                                     className="btn-primary"
                                 >
-                                    {__('Import', 'pcm')}
+                                    {__('Import', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </>

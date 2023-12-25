@@ -34,11 +34,11 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
 
     const defaultDesignation = {
         id: 'select_one',
-        name: __('Select one', 'pcm'),
+        name: __('Select one', 'pay-check-mate'),
     }
     const defaultDepartment = {
         id: 'select_one',
-        name: __('Select one', 'pcm'),
+        name: __('Select one', 'pay-check-mate'),
     }
 
     const {designations} = useSelect((select) => select(designation).getDesignations({per_page: '-1', status: '1'}), []);
@@ -99,7 +99,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
     const [showDesignationModal, setShowDesignationModal] = useState(false);
     const [departmentData, setDepartmentData] = useState<DepartmentType>({} as DepartmentType);
     const [designationData, setDesignationData] = useState<DesignationType>({} as DesignationType);
-    let indigo = applyFilters('pcm.indigo', 'gray');
+    let indigo = applyFilters('pay_check_mate.indigo', 'gray');
 
     return (
         <>
@@ -130,7 +130,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             <div className="sm:col-span-3">
                                 <FormInput
                                     required={true}
-                                    label={__('First name', 'pcm')}
+                                    label={__('First name', 'pay-check-mate')}
                                     name="first_name"
                                     id="first_name"
                                     value={formValues.first_name || initialValues.first_name || ''}
@@ -141,7 +141,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             <div className="sm:col-span-3">
                                 <FormInput
                                     required={true}
-                                    label={__('Last name', 'pcm')}
+                                    label={__('Last name', 'pay-check-mate')}
                                     name="last_name"
                                     id="last_name"
                                     value={formValues.last_name || initialValues.last_name || ''}
@@ -152,7 +152,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             <div className="sm:col-span-3">
                                 <SelectBox
                                     required={true}
-                                    title={__('Department', 'pcm')}
+                                    title={__('Department', 'pay-check-mate')}
                                     options={departments}
                                     selected={selectedDepartment}
                                     error={formError.department_id}
@@ -163,14 +163,14 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
                                     <span onClick={() => setShowDepartmentModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
-                                        {__('Create a new department', 'pcm')}
+                                        {__('Create a new department', 'pay-check-mate')}
                                     </span>
                                 </div>
                             </div>
                             <div className="sm:col-span-3">
                                 <SelectBox
                                     required={true}
-                                    title={__('Designation', 'pcm')}
+                                    title={__('Designation', 'pay-check-mate')}
                                     options={designations}
                                     selected={selectedDesignation}
                                     error={formError.designation_id}
@@ -181,13 +181,13 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
                                     <span onClick={() => setShowDesignationModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
-                                        {__('Create a new designation', 'pcm')}
+                                        {__('Create a new designation', 'pay-check-mate')}
                                     </span>
                                 </div>
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    label={__('Employee id', 'pcm')}
+                                    label={__('Employee id', 'pay-check-mate')}
                                     required={true}
                                     name="employee_id"
                                     id="employee_id"
@@ -199,7 +199,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             <div className="sm:col-span-3">
                                 <FormInput
                                     required={true}
-                                    label={__('Email address', 'pcm')}
+                                    label={__('Email address', 'pay-check-mate')}
                                     name="email"
                                     id="email"
                                     value={formValues.email || initialValues.email || ''}
@@ -209,7 +209,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    label={__('Phone number', 'pcm')}
+                                    label={__('Phone number', 'pay-check-mate')}
                                     name="phone"
                                     id="phone"
                                     value={formValues.phone || initialValues.phone || ''}
@@ -219,7 +219,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    label={__('Bank name', 'pcm')}
+                                    label={__('Bank name', 'pay-check-mate')}
                                     name="bank_name"
                                     id="bank_name"
                                     value={formValues.bank_name || initialValues.bank_name || ''}
@@ -229,7 +229,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    label={__('Bank account number', 'pcm')}
+                                    label={__('Bank account number', 'pay-check-mate')}
                                     name="bank_account_number"
                                     id="bank_account_number"
                                     value={formValues.bank_account_number || initialValues.bank_account_number || ''}
@@ -239,7 +239,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="sm:col-span-3">
                                 <FormInput
-                                    label={__('Tax number', 'pcm')}
+                                    label={__('Tax number', 'pay-check-mate')}
                                     name="tax_number"
                                     id="tax_number"
                                     value={formValues.tax_number || initialValues.tax_number || ''}
@@ -251,7 +251,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                 <FormInput
                                     required={true}
                                     type="date"
-                                    label={__('Joining date', 'pcm')}
+                                    label={__('Joining date', 'pay-check-mate')}
                                     name="joining_date"
                                     id="joining_date"
                                     value={formValues.joining_date || initialValues.joining_date || ''}
@@ -261,7 +261,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             </div>
                             <div className="col-span-full">
                                 <Textarea
-                                    label={__("Address", 'pcm')}
+                                    label={__("Address", 'pay-check-mate')}
                                     name="address"
                                     id="address"
                                     value={formValues.address || initialValues.address || ''}
@@ -282,7 +282,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                             onClick={() => handleNextStep()}
                             className="btn-primary"
                         >
-                            {__('Save & Continue', 'pcm')}
+                            {__('Save & Continue', 'pay-check-mate')}
                         </Button>
                     </div>
                 </div>

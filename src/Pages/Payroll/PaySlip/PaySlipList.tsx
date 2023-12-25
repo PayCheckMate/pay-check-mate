@@ -12,7 +12,7 @@ import {applyFilters} from "../../../Helpers/Hooks";
 export const PaySlipList = () => {
     let per_page = '10';
     const [paySlipList, setPaySlipList] = useState<EmployeeSalary[]>([]);
-    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/payslip', {per_page: per_page, status: '1'}, true);
+    const {models, loading, filterObject, setFilterObject, total, totalPages} = useFetchApi('/pay-check-mate/v1/payslip', {per_page: per_page, status: '1', order_by: 'id', order: 'desc'}, true);
     const [currentPage, setCurrentPage] = useState(1);
     useEffect(() => {
         if (models) {
@@ -20,10 +20,10 @@ export const PaySlipList = () => {
         }
     }, [models]);
 
-    let anchorClass = applyFilters('pcm.anchor_class', 'anchor-link-gray')
+    let anchorClass = applyFilters('pay_check_mate.anchor_class', 'anchor-link-gray')
     const columns = [
         {
-            title: __('Salary date', 'pcm'), dataIndex: 'payroll_date',
+            title: __('Salary date', 'pay-check-mate'), dataIndex: 'payroll_date',
             render: (text: any, record: PayrollType) => {
                 return (
                     <>
@@ -36,7 +36,7 @@ export const PaySlipList = () => {
             }
         },
         {
-            title: __('Action', 'pcm'), dataIndex: 'action',
+            title: __('Action', 'pay-check-mate'), dataIndex: 'action',
             render: (value: any, record: PayrollType) => {
                 return (
                     <>
@@ -45,7 +45,7 @@ export const PaySlipList = () => {
                             state={{data: record}}
                             className={anchorClass}
                         >
-                            {__('View', 'pcm')}
+                            {__('View', 'pay-check-mate')}
                         </Link>
                     </>
                 )
@@ -62,7 +62,7 @@ export const PaySlipList = () => {
                 <div className="sm:flex sm:items-center mb-6">
                     <div className="sm:flex-auto">
                         <h1 className="text-base font-semibold leading-6 text-gray-900">
-                            {__('Payslip List', 'pcm')}
+                            {__('Payslip List', 'pay-check-mate')}
                         </h1>
                     </div>
                 </div>

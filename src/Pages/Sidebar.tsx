@@ -47,7 +47,7 @@ export const Sidebar = ({navigations}: { navigations: NavigationType[] }) => {
                                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                                         <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                                             <span className="sr-only">
-                                                {__('Close sidebar', 'pcm')}
+                                                {__('Close sidebar', 'pay-check-mate')}
                                             </span>
                                             <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                                         </button>
@@ -94,7 +94,7 @@ export const Sidebar = ({navigations}: { navigations: NavigationType[] }) => {
             <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 lg:hidden" onClick={() => setSidebarOpen(true)}>
                     <span className="sr-only">
-                        {__('Open sidebar', 'pcm')}
+                        {__('Open sidebar', 'pay-check-mate')}
                     </span>
                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </button>

@@ -13,10 +13,10 @@ export const Profile = () => {
     const currentUser = getCurrentEmployee() as EmployeeType;
     return (
         <HOC role={UserCapNames.pay_check_mate_employee}>
-            <EmployeeDetails employee_id={currentUser.employee_id} page_title={__('My Profile', 'pcm')}/>
+            <EmployeeDetails employee_id={currentUser.employee_id} page_title={__('My Profile', 'pay-check-mate')}/>
             <div className="mt-8">
                 <Card>
-                    <PayrollLedger employeeId={currentUser.employee_id} pageTitle={__('My Payroll Ledger', 'pcm')}/>
+                    <PayrollLedger employeeId={currentUser.employee_id} pageTitle={__('My Payroll Ledger', 'pay-check-mate')}/>
                 </Card>
             </div>
         </HOC>

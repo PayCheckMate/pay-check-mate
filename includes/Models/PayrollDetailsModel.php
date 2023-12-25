@@ -119,12 +119,14 @@ class PayrollDetailsModel extends Model {
     public function count_payroll_details( string $employee_id = '' ): int {
         global $wpdb;
 
-        $where = "employee_id = $employee_id";
+        $args[] = $this->get_table();
+        $where = '1=1';
         if ( empty( $employee_id ) ) {
-            $where = '';
+            $where .= "AND employee_id = %d";
+            $args[] = $employee_id;
         }
 
-        $sql = "SELECT COUNT(*) FROM {$this->get_table()} WHERE $where";
+        $sql = $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE $where", $args );
 
         return (int) $wpdb->get_var( $sql );
     }

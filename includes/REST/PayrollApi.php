@@ -344,8 +344,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 			], $salary_head_types
         );
 
-        $employees         = apply_filters( 'pcm_generate_payroll_employee_response', $employees, $salary_head_types, $parameters );
-        $salary_head_types = apply_filters( 'pcm_generate_payroll_salary_head_types', $salary_head_types, $employees, $parameters );
+        $employees         = apply_filters( 'pay_check_mate_generate_payroll_employee_response', $employees, $salary_head_types, $parameters );
+        $salary_head_types = apply_filters( 'pay_check_mate_generate_payroll_salary_head_types', $salary_head_types, $employees, $parameters );
 
         return new WP_REST_Response(
             [
@@ -373,9 +373,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $employee       = $employee_model->get_employee_by_user_id( get_current_user_id() );
         if ( empty( $employee->get_data() ) ) {
             return new WP_Error(
-                400, __( 'You are not authorized to perform this action.', 'pcm' ), [
+                400, __( 'You are not authorized to perform this action.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'You are not authorized to perform this action.', 'pcm' ),
+                    'error'  => __( 'You are not authorized to perform this action.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -406,9 +406,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'status' => [ 2, 3, 4 ] ] );
         if ( $previous_payroll ) {
             return new WP_Error(
-                400, __( 'Payroll already exists for this Month.', 'pcm' ), [
+                400, __( 'Payroll already exists for this Month.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'Payroll already exists for this Month.', 'pcm' ),
+                    'error'  => __( 'Payroll already exists for this Month.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -452,7 +452,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         return new WP_REST_Response(
             [
-                'message' => __( 'Payroll saved successfully.', 'pcm' ),
+                'message' => __( 'Payroll saved successfully.', 'pay-check-mate' ),
             ], 200
         );
     }
@@ -473,9 +473,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $payroll_id = $parameters['id'];
         if ( ! $payroll_id ) {
             return new WP_Error(
-                400, __( 'Payroll ID is required.', 'pcm' ), [
+                400, __( 'Payroll ID is required.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'Payroll ID is required.', 'pcm' ),
+                    'error'  => __( 'Payroll ID is required.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -506,9 +506,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $previous_payroll = $payroll->get_payroll_by_date( $validated_data->payroll_date, [ 'id' => $payroll_id ] );
         if ( $previous_payroll ) {
             return new WP_Error(
-                400, __( 'Payroll already exists for this Month.', 'pcm' ), [
+                400, __( 'Payroll already exists for this Month.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'Payroll already exists for this Month.', 'pcm' ),
+                    'error'  => __( 'Payroll already exists for this Month.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -525,9 +525,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             $payroll_details_id = $detail['payroll_details_id'];
             if ( ! $payroll_details_id ) {
                 return new WP_Error(
-                    400, __( 'Payroll Details ID is required.', 'pcm' ), [
+                    400, __( 'Payroll Details ID is required.', 'pay-check-mate' ), [
                         'status' => 400,
-                        'error'  => __( 'Payroll Details ID is required.', 'pcm' ),
+                        'error'  => __( 'Payroll Details ID is required.', 'pay-check-mate' ),
                     ]
                 );
             }
@@ -560,7 +560,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         return new WP_REST_Response(
             [
-                'message' => __( 'Payroll updated successfully.', 'pcm' ),
+                'message' => __( 'Payroll updated successfully.', 'pay-check-mate' ),
             ], 200
         );
     }
@@ -635,8 +635,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $payroll_details   = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
-        $payroll_details   = apply_filters( 'pcm_get_payroll_employee_response', $payroll_details, $salary_head_types, $request->get_params() );
-        $salary_head_types = apply_filters( 'pcm_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
+        $payroll_details   = apply_filters( 'pay_check_mate_get_payroll_employee_response', $payroll_details, $salary_head_types, $request->get_params() );
+        $salary_head_types = apply_filters( 'pay_check_mate_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         return new WP_REST_Response(
             [
@@ -661,9 +661,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         $parameters = $request->get_params();
         if ( ! isset( $parameters['payroll_date'] ) ) {
             return new WP_Error(
-                400, __( 'Payroll Date is required.', 'pcm' ), [
+                400, __( 'Payroll Date is required.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'Payroll Date is required.', 'pcm' ),
+                    'error'  => __( 'Payroll Date is required.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -716,9 +716,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         if ( empty( $payroll_data ) || empty( $payroll_data[0] ) ) {
             return new WP_Error(
-                400, __( 'No payroll found.', 'pcm' ), [
+                400, __( 'No payroll found.', 'pay-check-mate' ), [
                     'status' => 400,
-                    'error'  => __( 'No payroll found.', 'pcm' ),
+                    'error'  => __( 'No payroll found.', 'pay-check-mate' ),
                 ]
             );
         }
@@ -783,7 +783,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function get_payroll_ledger( WP_REST_Request $request ): WP_REST_Response {
         $employee_id = $request->get_param( 'employee_id' );
         if ( ! isset( $employee_id ) ) {
-            wp_send_json_error( __( 'Employee ID is required.', 'pcm' ) );
+            wp_send_json_error( __( 'Employee ID is required.', 'pay-check-mate' ) );
         }
 
         $args              = [
@@ -837,11 +837,11 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         ];
 
         $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
-        $payroll_details   = apply_filters( 'pcm_get_payroll_ledger_response', $payroll_details, $salary_head_types, $request->get_params() );
-        $salary_head_types = apply_filters( 'pcm_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
+        $payroll_details   = apply_filters( 'pay_check_mate_get_payroll_ledger_response', $payroll_details, $salary_head_types, $request->get_params() );
+        $salary_head_types = apply_filters( 'pay_check_mate_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         if ( empty( $payroll_details ) ) {
-            wp_send_json_error( __( 'No payroll found.', 'pcm' ), 400 );
+            wp_send_json_error( __( 'No payroll found.', 'pay-check-mate' ), 400 );
         }
         return new WP_REST_Response(
             [
@@ -865,7 +865,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function update_payroll( WP_REST_Request $request ) {
         $validated_data = new PayrollRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
-            return new WP_Error( 500, __( 'Invalid data.', 'pcm' ), [ $validated_data->error ] );
+            return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
         }
 
         // Do not update the payroll date.
@@ -878,7 +878,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
 
         $payroll = $payroll->find( $request->get_param( 'id' ) );
 
-        do_action( 'pcm_after_update_payroll_status', (array) $payroll );
+        do_action( 'pay_check_mate_after_update_payroll_status', (array) $payroll );
 
         $item     = $this->prepare_item_for_response( $payroll, $request );
         $data     = $this->prepare_response_for_collection( $item );
@@ -902,13 +902,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'type'       => 'object',
             'properties' => [
                 'id'                   => [
-                    'description' => __( 'Unique identifier for the payroll.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
                 'payroll_date'         => [
-                    'description' => __( 'The date of the payroll', 'pcm' ),
+                    'description' => __( 'The date of the payroll', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
                     'required'    => true,
@@ -916,7 +916,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'embed' ],
                 ],
                 'payroll_date_string'  => [
-                    'description' => __( 'The date of the payroll in string format', 'pcm' ),
+                    'description' => __( 'The date of the payroll in string format', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
                     'required'    => true,
@@ -924,44 +924,44 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'context'     => [ 'view', 'embed' ],
                 ],
                 'designation_id'       => [
-                    'description' => __( 'Unique identifier for the designation.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the designation.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
                 'department_id'        => [
-                    'description' => __( 'Unique identifier for the department.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the department.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
                 'total_salary'         => [
-                    'description' => __( 'Total salary for the payroll.', 'pcm' ),
+                    'description' => __( 'Total salary for the payroll.', 'pay-check-mate' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
                 'remarks'              => [
-                    'description' => __( 'Remarks for the payroll.', 'pcm' ),
+                    'description' => __( 'Remarks for the payroll.', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
                 'status'               => [
-                    'description' => __( 'Status of the payroll.', 'pcm' ),
+                    'description' => __( 'Status of the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
                 'created_employee_id'  => [
-                    'description' => __( 'Unique identifier for the employee who created the payroll.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the employee who created the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
                 'approved_employee_id' => [
-                    'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pcm' ),
+                    'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
                 'created_on'           => [
-                    'description' => __( 'The date the payroll was created.', 'pcm' ),
+                    'description' => __( 'The date the payroll was created.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'readonly'    => true,
                 ],
                 'updated_at'           => [
-                    'description' => __( 'The date the payroll was last updated.', 'pcm' ),
+                    'description' => __( 'The date the payroll was last updated.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'readonly'    => true,
@@ -980,17 +980,17 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function get_payroll_register_collection_params(): array {
         return [
             'department_id'  => [
-                'description' => __( 'Unique identifier for the department.', 'pcm' ),
+                'description' => __( 'Unique identifier for the department.', 'pay-check-mate' ),
                 'type'        => 'string',
                 'required'    => true,
             ],
             'designation_id' => [
-                'description' => __( 'Unique identifier for the designation.', 'pcm' ),
+                'description' => __( 'Unique identifier for the designation.', 'pay-check-mate' ),
                 'type'        => 'string',
                 'required'    => true,
             ],
             'payroll_date'   => [
-                'description' => __( 'The date of the payroll', 'pcm' ),
+                'description' => __( 'The date of the payroll', 'pay-check-mate' ),
                 'type'        => 'string',
                 'format'      => 'Y-m-d',
                 'required'    => true,
@@ -1010,7 +1010,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function get_payroll_ledger_collection_params(): array {
         return [
             'employee_id' => [
-                'description' => __( 'Unique identifier for the employee.', 'pcm' ),
+                'description' => __( 'Unique identifier for the employee.', 'pay-check-mate' ),
                 'type'        => 'string',
                 'required'    => true,
             ],

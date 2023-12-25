@@ -12,7 +12,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = ({className, children, onClick, path, type = 'button', disabled = false}: ButtonProps) => {
-    let buttonClassName = applyFilters('pcm.button_class_name', 'btn-primary-gray')
+    let buttonClassName = applyFilters('pay_check_mate.button_class_name', 'btn-primary-gray')
     const buttonClass = className ? `${buttonClassName} ${className}` : buttonClassName;
 
     const handleClick = () => {

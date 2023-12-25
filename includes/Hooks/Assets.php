@@ -53,6 +53,7 @@ class Assets implements HookAbleInterface {
             return;
         }
 
+        wp_enqueue_media();
         $this->register_localize_script();
         wp_enqueue_script( 'pay-check-mate-js' );
         wp_enqueue_style( 'pay-check-mate-css' );
@@ -77,11 +78,12 @@ class Assets implements HookAbleInterface {
         $user->employee = $employee->get_employee();
         wp_localize_script(
             'pay-check-mate-js', 'payCheckMate', [
-				'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
-				'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
-				'currentUser'           => $user,
-				'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pcm_roles(),
-			],
+              'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
+              'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
+              'pluginUrl'            => PAY_CHECK_MATE_URL,
+              'currentUser'           => $user,
+              'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pcm_roles(),
+            ],
         );
     }
 }

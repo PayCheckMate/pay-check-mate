@@ -4,7 +4,7 @@ interface TextInputProps {
     id: string;
     className?: string;
     placeholder?: string;
-    value: string|number
+    value: string|number|undefined
     onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
     required?: boolean;
 }

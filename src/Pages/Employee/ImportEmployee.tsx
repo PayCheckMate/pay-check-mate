@@ -32,23 +32,23 @@ export const ImportEmployee = () => {
     // Adding header row to Excel
     const headerRow = salaryHeads.map((head) => head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : ''));
     const headers = [
-        __('First name', 'pcm'),
-        __('Last name', 'pcm'),
-        __('Designation id', 'pcm'),
-        __('Department id', 'pcm'),
-        __('Employee id', 'pcm'),
-        __('User id', 'pcm'),
-        __('Email', 'pcm'),
-        __('Phone', 'pcm'),
-        __('Bank name', 'pcm'),
-        __('Bank account number', 'pcm'),
-        __('Tax number', 'pcm'),
-        __('Joining date', 'pcm'),
-        __('Address', 'pcm'),
-        __('Gross salary', 'pcm'),
-        __('Basic salary', 'pcm'),
-        __('Salary active from', 'pcm'),
-        __('Remarks', 'pcm'),
+        __('First name', 'pay-check-mate'),
+        __('Last name', 'pay-check-mate'),
+        __('Designation id', 'pay-check-mate'),
+        __('Department id', 'pay-check-mate'),
+        __('Employee id', 'pay-check-mate'),
+        __('User id', 'pay-check-mate'),
+        __('Email', 'pay-check-mate'),
+        __('Phone', 'pay-check-mate'),
+        __('Bank name', 'pay-check-mate'),
+        __('Bank account number', 'pay-check-mate'),
+        __('Tax number', 'pay-check-mate'),
+        __('Joining date', 'pay-check-mate'),
+        __('Address', 'pay-check-mate'),
+        __('Gross salary', 'pay-check-mate'),
+        __('Basic salary', 'pay-check-mate'),
+        __('Salary active from', 'pay-check-mate'),
+        __('Remarks', 'pay-check-mate'),
         ...headerRow,
     ]
 
@@ -76,7 +76,7 @@ export const ImportEmployee = () => {
                 return prevEmployees.concat(
                     fileData.filter((data: any) => {
                         if (data.length !== totalHeadRowToBe) {
-                            toast.error(__('File is not formatted properly. Please check the sample file.', 'pcm'));
+                            toast.error(__('File is not formatted properly. Please check the sample file.', 'pay-check-mate'));
                             setFileData([]);
                             return false;
                         }
@@ -205,7 +205,7 @@ export const ImportEmployee = () => {
             <div>
                 <div className="sm:flex-auto mb-6">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">
-                        {__('Import Employee', 'pcm')}
+                        {__('Import Employee', 'pay-check-mate')}
                     </h1>
                 </div>
                 <Card>
@@ -213,10 +213,10 @@ export const ImportEmployee = () => {
                         <div className="flex justify-between mb-6 gap-4">
                             <div>
                                 <p className="text-base leading-6 text-gray-900">
-                                    {__('Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads.', 'pcm')}
+                                    {__('Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads.', 'pay-check-mate')}
                                 </p>
                                 <p className="text-gray-600">
-                                    {__('Note: The first row of the CSV file must be the column name.', 'pcm')}
+                                    {__('Note: The first row of the CSV file must be the column name.', 'pay-check-mate')}
                                 </p>
                             </div>
                             <div className="flex justify-between gap-6">
@@ -235,7 +235,7 @@ export const ImportEmployee = () => {
                                         className="w-5 h-5 mr-2 -ml-1 text-white"
                                         aria-hidden="true"
                                     />
-                                    {__('Download sample file', 'pcm')}
+                                    {__('Download sample file', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </div>
@@ -249,24 +249,24 @@ export const ImportEmployee = () => {
                                 <table className="payroll-table">
                                 <thead>
                                     <tr>
-                                        <th>{__('SL', 'pcm')}</th>
-                                        <th>{__('First name', 'pcm')}</th>
-                                        <th>{__('Last name', 'pcm')}</th>
-                                        <th>{__('Designation id', 'pcm')}</th>
-                                        <th>{__('Department id', 'pcm')}</th>
-                                        <th>{__('Employee id', 'pcm')}</th>
-                                        <th>{__('User id', 'pcm')}</th>
-                                        <th>{__('Email', 'pcm')}</th>
-                                        <th>{__('Phone', 'pcm')}</th>
-                                        <th>{__('Bank name', 'pcm')}</th>
-                                        <th>{__('Bank account number', 'pcm')}</th>
-                                        <th>{__('Tax number', 'pcm')}</th>
-                                        <th>{__('Joining date', 'pcm')}</th>
-                                        <th>{__('Address', 'pcm')}</th>
-                                        <th>{__('Gross salary', 'pcm')}</th>
-                                        <th>{__('Basic salary', 'pcm')}</th>
-                                        <th>{__('Salary active from', 'pcm')}</th>
-                                        <th>{__('Remarks', 'pcm')}</th>
+                                        <th>{__('SL', 'pay-check-mate')}</th>
+                                        <th>{__('First name', 'pay-check-mate')}</th>
+                                        <th>{__('Last name', 'pay-check-mate')}</th>
+                                        <th>{__('Designation id', 'pay-check-mate')}</th>
+                                        <th>{__('Department id', 'pay-check-mate')}</th>
+                                        <th>{__('Employee id', 'pay-check-mate')}</th>
+                                        <th>{__('User id', 'pay-check-mate')}</th>
+                                        <th>{__('Email', 'pay-check-mate')}</th>
+                                        <th>{__('Phone', 'pay-check-mate')}</th>
+                                        <th>{__('Bank name', 'pay-check-mate')}</th>
+                                        <th>{__('Bank account number', 'pay-check-mate')}</th>
+                                        <th>{__('Tax number', 'pay-check-mate')}</th>
+                                        <th>{__('Joining date', 'pay-check-mate')}</th>
+                                        <th>{__('Address', 'pay-check-mate')}</th>
+                                        <th>{__('Gross salary', 'pay-check-mate')}</th>
+                                        <th>{__('Basic salary', 'pay-check-mate')}</th>
+                                        <th>{__('Salary active from', 'pay-check-mate')}</th>
+                                        <th>{__('Remarks', 'pay-check-mate')}</th>
                                         {salaryHeads.map((head) => (
                                             <th>{head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : '')}</th>
                                         ))}
@@ -297,13 +297,13 @@ export const ImportEmployee = () => {
                                     }}
                                     className="text-sm font-semibold leading-6 text-gray-900 btn-cancel"
                                 >
-                                    {__('Reset', 'pcm')}
+                                    {__('Reset', 'pay-check-mate')}
                                 </button>
                                 <Button
                                     onClick={() => saveBulkEmployees()}
                                     className="btn-primary"
                                 >
-                                    {__('Import', 'pcm')}
+                                    {__('Import', 'pay-check-mate')}
                                 </Button>
                             </div>
                         </>

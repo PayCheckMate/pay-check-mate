@@ -5,8 +5,8 @@ Contributors: ratulhasan
 Version: 1.0.0
 Tags: payroll, HR, management, employees
 Requires at least: 5.6
-Tested up to: 6.2.2
-Requires PHP: 5.6
+Tested up to: 6.4.2
+Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -15,7 +15,7 @@ Manage payroll and HR information for your employees with PayCheckMate.
 
 == Description ==
 
-PayCheckMate is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors.
+[PayCheckMate](https://paycheckmate.com/) is a powerful and user-friendly payroll management solution that simplifies the payroll process for businesses of all sizes. It provides a comprehensive set of features that enables users to manage payroll efficiently and accurately, saving time and minimizing errors.
 
 Features:
 - Unlimited employee creation.
@@ -41,11 +41,6 @@ Yes, PayCheckMate provides customization options to configure payroll calculatio
 PayCheckMate offers a built-in reporting system that allows you to generate detailed payroll reports for different time periods.
 
 == Changelog ==
-
-= 1.0.0 =
-* Initial release.
-
-== Upgrade Notice ==
 
 = 1.0.0 =
 Initial release of PayCheckMate plugin.

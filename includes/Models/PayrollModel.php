@@ -105,7 +105,7 @@ class PayrollModel extends Model {
             $except = '1=1';
         }
 
-        $sql = $wpdb->prepare( "SELECT * FROM {$this->get_table()} WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d AND {$except}", $month, $year );
+        $sql = $wpdb->prepare( "SELECT * FROM %i WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d AND {$except}", $this->get_table(), $month, $year );
 
         return $wpdb->get_results( $sql, ARRAY_A );
     }

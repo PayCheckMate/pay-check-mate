@@ -129,22 +129,12 @@ class Model implements ModelInterface {
             $relational_fields = $relational->fields;
         }
 
-        if ( ! empty( $args['where'] ) ) {
-            foreach ( $args['where'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
-            }
-        }
-
-        if ( ! empty( $args['where_between'] ) ) {
-            foreach ( $args['where_between'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
-            }
-        }
+        $where .= $this->get_where( $args );
+        $where .= $this->get_where_between( $args );
+        $where .= $this->get_status( $args );
 
         if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+            $where .= $wpdb->prepare( " AND %i.status = %d", $this->get_table(), $args['status'] );
         }
 
         if ( ! empty( $args['search'] ) ) {
@@ -158,7 +148,7 @@ class Model implements ModelInterface {
 
         // Add table name as prefix and esc_sql the fields for the base table.
         foreach ( $fields as $key => $field ) {
-            $fields[ $key ] = $this->get_table() . '.' . esc_sql( $field );
+            $fields[$key] = $this->get_table() . '.' . esc_sql( $field );
         }
 
         $relational_fields = array_merge( ...$relational_fields );
@@ -166,11 +156,13 @@ class Model implements ModelInterface {
         $fields            = implode( ', ', esc_sql( $fields ) );
         if ( '-1' === "$args[limit]" ) {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
+                "SELECT $fields FROM %i {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']}",
+                $this->get_table()
             );
         } else {
             $query = $wpdb->prepare(
-                "SELECT $fields FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
+                "SELECT $fields FROM %i {$relations} {$where} {$group_by} ORDER BY {$this->get_table()}.{$args['order_by']} {$args['order']} LIMIT %d OFFSET %d",
+                $this->get_table(),
                 $args['limit'],
                 $args['offset']
             );
@@ -181,6 +173,72 @@ class Model implements ModelInterface {
         wp_cache_set( $cache_key, $this->data, $this->cache_group );
 
         return $this->data;
+    }
+
+    /**
+     * Get the where clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
+    private function get_where( array $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['where'] ) ) {
+            foreach ( $args['where'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
+            }
+        }
+
+        return $where;
+    }
+
+    /**
+     * Get the where between clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param array<string, mixed> $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
+    private function get_where_between( array $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['where_between'] ) ) {
+            foreach ( $args['where_between'] as $key => $value ) {
+                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
+                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
+            }
+        }
+
+        return $where;
+    }
+
+    /**
+     * Get the status clause.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param mixed $args Arguments.
+     *
+     * @throws \Exception
+     * @return string
+     */
+    private function get_status( $args ): string {
+        global $wpdb;
+        $where = '';
+        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
+        }
+
+        return $where;
     }
 
     /**
@@ -206,7 +264,7 @@ class Model implements ModelInterface {
             }
 
             // Add table prefix on the table name.
-            $relations         .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
+            $relations .= " {$relation['join_type']} JOIN {$relation['table']} ON {$relation['table']}.{$relation['foreign_key']} = {$this->get_table()}.{$relation['local_key']}";
 
             if ( ! empty( $relation['where'] ) ) {
                 foreach ( $relation['where'] as $key => $value ) {
@@ -303,7 +361,7 @@ class Model implements ModelInterface {
         }
 
         // As we prepared the where clause before, we can directly use it.
-        $query = "SELECT COUNT(*) FROM {$this->get_table()} {$where}";
+        $query = $wpdb->prepare( "SELECT COUNT(*) FROM %i {$where}", $this->get_table());
 
         return $wpdb->get_var( $query );
     }
@@ -320,7 +378,7 @@ class Model implements ModelInterface {
      */
     public function get_search_query( string $search ) {
         if ( empty( static::$search_by ) ) {
-            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pcm' ) );
+            return new WP_Error( 'search_by_not_defined', __( 'To search, you need to define the search_by property in the model.', 'pay-check-mate' ) );
         }
 
         global $wpdb;
@@ -362,6 +420,7 @@ class Model implements ModelInterface {
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
             $this->data = $cache;
+
             return $this->data;
         }
 
@@ -382,7 +441,7 @@ class Model implements ModelInterface {
         $relational_fields = array_merge( ...$relational_fields );
         $fields            = array_merge( $fields, $relational_fields );
         $fields            = implode( ', ', esc_sql( $fields ) );
-        $query             = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} AND {$this->get_table()}.{$this->get_find_key()} = %d", $id );
+        $query             = $wpdb->prepare( "SELECT {$fields} FROM %i {$relations} {$where} AND {$this->get_table()}.{$this->get_find_key()} = %d", $this->get_table(), $id );
         $results           = $wpdb->get_row( $query );
 
         if ( empty( $results ) ) {
@@ -410,7 +469,7 @@ class Model implements ModelInterface {
     public function find_by( array $find_by, array $args, array $fields = [ '*' ] ): array {
         global $wpdb;
         if ( empty( $find_by ) ) {
-            throw new \Exception( __( 'Arguments cannot be empty', 'pcm' ) );
+            throw new \Exception( __( 'Arguments cannot be empty', 'pay-check-mate' ) );
         }
 
         $args = wp_parse_args(
@@ -428,6 +487,7 @@ class Model implements ModelInterface {
         $cache     = wp_cache_get( $cache_key, $this->cache_group );
         if ( false !== $cache ) {
             $this->data = $cache;
+
             return $this->data;
         }
 
@@ -436,23 +496,9 @@ class Model implements ModelInterface {
         }
 
         $where = 'WHERE 1=1';
-        if ( ! empty( $args['where'] ) ) {
-            foreach ( $args['where'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} {$value['operator']} %s", $value['value'] );
-            }
-        }
-
-        if ( ! empty( $args['where_between'] ) ) {
-            foreach ( $args['where_between'] as $key => $value ) {
-                $type  = ! empty( $value['type'] ) ? $value['type'] : 'AND';
-                $where .= $wpdb->prepare( " {$type} {$this->get_table()}.{$key} BETWEEN %s AND %s", $value['start'], $value['end'] );
-            }
-        }
-
-        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
-        }
+        $where .= $this->get_where( $args );
+        $where .= $this->get_where_between( $args );
+        $where .= $this->get_status( $args );
 
         $relational_fields = [];
         $relations         = '';
@@ -481,9 +527,9 @@ class Model implements ModelInterface {
         }
 
         if ( '-1' === "$args[limit]" ) {
-            $query = "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ";
+            $query = $wpdb->prepare("SELECT {$fields} FROM %i {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} ", $this->get_table());
         } else {
-            $query = $wpdb->prepare( "SELECT {$fields} FROM {$this->get_table()} {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $args['limit'], $args['offset'] );
+            $query = $wpdb->prepare( "SELECT {$fields} FROM %i {$relations} {$where} {$group_by} ORDER BY {$args['order_by']} {$args['order']} LIMIT %d OFFSET %d", $this->get_table(), $args['limit'], $args['offset'] );
         }
 
         $results = $wpdb->get_results( $query );
@@ -523,7 +569,7 @@ class Model implements ModelInterface {
         $last_id = $wpdb->insert_id;
 
         if ( ! $last_id ) {
-            return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pcm' ) );
+            return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pay-check-mate' ) );
         }
 
         // Clear cache.
@@ -546,7 +592,7 @@ class Model implements ModelInterface {
     public function update( int $id, Request $data ): object {
         global $wpdb;
 
-        $data         = $data->to_array();
+        $data          = $data->to_array();
         $filtered_data = $this->filter_data( $data );
 
         if ( $wpdb->update(
@@ -567,7 +613,7 @@ class Model implements ModelInterface {
             return $this->find( $id );
         }
 
-        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pcm' ) );
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay-check-mate' ) );
     }
 
     /**
@@ -602,7 +648,7 @@ class Model implements ModelInterface {
             return $this->find_by( $find_by, [] )[0];
         }
 
-        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pcm' ) );
+        return new WP_Error( 'db_update_error', __( 'Could not update row into the database table.', 'pay-check-mate' ) );
     }
 
     /**
@@ -626,9 +672,11 @@ class Model implements ModelInterface {
             [
                 '%d',
             ],
-        ) ) {
+        )
+        ) {
             // Clear cache.
             wp_cache_flush_group( $this->cache_group );
+
             return $wpdb->rows_affected;
         }
 
@@ -707,8 +755,8 @@ class Model implements ModelInterface {
         // Like set_created_on, set_updated_at, etc.
         foreach ( $this->get_columns() as $key => $value ) {
             if ( method_exists( $this, "set_$key" ) ) {
-                $args           = $data[ "$key" ] ?? '';
-                $data[ "$key" ] = call_user_func( [ $this, "set_$key" ], $args );
+                $args         = $data["$key"] ?? '';
+                $data["$key"] = call_user_func( [ $this, "set_$key" ], $args );
             }
         }
 
@@ -751,7 +799,7 @@ class Model implements ModelInterface {
         $this->data = $item;
         foreach ( (array) $item as $column => $type ) {
             $method = "get_$column";
-            if ( method_exists( $this, $method ) ) {
+            if ( method_exists( get_class( $this ), $method ) ) {
                 // Check if the column has any mutation like, get_created_on, get_updated_at etc.
                 $value = call_user_func( [ $this, $method ], $item->$column, static::$additional_logical_data );
                 if ( is_array( $value ) ) {

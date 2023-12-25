@@ -13,8 +13,9 @@ import {
 import {Bar} from 'react-chartjs-2';
 import React, {useEffect, useState} from "@wordpress/element";
 import useFetchApi from "../Helpers/useFetchApi";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import {applyFilters} from "../Helpers/Hooks";
+import {userCan, userIs} from "../Helpers/User";
 
 // ChartJS.register
 ChartJS.register(
@@ -38,14 +39,14 @@ const options = {
             display: true,
             title: {
                 display: true,
-                text: __('Month', 'pcm'),
+                text: __('Month', 'pay-check-mate'),
             },
         },
         y: {
             display: true,
             title: {
                 display: true,
-                text: __('Amount', 'pcm'),
+                text: __('Amount', 'pay-check-mate'),
             }
         },
     },
@@ -57,6 +58,9 @@ type DashboardResponse = {
     last_payroll: any,
 }
 export const Dashboard = () => {
+    if (!userIs('pay_check_mate_admin') || !userIs('pay_check_mate_accountant')) {
+        return <Navigate to={'/profile'} />
+    }
     const {makeGetRequest} = useFetchApi('', {}, false);
     const [data, setData] = useState<any>(null);
     const [totalEmployees, setTotalEmployees] = useState(0);
@@ -66,8 +70,8 @@ export const Dashboard = () => {
         {id: 2, name: 'Last Payroll Total', stat: lastPayroll, icon: CurrencyDollarIcon, link: '/payroll'},
     ]
     useEffect(() => {
-        const backgroundColor = applyFilters('pcm.chart_background_color', 'rgba(110,114,114,0.7)');
-        const borderColor = applyFilters('pcm.chart_border_color', 'rgb(48,49,49)');
+        const backgroundColor = applyFilters('pay_check_mate.chart_background_color', 'rgba(110,114,114,0.7)');
+        const borderColor = applyFilters('pay_check_mate.chart_border_color', 'rgb(48,49,49)');
         makeGetRequest<DashboardResponse>('/pay-check-mate/v1/dashboard').then((response) => {
             if (response.all_payrolls) {
                 setTotalEmployees(response.total_employees);
@@ -82,7 +86,7 @@ export const Dashboard = () => {
                     labels: labels,
                     datasets: [
                         {
-                            label: __('Payroll Summary', 'pcm'),
+                            label: __('Payroll Summary', 'pay-check-mate'),
                             data: response.all_payrolls.map((model: any) => model.total_salary),
                             backgroundColor: [
                                 backgroundColor,
@@ -98,12 +102,12 @@ export const Dashboard = () => {
         })
     }, []);
 
-    let indigo = applyFilters('pcm.indigo', 'gray');
+    let indigo = applyFilters('pay_check_mate.indigo', 'gray');
     return (
         <>
             <div>
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
-                    {__('Dashboard', 'pcm')}
+                    {__('Dashboard', 'pay-check-mate')}
                 </h1>
                 {stats && (
                     <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -129,7 +133,7 @@ export const Dashboard = () => {
                                                 to={item.link || '#'}
                                                 className={"font-medium text-" + indigo + "-500 hover:text-" + indigo + "-500"}
                                             >
-                                                {__('View all', 'pcm')}
+                                                {__('View all', 'pay-check-mate')}
                                                 <span className="sr-only"> {item.name} stats</span>
                                             </Link>
                                         </div>
@@ -147,7 +151,7 @@ export const Dashboard = () => {
                         <Card>
                             <>
                                 <div className="header">
-                                    <h1 className="title">{__('Payroll Summary', 'pcm')}</h1>
+                                    <h1 className="title">{__('Payroll Summary', 'pay-check-mate')}</h1>
                                 </div>
                                 <Bar
                                     options={options}

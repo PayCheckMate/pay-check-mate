@@ -5,7 +5,6 @@ import {store as coreData} from "@wordpress/core-data";
 const currentUser = payCheckMate.currentUser as UserType;
 
 export const userCan = (permission: UserCapNames): boolean => {
-    console.log(currentUser.allcaps, permission, 'currentUser.allcaps')
     return Object.keys(currentUser.allcaps).includes(permission);
 }
 

@@ -10,17 +10,17 @@ class PayCheckMateUserRoles {
     public function __construct() {
         // Add an employee role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_employee' ) ) {
-            add_role( 'pay_check_mate_employee', __( 'PayCheckMate Employee', 'pcm' ), $this->get_employee_capabilities() );
+            add_role( self::get_pay_check_mate_employee_role_name(), __( 'PayCheckMate Employee', 'pay-check-mate' ), $this->get_employee_capabilities() );
         }
 
         // Add an accountant role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_accountant' ) ) {
-            add_role( 'pay_check_mate_accountant', __( 'PayCheckMate Accountant', 'pcm' ), $this->get_all_capabilities() );
+            add_role( self::get_pay_check_mate_accountant_role_name(), __( 'PayCheckMate Accountant', 'pay-check-mate' ), $this->get_all_capabilities() );
         }
 
         // Add an admin role if it doesn't exist.
         if ( ! get_role( 'pay_check_mate_admin' ) ) {
-            add_role( 'pay_check_mate_admin', __( 'PayCheckMate Admin', 'pcm' ), $this->get_all_capabilities() );
+            add_role( self::get_pay_check_mate_admin_role_name(), __( 'PayCheckMate Admin', 'pay-check-mate' ), $this->get_all_capabilities() );
         }
 
         // Add capabilities to all admin users.
@@ -32,6 +32,39 @@ class PayCheckMateUserRoles {
                 $admin->add_role( 'pay_check_mate_employee' );
             }
         }
+    }
+
+    /**
+     * Get the admin role.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
+    public static function get_pay_check_mate_admin_role_name(): string {
+        return 'pay_check_mate_admin';
+    }
+
+    /**
+     * Get the accountant role.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
+    public static function get_pay_check_mate_accountant_role_name(): string {
+        return 'pay_check_mate_accountant';
+    }
+
+    /**
+     * Get the employee role.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return string
+     */
+    public static function get_pay_check_mate_employee_role_name(): string {
+        return 'pay_check_mate_employee';
     }
 
     /**
@@ -111,20 +144,20 @@ class PayCheckMateUserRoles {
     /**
      * Get all the roles for the plugin.
      *
-     * @param string $role Role name.
-     *
      * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param string $role Role name.
      *
      * @return array<string, string>|string
      */
-    public static function get_pcm_roles( string $role = '' ) {
+    public static function get_pay_check_mate_roles( string $role = '' ) {
         $roles = [
-            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pcm' ),
-            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pcm' ),
-            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pcm' ),
+            'pay_check_mate_employee'   => __( 'PayCheckMate Employee', 'pay-check-mate' ),
+            'pay_check_mate_accountant' => __( 'PayCheckMate Accountant', 'pay-check-mate' ),
+            'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pay-check-mate' ),
         ];
         if ( ! empty( $role ) ) {
-            return $roles[ $role ];
+            return $roles[$role];
         }
 
         return $roles;

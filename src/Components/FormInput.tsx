@@ -10,7 +10,7 @@ interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     type?: "text" | "number" | "email" | "password" | "tel" | "url" | "search" | "date" | "time" | "datetime-local" | "month" | "week" | "range" | "color" | "checkbox" | "radio";
     className?: string;
     placeholder?: string;
-    value: string | number;
+    value: string | number | undefined;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     error?: any;
     required?: boolean;
@@ -67,7 +67,7 @@ export const FormInput = ({label, name, id, className = "", type = "text", place
                     </p>
                 )}
                 {/*{!isSelectionValid && (*/}
-                {/*    <p className="mt-2 text-sm text-red-600">{__('This field is required.', 'pcm')}</p>*/}
+                {/*    <p className="mt-2 text-sm text-red-600">{__('This field is required.', 'pay-check-mate')}</p>*/}
                 {/*)}*/}
             </div>
             {error && (

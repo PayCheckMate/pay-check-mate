@@ -25,14 +25,14 @@ class User implements HookAbleInterface {
      */
     public function display_user_role( $user ): void {
         ?>
-        <h3><?php esc_html_e( 'Pay Check Mate', 'pcm' ); ?></h3>
+        <h3><?php esc_html_e( 'Pay Check Mate', 'pay-check-mate' ); ?></h3>
         <table class="form-table">
             <tbody>
                 <tr>
-                    <th><label for="pay_check_mate_user_role"><?php esc_html_e( 'Pay Check Mate Role', 'pcm' ); ?></label></th>
+                    <th><label for="pay_check_mate_user_role"><?php esc_html_e( 'Pay Check Mate Role', 'pay-check-mate' ); ?></label></th>
                     <td>
                         <?php
-                        $roles = PayCheckMateUserRoles::get_pcm_roles();
+                        $roles = PayCheckMateUserRoles::get_pay_check_mate_roles();
                         $user_roles = $user->roles;
                         foreach ( $roles as $key => $role ) {
                             $checked = in_array( $key, $user_roles, true ) ? 'checked' : '';
@@ -44,7 +44,7 @@ class User implements HookAbleInterface {
                             <?php
                         }
                         ?>
-                        <?php wp_nonce_field( 'pcm_user_profile_update_role', '_pcm_nonce' ); ?>
+                        <?php wp_nonce_field( 'pay_check_mate_user_profile_update_role', '_pay_check_mate_nonce' ); ?>
                     </td>
                 </tr>
             </tbody>
@@ -61,7 +61,7 @@ class User implements HookAbleInterface {
      */
     public function update_user_role( int $user_id ): void {
         // verify nonce
-        if ( ! isset( $_REQUEST['_pcm_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_pcm_nonce'] ), 'pcm_user_profile_update_role' ) ) {
+        if ( ! isset( $_REQUEST['_pay_check_mate_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_REQUEST['_pay_check_mate_nonce'] ), 'pay_check_mate_user_profile_update_role' ) ) {
             return;
         }
 
@@ -79,7 +79,7 @@ class User implements HookAbleInterface {
             }
         }
 
-        $user_roles = PayCheckMateUserRoles::get_pcm_roles();
+        $user_roles = PayCheckMateUserRoles::get_pay_check_mate_roles();
         foreach ( $user_roles as $key => $user_role ) {
             if ( ! in_array( $key, $roles, true ) ) {
                 $user->remove_role( $key );
