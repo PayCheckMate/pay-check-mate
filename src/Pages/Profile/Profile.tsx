@@ -16,7 +16,7 @@ export const Profile = () => {
             <EmployeeDetails employee_id={currentUser.employee_id} page_title={__('My Profile', 'pay-check-mate')}/>
             <div className="mt-8">
                 <Card>
-                    <PayrollLedger employeeId={currentUser.employee_id} pageTitle={__('My Payroll Ledger', 'pay-check-mate')}/>
+                    <PayrollLedger showEmployeeSearch={false} employeeId={currentUser.employee_id} pageTitle={__('My Payroll Ledger', 'pay-check-mate')}/>
                 </Card>
             </div>
         </HOC>

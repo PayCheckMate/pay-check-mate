@@ -19,7 +19,7 @@ import apiFetch from "@wordpress/api-fetch";
 import {applyFilters} from "../../Helpers/Hooks";
 import {HOC} from "../../Components/HOC";
 
-export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: string, pageTitle?: string }) => {
+export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=true}: { employeeId?: string, pageTitle?: string, showEmployeeSearch: boolean }) => {
     const {loading} = useFetchApi('');
 
     const [searchedEmployeeId, setSearchedEmployeeId] = useState(employeeId);
@@ -126,7 +126,7 @@ export const PayrollLedger = ({employeeId='', pageTitle=''}: { employeeId?: stri
                 </Card>
             ) : (
                 <HOC role={UserCapNames.pay_check_mate_payroll_ledger}>
-                    {!employeeId && (
+                    {showEmployeeSearch && (
                         <div className="flex justify-between">
                             <form
                                 className="p-6"

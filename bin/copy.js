@@ -5,6 +5,7 @@ const packageJson = JSON.parse(fs.readFileSync('package.json'))
 const pluginFilesFoldersToCopy = [
   '/includes',
   '/languages',
+  '/images',
   '/vendor',
   'LICENSE',
   'readme.txt',

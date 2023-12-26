@@ -32,8 +32,8 @@ class AdminMenu implements HookAbleInterface {
     public function admin_menu(): void {
         $capabilities = 'pay_check_mate_manage_menu';
         add_menu_page(
-            __( 'PayCheckMate', 'pay-check-mate' ),
-            __( 'PayCheckMate', 'pay-check-mate' ),
+            __( 'Pay Check Mate', 'pay-check-mate' ),
+            __( 'Pay Check Mate', 'pay-check-mate' ),
             $capabilities,
             'pay-check-mate',
             [ $this, 'menu_page' ],
