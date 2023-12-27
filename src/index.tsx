@@ -1,6 +1,7 @@
 import React, {createRoot} from '@wordpress/element';
 import './app.css';
 import './Store/Store';
+import "./ProFilters";
 
 import {HashRouter} from "react-router-dom";
 import Main from "./Pages/Main";

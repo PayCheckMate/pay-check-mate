@@ -152,7 +152,7 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
         });
     }, 1000), []);
 
-    const color = applyFilters('pay_check_mate.pagination_button_color', 'gray');
+    const color = applyFilters('pay_check_mate.indigo', 'gray');
     return (
         <>
             {isLoading ? (
