@@ -120,7 +120,6 @@ export const EmployeeList = () => {
                         {applyFilters('pay_check_mate.employee_list_filter', null, record)}
                         {userCan(UserCapNames.pay_check_mate_edit_employee) && (
                             <>
-                                <span className="mx-2 text-gray-300">|</span>
                                 <Link
                                     to={`/employee/edit/${record.employee_id}`}
                                     className={anchorClass}

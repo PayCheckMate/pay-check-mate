@@ -42,14 +42,14 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
 
     return (
         <div className="overflow-hidden bg-white sm:rounded-lg">
-            <div className="px-4 py-6 sm:px-6">
+            <div className="px-4 py-2 sm:px-6">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">
                     {__('Review Information', 'pay-check-mate')}
                 </h2>
             </div>
             <div className="border-t border-gray-100">
                 <dl className="divide-y divide-gray-100">
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Employee ID', 'pay-check-mate')}
                         </dt>
@@ -68,7 +68,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
 
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('First name', 'pay-check-mate')}
                         </dt>
@@ -86,7 +86,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Last name', 'pay-check-mate')}
                         </dt>
@@ -104,7 +104,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Email address', 'pay-check-mate')}
                         </dt>
@@ -122,7 +122,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Department', 'pay-check-mate')}
                         </dt>
@@ -140,7 +140,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Designation', 'pay-check-mate')}
                         </dt>
@@ -158,7 +158,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Joining Date', 'pay-check-mate')}
                         </dt>
@@ -176,13 +176,13 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                             )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Address', 'pay-check-mate')}
                         </dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{personalInformation.address}</dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Salary Active From', 'pay-check-mate')}
                         </dt>
@@ -200,7 +200,7 @@ export const ReviewInformation = ({personalInformation, salaryInformation, setEr
                                 )}
                         </dd>
                     </div>
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div className="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt className="text-sm font-medium text-gray-900">
                             {__('Salary Information', 'pay-check-mate')}
                         </dt>
