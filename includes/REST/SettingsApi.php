@@ -2,9 +2,10 @@
 
 namespace PayCheckMate\REST;
 
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 
-class SettingsApi  extends RestController implements HookAbleApiInterface {
+class SettingsApi extends RestController implements HookAbleApiInterface {
 
     public function __construct() {
         $this->namespace = 'pay-check-mate/v1';
@@ -36,7 +37,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_settings_permissions_check(): bool {
-        return current_user_can( 'pay_check_mate_admin' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_admin_role_name() );
     }
 
     /**
@@ -59,7 +60,7 @@ class SettingsApi  extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function update_settings_permissions_check(): bool {
-        return current_user_can( 'pay_check_mate_admin' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_admin_role_name() );
     }
 
     /**

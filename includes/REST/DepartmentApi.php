@@ -2,6 +2,7 @@
 
 namespace PayCheckMate\REST;
 
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\REST\RestController;
 use WP_Error;
 use Exception;
@@ -107,8 +108,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_items_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' ) || current_user_can( 'pay_check_mate_employee' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() ) || current_user_can( PayCheckMateUserRoles::get_pay_check_mate_employee_role_name() );
     }
 
     /**
@@ -121,8 +121,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function create_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**
@@ -135,8 +134,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**
@@ -149,8 +147,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function update_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**
@@ -163,8 +160,7 @@ class DepartmentApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function delete_item_permissions_check( $request ): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**

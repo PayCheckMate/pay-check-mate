@@ -40,6 +40,11 @@ type TableProps = {
 };
 
 export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = false, searchPlaceholder = "Search by name..."}: TableProps) => {
+    // If data is undefined or empty, set it to an empty array
+    if (!data || !data.length) {
+        data = [];
+    }
+
     if (!userCan(UserCapNames[permissions])) {
         return (
             <>
