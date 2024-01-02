@@ -3,6 +3,7 @@
 namespace PayCheckMate\REST;
 
 use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\Models\PayrollModel;
 use PayCheckMate\REST\RestController;
 use WP_Error;
@@ -45,8 +46,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_dashboard_permissions_check(): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_admin' ) || current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_admin_role_name() ) || current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**
