@@ -123,14 +123,6 @@ export const GeneralSettings = () => {
                                         }
                                     })}
 
-                                    <div className="flex justify-end">
-                                        <Button
-                                            className="mt-4"
-                                            onClick={() => handleSubmit()}
-                                        >
-                                            {__('Save', 'pay-check-mate')}
-                                        </Button>
-                                    </div>
                                 </form>
                             </div>
                         </Card>

@@ -30,6 +30,7 @@ import ViewPayroll from "./Payroll/ViewPayroll";
 import {NeedPro} from "../Components/NeedPro/NeedPro";
 import {ImportEmployee} from "./Employee/ImportEmployee";
 import {GeneralSettings} from "./Settings/GeneralSettings";
+import { Onboarding } from "./Onboarding/Onboarding";
 
 addAction('pay_check_mate_notification', 'pay_check_mate_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
@@ -72,6 +73,7 @@ export default function Main() {
 
     navigations = applyFilters('pay_check_mate.sidebar_navigations', navigations);
     let paths = [
+        {key: 'onboarding', href: 'onboarding', roles: ['pay_check_mate_admin'], component: Onboarding},
         {key: 'add-employee', href: 'add-employee', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: AddEmployee},
         {key: 'employee-edit', href: '/employee/edit/:id', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: AddEmployee},
         {key: 'employee-details', href: '/employee/:id', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: EmployeeDetails},
