@@ -31,5 +31,4 @@ class Admin implements HookAbleInterface {
         wp_safe_redirect( admin_url( 'admin.php?page=pay-check-mate#/onboarding' ) );
         exit;
     }
-
 }
