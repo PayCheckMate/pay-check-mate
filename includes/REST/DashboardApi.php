@@ -128,6 +128,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
 
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
         include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+        include_once ABSPATH . 'wp-admin/includes/file.php';
 
         $plugin = $request->get_param( 'plugin' );
         // Check if plugin is already installed.
@@ -157,7 +158,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                 [
                     'success' => false,
                     'message' => $result->get_error_message(),
-                ], 200
+                ], 403
             );
         }
 
