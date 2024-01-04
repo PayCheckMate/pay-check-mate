@@ -37,9 +37,10 @@ type TableProps = {
     onFilterChange?: (defaultFilterObject: filtersType) => void;
     search?: boolean;
     searchPlaceholder?: string;
+    pagination?: boolean;
 };
 
-export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = false, searchPlaceholder = "Search by name..."}: TableProps) => {
+export const Table = ({columns, data, filters, permissions, total, isLoading = true, totalPage = 1, per_page = 10, currentPage = 1, onFilterChange = () => void 0, search = false, searchPlaceholder = "Search by name...", pagination = true}: TableProps) => {
     // If data is undefined or empty, set it to an empty array
     if (!data || !data.length) {
         data = [];
@@ -252,65 +253,67 @@ export const Table = ({columns, data, filters, permissions, total, isLoading = t
                 </div>
             )}
             {/* Pagination */}
-            <div className="flex justify-center mt-4">
-                <nav className="flex items-center">
-                    <Button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className={`px-4 py-1 mr-6 text-sm text-white focus:outline-none ` + (currentPage === 1 ? `cursor-not-allowed bg-${color}-500` : "")}
-                    >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        {__("Previous", "pay-check-mate")}
-                    </Button>
-                    {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
-                    {/*    Page {currentPage} of {totalPages}*/}
-                    {/*</span>*/}
-                    {totalPages > 1 && (
-                        <>
+            {pagination && (
+                <div className="flex justify-center mt-4">
+                    <nav className="flex items-center">
+                        <Button
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className={`px-4 py-1 mr-6 text-sm text-white focus:outline-none ` + (currentPage === 1 ? `cursor-not-allowed bg-${color}-500` : "")}
+                        >
+                            <ArrowLeftIcon className="w-4 h-4" />
+                            {__("Previous", "pay-check-mate")}
+                        </Button>
+                        {/*<span className="px-1 py-1 text-sm font-medium text-gray-900">*/}
+                        {/*    Page {currentPage} of {totalPages}*/}
+                        {/*</span>*/}
+                        {totalPages > 1 && (
+                            <>
+                            <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                            {__("Go to page", 'pay-check-mate')}
+                            </span>
+                            <FormInput
+                                type="number"
+                                value={currentPage}
+                                onChange={(e) => handlePageChange(parseInt(e.target.value))}
+                                min={1}
+                                max={totalPages}
+                                id="page"
+                                name="page"
+                            />
+                            <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                                {__("of") + " " + totalPages}
+                            </span>
+                            <span className="mx-2 text-gray-600">|</span>
+                        </>
+                        )}
                         <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("Go to page", 'pay-check-mate')}
-                        </span>
-                        <FormInput
-                            type="number"
-                            value={currentPage}
-                            onChange={(e) => handlePageChange(parseInt(e.target.value))}
-                            min={1}
-                            max={totalPages}
-                            id="page"
-                            name="page"
-                        />
-                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                            {__("of") + " " + totalPages}
+                            {__("Showing") + " " + ((parseInt(String(currentPage)) - 1) * parseInt(String(filterObject.per_page)) + 1) + " " + __("to") + " " + (currentPage * parseInt(String(filterObject.per_page)) > total ? total : currentPage * parseInt(String(filterObject.per_page))) + " " + __("of") + " " + total + " " + __("results")}
                         </span>
                         <span className="mx-2 text-gray-600">|</span>
-                    </>
-                    )}
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("Showing") + " " + ((parseInt(String(currentPage)) - 1) * parseInt(String(filterObject.per_page)) + 1) + " " + __("to") + " " + (currentPage * parseInt(String(filterObject.per_page)) > total ? total : currentPage * parseInt(String(filterObject.per_page))) + " " + __("of") + " " + total + " " + __("results")}
-                    </span>
-                    <span className="mx-2 text-gray-600">|</span>
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        {__("Showing per page", "pay-check-mate")}
-                    </span>
-                    <span className="px-1 py-1 text-sm font-medium text-gray-900">
-                        <SelectBox
-                            title=""
-                            className="w-20 h-10"
-                            options={perPageOptions}
-                            selected={selectedPerPageOption}
-                            setSelected={(value) => handlePerPageChange(value)}
-                        />
-                    </span>
-                    <Button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === parseInt(String(totalPages))}
-                        className={`px-4 py-1 ml-6 text-sm text-white focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? `cursor-not-allowed bg-${color}-500` : "")}
-                    >
-                    {__("Next", "pay-check-mate")}
-                        <ArrowRightIcon className="w-4 h-4" />
-                    </Button>
-                </nav>
-            </div>
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                            {__("Showing per page", "pay-check-mate")}
+                        </span>
+                        <span className="px-1 py-1 text-sm font-medium text-gray-900">
+                            <SelectBox
+                                title=""
+                                className="w-20 h-10"
+                                options={perPageOptions}
+                                selected={selectedPerPageOption}
+                                setSelected={(value) => handlePerPageChange(value)}
+                            />
+                        </span>
+                        <Button
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === parseInt(String(totalPages))}
+                            className={`px-4 py-1 ml-6 text-sm text-white focus:outline-none ` + (currentPage === parseInt(String(totalPages)) ? `cursor-not-allowed bg-${color}-500` : "")}
+                        >
+                        {__("Next", "pay-check-mate")}
+                            <ArrowRightIcon className="w-4 h-4" />
+                        </Button>
+                    </nav>
+                </div>
+            )}
         </>
     );
 };
