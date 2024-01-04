@@ -16,6 +16,9 @@ export const getNonce = () => {
     // @ts-ignore
     return  payCheckMate.pay_check_mate_nonce;
 }
+
+// @ts-ignore
+export const isOnboarding: boolean = payCheckMate.isOnboarding;
 export const getCurrentEmployee = () => {
     // @ts-ignore
     return  payCheckMate.currentUser.data.employee;

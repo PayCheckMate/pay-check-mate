@@ -2,18 +2,15 @@
 
 namespace PayCheckMate\REST;
 
-use PayCheckMate\Classes\Employee;
+use PayCheckMate\Classes\PayCheckMateUserRoles;
 use PayCheckMate\Models\PayrollModel;
-use PayCheckMate\REST\RestController;
-use WP_Error;
+use Plugin_Upgrader;
+use WP_Ajax_Upgrader_Skin;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
-use PayCheckMate\Requests\EmployeeRequest;
-use PayCheckMate\Requests\SalaryHistoryRequest;
 use PayCheckMate\Contracts\HookAbleApiInterface;
 use PayCheckMate\Models\EmployeeModel;
-use PayCheckMate\Models\SalaryHistoryModel;
 
 class DashboardApi extends RestController implements HookAbleApiInterface {
 
@@ -35,6 +32,39 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                 'schema' => [ $this, 'get_public_item_schema' ],
             ]
         );
+
+        register_rest_route(
+            $this->namespace, '/install-required-plugins', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'get_required_plugins' ],
+                    'permission_callback' => [ $this, 'get_install_permissions_check' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
+
+        register_rest_route(
+            $this->namespace, '/cancel-install-required-plugins', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'cancel_required_plugins' ],
+                    'permission_callback' => [ $this, 'get_install_permissions_check' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Get the install permissions check.
+     *
+     * @since 1.0.0
+     *
+     * @return bool
+     */
+    public function get_install_permissions_check(): bool {
+        return current_user_can( 'install_plugins' );
     }
 
     /**
@@ -45,8 +75,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
      * @return bool
      */
     public function get_dashboard_permissions_check(): bool {
-        // phpcs:ignore
-        return current_user_can( 'pay_check_mate_admin' ) || current_user_can( 'pay_check_mate_accountant' );
+        return current_user_can( PayCheckMateUserRoles::get_pay_check_mate_admin_role_name() ) || current_user_can( PayCheckMateUserRoles::get_pay_check_mate_accountant_role_name() );
     }
 
     /**
@@ -61,20 +90,20 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
      */
     public function get_dashboard( WP_REST_Request $request ): WP_REST_Response {
         $employee_model = new EmployeeModel();
-        $all_employees = $employee_model->count(
+        $all_employees  = $employee_model->count(
             [
-				'status' => 1,
-			]
+                'status' => 1,
+            ]
         );
 
         $payroll_model = new PayrollModel();
-        $args = [
-            'limit' => 12,
-            'status' => 1,
+        $args          = [
+            'limit'    => 12,
+            'status'   => 1,
             'order_by' => 'payroll_date',
-            'order' => 'DESC',
+            'order'    => 'DESC',
         ];
-        $salary = $payroll_model->all( $args );
+        $salary        = $payroll_model->all( $args );
         // Now sort this in reverse order.
         $salary = array_reverse( $salary );
 
@@ -82,12 +111,86 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
         $last_month_salary = end( $salary );
 
         $data = [
-            'all_payrolls' => $salary,
+            'all_payrolls'    => $salary,
             'total_employees' => $all_employees,
-            'last_payroll' => $last_month_salary,
+            'last_payroll'    => $last_month_salary,
         ];
 
         return new WP_REST_Response( $data, 200 );
+    }
+
+    /**
+     * Install required plugins.
+     *
+     * @since 1.0.0
+     *
+     * @param \WP_REST_Request<array<string>> $request Full details about the request.
+     */
+    public function get_required_plugins( WP_REST_Request $request ): WP_REST_Response {
+        require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+        if ( empty( $request->get_param( '_wpnonce' ) ) || ! wp_verify_nonce( $request->get_param( '_wpnonce' ), 'pay_check_mate_nonce' ) ) {
+            return new WP_REST_Response(
+                [
+                    'success' => false,
+                    'message' => __( 'Nonce verification failed', 'pay-check-mate' ),
+                ], 403
+            );
+        }
+
+        include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+        include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+        include_once ABSPATH . 'wp-admin/includes/file.php';
+        update_option( 'pay_check_mate_onboarding', false );
+
+        $plugin = $request->get_param( 'plugin' );
+        // Check if plugin is already installed.
+        if ( is_plugin_active( $plugin . '/' . $plugin . '.php' ) ) {
+            return new WP_REST_Response(
+                [
+                    'success' => true,
+                    'message' => __( 'Plugin already installed', 'pay-check-mate' ),
+                ], 200
+            );
+        }
+
+        $api = plugins_api(
+            'plugin_information', [
+                'slug'   => $plugin,
+                'fields' => [ 'sections' => false ],
+            ]
+        );
+
+        $installer = new Plugin_Upgrader( new WP_Ajax_Upgrader_Skin() );
+        // @phpstan-ignore-next-line
+        $result = $installer->install( $api->download_link );
+        activate_plugin( $plugin . '/' . $plugin . '.php' );
+
+        if ( is_wp_error( $result ) ) {
+            return new WP_REST_Response(
+                [
+                    'success' => false,
+                    'message' => $result->get_error_message(),
+                ], 403
+            );
+        }
+
+        return new WP_REST_Response(
+            [
+                'success' => true,
+                'message' => __( 'Plugin installed successfully', 'pay-check-mate' ),
+            ], 200
+        );
+    }
+
+    /**
+     * Cancel required plugins.
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function cancel_required_plugins() {
+        update_option( 'pay_check_mate_onboarding', false );
     }
 
     /**
@@ -129,7 +232,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'designation_name'      => [
+                'designation_name'    => [
                     'description' => __( 'Designation ID', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],

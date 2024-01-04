@@ -157,7 +157,7 @@ class PayCheckMateUserRoles {
             'pay_check_mate_admin'      => __( 'PayCheckMate Admin', 'pay-check-mate' ),
         ];
         if ( ! empty( $role ) ) {
-            return $roles[$role];
+            return $roles[ $role ];
         }
 
         return $roles;

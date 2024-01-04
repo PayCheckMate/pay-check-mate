@@ -80,10 +80,11 @@ class Assets implements HookAbleInterface {
             'pay-check-mate-js', 'payCheckMate', [
                 'ajaxUrl'               => admin_url( 'admin-ajax.php' ),
                 'pay_check_mate_nonce'  => wp_create_nonce( 'pay_check_mate_nonce' ),
-                'pluginUrl'            => PAY_CHECK_MATE_URL,
+                'pluginUrl'             => PAY_CHECK_MATE_URL,
                 'currentUser'           => $user,
+                'isOnboarding'          => get_option( 'pay_check_mate_onboarding', false ),
                 'payCheckMateUserRoles' => PayCheckMateUserRoles::get_pay_check_mate_roles(),
-            ],
+			],
         );
     }
 }
