@@ -26,8 +26,8 @@ export const Onboarding=() =>{
             {currentStep === 3 && <Designation />}
             {currentStep === 4 && <SalaryHeadList />}
             {currentStep === 5 && <InstallPlugins />}
-            <div className="grid grid-cols-2 gap-8">
-                <div className="flex justify-between mt-4">
+            <div className="grid grid-cols-1 justify-items-center mt-6">
+                <div className="flex justify-between w-1/2 mt-4">
                     {currentStep > 1 && (
                         <Button
                             type="button"

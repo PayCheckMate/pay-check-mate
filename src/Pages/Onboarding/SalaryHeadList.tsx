@@ -38,7 +38,7 @@ const is_variable = [
 
 export const SalaryHeadList = () => {
     const dispatch = useDispatch();
-    const per_page = '10';
+    const per_page = '100';
     const {salaryHeads, loading, totalPages, filters, total} = useSelect((select) => select(salaryHead).getSalaryHeads({per_page: per_page, page: 1}), []);
 
     const [formData, setFormData] = useState<SalaryHeadType>({} as SalaryHeadType);
@@ -314,6 +314,7 @@ export const SalaryHeadList = () => {
                         currentPage={currentPage}
                         filters={filters}
                         onFilterChange={(filter) => handleFilterChange(filter)}
+                        pagination={false}
                     />
                 </Card>
                 </div>

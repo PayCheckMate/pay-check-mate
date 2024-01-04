@@ -25,19 +25,28 @@ export const InstallPlugins = () => {
                 _wpnonce
             }
         }).then((response: any) => {
-            console.log(response)
-            toast.success(response.message, {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000
-            });
+            toast.success(response.message);
         }).catch((error: any) => {
-            console.log(error, 'error')
-            toast.error(error.message, {
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000
-            });
+            toast.error(error.message);
         }).finally(() => {
             setLoading(false)
+            window.location.href = '/wp-admin/admin.php?page=pay-check-mate';
+        })
+    }
+
+    const cancelInstall = () => {
+        setLoading(true)
+        // @ts-ignore
+        const _wpnonce = payCheckMate.pay_check_mate_nonce;
+        apiFetch({
+            path: '/pay-check-mate/v1/cancel-install-required-plugins',
+            method: 'POST',
+            data: {
+                _wpnonce
+            }
+        }).finally(() => {
+            setLoading(false)
+            window.location.href = '/wp-admin/admin.php?page=pay-check-mate';
         })
     }
 
@@ -70,10 +79,17 @@ export const InstallPlugins = () => {
                                     <div className="mt-4 flex justify-end">
                                         <Button
                                             type="button"
+                                            className="mr-2 btn-primary-gray"
                                             onClick={() => installPlugin('custom-role-creator')}
                                         >
-                                        {__('Install', 'pay-check-mate')}
-                                    </Button>
+                                            {__('Finish Onboarding', 'pay-check-mate')}
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            onClick={() => installPlugin('custom-role-creator')}
+                                        >
+                                            {__('Install & Activate', 'pay-check-mate')}
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

@@ -43,6 +43,17 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                 ],
             ]
         );
+
+        register_rest_route(
+            $this->namespace, '/cancel-install-required-plugins', [
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'cancel_required_plugins' ],
+                    'permission_callback' => [ $this, 'get_install_permissions_check' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
     }
 
     /**
@@ -129,6 +140,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
         include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
         include_once ABSPATH . 'wp-admin/includes/file.php';
+        update_option( 'pay_check_mate_onboarding', false );
 
         $plugin = $request->get_param( 'plugin' );
         // Check if plugin is already installed.
@@ -168,6 +180,17 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
                 'message' => __( 'Plugin installed successfully', 'pay-check-mate' ),
             ], 200
         );
+    }
+
+    /**
+     * Cancel required plugins.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @return void
+     */
+    public function cancel_required_plugins() {
+        update_option( 'pay_check_mate_onboarding', false );
     }
 
     /**

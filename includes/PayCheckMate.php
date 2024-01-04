@@ -154,6 +154,7 @@ final class PayCheckMate {
 
         update_option( 'pay_check_mate_version', PAY_CHECK_MATE_PLUGIN_VERSION );
         set_transient( 'pay_check_mate_redirect_after_activation', true, 30 );
+        update_option( 'pay_check_mate_onboarding', true );
 
         new Installer();
 

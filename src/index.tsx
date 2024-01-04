@@ -7,6 +7,8 @@ import {HashRouter} from "react-router-dom";
 import Main from "./Pages/Main";
 import {ColorPallets} from "./ColorPallets";
 import {__} from "@wordpress/i18n";
+import {isOnboarding} from "./Helpers/Helpers";
+import {Onboarding} from "./Pages/Onboarding/Onboarding";
 
 export default function App() {
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem('currentTheme') || 'light');
@@ -31,11 +33,15 @@ export default function App() {
         </button>
 
     return (
-        <HashRouter>
-            <Main/>
-            <ColorPallets />
-            {button}
-        </HashRouter>
+        <>
+            {isOnboarding ? <Onboarding /> : (
+                <HashRouter>
+                    <Main/>
+                    <ColorPallets />
+                    {button}
+                </HashRouter>
+            )}
+        </>
     )
 }
 

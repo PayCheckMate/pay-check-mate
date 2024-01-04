@@ -28,7 +28,7 @@ class Admin implements HookAbleInterface {
 
         delete_transient( 'pay_check_mate_redirect_after_activation' );
 
-        wp_safe_redirect( admin_url( 'admin.php?page=pay-check-mate#/onboarding' ) );
+        wp_safe_redirect( admin_url( 'admin.php?page=pay-check-mate' ) );
         exit;
     }
 }

@@ -54,7 +54,8 @@ export default function Main() {
                 {key: 'salary_heads', title: __('Salary Heads', 'pay-check-mate'), href: 'salary-heads', current: false, roles: ['pay_check_mate_accountant'], component: SalaryHeadList},
                 {key: '[need_pro]pro/setup-gratuity', title: __('Setup Gratuity (PRO)', 'pay-check-mate'), href: 'pro/setup-gratuity', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
                 {key: '[need_pro]pro/setup-loans', title: __('Setup Loans (PRO)', 'pay-check-mate'), href: 'pro/setup-loans', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: '[need_pro]pro/setup-pf', title: __('Setup P.F. (PRO)', 'pay-check-mate'), href: 'pro/setup-pf', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro}
+                {key: '[need_pro]pro/setup-pf', title: __('Setup P.F. (PRO)', 'pay-check-mate'), href: 'pro/setup-pf', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
+                {key: 'onboarding', title: __('Onboarding', 'pay-check-mate'), href: 'onboarding', current: false, roles: ['pay_check_mate_admin'], component: Onboarding},
             ]
         },
         {key: 'reports', title: __('Reports', 'pay-check-mate'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
@@ -73,7 +74,6 @@ export default function Main() {
 
     navigations = applyFilters('pay_check_mate.sidebar_navigations', navigations);
     let paths = [
-        {key: 'onboarding', href: 'onboarding', roles: ['pay_check_mate_admin'], component: Onboarding},
         {key: 'add-employee', href: 'add-employee', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: AddEmployee},
         {key: 'employee-edit', href: '/employee/edit/:id', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: AddEmployee},
         {key: 'employee-details', href: '/employee/:id', roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: EmployeeDetails},
