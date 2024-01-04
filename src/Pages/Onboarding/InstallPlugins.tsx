@@ -65,7 +65,7 @@ export const InstallPlugins = () => {
                         <Card>
                             <div className="flex">
                                 <img
-                                    src={baseUrl + "/images/icon-256x256.jpg"}
+                                    src={baseUrl + "/images/crc-icon-256x256.jpg"}
                                     alt="CRC"
                                     className="w-32 h-32"
                                 />

@@ -59,7 +59,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Get the install permissions check.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return bool
      */
@@ -122,7 +122,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Install required plugins.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param \WP_REST_Request<array<string>> $request Full details about the request.
      */
@@ -185,7 +185,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
     /**
      * Cancel required plugins.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @return void
      */
