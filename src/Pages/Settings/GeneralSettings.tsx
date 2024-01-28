@@ -32,8 +32,8 @@ export const GeneralSettings = () => {
                         {__('General Settings', 'pay-check-mate')}
                     </h1>
                 </div>
-                <div className="grid grid-cols-2 gap-8">
-                    <div className="text-base">
+                <div className="grid grid-cols-1 justify-items-center">
+                    <div className="text-base w-1/2">
                         <Card>
                             <div className="mt-5 md:mt-0 md:col-span-2">
                                 <form
@@ -59,7 +59,7 @@ export const GeneralSettings = () => {
                                                     <FormInput
                                                         key={settingsKey}
                                                         className="col-span-6"
-                                                        type='url'
+                                                        type="url"
                                                         label={replaceUnderscoreAndCapitalize(settingsKey)}
                                                         name={settingsKey}
                                                         id={settingsKey}
@@ -70,7 +70,11 @@ export const GeneralSettings = () => {
                                             case 'company_logo':
                                                 return (
                                                     <div key={`div-${settingsKey}`}>
-                                                        <label key={`label-${settingsKey}`} htmlFor={settingsKey} className="block text-sm font-medium leading-6 text-gray-900">
+                                                        <label
+                                                            key={`label-${settingsKey}`}
+                                                            htmlFor={settingsKey}
+                                                            className="block text-sm font-medium leading-6 text-gray-900"
+                                                        >
                                                             {replaceUnderscoreAndCapitalize(settingsKey)}
                                                         </label>
                                                         <div className="flex items-center">
@@ -82,7 +86,12 @@ export const GeneralSettings = () => {
                                                             />
                                                             {
                                                                 settingsData[settingsKey] &&
-                                                                <img key={`img-${settingsKey}`} src={settingsData[settingsKey]} alt={replaceUnderscoreAndCapitalize(settingsKey)} className="w-20 ml-4" />
+                                                                <img
+                                                                    key={`img-${settingsKey}`}
+                                                                    src={settingsData[settingsKey]}
+                                                                    alt={replaceUnderscoreAndCapitalize(settingsKey)}
+                                                                    className="w-20 ml-4"
+                                                                />
                                                             }
                                                         </div>
                                                     </div>
@@ -92,7 +101,7 @@ export const GeneralSettings = () => {
                                                     <FormInput
                                                         key={settingsKey}
                                                         className="col-span-6"
-                                                        type='text'
+                                                        type="text"
                                                         label={replaceUnderscoreAndCapitalize(settingsKey)}
                                                         name={settingsKey}
                                                         id={settingsKey}
