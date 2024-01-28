@@ -12,7 +12,7 @@ import apiFetch from "@wordpress/api-fetch";
 import {toast} from "react-toastify";
 import {useSettings} from "../../Helpers/useSettings";
 
-export const GeneralSettings = () => {
+export const GeneralSettings = ({setFormData}: { setFormData: (data: any) => void }) => {
     const settingsFields = [
         'company_name',
         'company_address',
@@ -44,6 +44,11 @@ export const GeneralSettings = () => {
             console.log(error)
         })
     }
+
+    const handleGeneralSettings = (key: string, value: string) => {
+        setFormData({[key]: value})
+    }
+
     return (
         <>
             <HOC role={UserCapNames.pay_check_mate_admin}>
@@ -71,7 +76,10 @@ export const GeneralSettings = () => {
                                                         name={settingsKey}
                                                         id={settingsKey}
                                                         value={settingsData[settingsKey]}
-                                                        onChange={(e: any) => setSettingsData({...settingsData, [settingsKey]: e.target.value})}
+                                                        onChange={(e: any) => {
+                                                            setSettingsData({...settingsData, [settingsKey]: e.target.value})
+                                                            handleGeneralSettings(settingsKey, e.target.value)
+                                                        }}
                                                     />
                                                 );
                                             case 'company_website':
@@ -84,7 +92,10 @@ export const GeneralSettings = () => {
                                                         name={settingsKey}
                                                         id={settingsKey}
                                                         value={settingsData[settingsKey]}
-                                                        onChange={(e: any) => setSettingsData({...settingsData, [settingsKey]: e.target.value})}
+                                                        onChange={(e: any) => {
+                                                            setSettingsData({...settingsData, [settingsKey]: e.target.value})
+                                                            handleGeneralSettings(settingsKey, e.target.value)
+                                                        }}
                                                     />
                                                 );
                                             case 'company_logo':
@@ -98,7 +109,10 @@ export const GeneralSettings = () => {
                                                                 key={`media-gallery-${settingsKey}`}
                                                                 title={replaceUnderscoreAndCapitalize(settingsKey)}
                                                                 settingsData={settingsData}
-                                                                setSettingsData={setSettingsData}
+                                                                setSettingsData={(data: any) => {
+                                                                    setSettingsData(data)
+                                                                    handleGeneralSettings(settingsKey, data[settingsKey])
+                                                                }}
                                                             />
                                                             {
                                                                 settingsData[settingsKey] &&
@@ -117,7 +131,10 @@ export const GeneralSettings = () => {
                                                         name={settingsKey}
                                                         id={settingsKey}
                                                         value={settingsData[settingsKey]}
-                                                        onChange={(e: any) => setSettingsData({...settingsData, [settingsKey]: e.target.value})}
+                                                        onChange={(e: any) => {
+                                                            setSettingsData({...settingsData, [settingsKey]: e.target.value})
+                                                            handleGeneralSettings(settingsKey, e.target.value)
+                                                        }}
                                                     />
                                                 );
                                         }
