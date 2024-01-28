@@ -2,7 +2,7 @@ import {__} from "@wordpress/i18n";
 import {useState} from "@wordpress/element";
 import {validateRequiredFields} from "../../Helpers/Helpers";
 import {toast} from "react-toastify";
-import department from "../../Store/Designation";
+import designation from "../../Store/Designation";
 import useNotify from "../../Helpers/useNotify";
 import {useDispatch, useSelect} from "@wordpress/data";
 import {HOC} from "../../Components/HOC";
@@ -16,7 +16,7 @@ export const Designation = () => {
     const per_page = '-1';
     const [formData, setFormData] = useState<DesignationType>({} as DesignationType);
     const [formError, setFormError] = useState({} as { [key: string]: string });
-    const {designations} = useSelect((select) => select(department).getDesignations({per_page: per_page, page: 1}), []);
+    const {designations} = useSelect((select) => select(designation).getDesignations({per_page: per_page, page: 1}), []);
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
@@ -27,26 +27,26 @@ export const Designation = () => {
         const requiredFields = ['name'];
         const errors = validateRequiredFields(data, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
-            toast.error(__('Please fill department name', 'pay-check-mate'), {
+            toast.error(__('Please fill designation name', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
             });
 
             return;
         }
 
-        dispatch(department).createDesignation(data).then((response: any) => {
+        dispatch(designation).createDesignation(data).then((response: any) => {
             useNotify(response, __('Designation created successfully', 'pay-check-mate'));
             setFormData({} as DesignationType)
         }).catch((error: any) => {
             console.log(error, 'error')
-            toast.error(__('Something went wrong while creating department', 'pay-check-mate'), {
+            toast.error(__('Something went wrong while creating designation', 'pay-check-mate'), {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000
             });
         })
     }
     return (
-        <HOC role={UserCapNames.pay_check_mate_add_department}>
+        <HOC role={UserCapNames.pay_check_mate_add_designation}>
             <div className="sm:flex-auto mb-6">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">
                     {__('Create Designation', 'pay-check-mate')}
@@ -57,10 +57,13 @@ export const Designation = () => {
                     <Card>
                         <form className="flex flex-col gap-4">
                             {/*List of designations*/}
-                            <div className="flex-1">
-                                {designations?.map((department: DesignationType) => (
-                                    <div>
-                                        {department.name}
+                            <div className="grid grid-cols-4 gap-2">
+                                {designations?.map((designation: DesignationType) => (
+                                    <div
+                                        key={designation.id}
+                                        className="items-center justify-between mr-2 border border-input rounded-md px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        {designation.name}
                                     </div>
                                 ))}
                             </div>

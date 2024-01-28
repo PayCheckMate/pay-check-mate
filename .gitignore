@@ -49,6 +49,7 @@ wp-config.php
 /vendor/
 phpcs.xml
 .idea
+.DS_Store
 build/
 /assets
 dist

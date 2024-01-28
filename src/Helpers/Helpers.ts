@@ -1,4 +1,7 @@
 import {__} from "@wordpress/i18n";
+import apiFetch from "@wordpress/api-fetch";
+import {toast} from "react-toastify";
+import {SettingsType} from "../Types/Settings";
 
 export const validateRequiredFields = (data: any, requiredFields: string[], setFormError: (errors: any) => void) => {
     const errors: any = {};
@@ -27,6 +30,28 @@ export const getCurrentEmployee = () => {
 export const getPayCheckMateUserRoles = () => {
     // @ts-ignore
     return payCheckMate.payCheckMateUserRoles;
+}
+
+export const saveGeneralSettings = (data: SettingsType) => {
+    // @ts-ignore
+    const _wpnonce = payCheckMate.pay_check_mate_nonce;
+    apiFetch({
+        path: '/pay-check-mate/v1/general-settings',
+        method: 'PATCH',
+        data: {
+            settings: data,
+            _wpnonce,
+        },
+    }).then((response: any) => {
+        if (response) {
+            toast.success(__('Settings updated successfully', 'pay-check-mate'), {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000
+            });
+        }
+    }).catch((error: any) => {
+        console.log(error)
+    })
 }
 
 export const handlePrint = (divID: string) => {

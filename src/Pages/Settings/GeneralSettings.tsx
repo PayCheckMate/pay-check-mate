@@ -7,9 +7,7 @@ import {Card} from "../../Components/Card";
 import {SettingsType} from "../../Types/Settings";
 import {Textarea} from "../../Components/Textarea";
 import MediaGallery from "../../Components/MediaGallery";
-import {replaceUnderscoreAndCapitalize} from "../../Helpers/Helpers";
-import apiFetch from "@wordpress/api-fetch";
-import {toast} from "react-toastify";
+import {replaceUnderscoreAndCapitalize, saveGeneralSettings} from "../../Helpers/Helpers";
 import {useSettings} from "../../Helpers/useSettings";
 
 export const GeneralSettings = () => {
@@ -24,25 +22,7 @@ export const GeneralSettings = () => {
     const {settingsData, setSettingsData} = useSettings();
 
     const handleSubmit = () => {
-        // @ts-ignore
-        const _wpnonce = payCheckMate.pay_check_mate_nonce;
-        apiFetch({
-            path: '/pay-check-mate/v1/general-settings',
-            method: 'PATCH',
-            data: {
-                settings: settingsData,
-                _wpnonce,
-            },
-        }).then((response: any) => {
-            if (response) {
-                toast.success(__('Settings updated successfully', 'pay-check-mate'), {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 3000
-                });
-            }
-        }).catch((error: any) => {
-            console.log(error)
-        })
+        saveGeneralSettings(settingsData)
     }
     return (
         <>

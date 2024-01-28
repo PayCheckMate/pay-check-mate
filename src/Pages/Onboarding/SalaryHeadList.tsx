@@ -164,7 +164,7 @@ export const SalaryHeadList = () => {
                     {__('Create Salary Head', 'pay-check-mate')}
                 </h1>
             </div>
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-2">
                 <div className="text-base">
                     <Card>
                         <div className="mt-5 md:mt-0 md:col-span-2">
