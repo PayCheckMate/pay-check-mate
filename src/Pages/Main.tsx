@@ -55,7 +55,7 @@ export default function Main() {
                 {key: '[need_pro]pro/setup-gratuity', title: __('Setup Gratuity (PRO)', 'pay-check-mate'), href: 'pro/setup-gratuity', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
                 {key: '[need_pro]pro/setup-loans', title: __('Setup Loans (PRO)', 'pay-check-mate'), href: 'pro/setup-loans', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
                 {key: '[need_pro]pro/setup-pf', title: __('Setup P.F. (PRO)', 'pay-check-mate'), href: 'pro/setup-pf', current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], icon: null, component: NeedPro},
-                {key: 'onboarding', title: __('Onboarding', 'pay-check-mate'), href: 'onboarding', current: false, roles: ['pay_check_mate_admin'], component: Onboarding},
+                // {key: 'onboarding', title: __('Onboarding', 'pay-check-mate'), href: 'onboarding', current: false, roles: ['pay_check_mate_admin'], component: Onboarding},
             ]
         },
         {key: 'reports', title: __('Reports', 'pay-check-mate'), href: 'reports', icon: ChartPieIcon, current: false, roles: ['pay_check_mate_accountant'],
@@ -81,7 +81,8 @@ export default function Main() {
         {key: 'view-payroll', href: 'payroll/:id', roles: ['pay_check_mate_accountant'], component: ViewPayroll},
         {key: 'edit-payroll', href: 'payroll/edit/:id', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
         {key: 'create-payroll', href: 'generate-payroll', roles: ['pay_check_mate_accountant'], component: CreatePayroll},
-        {key: 'import-employee', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee}
+        {key: 'import-employee', href: 'import-employee', roles: ['pay_check_mate_accountant'], component: ImportEmployee},
+        {key: 'onboarding', href: 'onboarding', roles: ['pay_check_mate_admin'], component: Onboarding}
     ];
     paths = applyFilters('pay_check_mate.routes', paths);
 

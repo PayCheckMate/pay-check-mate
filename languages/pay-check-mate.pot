@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-04T18:46:20+00:00\n"
+"POT-Creation-Date: 2024-01-29T18:16:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: pay-check-mate\n"
 
 #. Plugin Name of the plugin
@@ -79,20 +79,20 @@ msgid "Could not update row into the database table."
 msgstr ""
 
 #: includes/Models/SalaryHeadModel.php:87
-#: assets/index.js:11989
-#: assets/index.js:12039
-#: assets/index.js:15155
-#: assets/index.js:15209
-#: assets/index.js:15328
+#: assets/index.js:12076
+#: assets/index.js:12126
+#: assets/index.js:15242
+#: assets/index.js:15296
+#: assets/index.js:15415
 msgid "Earning"
 msgstr ""
 
 #: includes/Models/SalaryHeadModel.php:87
-#: assets/index.js:11992
-#: assets/index.js:12039
-#: assets/index.js:15158
-#: assets/index.js:15209
-#: assets/index.js:15328
+#: assets/index.js:12079
+#: assets/index.js:12126
+#: assets/index.js:15245
+#: assets/index.js:15296
+#: assets/index.js:15415
 msgid "Deduction"
 msgstr ""
 
@@ -149,12 +149,12 @@ msgstr ""
 
 #: includes/REST/DashboardApi.php:216
 #: includes/REST/EmployeeApi.php:532
-#: assets/index.js:9595
-#: assets/index.js:12679
-#: assets/index.js:13997
-#: assets/index.js:14111
-#: assets/index.js:14517
-#: assets/index.js:14922
+#: assets/index.js:9623
+#: assets/index.js:12766
+#: assets/index.js:14084
+#: assets/index.js:14198
+#: assets/index.js:14604
+#: assets/index.js:15009
 msgid "Employee ID"
 msgstr ""
 
@@ -263,15 +263,15 @@ msgstr ""
 
 #: includes/REST/DepartmentApi.php:344
 #: includes/REST/EmployeeApi.php:547
-#: assets/index.js:8104
+#: assets/index.js:8132
 msgid "Department name"
 msgstr ""
 
 #: includes/REST/DepartmentApi.php:349
-#: assets/index.js:10152
-#: assets/index.js:10385
-#: assets/index.js:13670
-#: assets/index.js:15248
+#: assets/index.js:10180
+#: assets/index.js:10413
+#: assets/index.js:13757
+#: assets/index.js:15335
 msgid "Status"
 msgstr ""
 
@@ -340,7 +340,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/REST/EmployeeApi.php:552
-#: assets/index.js:8470
+#: assets/index.js:8498
 msgid "Designation name"
 msgstr ""
 
@@ -562,6 +562,32 @@ msgstr ""
 msgid "The date the object was last updated."
 msgstr ""
 
+#: assets/index.c149739365e29cb36151.hot-update.js:85
+#: assets/index.js:11828
+#: assets/index.js:11942
+msgid "Install Recommended Plugins"
+msgstr ""
+
+#: assets/index.c149739365e29cb36151.hot-update.js:97
+#: assets/index.js:11840
+msgid "Custom Role Creator (CRC)"
+msgstr ""
+
+#: assets/index.c149739365e29cb36151.hot-update.js:99
+#: assets/index.js:11842
+msgid "Custom Role Creator plugin allows you to add or change user roles and capabilities easily."
+msgstr ""
+
+#: assets/index.c149739365e29cb36151.hot-update.js:105
+#: assets/index.js:11848
+msgid "Finish Onboarding"
+msgstr ""
+
+#: assets/index.c149739365e29cb36151.hot-update.js:108
+#: assets/index.js:11851
+msgid "Install & Activate"
+msgstr ""
+
 #: assets/index.js:4662
 msgid "404"
 msgstr ""
@@ -636,13 +662,13 @@ msgid "Open Media Gallery"
 msgstr ""
 
 #: assets/index.js:6261
-#: assets/index.js:9215
-#: assets/index.js:9219
+#: assets/index.js:9243
+#: assets/index.js:9247
 msgid "Select one"
 msgstr ""
 
 #: assets/index.js:6778
-#: assets/index.js:11895
+#: assets/index.js:11980
 msgid "Previous"
 msgstr ""
 
@@ -658,1207 +684,1185 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: assets/index.js:7195
+#: assets/index.js:7201
 msgid "This field is required"
 msgstr ""
 
-#: assets/index.js:7863
-msgid "Month"
-msgstr ""
-
-#: assets/index.js:7870
-#: assets/index.js:13314
-msgid "Amount"
-msgstr ""
-
-#: assets/index.js:7919
-#: assets/index.js:7963
-msgid "Payroll Summary"
-msgstr ""
-
-#: assets/index.js:7932
-#: assets/index.js:10882
-msgid "Dashboard"
-msgstr ""
-
-#: assets/index.js:7955
-msgid "View all"
-msgstr ""
-
-#: assets/index.js:8063
-#: assets/index.js:8429
-#: assets/index.js:12090
-#: assets/index.js:15353
-msgid "Please fill all required fields"
-msgstr ""
-
-#: assets/index.js:8071
-msgid "Department updated successfully"
-msgstr ""
-
-#: assets/index.js:8074
-#: assets/index.js:8280
-msgid "Something went wrong while updating department"
-msgstr ""
-
-#: assets/index.js:8082
-#: assets/index.js:11282
-msgid "Department created successfully"
-msgstr ""
-
-#: assets/index.js:8085
-#: assets/index.js:11286
-#: assets/index.js:11433
-msgid "Something went wrong while creating department"
-msgstr ""
-
-#: assets/index.js:8095
-#: assets/index.js:8313
-msgid "Add department"
-msgstr ""
-
-#: assets/index.js:8117
-#: assets/index.js:12286
-#: assets/index.js:15572
-msgid "Update"
-msgstr ""
-
-#: assets/index.js:8117
-#: assets/index.js:12853
-#: assets/index.js:15775
-msgid "Save"
-msgstr ""
-
-#: assets/index.js:8251
-#: assets/index.js:8617
-#: assets/index.js:10413
-#: assets/index.js:13714
-#: assets/index.js:15264
-msgid "Edit"
-msgstr ""
-
-#: assets/index.js:8256
-#: assets/index.js:8622
-#: assets/index.js:15269
-msgid "Inactive"
-msgstr ""
-
-#: assets/index.js:8261
-#: assets/index.js:8627
-#: assets/index.js:10392
-#: assets/index.js:15274
-msgid "Active"
-msgstr ""
-
-#: assets/index.js:8277
-msgid "Department status updated successfully"
-msgstr ""
-
-#: assets/index.js:8305
-msgid "Department list"
-msgstr ""
-
-#: assets/index.js:8437
-msgid "Designation updated successfully"
-msgstr ""
-
-#: assets/index.js:8440
-#: assets/index.js:8646
-msgid "Something went wrong while updating designation"
-msgstr ""
-
-#: assets/index.js:8448
-#: assets/index.js:11429
-msgid "Designation created successfully"
-msgstr ""
-
-#: assets/index.js:8451
-msgid "Something went wrong while creating designation"
-msgstr ""
-
-#: assets/index.js:8461
-#: assets/index.js:8483
-#: assets/index.js:8679
-msgid "Add designation"
-msgstr ""
-
-#: assets/index.js:8643
-msgid "Designation status updated successfully"
-msgstr ""
-
-#: assets/index.js:8671
-msgid "Designation list"
-msgstr ""
-
-#: assets/index.js:8839
-#: assets/index.js:8999
-#: assets/index.js:10067
-msgid "Something went wrong"
-msgstr ""
-
-#: assets/index.js:8869
-msgid "Please fill personal information"
-msgstr ""
-
-#: assets/index.js:8873
-msgid "Please select designation"
-msgstr ""
-
-#: assets/index.js:8877
-msgid "Please select department"
-msgstr ""
-
-#: assets/index.js:8881
-msgid "Please fill employee id"
-msgstr ""
-
-#: assets/index.js:8885
-msgid "Please fill first name"
-msgstr ""
-
-#: assets/index.js:8889
-msgid "Please fill last name"
-msgstr ""
-
-#: assets/index.js:8893
-msgid "Please fill email"
-msgstr ""
-
-#: assets/index.js:8900
-msgid "Please fill salary information"
-msgstr ""
-
-#: assets/index.js:8905
-msgid "Please fill basic salary"
-msgstr ""
-
-#: assets/index.js:8910
-msgid "Please fill gross salary"
-msgstr ""
-
-#: assets/index.js:8963
-msgid "Employee updated successfully"
-msgstr ""
-
-#: assets/index.js:8966
-msgid "Employee added successfully"
-msgstr ""
-
-#: assets/index.js:8994
-msgid "User not found"
-msgstr ""
-
-#: assets/index.js:9027
-#: assets/index.js:10094
-msgid "Personal Information"
-msgstr ""
-
-#: assets/index.js:9029
-msgid "Search from existing user"
-msgstr ""
-
-#: assets/index.js:9030
-msgid "Enter user id"
-msgstr ""
-
-#: assets/index.js:9046
-#: assets/index.js:9669
-msgid "Salary Information"
-msgstr ""
-
-#: assets/index.js:9052
-msgid "Add Salary Heads"
-msgstr ""
-
-#: assets/index.js:9064
-#: assets/index.js:9118
-msgid "Back"
-msgstr ""
-
-#: assets/index.js:9067
-#: assets/index.js:9469
-#: assets/index.js:11898
-msgid "Save & Continue"
-msgstr ""
-
-#: assets/index.js:9075
-msgid "User Roles:"
-msgstr ""
-
-#: assets/index.js:9114
-msgid "Please fill all the information"
-msgstr ""
-
-#: assets/index.js:9326
-#: assets/index.js:9603
-#: assets/index.js:10102
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "First name"
-msgstr ""
-
-#: assets/index.js:9336
-#: assets/index.js:9611
-#: assets/index.js:10108
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Last name"
-msgstr ""
-
-#: assets/index.js:9346
-#: assets/index.js:9627
-#: assets/index.js:10378
-#: assets/index.js:12634
-#: assets/index.js:12686
-#: assets/index.js:13644
-#: assets/index.js:13997
-#: assets/index.js:14084
-#: assets/index.js:14118
-#: assets/index.js:14883
-#: assets/index.js:14929
-msgid "Department"
-msgstr ""
-
-#: assets/index.js:9364
-msgid "Create a new department"
-msgstr ""
-
-#: assets/index.js:9368
-#: assets/index.js:9635
-#: assets/index.js:10371
-#: assets/index.js:12629
-#: assets/index.js:12684
-#: assets/index.js:13652
-#: assets/index.js:13997
-#: assets/index.js:14084
-#: assets/index.js:14116
-#: assets/index.js:14878
-#: assets/index.js:14927
-msgid "Designation"
-msgstr ""
-
-#: assets/index.js:9386
-msgid "Create a new designation"
-msgstr ""
-
-#: assets/index.js:9389
-#: assets/index.js:10563
-#: assets/index.js:10737
-#: assets/index.js:12980
-#: assets/index.js:13117
-msgid "Employee id"
-msgstr ""
-
-#: assets/index.js:9400
-#: assets/index.js:9619
-#: assets/index.js:10114
-msgid "Email address"
-msgstr ""
-
-#: assets/index.js:9409
-#: assets/index.js:10120
-msgid "Phone number"
-msgstr ""
-
-#: assets/index.js:9418
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Bank name"
-msgstr ""
-
-#: assets/index.js:9427
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Bank account number"
-msgstr ""
-
-#: assets/index.js:9436
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Tax number"
-msgstr ""
-
-#: assets/index.js:9447
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Joining date"
-msgstr ""
-
-#: assets/index.js:9456
-#: assets/index.js:9651
-#: assets/index.js:10126
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Address"
-msgstr ""
-
-#: assets/index.js:9587
-msgid "Review Information"
-msgstr ""
-
-#: assets/index.js:9599
-msgid "Employee ID cannot be empty."
-msgstr ""
-
-#: assets/index.js:9607
-msgid "First name cannot be empty."
-msgstr ""
-
-#: assets/index.js:9615
-msgid "Last name cannot be empty."
-msgstr ""
-
-#: assets/index.js:9623
-msgid "Email address cannot be empty."
-msgstr ""
-
-#: assets/index.js:9631
-msgid "Department cannot be empty."
-msgstr ""
-
-#: assets/index.js:9639
-msgid "Designation cannot be empty."
-msgstr ""
-
-#: assets/index.js:9643
-#: assets/index.js:10132
-#: assets/index.js:10343
-msgid "Joining Date"
-msgstr ""
-
-#: assets/index.js:9647
-msgid "Joining date cannot be empty."
-msgstr ""
-
-#: assets/index.js:9657
-msgid "Salary Active From"
-msgstr ""
-
-#: assets/index.js:9665
-msgid "Salary active from cannot be empty."
-msgstr ""
-
-#: assets/index.js:9859
-#: assets/index.js:10223
-msgid "Gross Salary"
-msgstr ""
-
-#: assets/index.js:9865
-msgid "Set gross salary to auto calculate basic salary and other salary heads."
-msgstr ""
-
-#: assets/index.js:9870
-#: assets/index.js:10201
-#: assets/index.js:12688
-#: assets/index.js:13997
-#: assets/index.js:14120
-#: assets/index.js:14554
-#: assets/index.js:14931
-msgid "Basic Salary"
-msgstr ""
-
-#: assets/index.js:9891
-msgid "Active from"
-msgstr ""
-
-#: assets/index.js:9901
-msgid "Salary in hand"
-msgstr ""
-
-#: assets/index.js:9931
-msgid "Total Salary in hand"
-msgstr ""
-
-#: assets/index.js:10086
-msgid "Employee Details"
-msgstr ""
-
-#: assets/index.js:10142
-msgid "Resignation Date"
-msgstr ""
-
-#: assets/index.js:10160
-msgid "Salary History"
-msgstr ""
-
-#: assets/index.js:10178
-msgid "Initial salary"
-msgstr ""
-
-#: assets/index.js:10181
-msgid "On Permanent"
-msgstr ""
-
-#: assets/index.js:10184
-msgid "Increment"
-msgstr ""
-
-#: assets/index.js:10187
-msgid "Promotion"
-msgstr ""
-
-#: assets/index.js:10191
-msgid "Active from: "
-msgstr ""
-
-#: assets/index.js:10229
-#: assets/index.js:10563
-#: assets/index.js:10737
-#: assets/index.js:12842
-#: assets/index.js:14230
-#: assets/index.js:15041
-msgid "Remarks"
-msgstr ""
-
-#: assets/index.js:10354
-msgid "Name"
-msgstr ""
-
-#: assets/index.js:10368
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Email"
-msgstr ""
-
-#: assets/index.js:10393
-#: assets/index.js:10406
-msgid "Resigned"
-msgstr ""
-
-#: assets/index.js:10398
-#: assets/index.js:13457
-#: assets/index.js:13701
-#: assets/index.js:15257
-msgid "Action"
-msgstr ""
-
-#: assets/index.js:10424
-msgid "Employee List"
-msgstr ""
-
-#: assets/index.js:10434
-#: assets/index.js:10707
-msgid "Import Employee"
-msgstr ""
-
-#: assets/index.js:10440
-msgid "Add Employee"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Designation id"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Department id"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "User id"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Phone"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Gross salary"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Basic salary"
-msgstr ""
-
-#: assets/index.js:10563
-#: assets/index.js:10737
-msgid "Salary active from"
-msgstr ""
-
-#: assets/index.js:10580
-#: assets/index.js:12994
-msgid "File is not formatted properly. Please check the sample file."
-msgstr ""
-
-#: assets/index.js:10713
-msgid "Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads."
-msgstr ""
-
-#: assets/index.js:10715
-#: assets/index.js:13095
-msgid "Note: The first row of the CSV file must be the column name."
-msgstr ""
-
-#: assets/index.js:10729
-msgid "Download sample file"
-msgstr ""
-
-#: assets/index.js:10737
-#: assets/index.js:13117
-msgid "SL"
-msgstr ""
-
-#: assets/index.js:10750
-#: assets/index.js:13132
-msgid "Reset"
-msgstr ""
-
-#: assets/index.js:10753
-#: assets/index.js:13135
-msgid "Import"
-msgstr ""
-
-#: assets/index.js:10890
-msgid "Employees"
-msgstr ""
-
-#: assets/index.js:10898
-msgid "Profile"
-msgstr ""
-
-#: assets/index.js:10906
-msgid "Pay Slip"
-msgstr ""
-
-#: assets/index.js:10914
-msgid "Payroll"
-msgstr ""
-
-#: assets/index.js:10922
-msgid "Payroll Importer (PRO)"
-msgstr ""
-
-#: assets/index.js:10930
-msgid "Loans (PRO)"
-msgstr ""
-
-#: assets/index.js:10938
-msgid "Final Payment (PRO)"
-msgstr ""
-
-#: assets/index.js:10946
-msgid "Settings"
-msgstr ""
-
-#: assets/index.js:10953
-msgid "General"
-msgstr ""
-
-#: assets/index.js:10960
-msgid "Departments"
-msgstr ""
-
-#: assets/index.js:10967
-msgid "Designations"
-msgstr ""
-
-#: assets/index.js:10974
-msgid "Salary Heads"
-msgstr ""
-
-#: assets/index.js:10981
-msgid "Setup Gratuity (PRO)"
-msgstr ""
-
-#: assets/index.js:10989
-msgid "Setup Loans (PRO)"
-msgstr ""
-
-#: assets/index.js:10997
-msgid "Setup P.F. (PRO)"
-msgstr ""
-
-#: assets/index.js:11005
-msgid "Onboarding"
-msgstr ""
-
-#: assets/index.js:11013
-msgid "Reports"
-msgstr ""
-
-#: assets/index.js:11020
-msgid "Payroll Register"
-msgstr ""
-
-#: assets/index.js:11028
-msgid "Payroll Ledger"
-msgstr ""
-
-#: assets/index.js:11036
-msgid "P.F. Register (PRO)"
-msgstr ""
-
-#: assets/index.js:11044
-msgid "P.F. Ledger (PRO)"
-msgstr ""
-
-#: assets/index.js:11052
-msgid "Gratuity Register (PRO)"
-msgstr ""
-
-#: assets/index.js:11060
-msgid "Gratuity Ledger (PRO)"
-msgstr ""
-
-#: assets/index.js:11068
-msgid "Loan Register (PRO)"
-msgstr ""
-
-#: assets/index.js:11076
-msgid "Loan Ledger (PRO)"
-msgstr ""
-
-#: assets/index.js:11276
-#: assets/index.js:11423
-msgid "Please fill department name"
-msgstr ""
-
-#: assets/index.js:11298
-#: assets/index.js:11875
-msgid "Create Department"
-msgstr ""
-
-#: assets/index.js:11317
-msgid "Department Name"
-msgstr ""
-
-#: assets/index.js:11445
-#: assets/index.js:11877
-msgid "Create Designation"
-msgstr ""
-
-#: assets/index.js:11464
-msgid "Designation Name"
-msgstr ""
-
-#: assets/index.js:11569
-#: assets/index.js:15682
+#: assets/index.js:7234
+#: assets/index.js:11605
 msgid "Settings updated successfully"
 msgstr ""
 
-#: assets/index.js:11584
-#: assets/index.js:11873
-#: assets/index.js:15697
+#: assets/index.js:7891
+msgid "Month"
+msgstr ""
+
+#: assets/index.js:7898
+#: assets/index.js:13401
+msgid "Amount"
+msgstr ""
+
+#: assets/index.js:7947
+#: assets/index.js:7991
+msgid "Payroll Summary"
+msgstr ""
+
+#: assets/index.js:7960
+#: assets/index.js:10910
+msgid "Dashboard"
+msgstr ""
+
+#: assets/index.js:7983
+msgid "View all"
+msgstr ""
+
+#: assets/index.js:8091
+#: assets/index.js:8457
+#: assets/index.js:12177
+#: assets/index.js:15440
+msgid "Please fill all required fields"
+msgstr ""
+
+#: assets/index.js:8099
+msgid "Department updated successfully"
+msgstr ""
+
+#: assets/index.js:8102
+#: assets/index.js:8308
+msgid "Something went wrong while updating department"
+msgstr ""
+
+#: assets/index.js:8110
+#: assets/index.js:11310
+msgid "Department created successfully"
+msgstr ""
+
+#: assets/index.js:8113
+#: assets/index.js:11314
+msgid "Something went wrong while creating department"
+msgstr ""
+
+#: assets/index.js:8123
+#: assets/index.js:8341
+msgid "Add department"
+msgstr ""
+
+#: assets/index.js:8145
+#: assets/index.js:12373
+#: assets/index.js:15659
+msgid "Update"
+msgstr ""
+
+#: assets/index.js:8145
+#: assets/index.js:12940
+#: assets/index.js:15839
+msgid "Save"
+msgstr ""
+
+#: assets/index.js:8279
+#: assets/index.js:8645
+#: assets/index.js:10441
+#: assets/index.js:13801
+#: assets/index.js:15351
+msgid "Edit"
+msgstr ""
+
+#: assets/index.js:8284
+#: assets/index.js:8650
+#: assets/index.js:15356
+msgid "Inactive"
+msgstr ""
+
+#: assets/index.js:8289
+#: assets/index.js:8655
+#: assets/index.js:10420
+#: assets/index.js:15361
+msgid "Active"
+msgstr ""
+
+#: assets/index.js:8305
+msgid "Department status updated successfully"
+msgstr ""
+
+#: assets/index.js:8333
+msgid "Department list"
+msgstr ""
+
+#: assets/index.js:8465
+msgid "Designation updated successfully"
+msgstr ""
+
+#: assets/index.js:8468
+#: assets/index.js:8674
+msgid "Something went wrong while updating designation"
+msgstr ""
+
+#: assets/index.js:8476
+#: assets/index.js:11460
+msgid "Designation created successfully"
+msgstr ""
+
+#: assets/index.js:8479
+#: assets/index.js:11464
+msgid "Something went wrong while creating designation"
+msgstr ""
+
+#: assets/index.js:8489
+#: assets/index.js:8511
+#: assets/index.js:8707
+msgid "Add designation"
+msgstr ""
+
+#: assets/index.js:8671
+msgid "Designation status updated successfully"
+msgstr ""
+
+#: assets/index.js:8699
+msgid "Designation list"
+msgstr ""
+
+#: assets/index.js:8867
+#: assets/index.js:9027
+#: assets/index.js:10095
+msgid "Something went wrong"
+msgstr ""
+
+#: assets/index.js:8897
+msgid "Please fill personal information"
+msgstr ""
+
+#: assets/index.js:8901
+msgid "Please select designation"
+msgstr ""
+
+#: assets/index.js:8905
+msgid "Please select department"
+msgstr ""
+
+#: assets/index.js:8909
+msgid "Please fill employee id"
+msgstr ""
+
+#: assets/index.js:8913
+msgid "Please fill first name"
+msgstr ""
+
+#: assets/index.js:8917
+msgid "Please fill last name"
+msgstr ""
+
+#: assets/index.js:8921
+msgid "Please fill email"
+msgstr ""
+
+#: assets/index.js:8928
+msgid "Please fill salary information"
+msgstr ""
+
+#: assets/index.js:8933
+msgid "Please fill basic salary"
+msgstr ""
+
+#: assets/index.js:8938
+msgid "Please fill gross salary"
+msgstr ""
+
+#: assets/index.js:8991
+msgid "Employee updated successfully"
+msgstr ""
+
+#: assets/index.js:8994
+msgid "Employee added successfully"
+msgstr ""
+
+#: assets/index.js:9022
+msgid "User not found"
+msgstr ""
+
+#: assets/index.js:9055
+#: assets/index.js:10122
+msgid "Personal Information"
+msgstr ""
+
+#: assets/index.js:9057
+msgid "Search from existing user"
+msgstr ""
+
+#: assets/index.js:9058
+msgid "Enter user id"
+msgstr ""
+
+#: assets/index.js:9074
+#: assets/index.js:9697
+msgid "Salary Information"
+msgstr ""
+
+#: assets/index.js:9080
+msgid "Add Salary Heads"
+msgstr ""
+
+#: assets/index.js:9092
+#: assets/index.js:9146
+msgid "Back"
+msgstr ""
+
+#: assets/index.js:9095
+#: assets/index.js:9497
+#: assets/index.js:11985
+msgid "Save & Continue"
+msgstr ""
+
+#: assets/index.js:9103
+msgid "User Roles:"
+msgstr ""
+
+#: assets/index.js:9142
+msgid "Please fill all the information"
+msgstr ""
+
+#: assets/index.js:9354
+#: assets/index.js:9631
+#: assets/index.js:10130
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "First name"
+msgstr ""
+
+#: assets/index.js:9364
+#: assets/index.js:9639
+#: assets/index.js:10136
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Last name"
+msgstr ""
+
+#: assets/index.js:9374
+#: assets/index.js:9655
+#: assets/index.js:10406
+#: assets/index.js:12721
+#: assets/index.js:12773
+#: assets/index.js:13731
+#: assets/index.js:14084
+#: assets/index.js:14171
+#: assets/index.js:14205
+#: assets/index.js:14970
+#: assets/index.js:15016
+msgid "Department"
+msgstr ""
+
+#: assets/index.js:9392
+msgid "Create a new department"
+msgstr ""
+
+#: assets/index.js:9396
+#: assets/index.js:9663
+#: assets/index.js:10399
+#: assets/index.js:12716
+#: assets/index.js:12771
+#: assets/index.js:13739
+#: assets/index.js:14084
+#: assets/index.js:14171
+#: assets/index.js:14203
+#: assets/index.js:14965
+#: assets/index.js:15014
+msgid "Designation"
+msgstr ""
+
+#: assets/index.js:9414
+msgid "Create a new designation"
+msgstr ""
+
+#: assets/index.js:9417
+#: assets/index.js:10591
+#: assets/index.js:10765
+#: assets/index.js:13067
+#: assets/index.js:13204
+msgid "Employee id"
+msgstr ""
+
+#: assets/index.js:9428
+#: assets/index.js:9647
+#: assets/index.js:10142
+msgid "Email address"
+msgstr ""
+
+#: assets/index.js:9437
+#: assets/index.js:10148
+msgid "Phone number"
+msgstr ""
+
+#: assets/index.js:9446
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Bank name"
+msgstr ""
+
+#: assets/index.js:9455
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Bank account number"
+msgstr ""
+
+#: assets/index.js:9464
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Tax number"
+msgstr ""
+
+#: assets/index.js:9475
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Joining date"
+msgstr ""
+
+#: assets/index.js:9484
+#: assets/index.js:9679
+#: assets/index.js:10154
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Address"
+msgstr ""
+
+#: assets/index.js:9615
+msgid "Review Information"
+msgstr ""
+
+#: assets/index.js:9627
+msgid "Employee ID cannot be empty."
+msgstr ""
+
+#: assets/index.js:9635
+msgid "First name cannot be empty."
+msgstr ""
+
+#: assets/index.js:9643
+msgid "Last name cannot be empty."
+msgstr ""
+
+#: assets/index.js:9651
+msgid "Email address cannot be empty."
+msgstr ""
+
+#: assets/index.js:9659
+msgid "Department cannot be empty."
+msgstr ""
+
+#: assets/index.js:9667
+msgid "Designation cannot be empty."
+msgstr ""
+
+#: assets/index.js:9671
+#: assets/index.js:10160
+#: assets/index.js:10371
+msgid "Joining Date"
+msgstr ""
+
+#: assets/index.js:9675
+msgid "Joining date cannot be empty."
+msgstr ""
+
+#: assets/index.js:9685
+msgid "Salary Active From"
+msgstr ""
+
+#: assets/index.js:9693
+msgid "Salary active from cannot be empty."
+msgstr ""
+
+#: assets/index.js:9887
+#: assets/index.js:10251
+msgid "Gross Salary"
+msgstr ""
+
+#: assets/index.js:9893
+msgid "Set gross salary to auto calculate basic salary and other salary heads."
+msgstr ""
+
+#: assets/index.js:9898
+#: assets/index.js:10229
+#: assets/index.js:12775
+#: assets/index.js:14084
+#: assets/index.js:14207
+#: assets/index.js:14641
+#: assets/index.js:15018
+msgid "Basic Salary"
+msgstr ""
+
+#: assets/index.js:9919
+msgid "Active from"
+msgstr ""
+
+#: assets/index.js:9929
+msgid "Salary in hand"
+msgstr ""
+
+#: assets/index.js:9959
+msgid "Total Salary in hand"
+msgstr ""
+
+#: assets/index.js:10114
+msgid "Employee Details"
+msgstr ""
+
+#: assets/index.js:10170
+msgid "Resignation Date"
+msgstr ""
+
+#: assets/index.js:10188
+msgid "Salary History"
+msgstr ""
+
+#: assets/index.js:10206
+msgid "Initial salary"
+msgstr ""
+
+#: assets/index.js:10209
+msgid "On Permanent"
+msgstr ""
+
+#: assets/index.js:10212
+msgid "Increment"
+msgstr ""
+
+#: assets/index.js:10215
+msgid "Promotion"
+msgstr ""
+
+#: assets/index.js:10219
+msgid "Active from: "
+msgstr ""
+
+#: assets/index.js:10257
+#: assets/index.js:10591
+#: assets/index.js:10765
+#: assets/index.js:12929
+#: assets/index.js:14317
+#: assets/index.js:15128
+msgid "Remarks"
+msgstr ""
+
+#: assets/index.js:10382
+msgid "Name"
+msgstr ""
+
+#: assets/index.js:10396
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Email"
+msgstr ""
+
+#: assets/index.js:10421
+#: assets/index.js:10434
+msgid "Resigned"
+msgstr ""
+
+#: assets/index.js:10426
+#: assets/index.js:13544
+#: assets/index.js:13788
+#: assets/index.js:15344
+msgid "Action"
+msgstr ""
+
+#: assets/index.js:10452
+msgid "Employee List"
+msgstr ""
+
+#: assets/index.js:10462
+#: assets/index.js:10735
+msgid "Import Employee"
+msgstr ""
+
+#: assets/index.js:10468
+msgid "Add Employee"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Designation id"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Department id"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "User id"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Phone"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Gross salary"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Basic salary"
+msgstr ""
+
+#: assets/index.js:10591
+#: assets/index.js:10765
+msgid "Salary active from"
+msgstr ""
+
+#: assets/index.js:10608
+#: assets/index.js:13081
+msgid "File is not formatted properly. Please check the sample file."
+msgstr ""
+
+#: assets/index.js:10741
+msgid "Import employee data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads."
+msgstr ""
+
+#: assets/index.js:10743
+#: assets/index.js:13182
+msgid "Note: The first row of the CSV file must be the column name."
+msgstr ""
+
+#: assets/index.js:10757
+msgid "Download sample file"
+msgstr ""
+
+#: assets/index.js:10765
+#: assets/index.js:13204
+msgid "SL"
+msgstr ""
+
+#: assets/index.js:10778
+#: assets/index.js:13219
+msgid "Reset"
+msgstr ""
+
+#: assets/index.js:10781
+#: assets/index.js:13222
+msgid "Import"
+msgstr ""
+
+#: assets/index.js:10918
+msgid "Employees"
+msgstr ""
+
+#: assets/index.js:10926
+msgid "Profile"
+msgstr ""
+
+#: assets/index.js:10934
+msgid "Pay Slip"
+msgstr ""
+
+#: assets/index.js:10942
+msgid "Payroll"
+msgstr ""
+
+#: assets/index.js:10950
+msgid "Payroll Importer (PRO)"
+msgstr ""
+
+#: assets/index.js:10958
+msgid "Loans (PRO)"
+msgstr ""
+
+#: assets/index.js:10966
+msgid "Final Payment (PRO)"
+msgstr ""
+
+#: assets/index.js:10974
+msgid "Settings"
+msgstr ""
+
+#: assets/index.js:10981
+msgid "General"
+msgstr ""
+
+#: assets/index.js:10988
+msgid "Departments"
+msgstr ""
+
+#: assets/index.js:10995
+msgid "Designations"
+msgstr ""
+
+#: assets/index.js:11002
+msgid "Salary Heads"
+msgstr ""
+
+#: assets/index.js:11009
+msgid "Setup Gratuity (PRO)"
+msgstr ""
+
+#: assets/index.js:11017
+msgid "Setup Loans (PRO)"
+msgstr ""
+
+#: assets/index.js:11025
+msgid "Setup P.F. (PRO)"
+msgstr ""
+
+#: assets/index.js:11036
+msgid "Reports"
+msgstr ""
+
+#: assets/index.js:11043
+msgid "Payroll Register"
+msgstr ""
+
+#: assets/index.js:11051
+msgid "Payroll Ledger"
+msgstr ""
+
+#: assets/index.js:11059
+msgid "P.F. Register (PRO)"
+msgstr ""
+
+#: assets/index.js:11067
+msgid "P.F. Ledger (PRO)"
+msgstr ""
+
+#: assets/index.js:11075
+msgid "Gratuity Register (PRO)"
+msgstr ""
+
+#: assets/index.js:11083
+msgid "Gratuity Ledger (PRO)"
+msgstr ""
+
+#: assets/index.js:11091
+msgid "Loan Register (PRO)"
+msgstr ""
+
+#: assets/index.js:11099
+msgid "Loan Ledger (PRO)"
+msgstr ""
+
+#: assets/index.js:11304
+msgid "Please fill department name"
+msgstr ""
+
+#: assets/index.js:11326
+#: assets/index.js:11936
+msgid "Create Department"
+msgstr ""
+
+#: assets/index.js:11348
+msgid "Department Name"
+msgstr ""
+
+#: assets/index.js:11454
+msgid "Please fill designation name"
+msgstr ""
+
+#: assets/index.js:11476
+#: assets/index.js:11938
+msgid "Create Designation"
+msgstr ""
+
+#: assets/index.js:11498
+msgid "Designation Name"
+msgstr ""
+
+#: assets/index.js:11625
+#: assets/index.js:11934
+#: assets/index.js:15761
 msgid "General Settings"
 msgstr ""
 
-#: assets/index.js:11775
-#: assets/index.js:11881
-msgid "Install Recommended Plugins"
-msgstr ""
-
-#: assets/index.js:11787
-msgid "Custom Role Creator (CRC)"
-msgstr ""
-
-#: assets/index.js:11789
-msgid "Custom Role Creator plugin allows you to add or change user roles and capabilities easily."
-msgstr ""
-
-#: assets/index.js:11795
-msgid "Finish Onboarding"
-msgstr ""
-
-#: assets/index.js:11798
-msgid "Install & Activate"
-msgstr ""
-
-#: assets/index.js:11879
-#: assets/index.js:12130
+#: assets/index.js:11940
+#: assets/index.js:12217
 msgid "Create Salary Head"
 msgstr ""
 
-#: assets/index.js:11996
-#: assets/index.js:12003
-#: assets/index.js:12054
-#: assets/index.js:12063
-#: assets/index.js:12074
-#: assets/index.js:15162
-#: assets/index.js:15169
-#: assets/index.js:15224
-#: assets/index.js:15233
-#: assets/index.js:15245
+#: assets/index.js:12083
+#: assets/index.js:12090
+#: assets/index.js:12141
+#: assets/index.js:12150
+#: assets/index.js:12161
+#: assets/index.js:15249
+#: assets/index.js:15256
+#: assets/index.js:15311
+#: assets/index.js:15320
 #: assets/index.js:15332
+#: assets/index.js:15419
 msgid "No"
 msgstr ""
 
-#: assets/index.js:11999
-#: assets/index.js:12006
-#: assets/index.js:12054
-#: assets/index.js:12063
-#: assets/index.js:12074
-#: assets/index.js:15165
-#: assets/index.js:15172
-#: assets/index.js:15224
-#: assets/index.js:15233
-#: assets/index.js:15245
+#: assets/index.js:12086
+#: assets/index.js:12093
+#: assets/index.js:12141
+#: assets/index.js:12150
+#: assets/index.js:12161
+#: assets/index.js:15252
+#: assets/index.js:15259
+#: assets/index.js:15311
+#: assets/index.js:15320
 #: assets/index.js:15332
+#: assets/index.js:15419
 msgid "Yes"
 msgstr ""
 
-#: assets/index.js:12030
-#: assets/index.js:15198
+#: assets/index.js:12117
+#: assets/index.js:15285
 msgid "Salary Head"
 msgstr ""
 
-#: assets/index.js:12033
-#: assets/index.js:15202
+#: assets/index.js:12120
+#: assets/index.js:15289
 msgid "Head Type"
 msgstr ""
 
-#: assets/index.js:12042
-#: assets/index.js:15212
+#: assets/index.js:12129
+#: assets/index.js:15299
 msgid "Head Amount"
 msgstr ""
 
-#: assets/index.js:12045
-#: assets/index.js:15215
+#: assets/index.js:12132
+#: assets/index.js:15302
 msgid " and variable"
 msgstr ""
 
-#: assets/index.js:12048
-#: assets/index.js:12233
-#: assets/index.js:15218
-#: assets/index.js:15519
+#: assets/index.js:12135
+#: assets/index.js:12320
+#: assets/index.js:15305
+#: assets/index.js:15606
 msgid "Is Taxable"
 msgstr ""
 
-#: assets/index.js:12057
-#: assets/index.js:15227
+#: assets/index.js:12144
+#: assets/index.js:15314
 msgid "Is Personal Savings"
 msgstr ""
 
-#: assets/index.js:12066
-#: assets/index.js:12275
-#: assets/index.js:15236
-#: assets/index.js:15561
+#: assets/index.js:12153
+#: assets/index.js:12362
+#: assets/index.js:15323
+#: assets/index.js:15648
 msgid "Priority"
 msgstr ""
 
-#: assets/index.js:12069
-#: assets/index.js:15240
+#: assets/index.js:12156
+#: assets/index.js:15327
 msgid "Variable"
 msgstr ""
 
-#: assets/index.js:12104
-#: assets/index.js:15379
+#: assets/index.js:12191
+#: assets/index.js:15466
 msgid "Successfully created salary head"
 msgstr ""
 
-#: assets/index.js:12108
-#: assets/index.js:15308
-#: assets/index.js:15382
+#: assets/index.js:12195
+#: assets/index.js:15395
+#: assets/index.js:15469
 msgid "Something went wrong while creating salary head"
 msgstr ""
 
-#: assets/index.js:12140
-#: assets/index.js:15426
+#: assets/index.js:12227
+#: assets/index.js:15513
 msgid "Salary Head name"
 msgstr ""
 
-#: assets/index.js:12148
-#: assets/index.js:15434
+#: assets/index.js:12235
+#: assets/index.js:15521
 msgid "Head amount"
 msgstr ""
 
-#: assets/index.js:12159
-#: assets/index.js:15445
+#: assets/index.js:12246
+#: assets/index.js:15532
 msgid "Is percentage?"
-msgstr ""
-
-#: assets/index.js:12186
-#: assets/index.js:15472
-msgid "If you want to add this head as percentage, please check this box."
-msgstr ""
-
-#: assets/index.js:12188
-#: assets/index.js:15474
-msgid "Is changeable in every payroll?"
-msgstr ""
-
-#: assets/index.js:12216
-#: assets/index.js:15502
-msgid "If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc."
-msgstr ""
-
-#: assets/index.js:12218
-#: assets/index.js:15504
-msgid "Head type"
-msgstr ""
-
-#: assets/index.js:12252
-#: assets/index.js:15538
-msgid "If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc."
-msgstr ""
-
-#: assets/index.js:12254
-#: assets/index.js:15540
-msgid "Is personal savings?"
 msgstr ""
 
 #: assets/index.js:12273
 #: assets/index.js:15559
+msgid "If you want to add this head as percentage, please check this box."
+msgstr ""
+
+#: assets/index.js:12275
+#: assets/index.js:15561
+msgid "Is changeable in every payroll?"
+msgstr ""
+
+#: assets/index.js:12303
+#: assets/index.js:15589
+msgid "If you want to change this head amount in every payroll, please check this box. Eg: Bonus, Overtime, TA/DA, etc."
+msgstr ""
+
+#: assets/index.js:12305
+#: assets/index.js:15591
+msgid "Head type"
+msgstr ""
+
+#: assets/index.js:12339
+#: assets/index.js:15625
+msgid "If this head is taxable, then check this. Eg: Basic, HRA, etc. Non-taxable: Mobile allowance, reimbursement, etc."
+msgstr ""
+
+#: assets/index.js:12341
+#: assets/index.js:15627
+msgid "Is personal savings?"
+msgstr ""
+
+#: assets/index.js:12360
+#: assets/index.js:15646
 msgid "If this is a personal savings, then check this. Eg: PF, Gratuity, etc."
 msgstr ""
 
-#: assets/index.js:12286
-#: assets/index.js:15572
+#: assets/index.js:12373
+#: assets/index.js:15659
 msgid "Add"
 msgstr ""
 
-#: assets/index.js:12468
-#: assets/index.js:13908
+#: assets/index.js:12555
+#: assets/index.js:13995
 msgid "Something went wrong while fetching payroll"
 msgstr ""
 
-#: assets/index.js:12480
-#: assets/index.js:12552
-#: assets/index.js:14795
+#: assets/index.js:12567
+#: assets/index.js:12639
+#: assets/index.js:14882
 msgid "Please select a date"
 msgstr ""
 
-#: assets/index.js:12513
-#: assets/index.js:12521
-#: assets/index.js:13647
-#: assets/index.js:13655
-#: assets/index.js:14003
-#: assets/index.js:14084
-#: assets/index.js:14165
-#: assets/index.js:14168
-#: assets/index.js:14835
-#: assets/index.js:14843
-#: assets/index.js:14976
-#: assets/index.js:14979
+#: assets/index.js:12600
+#: assets/index.js:12608
+#: assets/index.js:13734
+#: assets/index.js:13742
+#: assets/index.js:14090
+#: assets/index.js:14171
+#: assets/index.js:14252
+#: assets/index.js:14255
+#: assets/index.js:14922
+#: assets/index.js:14930
+#: assets/index.js:15063
+#: assets/index.js:15066
 msgid "All"
 msgstr ""
 
-#: assets/index.js:12580
+#: assets/index.js:12667
 msgid "Payroll saved successfully"
 msgstr ""
 
-#: assets/index.js:12597
+#: assets/index.js:12684
 msgid "Turn on edit mode (PRO)"
 msgstr ""
 
-#: assets/index.js:12640
-#: assets/index.js:14890
+#: assets/index.js:12727
+#: assets/index.js:14977
 msgid "Pay month"
 msgstr ""
 
-#: assets/index.js:12650
+#: assets/index.js:12737
 msgid "Generate"
 msgstr ""
 
-#: assets/index.js:12658
-#: assets/index.js:13087
+#: assets/index.js:12745
+#: assets/index.js:13174
 msgid "Import Variable Salary"
 msgstr ""
 
-#: assets/index.js:12677
-#: assets/index.js:14109
-#: assets/index.js:14547
-#: assets/index.js:14920
+#: assets/index.js:12764
+#: assets/index.js:14196
+#: assets/index.js:14634
+#: assets/index.js:15007
 msgid "Sl. No."
 msgstr ""
 
-#: assets/index.js:12682
-#: assets/index.js:14114
-#: assets/index.js:14552
-#: assets/index.js:14925
+#: assets/index.js:12769
+#: assets/index.js:14201
+#: assets/index.js:14639
+#: assets/index.js:15012
 msgid "Employee Name"
 msgstr ""
 
-#: assets/index.js:12691
-#: assets/index.js:13308
+#: assets/index.js:12778
+#: assets/index.js:13395
 msgid "Earnings"
 msgstr ""
 
-#: assets/index.js:12694
-#: assets/index.js:14126
-#: assets/index.js:14560
-#: assets/index.js:14937
+#: assets/index.js:12781
+#: assets/index.js:14213
+#: assets/index.js:14647
+#: assets/index.js:15024
 msgid "Total Earnings"
 msgstr ""
 
-#: assets/index.js:12697
-#: assets/index.js:14129
-#: assets/index.js:14563
-#: assets/index.js:14940
+#: assets/index.js:12784
+#: assets/index.js:14216
+#: assets/index.js:14650
+#: assets/index.js:15027
 msgid "Deductions"
 msgstr ""
 
-#: assets/index.js:12700
-#: assets/index.js:14132
-#: assets/index.js:14566
-#: assets/index.js:14943
+#: assets/index.js:12787
+#: assets/index.js:14219
+#: assets/index.js:14653
+#: assets/index.js:15030
 msgid "Total Deductions"
 msgstr ""
 
-#: assets/index.js:12703
-#: assets/index.js:14135
-#: assets/index.js:14569
-#: assets/index.js:14946
+#: assets/index.js:12790
+#: assets/index.js:14222
+#: assets/index.js:14656
+#: assets/index.js:15033
 msgid "Net Payable"
 msgstr ""
 
-#: assets/index.js:12706
-#: assets/index.js:14138
-#: assets/index.js:14572
-#: assets/index.js:14949
+#: assets/index.js:12793
+#: assets/index.js:14225
+#: assets/index.js:14659
+#: assets/index.js:15036
 msgid "Non Taxable"
 msgstr ""
 
-#: assets/index.js:12709
-#: assets/index.js:14141
-#: assets/index.js:14575
-#: assets/index.js:14952
+#: assets/index.js:12796
+#: assets/index.js:14228
+#: assets/index.js:14662
+#: assets/index.js:15039
 msgid "Total Payable"
 msgstr ""
 
-#: assets/index.js:12812
-#: assets/index.js:14196
-#: assets/index.js:14628
-#: assets/index.js:15007
+#: assets/index.js:12899
+#: assets/index.js:14283
+#: assets/index.js:14715
+#: assets/index.js:15094
 msgid "Total"
 msgstr ""
 
-#: assets/index.js:12853
+#: assets/index.js:12940
 msgid "Submitting..."
 msgstr ""
 
-#: assets/index.js:12854
-#: assets/index.js:14241
-#: assets/index.js:14653
-#: assets/index.js:15052
+#: assets/index.js:12941
+#: assets/index.js:14328
+#: assets/index.js:14740
+#: assets/index.js:15139
 msgid "Payroll Sheet"
 msgstr ""
 
-#: assets/index.js:12855
-#: assets/index.js:14242
-#: assets/index.js:14654
-#: assets/index.js:15053
+#: assets/index.js:12942
+#: assets/index.js:14329
+#: assets/index.js:14741
+#: assets/index.js:15140
 msgid "Select department or designation and pay month to view payroll list"
 msgstr ""
 
-#: assets/index.js:13076
+#: assets/index.js:13163
 msgid "Please upload a file first."
 msgstr ""
 
-#: assets/index.js:13093
+#: assets/index.js:13180
 msgid "Import salary data in CSV or Excel format following the structure of sample file. The fields are aligned with your salary heads."
 msgstr ""
 
-#: assets/index.js:13109
+#: assets/index.js:13196
 msgid "Download sample"
 msgstr ""
 
-#: assets/index.js:13285
+#: assets/index.js:13372
 msgid "Address:"
 msgstr ""
 
-#: assets/index.js:13287
+#: assets/index.js:13374
 msgid "Phone:"
 msgstr ""
 
-#: assets/index.js:13289
+#: assets/index.js:13376
 msgid "Email:"
 msgstr ""
 
-#: assets/index.js:13291
+#: assets/index.js:13378
 msgid "Website:"
 msgstr ""
 
-#: assets/index.js:13293
+#: assets/index.js:13380
 msgid "Employee Name:"
 msgstr ""
 
-#: assets/index.js:13295
+#: assets/index.js:13382
 msgid "Employee ID:"
 msgstr ""
 
-#: assets/index.js:13297
+#: assets/index.js:13384
 msgid "Department:"
 msgstr ""
 
-#: assets/index.js:13299
+#: assets/index.js:13386
 msgid "Designation:"
 msgstr ""
 
-#: assets/index.js:13301
+#: assets/index.js:13388
 msgid "Pay Slip for:"
 msgstr ""
 
-#: assets/index.js:13312
+#: assets/index.js:13399
 msgid "Description"
 msgstr ""
 
-#: assets/index.js:13344
+#: assets/index.js:13431
 msgid "Basic Salary:"
 msgstr ""
 
-#: assets/index.js:13348
+#: assets/index.js:13435
 msgid "Total Earnings:"
 msgstr ""
 
-#: assets/index.js:13352
+#: assets/index.js:13439
 msgid "Total Deductions:"
 msgstr ""
 
-#: assets/index.js:13356
+#: assets/index.js:13443
 msgid "Net Pay:"
 msgstr ""
 
-#: assets/index.js:13448
+#: assets/index.js:13535
 msgid "Salary date"
 msgstr ""
 
-#: assets/index.js:13466
-#: assets/index.js:13709
+#: assets/index.js:13553
+#: assets/index.js:13796
 msgid "View"
 msgstr ""
 
-#: assets/index.js:13479
+#: assets/index.js:13566
 msgid "Payslip List"
 msgstr ""
 
-#: assets/index.js:13623
+#: assets/index.js:13710
 msgid "Payroll updated successfully"
 msgstr ""
 
-#: assets/index.js:13623
-#: assets/index.js:13626
+#: assets/index.js:13710
+#: assets/index.js:13713
 msgid "Something went wrong while updating payroll"
 msgstr ""
 
-#: assets/index.js:13637
+#: assets/index.js:13724
 msgid "Payroll date"
 msgstr ""
 
-#: assets/index.js:13660
+#: assets/index.js:13747
 msgid "Prepared by"
 msgstr ""
 
-#: assets/index.js:13666
+#: assets/index.js:13753
 msgid "Total salary"
 msgstr ""
 
-#: assets/index.js:13679
+#: assets/index.js:13766
 msgid "Approved"
 msgstr ""
 
-#: assets/index.js:13685
+#: assets/index.js:13772
 msgid "Rejected"
 msgstr ""
 
-#: assets/index.js:13691
+#: assets/index.js:13778
 msgid "Cancelled"
 msgstr ""
 
-#: assets/index.js:13697
+#: assets/index.js:13784
 msgid "Pending"
 msgstr ""
 
-#: assets/index.js:13719
+#: assets/index.js:13806
 msgid "Approve"
 msgstr ""
 
-#: assets/index.js:13724
+#: assets/index.js:13811
 msgid "Reject"
 msgstr ""
 
-#: assets/index.js:13729
+#: assets/index.js:13816
 msgid "Cancel"
 msgstr ""
 
-#: assets/index.js:13746
+#: assets/index.js:13833
 msgid "Payroll List"
 msgstr ""
 
-#: assets/index.js:13754
+#: assets/index.js:13841
 msgid "Generate Payroll"
 msgstr ""
 
-#: assets/index.js:13997
+#: assets/index.js:14084
 msgid "Employee name"
 msgstr ""
 
-#: assets/index.js:13997
+#: assets/index.js:14084
 msgid "Total Salary"
 msgstr ""
 
-#: assets/index.js:14080
-#: assets/index.js:14910
+#: assets/index.js:14167
+#: assets/index.js:14997
 msgid "Payroll for : "
 msgstr ""
 
-#: assets/index.js:14103
+#: assets/index.js:14190
 msgid "Export"
 msgstr ""
 
-#: assets/index.js:14240
-#: assets/index.js:15051
+#: assets/index.js:14327
+#: assets/index.js:15138
 msgid "Prepared By: "
 msgstr ""
 
-#: assets/index.js:14324
+#: assets/index.js:14411
 msgid "My Profile"
 msgstr ""
 
-#: assets/index.js:14330
+#: assets/index.js:14417
 msgid "My Payroll Ledger"
 msgstr ""
 
-#: assets/index.js:14450
+#: assets/index.js:14537
 msgid "Please enter employee id"
 msgstr ""
 
-#: assets/index.js:14526
-#: assets/index.js:14899
+#: assets/index.js:14613
+#: assets/index.js:14986
 msgid "Show report"
 msgstr ""
 
-#: assets/index.js:14537
+#: assets/index.js:14624
 msgid "Payroll Ledger %s"
 msgstr ""
 
-#: assets/index.js:14549
+#: assets/index.js:14636
 msgid "Pay Month"
 msgstr ""
 
-#: assets/index.js:15305
+#: assets/index.js:15392
 msgid "Salary head status updated successfully"
 msgstr ""
 
-#: assets/index.js:15361
+#: assets/index.js:15448
 msgid "Successfully updated salary head"
 msgstr ""
 
-#: assets/index.js:15364
+#: assets/index.js:15451
 msgid "Something went wrong while updating salary head"
 msgstr ""
 
-#: assets/index.js:15408
+#: assets/index.js:15495
 msgid "Salary Head list"
 msgstr ""
 
-#: assets/index.js:15416
-#: assets/index.js:15418
+#: assets/index.js:15503
+#: assets/index.js:15505
 msgid "Add salary head"
 msgstr ""
 
-#: assets/index.js:15419
+#: assets/index.js:15506
 msgid "No need to add Basic as salary head. It will be added automatically."
 msgstr ""
 
-#: assets/index.js:15890
+#: assets/index.js:15954
 msgid "Close sidebar"
 msgstr ""
 
-#: assets/index.js:15927
+#: assets/index.js:15991
 msgid "Open sidebar"
 msgstr ""

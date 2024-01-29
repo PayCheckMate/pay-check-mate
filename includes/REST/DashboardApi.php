@@ -140,7 +140,9 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
         include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
         include_once ABSPATH . 'wp-admin/includes/file.php';
-        update_option( 'pay_check_mate_onboarding', PAY_CHECK_MATE_PLUGIN_VERSION );
+        include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+        update_option( 'pay_check_mate_onboarding', false );
 
         $plugin = $request->get_param( 'plugin' );
         // Check if plugin is already installed.
@@ -190,7 +192,7 @@ class DashboardApi extends RestController implements HookAbleApiInterface {
      * @return void
      */
     public function cancel_required_plugins() {
-        update_option( 'pay_check_mate_onboarding', PAY_CHECK_MATE_PLUGIN_VERSION );
+        update_option( 'pay_check_mate_onboarding', false );
     }
 
     /**

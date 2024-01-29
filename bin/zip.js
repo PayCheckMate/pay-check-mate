@@ -8,7 +8,7 @@ if (!fs.existsSync(buildFolder)) {
   fs.mkdirSync(buildFolder);
 }
 
-const outputFile = `./${packageJson.name}-v${packageJson.version}.zip`;
+const outputFile = `./${packageJson.name}.zip`;
 
 const archive = archiver('zip', { zlib: { level: 9 }});
 const stream = fs.createWriteStream(outputFile);

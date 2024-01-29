@@ -80,7 +80,7 @@ export const InstallPlugins = () => {
                                         <Button
                                             type="button"
                                             className="mr-2 btn-primary-gray"
-                                            onClick={() => installPlugin('custom-role-creator')}
+                                            onClick={() => cancelInstall()}
                                         >
                                             {__('Finish Onboarding', 'pay-check-mate')}
                                         </Button>
