@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-29T18:16:09+00:00\n"
+"POT-Creation-Date: 2024-01-29T19:16:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: pay-check-mate\n"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "PayCheckMate Admin"
 msgstr ""
 
-#: includes/Hooks/AdminMenu.php:76
+#: includes/Hooks/AdminMenu.php:85
 msgctxt "verb"
 msgid "Upgrade to Pro"
 msgstr ""
@@ -123,15 +123,15 @@ msgstr ""
 msgid "Fillable are not defined for this form request."
 msgstr ""
 
-#: includes/REST/DashboardApi.php:151
+#: includes/REST/DashboardApi.php:153
 msgid "Plugin already installed"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:180
+#: includes/REST/DashboardApi.php:182
 msgid "Plugin installed successfully"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:210
+#: includes/REST/DashboardApi.php:212
 #: includes/REST/DepartmentApi.php:57
 #: includes/REST/DepartmentApi.php:69
 #: includes/REST/DepartmentApi.php:90
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Unique identifier for the object."
 msgstr ""
 
-#: includes/REST/DashboardApi.php:216
+#: includes/REST/DashboardApi.php:218
 #: includes/REST/EmployeeApi.php:532
 #: assets/index.js:9623
 #: assets/index.js:12766
@@ -158,69 +158,69 @@ msgstr ""
 msgid "Employee ID"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:221
-#: includes/REST/DashboardApi.php:231
+#: includes/REST/DashboardApi.php:223
+#: includes/REST/DashboardApi.php:233
 #: includes/REST/EmployeeApi.php:537
 msgid "Department ID"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:226
-#: includes/REST/DashboardApi.php:236
+#: includes/REST/DashboardApi.php:228
+#: includes/REST/DashboardApi.php:238
 #: includes/REST/EmployeeApi.php:542
 msgid "Designation ID"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:241
+#: includes/REST/DashboardApi.php:243
 #: includes/REST/EmployeeApi.php:557
 msgid "Employee First Name"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:246
+#: includes/REST/DashboardApi.php:248
 #: includes/REST/EmployeeApi.php:562
 msgid "Employee Last Name"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:251
+#: includes/REST/DashboardApi.php:253
 #: includes/REST/EmployeeApi.php:567
 msgid "Employee Email"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:256
+#: includes/REST/DashboardApi.php:258
 #: includes/REST/EmployeeApi.php:572
 msgid "Employee Phone Number"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:260
+#: includes/REST/DashboardApi.php:262
 #: includes/REST/EmployeeApi.php:588
 msgid "Employee Address"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:264
+#: includes/REST/DashboardApi.php:266
 #: includes/REST/EmployeeApi.php:592
 msgid "Employee Joining Date"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:270
+#: includes/REST/DashboardApi.php:272
 #: includes/REST/EmployeeApi.php:598
 msgid "Employee Joining Date String"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:276
+#: includes/REST/DashboardApi.php:278
 #: includes/REST/EmployeeApi.php:604
 msgid "Employee Regine Date"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:281
+#: includes/REST/DashboardApi.php:283
 #: includes/REST/EmployeeApi.php:609
 msgid "Employee Status"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:285
+#: includes/REST/DashboardApi.php:287
 #: includes/REST/EmployeeApi.php:613
 msgid "Employee Created On"
 msgstr ""
 
-#: includes/REST/DashboardApi.php:290
+#: includes/REST/DashboardApi.php:292
 #: includes/REST/EmployeeApi.php:618
 msgid "Employee Updated At"
 msgstr ""
