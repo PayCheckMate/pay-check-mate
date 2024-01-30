@@ -20,7 +20,7 @@ import {applyFilters} from "../../Helpers/Hooks";
 import {HOC} from "../../Components/HOC";
 
 export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=true}: { employeeId?: string, pageTitle?: string, showEmployeeSearch: boolean }) => {
-    const {loading} = useFetchApi('');
+    const {loading} = useFetchApi('', {}, false);
 
     const [searchedEmployeeId, setSearchedEmployeeId] = useState(employeeId);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);

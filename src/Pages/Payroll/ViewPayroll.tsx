@@ -22,7 +22,7 @@ import {UserCapNames} from "../../Types/UserType";
 
 const ViewPayroll = () => {
     const payrollId = useParams().id;
-    const {loading, makeGetRequest,} = useFetchApi('');
+    const {loading, makeGetRequest,} = useFetchApi('', {}, false);
 
     const [payRoll, setPayRoll] = useState<PayrollType>({} as PayrollType);
     const [tableData, setTableData] = useState<EmployeeSalary[]>([]);

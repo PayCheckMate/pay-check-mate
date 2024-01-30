@@ -27,7 +27,7 @@ import {HOC} from "../../Components/HOC";
 
 export const PayrollRegister = () => {
     const payrollId = useParams().id;
-    const {loading,makePostRequest} = useFetchApi('');
+    const {loading} = useFetchApi('', {}, false);
 
     const [selectedDesignation, setSelectedDesignation] = useState<SelectBoxType>({} as SelectBoxType);
     const [selectedDepartment, setSelectedDepartment] = useState<SelectBoxType>({} as SelectBoxType);

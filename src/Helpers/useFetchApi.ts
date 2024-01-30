@@ -98,7 +98,6 @@ const useFetchApi = <Model extends object>(url: string, initialFilters?: object,
 
     useEffect(() => {
         if (!run) return;
-        if (!url) return;
 
         setLoading(true);
         const queryParam = new URLSearchParams(filterObject as URLSearchParams).toString();

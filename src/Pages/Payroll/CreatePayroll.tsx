@@ -33,7 +33,8 @@ import {HOC} from "../../Components/HOC";
 const CreatePayroll = () => {
     const payrollId = useParams().id;
     const navigate = useNavigate();
-    const {loading, makePostRequest, makeGetRequest} = useFetchApi('');
+    const [loading, setLoading] = useState(false)
+    const {makeGetRequest} = useFetchApi('', {}, false);
     let PayrollTableData = null;
     let TableData: EmployeeSalary[] = [];
     if (payrollId) {
@@ -89,6 +90,7 @@ const CreatePayroll = () => {
 
     const handleFilter = (e: any) => {
         e.preventDefault();
+        setLoading(true)
         setIsSubmitting(false)
         try {
             if (!payDate) {
@@ -111,6 +113,8 @@ const CreatePayroll = () => {
             }).catch(error => {
                 const errorMessage = error.data ? error.data : error.message;
                 toast.error(errorMessage);
+            }).finally(() => {
+                setLoading(false)
             })
         } catch (error) {
             console.log(error, 'error'); // Handle the error accordingly
