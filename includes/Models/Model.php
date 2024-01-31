@@ -572,8 +572,10 @@ class Model implements ModelInterface {
             return new WP_Error( 'db_insert_error', __( 'Could not insert row into the database table.', 'pay-check-mate' ) );
         }
 
-        // Clear cache.
-        wp_cache_flush_group( $this->cache_group );
+        if ( wp_cache_supports( 'flush_group' ) ) {
+            // Clear cache.
+            wp_cache_flush_group( $this->cache_group );
+        }
 
         return $this->find( $last_id );
     }
@@ -607,8 +609,10 @@ class Model implements ModelInterface {
             ],
         )
         ) {
-            // Clear cache.
-            wp_cache_flush_group( $this->cache_group );
+            if ( wp_cache_supports( 'flush_group' ) ) {
+                // Clear cache.
+                wp_cache_flush_group( $this->cache_group );
+            }
 
             return $this->find( $id );
         }
@@ -642,8 +646,10 @@ class Model implements ModelInterface {
             ],
         )
         ) {
-            // Clear cache.
-            wp_cache_flush_group( $this->cache_group );
+            if ( wp_cache_supports( 'flush_group' ) ) {
+                // Clear cache.
+                wp_cache_flush_group( $this->cache_group );
+            }
 
             return $this->find_by( $find_by, [] )[0];
         }
@@ -674,8 +680,10 @@ class Model implements ModelInterface {
             ],
         )
         ) {
-            // Clear cache.
-            wp_cache_flush_group( $this->cache_group );
+            if ( wp_cache_supports( 'flush_group' ) ) {
+                // Clear cache.
+                wp_cache_flush_group( $this->cache_group );
+            }
 
             return $wpdb->rows_affected;
         }

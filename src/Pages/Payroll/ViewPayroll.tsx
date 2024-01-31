@@ -112,7 +112,7 @@ const ViewPayroll = () => {
                         margin-top: 1rem;
                     }
                     .prepared_by{
-                        width: 20%;
+                        width: 25%;
                         margin-top: 1rem;
                     }
                     .text-right {
@@ -258,7 +258,7 @@ const ViewPayroll = () => {
                         <TableSkeleton rows={10} columns={4} />
                     ) : (
                         <HOC role={UserCapNames.pay_check_mate_view_payroll_details}>
-                            <div id='printable'>
+                            <div id="printable">
                                 <div className="flex justify-between">
                                     <div>
                                         <div className="sm:flex-auto">
@@ -279,7 +279,10 @@ const ViewPayroll = () => {
                                         </div>
                                     </div>
                                     <div className="flex items-center no-print">
-                                        <PrinterIcon className="h-6 w-6 text-gray-500 cursor-pointer" onClick={() => handlePrint('printable')} />
+                                        <PrinterIcon
+                                            className="h-6 w-6 text-gray-500 cursor-pointer"
+                                            onClick={() => handlePrint('printable')}
+                                        />
                                         {isExportSalarySheet && (
                                             <div className="ml-6 flex justify-between gap-6">
                                                 <SelectBox
@@ -565,7 +568,7 @@ const ViewPayroll = () => {
                                                             <strong>
                                                                 {__('Remarks', 'pay-check-mate')}
                                                             </strong>:&nbsp;
-                                                            <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
+                                                            <div dangerouslySetInnerHTML={{__html: payRoll.remarks}} />
                                                         </div>
                                                     </div>
                                             </div>
@@ -575,8 +578,16 @@ const ViewPayroll = () => {
                                                     <strong className="font-bold">
                                                         {__('Prepared By: ', 'pay-check-mate')}&nbsp;
                                                     </strong>
-                                                {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
+                                                {payRoll.created_user} ({payRoll.created_user_id})
                                             </div>
+                                            {payRoll.status == 1 && (
+                                                <div className="flex">
+                                                    <strong className="font-bold">
+                                                        {__('Approved By: ', 'pay-check-mate')}&nbsp;
+                                                    </strong>
+                                                    {payRoll.approved_user} ({payRoll.approved_user_id})
+                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -590,7 +601,7 @@ const ViewPayroll = () => {
                         title={__('Payroll Sheet', 'pay-check-mate')}
                         description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                         icon={<CurrencyDollarIcon
-                            className={"w-6 h-6 text-"+red+"-600"}
+                            className={"w-6 h-6 text-" + red + "-600"}
                             aria-hidden="true"
                         />}
                     />

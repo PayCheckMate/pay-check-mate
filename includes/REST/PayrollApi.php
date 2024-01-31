@@ -142,7 +142,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     }
 
     public function get_payroll_permissions_check(): bool {
-        return current_user_can( 'pay_check_mate_view_payroll' );
+        return current_user_can( 'pay_check_mate_view_payroll_details' );
     }
 
     public function update_payroll_permissions_check(): bool {
@@ -575,25 +575,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
         $payroll_id   = $request->get_param( 'id' );
         $payroll      = new PayrollModel();
-        $payroll_args = [
-            'order'     => 'DESC',
-            'order_by'  => 'id',
-            'relations' => [
-                [
-                    'table'       => EmployeeModel::get_table(),
-                    'local_key'   => 'created_user_id',
-                    'foreign_key' => 'employee_id',
-                    'join_type'   => 'left',
-                    'fields'      => [
-                        'employee_id as prepared_by_employee_id',
-                        'first_name as prepared_by_first_name',
-                        'last_name as prepared_by_last_name',
-                    ],
-                ],
-            ],
-        ];
-
-        $payroll = $payroll->find( $payroll_id, $payroll_args );
+        $payroll = $payroll->find( $payroll_id );
 
         $args              = [
             'status'   => 1,
@@ -691,19 +673,6 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'payroll_date' => [
                     'start' => gmdate( 'Y-m-01', strtotime( $parameters['payroll_date'] ) ),
                     'end'   => gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) ),
-                ],
-            ],
-            'relations'     => [
-                [
-                    'table'       => EmployeeModel::get_table(),
-                    'local_key'   => 'created_user_id',
-                    'foreign_key' => 'employee_id',
-                    'join_type'   => 'right',
-                    'fields'      => [
-                        'employee_id as prepared_by_employee_id',
-                        'first_name as prepared_by_first_name',
-                        'last_name as prepared_by_last_name',
-                    ],
                 ],
             ],
         ];
@@ -948,9 +917,21 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Unique identifier for the employee who created the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
+                'created_user'     => [
+                    'description' => __( 'Created user name.', 'pay-check-mate' ),
+                    'type'        => 'string',
+                    'readonly'    => true,
+                    'context'     => [ 'view', 'embed' ],
+                ],
                 'approved_user_id'    => [
                     'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pay-check-mate' ),
+                    'type'        => ['integer, null'],
+                ],
+                'approved_user'    => [
+                    'description' => __( 'Approved user name.', 'pay-check-mate' ),
                     'type'        => 'string',
+                    'readonly'    => true,
+                    'context'     => [ 'view', 'embed' ],
                 ],
                 'created_on'          => [
                     'description' => __( 'The date the payroll was created.', 'pay-check-mate' ),

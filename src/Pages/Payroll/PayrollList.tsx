@@ -83,7 +83,7 @@ export const PayrollList = () => {
             title: __('Prepared by', 'pay-check-mate'), dataIndex: 'prepared_by',
             render: (text: string, record: PayrollType) => {
                 return (
-                    <span>{record.created_user_id}</span>
+                    <span>{record.created_user}</span>
                 )
             }
         },

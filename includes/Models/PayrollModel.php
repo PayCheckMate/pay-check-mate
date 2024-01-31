@@ -109,4 +109,40 @@ class PayrollModel extends Model {
 
         return $wpdb->get_results( $sql, ARRAY_A );
     }
+
+    /**
+     * Get crated user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int $user_id
+     *
+     * @return array|void
+     */
+    public function get_created_user_id( int $user_id ) {
+        if ( ! empty( $user_id ) ) {
+            return [
+                'created_user_id' => $user_id,
+                'created_user'    => get_user_by( 'ID', $user_id )->display_name,
+            ];
+        }
+    }
+
+    /**
+     * Get approved user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int|null $user_id
+     *
+     * @return array|void
+     */
+    public function get_approved_user_id( ?int $user_id ) {
+        if ( ! empty( $user_id ) ) {
+            return [
+                'approved_user_id' => $user_id,
+                'approved_user'    => get_user_by( 'ID', $user_id )->display_name,
+            ];
+        }
+    }
 }
