@@ -126,31 +126,31 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     }
 
     public function get_payrolls_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_view_payroll_list' );
     }
 
     public function generate_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_add_payroll' );
     }
 
     public function save_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_add_payroll' );
     }
 
     public function update_payroll_sheet_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_edit_payroll' );
     }
 
     public function get_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_view_payroll' );
     }
 
     public function update_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_edit_payroll' );
     }
 
     public function delete_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_delete_payroll' );
     }
 
     /**
