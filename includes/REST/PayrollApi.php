@@ -484,7 +484,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
         }
 
         $parameters['approved_user_id'] = get_current_user_id();
-        $validated_data                = new PayrollRequest( $parameters );
+        $validated_data                 = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
             return new WP_Error(
                 400, implode( ', ', $validated_data->error ), [
@@ -573,9 +573,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object.
      */
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
-        $payroll_id   = $request->get_param( 'id' );
-        $payroll      = new PayrollModel();
-        $payroll = $payroll->find( $payroll_id );
+        $payroll_id = $request->get_param( 'id' );
+        $payroll    = new PayrollModel();
+        $payroll    = $payroll->find( $payroll_id );
 
         $args              = [
             'status'   => 1,
@@ -917,7 +917,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'description' => __( 'Unique identifier for the employee who created the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
-                'created_user'     => [
+                'created_user'        => [
                     'description' => __( 'Created user name.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'readonly'    => true,
@@ -925,9 +925,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 ],
                 'approved_user_id'    => [
                     'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pay-check-mate' ),
-                    'type'        => ['integer, null'],
+                    'type'        => [ 'integer, null' ],
                 ],
-                'approved_user'    => [
+                'approved_user'       => [
                     'description' => __( 'Approved user name.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'readonly'    => true,
