@@ -2,96 +2,119 @@
 
 use PayCheckMate\REST\PayrollApi;
 
-class PayrollApiTest extends WP_UnitTestCase
-{
+class PayrollApiTest extends WP_UnitTestCase {
 
-    private $payroll_api;
+    public function testGetPayrollsReturnsCorrectResponseWithDefaultParameters(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
 
-    public function setUp(): void
-    {
-        parent::setUp();
+        $response = $payrollApi->get_payrolls( $request );
 
-        $this->payroll_api = new PayrollApi();
-        // Create a user with the accountant role.
-        $user = $this->factory()->user->create(
-            [
-                'role' => 'pay_check_mate_accountant',
-            ]
-        );
-        do_action('rest_api_init');
-
-        // Use this user to authenticate the request.
-        wp_set_current_user($user);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->payroll_api = null;
-    }
-
-    public function test_register_api_routes()
-    {
-        global $wp_rest_server;
-
-        $wp_rest_server = new WP_REST_Server();
-
-        $this->payroll_api->register_api_routes();
-
-        $routes = $wp_rest_server->get_routes();
-        $this->assertArrayHasKey('/pay-check-mate/v1/payrolls', $routes);
-        $this->assertArrayHasKey('POST', $routes['/pay-check-mate/v1/payrolls'][1]['methods']);
-        $this->assertEquals([$this->payroll_api, 'create_payroll'], $routes['/pay-check-mate/v1/payrolls'][1]['callback']);
-        $this->assertEquals([$this->payroll_api, 'create_payroll_permissions_check'], $routes['/pay-check-mate/v1/payrolls'][1]['permission_callback']);
-        $this->assertArrayHasKey('date', $routes['/pay-check-mate/v1/payrolls'][1]['args']);
-    }
-
-    public function test_create_payroll_permissions_check()
-    {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
-        $response = $this->payroll_api->create_payroll_permissions_check($request);
-
-        $this->assertTrue($response);
-    }
-
-    public function test_create_payroll_with_valid_date()
-    {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
-        $request->set_param('date', '2023-05-31');
-
-        $response = $this->payroll_api->create_payroll($request);
-        $data = $response->get_data();
-
-        // Assert that the response is a WP_REST_Response object
         $this->assertInstanceOf( WP_REST_Response::class, $response );
-
-        // Assert that the response status is 200
         $this->assertEquals( 200, $response->get_status() );
-
-        $this->assertArrayHasKey('salary_head_types', $data);
-        $this->assertArrayHasKey('employee_salary_history', $data);
+        $this->assertIsArray( $response->get_data()->data );
     }
 
-    public function test_create_payroll_without_date()
-    {
-        $request = new WP_REST_Request('POST', '/pay-check-mate/v1/payrolls');
+    public function testGeneratePayrollReturnsErrorWhenDateIsMissing(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
 
-        $response = $this->payroll_api->create_payroll($request);
-        $data = $response->get_data();
+        $response = $payrollApi->generate_payroll( $request );
 
-        $this->assertArrayHasKey('error', $data);
-        $this->assertEquals('The "date" parameter is required.', $data['error']);
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 400, $response->get_status() );
+        $this->assertEquals( [ 'error' => 'The "date" parameter is required.' ], $response->get_data() );
     }
 
-    public function test_get_collection_params()
-    {
-        $params = $this->payroll_api->get_item_schema();
-        $this->assertArrayHasKey('date', $params['properties']);
-        $this->assertArrayHasKey('description', $params['properties']['date']);
-        $this->assertArrayHasKey('type', $params['properties']['date']);
-        $this->assertArrayHasKey('format', $params['properties']['date']);
-        $this->assertArrayHasKey('required', $params['properties']['date']);
+    public function testSavePayrollReturnsErrorWhenUnauthorized(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->save_payroll( $request );
+
+        $this->assertInstanceOf( WP_Error::class, $response );
+        $this->assertEquals( 400, $response->get_error_code() );
+        $this->assertEquals( [
+            'status' => 400,
+            'error'  => 'You are not authorized to perform this action.',
+        ], $response->get_error_data() );
     }
 
+    public function testUpdatePayrollSheetReturnsErrorWhenPayrollIdIsMissing(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->update_payroll_sheet( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 400, $response->get_status() );
+        $this->assertEquals( [ 'error' => 'Payroll ID is required.' ], $response->get_data() );
+    }
+
+    public function testGetPayrollReturnsCorrectResponseWithDefaultParameters(): void {
+        $request = new WP_REST_Request();
+        $request->set_param( 'id', 1 );
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->get_payroll( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 200, $response->get_status() );
+        $this->assertIsArray( $response->get_data() );
+    }
+
+    public function testGetPayrollReportReturnsErrorWhenDateIsMissing(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->get_payroll_report( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 400, $response->get_status() );
+        $this->assertEquals( [ 'error' => 'Payroll Date is required.' ], $response->get_data() );
+    }
+
+    public function testGetPayrollLedgerReturnsErrorWhenEmployeeIdIsMissing(): void {
+        $request    = new WP_REST_Request();
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->get_payroll_ledger( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 400, $response->get_status() );
+        $this->assertEquals( [ 'error' => 'Employee ID is required.' ], $response->get_data() );
+    }
+
+    public function testUpdatePayrollReturnsErrorWhenInvalidData(): void {
+        $request = new WP_REST_Request();
+        $request->set_param( 'id', 1 );
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->update_payroll( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 500, $response->get_status() );
+        $this->assertEquals( [ 'error' => 'Invalid data.' ], $response->get_data() );
+    }
+
+    public function testSavePayrollSavesCorrectly(): void {
+        $request = new WP_REST_Request();
+        $request->set_param( 'id', 1 );
+        $request->set_param( 'payroll_date', '2022-12-31' );
+        $request->set_param( 'designation_id', 1 );
+        $request->set_param( 'department_id', 1 );
+        $request->set_param( 'total_salary', 5000 );
+        $request->set_param( 'remarks', 'Test Remarks' );
+        $request->set_param( 'status', 1 );
+        $request->set_param( 'created_user_id', 1 );
+        $request->set_param( 'approved_user_id', 1 );
+
+        $payrollApi = new PayrollApi();
+
+        $response = $payrollApi->save_payroll( $request );
+
+        $this->assertInstanceOf( WP_REST_Response::class, $response );
+        $this->assertEquals( 200, $response->get_status() );
+        $this->assertIsArray( $response->get_data() );
+    }
 }
