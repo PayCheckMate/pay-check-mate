@@ -205,8 +205,8 @@ class Databases {
                 `total_salary` decimal(10,2) NOT NULL,
                 `remarks` text NULL,
                 `status` tinyint(1) NOT NULL DEFAULT 0,
-                `created_employee_id` bigint(20) unsigned NOT NULL,
-                `approved_employee_id` bigint(20) unsigned NULL,
+                `created_user_id` bigint(20) unsigned NOT NULL,
+                `approved_user_id` bigint(20) unsigned NULL,
                 `created_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)

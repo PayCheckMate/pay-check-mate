@@ -126,31 +126,31 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
     }
 
     public function get_payrolls_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_view_payroll_list' );
     }
 
     public function generate_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_add_payroll' );
     }
 
     public function save_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_add_payroll' );
     }
 
     public function update_payroll_sheet_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_edit_payroll' );
     }
 
     public function get_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_view_payroll_details' );
     }
 
     public function update_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_edit_payroll' );
     }
 
     public function delete_payroll_permissions_check(): bool {
-        return true;
+        return current_user_can( 'pay_check_mate_delete_payroll' );
     }
 
     /**
@@ -368,10 +368,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function save_payroll( WP_REST_Request $request ) {
         global $wpdb;
-        $parameters     = $request->get_params();
-        $employee_model = new EmployeeModel();
-        $employee       = $employee_model->get_employee_by_user_id( get_current_user_id() );
-        if ( empty( $employee->get_data() ) ) {
+        $parameters      = $request->get_params();
+        $created_user_id = get_current_user_id();
+        if ( empty( $created_user_id ) ) {
             return new WP_Error(
                 400, __( 'You are not authorized to perform this action.', 'pay-check-mate' ), [
                     'status' => 400,
@@ -380,7 +379,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             );
         }
 
-        $parameters['created_employee_id'] = $employee->get_employee_id();
+        $parameters['created_user_id'] = $created_user_id;
 
         $parameters['payroll_date'] = gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) );
 
@@ -484,11 +483,8 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             return $result;
         }
 
-        $employee                          = new EmployeeModel();
-        $parameters['created_employee_id'] = $employee->get_employee_by_user_id( get_current_user_id() );
-
-        $validated_data = new PayrollRequest( $parameters );
-
+        $parameters['approved_user_id'] = get_current_user_id();
+        $validated_data                 = new PayrollRequest( $parameters );
         if ( $validated_data->error ) {
             return new WP_Error(
                 400, implode( ', ', $validated_data->error ), [
@@ -577,27 +573,9 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @return WP_REST_Response Response object.
      */
     public function get_payroll( WP_REST_Request $request ): WP_REST_Response {
-        $payroll_id   = $request->get_param( 'id' );
-        $payroll      = new PayrollModel();
-        $payroll_args = [
-            'order'     => 'DESC',
-            'order_by'  => 'id',
-            'relations' => [
-                [
-                    'table'       => EmployeeModel::get_table(),
-                    'local_key'   => 'created_employee_id',
-                    'foreign_key' => 'employee_id',
-                    'join_type'   => 'left',
-                    'fields'      => [
-                        'employee_id as prepared_by_employee_id',
-                        'first_name as prepared_by_first_name',
-                        'last_name as prepared_by_last_name',
-                    ],
-                ],
-            ],
-        ];
-
-        $payroll = $payroll->find( $payroll_id, $payroll_args );
+        $payroll_id = $request->get_param( 'id' );
+        $payroll    = new PayrollModel();
+        $payroll    = $payroll->find( $payroll_id );
 
         $args              = [
             'status'   => 1,
@@ -695,19 +673,6 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'payroll_date' => [
                     'start' => gmdate( 'Y-m-01', strtotime( $parameters['payroll_date'] ) ),
                     'end'   => gmdate( 'Y-m-t', strtotime( $parameters['payroll_date'] ) ),
-                ],
-            ],
-            'relations'     => [
-                [
-                    'table'       => EmployeeModel::get_table(),
-                    'local_key'   => 'created_employee_id',
-                    'foreign_key' => 'employee_id',
-                    'join_type'   => 'right',
-                    'fields'      => [
-                        'employee_id as prepared_by_employee_id',
-                        'first_name as prepared_by_first_name',
-                        'last_name as prepared_by_last_name',
-                    ],
                 ],
             ],
         ];
@@ -836,13 +801,14 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             ],
         ];
 
-        $payroll_details = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
+        $payroll_details   = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
         $payroll_details   = apply_filters( 'pay_check_mate_get_payroll_ledger_response', $payroll_details, $salary_head_types, $request->get_params() );
         $salary_head_types = apply_filters( 'pay_check_mate_get_payroll_salary_head_types', $salary_head_types, $payroll_details, $request->get_params() );
 
         if ( empty( $payroll_details ) ) {
             wp_send_json_error( __( 'No payroll found.', 'pay-check-mate' ), 400 );
         }
+
         return new WP_REST_Response(
             [
                 'employee_salary_history' => $payroll_details,
@@ -863,6 +829,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      * @return \WP_REST_Response|\WP_Error
      */
     public function update_payroll( WP_REST_Request $request ) {
+        $request->set_param( 'approved_user_id', get_current_user_id() );
         $validated_data = new PayrollRequest( $request->get_params() );
         if ( ! empty( $validated_data->error ) ) {
             return new WP_Error( 500, __( 'Invalid data.', 'pay-check-mate' ), [ $validated_data->error ] );
@@ -901,13 +868,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
             'title'      => 'payroll',
             'type'       => 'object',
             'properties' => [
-                'id'                   => [
+                'id'                  => [
                     'description' => __( 'Unique identifier for the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'context'     => [ 'view', 'edit', 'embed' ],
                     'readonly'    => true,
                 ],
-                'payroll_date'         => [
+                'payroll_date'        => [
                     'description' => __( 'The date of the payroll', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
@@ -915,7 +882,7 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'readonly'    => true,
                     'context'     => [ 'view', 'embed' ],
                 ],
-                'payroll_date_string'  => [
+                'payroll_date_string' => [
                     'description' => __( 'The date of the payroll in string format', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'Y-m-d',
@@ -923,44 +890,56 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                     'readonly'    => true,
                     'context'     => [ 'view', 'embed' ],
                 ],
-                'designation_id'       => [
+                'designation_id'      => [
                     'description' => __( 'Unique identifier for the designation.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
-                'department_id'        => [
+                'department_id'       => [
                     'description' => __( 'Unique identifier for the department.', 'pay-check-mate' ),
                     'type'        => 'integer',
                     'required'    => true,
                 ],
-                'total_salary'         => [
+                'total_salary'        => [
                     'description' => __( 'Total salary for the payroll.', 'pay-check-mate' ),
                     'type'        => 'number',
                     'context'     => [ 'view', 'edit', 'embed' ],
                 ],
-                'remarks'              => [
+                'remarks'             => [
                     'description' => __( 'Remarks for the payroll.', 'pay-check-mate' ),
                     'type'        => 'string',
                 ],
-                'status'               => [
+                'status'              => [
                     'description' => __( 'Status of the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
-                'created_employee_id'  => [
+                'created_user_id'     => [
                     'description' => __( 'Unique identifier for the employee who created the payroll.', 'pay-check-mate' ),
                     'type'        => 'integer',
                 ],
-                'approved_employee_id' => [
-                    'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pay-check-mate' ),
-                    'type'        => 'integer',
+                'created_user'        => [
+                    'description' => __( 'Created user name.', 'pay-check-mate' ),
+                    'type'        => 'string',
+                    'readonly'    => true,
+                    'context'     => [ 'view', 'embed' ],
                 ],
-                'created_on'           => [
+                'approved_user_id'    => [
+                    'description' => __( 'Unique identifier for the employee who approved the payroll.', 'pay-check-mate' ),
+                    'type'        => [ 'integer, null' ],
+                ],
+                'approved_user'       => [
+                    'description' => __( 'Approved user name.', 'pay-check-mate' ),
+                    'type'        => 'string',
+                    'readonly'    => true,
+                    'context'     => [ 'view', 'embed' ],
+                ],
+                'created_on'          => [
                     'description' => __( 'The date the payroll was created.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'readonly'    => true,
                 ],
-                'updated_at'           => [
+                'updated_at'          => [
                     'description' => __( 'The date the payroll was last updated.', 'pay-check-mate' ),
                     'type'        => 'string',
                     'format'      => 'date-time',

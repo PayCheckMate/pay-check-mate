@@ -30,8 +30,6 @@ export const PayrollList = () => {
         if (!userCan(UserCapNames.pay_check_mate_approve_payroll)) return;
         if (status === payrollData.status) return;
         // @ts-ignore
-        payrollData.approved_employee_id = payCheckMatePro.currentUser.data.employee.employee_id;
-        // @ts-ignore
         const _wpnonce = payCheckMate.pay_check_mate_nonce;
         const data = {
             ...payrollData,
@@ -85,7 +83,7 @@ export const PayrollList = () => {
             title: __('Prepared by', 'pay-check-mate'), dataIndex: 'prepared_by',
             render: (text: string, record: PayrollType) => {
                 return (
-                    <span>{record.created_employee_id}</span>
+                    <span>{record.created_user}</span>
                 )
             }
         },

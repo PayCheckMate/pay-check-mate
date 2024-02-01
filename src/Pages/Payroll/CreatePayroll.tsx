@@ -224,8 +224,8 @@ const CreatePayroll = () => {
                 navigate('/payroll');
                 toast.success(__('Payroll saved successfully', 'pay-check-mate'));
             }).catch((error: any) => {
-                localStorage.removeItem('Payroll.TableData');
-                navigate('/payroll');
+                // localStorage.removeItem('Payroll.TableData');
+                // navigate('/payroll');
                 toast.error(error.message);
                 setIsSubmitting(false);
             });

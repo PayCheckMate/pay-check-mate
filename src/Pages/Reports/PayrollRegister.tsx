@@ -491,7 +491,7 @@ export const PayrollRegister = () => {
                                                                 <strong>
                                                                     {__('Remarks', 'pay-check-mate')}
                                                                 </strong>:&nbsp;
-                                                                <div dangerouslySetInnerHTML={{__html: payRoll.remarks}}/>
+                                                                <div dangerouslySetInnerHTML={{__html: payRoll.remarks}} />
                                                             </div>
                                                         </div>
                                                 </div>
@@ -501,8 +501,16 @@ export const PayrollRegister = () => {
                                                         <strong className="font-bold">
                                                             {__('Prepared By: ', 'pay-check-mate')}&nbsp;
                                                         </strong>
-                                                        {payRoll.prepared_by_first_name + ' ' + payRoll.prepared_by_last_name} ({payRoll.prepared_by_employee_id})
+                                                    {payRoll.created_user} ({payRoll.created_user_id})
                                                 </div>
+                                                    {payRoll.status == 1 && (
+                                                        <div className="flex">
+                                                        <strong className="font-bold">
+                                                            {__('Approved By: ', 'pay-check-mate')}&nbsp;
+                                                        </strong>
+                                                            {payRoll.approved_user} ({payRoll.approved_user_id})
+                                                </div>
+                                                    )}
                                             </div>
                                         </div>
                                     </div>
@@ -515,7 +523,7 @@ export const PayrollRegister = () => {
                                 title={__('Payroll Sheet', 'pay-check-mate')}
                                 description={__('Select department or designation and pay month to view payroll list', 'pay-check-mate')}
                                 icon={<CurrencyDollarIcon
-                                    className={"w-6 h-6 text-"+red+"-600"}
+                                    className={"w-6 h-6 text-" + red + "-600"}
                                     aria-hidden="true"
                                 />}
                             />

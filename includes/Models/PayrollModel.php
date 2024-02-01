@@ -9,19 +9,19 @@ class PayrollModel extends Model {
     /**
      * @var array|string[] $search_by
      */
-    protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary', 'created_employee_id' ];
+    protected static array $search_by = [ 'department_id', 'designation_id', 'payroll_date', 'total_salary', 'created_user_id' ];
 
     protected static array $columns = [
-        'department_id'        => '%d',
-        'designation_id'       => '%d',
-        'payroll_date'         => '%s',
-        'total_salary'         => '%d',
-        'remarks'              => '%s',
-        'status'               => '%d',
-        'created_employee_id'  => '%s',
-        'approved_employee_id' => '%s',
-        'created_on'           => '%s',
-        'updated_at'           => '%s',
+        'department_id'    => '%d',
+        'designation_id'   => '%d',
+        'payroll_date'     => '%s',
+        'total_salary'     => '%d',
+        'remarks'          => '%s',
+        'status'           => '%d',
+        'created_user_id'  => '%d',
+        'approved_user_id' => '%d',
+        'created_on'       => '%s',
+        'updated_at'       => '%s',
     ];
 
     /**
@@ -108,5 +108,41 @@ class PayrollModel extends Model {
         $sql = $wpdb->prepare( "SELECT * FROM %i WHERE MONTH(payroll_date) = %d AND YEAR(payroll_date) = %d AND {$except}", $this->get_table(), $month, $year );
 
         return $wpdb->get_results( $sql, ARRAY_A );
+    }
+
+    /**
+     * Get crated user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int $user_id
+     *
+     * @return array|void
+     */
+    public function get_created_user_id( int $user_id ) {
+        if ( ! empty( $user_id ) ) {
+            return [
+                'created_user_id' => $user_id,
+                'created_user'    => get_user_by( 'ID', $user_id )->display_name,
+            ];
+        }
+    }
+
+    /**
+     * Get approved user id.
+     *
+     * @since PAY_CHECK_MATE_SINCE
+     *
+     * @param int|null $user_id
+     *
+     * @return array|void
+     */
+    public function get_approved_user_id( ?int $user_id ) {
+        if ( ! empty( $user_id ) ) {
+            return [
+                'approved_user_id' => $user_id,
+                'approved_user'    => get_user_by( 'ID', $user_id )->display_name,
+            ];
+        }
     }
 }

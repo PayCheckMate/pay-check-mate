@@ -294,7 +294,6 @@ export const SalaryHeadList = () => {
                             <Modal
                                 setShowModal={setShowModal}
                                 header={__('Add salary head', 'pay-check-mate')}
-                                description={__('No need to add Basic as salary head. It will be added automatically.', 'pay-check-mate')}
                             >
                                 <div className="mt-5 md:mt-0 md:col-span-2">
                                     <form
@@ -311,6 +310,7 @@ export const SalaryHeadList = () => {
                                                 handleInputChange(e)
                                             }
                                             error={formError.head_name}
+                                            helpText={__('No need to add Basic as salary head. It will be added automatically.', 'pay-check-mate')}
                                         />
                                         <FormInput
                                             label={__('Head amount', 'pay-check-mate')}

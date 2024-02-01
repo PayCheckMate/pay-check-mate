@@ -17,6 +17,7 @@ import {useParams} from "react-router-dom";
 import {CreateDepartment} from "../../Department/CreateDepartment";
 import {CreateDesignation} from "../../Designation/CreateDesignation";
 import {applyFilters} from "../../../Helpers/Hooks";
+import {toast} from "react-toastify";
 
 type PersonalInformationPropTypes = {
     setFormData: (formData: EmployeeType) => void;
@@ -52,7 +53,7 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
     }) || defaultDepartment as SelectBoxType);
 
     const [formValues, setFormValues] = useState(initialValues as EmployeeType);
-    const [formError, setFormError] = useState({} as { [key: string]: string});
+    const [formError, setFormError] = useState({} as { [key: string]: string });
 
     // If this is new employee then set employee id.
     if (!employeeId) {
@@ -87,9 +88,13 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
     }
 
     const handleNextStep = () => {
-        const requiredFields = ['first_name', 'last_name', 'department_id', 'designation_id', 'employee_id', 'joining_date', 'email' ];
+        const requiredFields = ['first_name', 'last_name', 'department_id', 'designation_id', 'employee_id', 'joining_date', 'email'];
         const errors = validateRequiredFields(formValues, requiredFields, setFormError);
         if (Object.keys(errors).length > 0) {
+            const error_text = __('Please fill all required fields- ', 'pay-check-mate') + Object.keys(errors).map((key: string) => {
+                return key.replace('_', ' ');
+            }).join(', ');
+            toast.error(error_text);
             return;
         }
         nextStep();
@@ -162,7 +167,10 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     }}
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
-                                    <span onClick={() => setShowDepartmentModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
+                                    <span
+                                        onClick={() => setShowDepartmentModal(true)}
+                                        className={"font-medium text-" + indigo + "-600 hover:text-" + indigo + "-500 cursor-pointer"}
+                                    >
                                         {__('Create a new department', 'pay-check-mate')}
                                     </span>
                                 </div>
@@ -180,7 +188,10 @@ export const PersonalInformation = ({setFormData, initialValues = {} as Employee
                                     }}
                                 />
                                 <div className="mt-1 text-sm text-gray-500">
-                                    <span onClick={() => setShowDesignationModal(true)} className={"font-medium text-"+indigo+"-600 hover:text-"+indigo+"-500 cursor-pointer"}>
+                                    <span
+                                        onClick={() => setShowDesignationModal(true)}
+                                        className={"font-medium text-" + indigo + "-600 hover:text-" + indigo + "-500 cursor-pointer"}
+                                    >
                                         {__('Create a new designation', 'pay-check-mate')}
                                     </span>
                                 </div>

@@ -1,9 +1,7 @@
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {__} from "@wordpress/i18n";
-import {SalaryHeadType, SelectBoxType} from "../../../Types/SalaryHeadType";
-import {Button} from "../../../Components/Button";
+import {SalaryHeadType} from "../../../Types/SalaryHeadType";
 import {useState} from "react";
-import useFetchApi from "../../../Helpers/useFetchApi";
 import {useEffect} from "@wordpress/element";
 import {DesignationType} from "../../../Types/DesignationType";
 import {DepartmentType} from "../../../Types/DepartmentType";

@@ -248,6 +248,10 @@ export const AddEmployee = () => {
         const requiredFields = ['gross_salary', 'basic_salary', 'active_from'];
         const errors = validateRequiredFields(salaryInformation, requiredFields, setSalaryFormError);
         if (Object.keys(errors).length > 0) {
+            const error_text = __('Please fill all required fields- ', 'pay-check-mate') + Object.keys(errors).map((key: string) => {
+                return key.replace('_', ' ');
+            }).join(', ');
+            toast.error(error_text);
             return;
         }
         setStep(3)
@@ -348,13 +352,16 @@ export const AddEmployee = () => {
                                             {!error && (
                                                 <div className="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                                                     <>
-                                                        <h2 className="text-xl font-medium">
+                                                        <h2 className="text-lg font-medium">
                                                             {__('User Roles:', 'pay-check-mate')}
                                                         </h2>
                                                         <div className="grid grid-cols-3 gap-4">
                                                             {Object.keys(PayCheckMateUserRoles).length > 0 && Object.keys(PayCheckMateUserRoles).map((role: any) => {
-                                                                return (
-                                                                    <div className="flex items-center" key={role}>
+                                                                    return (
+                                                                        <div
+                                                                            className="flex items-center"
+                                                                            key={role}
+                                                                        >
                                                                         <input
                                                                             key={`role-${role}`}
                                                                             type="checkbox"
@@ -420,8 +427,8 @@ export const AddEmployee = () => {
                                 </>
                             )}
                         </form>
-                    </Card>
-                </HOC>
+                                        </Card>
+                                        </HOC>
             )}
         </>
     )

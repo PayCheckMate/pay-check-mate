@@ -7,13 +7,12 @@ export interface PayrollType {
     payroll_date_string: string;
     remarks: string;
     status: number;
-    created_employee_id: number;
-    approved_employee_id: number;
+    created_user_id: number;
+    approved_user_id: number;
     created_on: string;
     updated_at: string;
-    prepared_by_first_name: string;
-    prepared_by_last_name: string;
-    prepared_by_employee_id: number;
+    created_user: string;
+    approved_user: string;
 }
 
 export enum PayrollStatus {
