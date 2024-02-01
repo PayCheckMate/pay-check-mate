@@ -47,7 +47,10 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
             }
             const data = {
                 employee_id: searchedEmployeeId,
+                start_date: dateBetween.startDate,
+                end_date: dateBetween.endDate
             }
+
             apiFetch({
                 path: '/pay-check-mate/v1/payrolls/payroll-ledger',
                 method: 'POST',
@@ -118,6 +121,13 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
     const totalPayableClass = applyFilters('pay_check_mate.total_payable_class', '')
     let red = applyFilters('pay_check_mate.red', 'gray');
 
+    // For payroll ledger date between
+    const [dateBetween, setDateBetween] = useState({
+        startDate: '',
+        endDate: ''
+    })
+    const payroll_ledger_date_between = applyFilters('pay_check_mate.payroll_ledger_date_between', '', dateBetween, setDateBetween);
+
     return (
         <>
             {!userCan(UserCapNames.pay_check_mate_view_payroll_details) ? (
@@ -133,17 +143,16 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                                 onSubmit={handleFilter}
                             >
                                 <div className="grid grid-cols-4 gap-4">
-                                    <div>
-                                        <FormInput
-                                            type="text"
-                                            className="mt-2"
-                                            label={__('Employee ID', 'pay-check-mate')}
-                                            name="employee_id"
-                                            id="employee_id"
-                                            value={searchedEmployeeId}
-                                            onChange={(e) => setSearchedEmployeeId(e.target.value)}
-                                        />
-                                    </div>
+                                    <FormInput
+                                        type="text"
+                                        className="mt-2"
+                                        label={__('Employee ID', 'pay-check-mate')}
+                                        name="employee_id"
+                                        id="employee_id"
+                                        value={searchedEmployeeId}
+                                        onChange={(e) => setSearchedEmployeeId(e.target.value)}
+                                    />
+                                    {payroll_ledger_date_between}
                                     <div className="flex items-end">
                                         <Button
                                             type="submit"
@@ -160,17 +169,17 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                             {loading ? (
                                 <TableSkeleton rows={10} columns={4} />
                             ) : (
-                                <div id='printable'>
-                                    <div className="flex justify-between">
-                                        <div>
-                                            <div className="sm:flex-auto">
-                                                <h1 className="text-base font-semibold leading-6 text-gray-900">
-                                                    {pageTitle ? pageTitle : __('Payroll Ledger %s', 'pay-check-mate').replace('%s', searchedEmployeeId)}
-                                                </h1>
+                                <div id="printable">
+                                    <div className="flex justify-end no-print">
+                                        <PrintButton onClick={() => handlePrint('printable')} />
+                                    </div>
+                                    <div>
+                                        <div className="flex justify-center">
+                                            <div className="w-1/2">
+                                                <h2 className="text-center text-lg font-medium text-gray-900 title-font mb-2">
+                                                    {pageTitle ? pageTitle : __('Payroll Ledger for %s', 'pay-check-mate').replace('%s', searchedEmployeeId)}
+                                                </h2>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center no-print">
-                                            <PrintButton onClick={() => handlePrint('printable')} />
                                         </div>
                                     </div>
                                     <div className="payroll-table-container">

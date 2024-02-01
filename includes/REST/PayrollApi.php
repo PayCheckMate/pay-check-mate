@@ -747,6 +747,12 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
      */
     public function get_payroll_ledger( WP_REST_Request $request ): WP_REST_Response {
         $employee_id = $request->get_param( 'employee_id' );
+        $start_date  = $request->get_param( 'start_date' );
+        $end_date    = $request->get_param( 'end_date' );
+        if ( ! empty( $start_date ) && empty( $end_date ) ) {
+            // Set end date to current month's last date
+            $end_date = gmdate( 'Y-m-t' );
+        }
         if ( ! isset( $employee_id ) ) {
             wp_send_json_error( __( 'Employee ID is required.', 'pay-check-mate' ) );
         }
@@ -800,6 +806,13 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 ],
             ],
         ];
+
+        if ( ! empty( $start_date ) && ! empty( $end_date ) ) {
+            $args['relations'][1]['where_between']['payroll_date'] = [
+                'start' => gmdate( 'Y-m-01', strtotime( $start_date ) ),
+                'end'   => gmdate( 'Y-m-t', strtotime( $end_date ) ),
+            ];
+        }
 
         $payroll_details   = $payroll_details->all( $args, [ '*', 'id as payroll_details_id' ], $salary_head_types );
         $payroll_details   = apply_filters( 'pay_check_mate_get_payroll_ledger_response', $payroll_details, $salary_head_types, $request->get_params() );
@@ -992,6 +1005,16 @@ class PayrollApi extends RestController implements HookAbleApiInterface {
                 'description' => __( 'Unique identifier for the employee.', 'pay-check-mate' ),
                 'type'        => 'string',
                 'required'    => true,
+            ],
+            'start_date'  => [
+                'description' => __( 'The start date of the payroll', 'pay-check-mate' ),
+                'type'        => 'string',
+                'format'      => 'Y-m',
+            ],
+            'end_date'    => [
+                'description' => __( 'The end date of the payroll', 'pay-check-mate' ),
+                'type'        => 'string',
+                'format'      => 'Y-m',
             ],
         ];
     }
