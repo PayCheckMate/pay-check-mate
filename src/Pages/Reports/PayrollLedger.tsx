@@ -1,5 +1,5 @@
 import {useEffect, useState} from "@wordpress/element";
-import {EmployeeSalary, SalaryHeadsResponseType, SalaryResponseType, SelectBoxType,} from "../../Types/SalaryHeadType";
+import {EmployeeSalary, SalaryHeadsResponseType} from "../../Types/SalaryHeadType";
 import '../../css/table.scss'
 import useFetchApi from "../../Helpers/useFetchApi";
 import TableSkeleton from "../../Components/TableSkeleton";
@@ -35,6 +35,12 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
             handleFilter({preventDefault: () => {}})
         }
     }, [employeeId]);
+
+    // For payroll ledger date between
+    const [dateBetween, setDateBetween] = useState({
+        startDate: '',
+        endDate: new Date().toISOString().slice(0, 7)
+    })
     const handleFilter = (e: any) => {
         e.preventDefault();
         try {
@@ -44,6 +50,13 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                     autoClose: 3000
                 });
                 return;
+            }
+            if (dateBetween.startDate && !dateBetween.endDate) {
+                setDateBetween({
+                    ...dateBetween,
+                    // Set current month like YYYY-MM as end date
+                    endDate: new Date().toISOString().slice(0, 7)
+                })
             }
             const data = {
                 employee_id: searchedEmployeeId,
@@ -122,10 +135,6 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
     let red = applyFilters('pay_check_mate.red', 'gray');
 
     // For payroll ledger date between
-    const [dateBetween, setDateBetween] = useState({
-        startDate: '',
-        endDate: ''
-    })
     const payroll_ledger_date_between = applyFilters('pay_check_mate.payroll_ledger_date_between', '', dateBetween, setDateBetween);
 
     return (
@@ -179,6 +188,19 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                                                 <h2 className="text-center text-lg font-medium text-gray-900 title-font mb-2">
                                                     {pageTitle ? pageTitle : __('Payroll Ledger for %s', 'pay-check-mate').replace('%s', searchedEmployeeId)}
                                                 </h2>
+                                                {dateBetween.startDate && dateBetween.endDate && (
+                                                    <p className="text-center text-gray-900 title-font mb-2">
+                                                        {__('From %s to %s', 'pay-check-mate').replace('%s', /*@ts-ignore*/
+                                                            new Date(dateBetween.startDate).toLocaleString('default', {
+                                                                month: 'short',
+                                                                year: 'numeric'
+                                                            }).replace(/ /g, ', '))
+                                                            .replace('%s', new Date(dateBetween.endDate).toLocaleString('default', {
+                                                            month: 'short',
+                                                            year: 'numeric'
+                                                        }).replace(/ /g, ', '))}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
