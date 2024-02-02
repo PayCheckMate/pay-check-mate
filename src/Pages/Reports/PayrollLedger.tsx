@@ -60,7 +60,6 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                 data.end_date = dateBetween.endDate;
             }
 
-            console.log(data)
             apiFetch({
                 path: '/pay-check-mate/v1/payrolls/payroll-ledger',
                 method: 'POST',
