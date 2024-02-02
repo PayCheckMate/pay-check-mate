@@ -39,7 +39,7 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
     // For payroll ledger date between
     const [dateBetween, setDateBetween] = useState({
         startDate: '',
-        endDate: new Date().toISOString().slice(0, 7)
+        endDate: '',
     })
     const handleFilter = (e: any) => {
         e.preventDefault();
@@ -51,19 +51,16 @@ export const PayrollLedger = ({employeeId='', pageTitle='', showEmployeeSearch=t
                 });
                 return;
             }
-            if (dateBetween.startDate && !dateBetween.endDate) {
-                setDateBetween({
-                    ...dateBetween,
-                    // Set current month like YYYY-MM as end date
-                    endDate: new Date().toISOString().slice(0, 7)
-                })
-            }
-            const data = {
+            const data: { [key: string]: any } = {
                 employee_id: searchedEmployeeId,
-                start_date: dateBetween.startDate,
-                end_date: dateBetween.endDate
             }
 
+            if (dateBetween.startDate && dateBetween.endDate) {
+                data.start_date = dateBetween.startDate;
+                data.end_date = dateBetween.endDate;
+            }
+
+            console.log(data)
             apiFetch({
                 path: '/pay-check-mate/v1/payrolls/payroll-ledger',
                 method: 'POST',

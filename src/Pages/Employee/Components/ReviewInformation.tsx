@@ -1,8 +1,7 @@
 import {EmployeeType} from "../../../Types/EmployeeType";
 import {__} from "@wordpress/i18n";
 import {SalaryHeadType} from "../../../Types/SalaryHeadType";
-import {useState} from "react";
-import {useEffect} from "@wordpress/element";
+import {useEffect, useState} from "@wordpress/element";
 import {DesignationType} from "../../../Types/DesignationType";
 import {DepartmentType} from "../../../Types/DepartmentType";
 import {useSelect} from "@wordpress/data";
