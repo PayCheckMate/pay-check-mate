@@ -31,6 +31,7 @@ import {NeedPro} from "../Components/NeedPro/NeedPro";
 import {ImportEmployee} from "./Employee/ImportEmployee";
 import {GeneralSettings} from "./Settings/GeneralSettings";
 import { Onboarding } from "./Onboarding/Onboarding";
+import {PayCheckMateIcon} from "../Components/PayCheckMateIcon";
 
 addAction('pay_check_mate_notification', 'pay_check_mate_notification', (message: string, type: string = 'success') => {
     // @ts-ignore
@@ -42,7 +43,7 @@ export default function Main() {
         {key: 'employees', title: __('Employees', 'pay-check-mate'), href: 'employees', icon: UserGroupIcon, current: false, roles: ['pay_check_mate_accountant'], component: EmployeeList},
         {key: 'profile', title: __('Profile', 'pay-check-mate'), href: 'profile', icon: UserIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant', 'pay_check_mate_employee'], component: Profile},
         {key: 'payslip', title: __('Pay Slip', 'pay-check-mate'), href: 'pay-slip', icon: DocumentTextIcon, current: false, roles: ['pay_check_mate_accountant', 'pay_check_mate_employee'], component: PaySlipList},
-        {key: 'payroll', title: __('Payroll', 'pay-check-mate'), href: 'payroll', icon: RocketLaunchIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
+        {key: 'payroll', title: __('Payroll', 'pay-check-mate'), href: 'payroll', icon: PayCheckMateIcon, current: false, roles: ['pay_check_mate_accountant'], component: PayrollList},
         {key: '[need_pro]pro/payroll-salary-payment', title: __('Payroll Importer (PRO)', 'pay-check-mate'), href: 'pro/payroll-salary-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},
         {key: '[need_pro]pro/loans', title: __('Loans (PRO)', 'pay-check-mate'), href: 'pro/loans', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},
         {key: '[need_pro]pro/final-payment', title: __('Final Payment (PRO)', 'pay-check-mate'), href: 'pro/final-payment', icon: BanknotesIcon, current: false, roles: ['pay_check_mate_admin', 'pay_check_mate_accountant'], component: NeedPro},

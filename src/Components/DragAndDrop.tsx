@@ -25,24 +25,27 @@ function DragAndDrop({setFileData, ...props}: DragAndDropComponentProps) {
         // Parse Excel data using xlsx
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
-        return XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+        // Convert sheet data to an array of arrays
+        const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        return sheetData.map((row: any) => Array.isArray(row) ? row : Object.values(row) as any[]);
     };
+
+
     const handleFileUpload = (files: FileList | null) => {
         if (files && files.length > 0 && isCSVorExcelFile(files[0])) {
             setIsLoading(true);
-
             const reader = new FileReader();
-
             reader.onload = (event) => {
-                const fileContent = event.target?.result; // Get the content of the file
+                const fileContent = event.target?.result;
                 if (fileContent) {
-                    // Parse the file content if it's a CSV or Excel file
                     if (files[0].type === 'text/csv') {
                         const csvData = parseCSV(fileContent as string);
-                        setFileData(csvData); // Set the parsed CSV data
+                        setFileData(csvData);
                     } else if (files[0].type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                         const excelData = parseExcel(fileContent as ArrayBuffer);
-                        setFileData(excelData); // Set the parsed Excel data
+                        setFileData(excelData);
                     }
                 }
 

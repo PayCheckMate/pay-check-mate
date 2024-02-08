@@ -250,26 +250,7 @@ export const ImportEmployee = () => {
                                 <thead>
                                     <tr>
                                         <th>{__('SL', 'pay-check-mate')}</th>
-                                        <th>{__('First name', 'pay-check-mate')}</th>
-                                        <th>{__('Last name', 'pay-check-mate')}</th>
-                                        <th>{__('Designation id', 'pay-check-mate')}</th>
-                                        <th>{__('Department id', 'pay-check-mate')}</th>
-                                        <th>{__('Employee id', 'pay-check-mate')}</th>
-                                        <th>{__('User id', 'pay-check-mate')}</th>
-                                        <th>{__('Email', 'pay-check-mate')}</th>
-                                        <th>{__('Phone', 'pay-check-mate')}</th>
-                                        <th>{__('Bank name', 'pay-check-mate')}</th>
-                                        <th>{__('Bank account number', 'pay-check-mate')}</th>
-                                        <th>{__('Tax number', 'pay-check-mate')}</th>
-                                        <th>{__('Joining date', 'pay-check-mate')}</th>
-                                        <th>{__('Address', 'pay-check-mate')}</th>
-                                        <th>{__('Gross salary', 'pay-check-mate')}</th>
-                                        <th>{__('Basic salary', 'pay-check-mate')}</th>
-                                        <th>{__('Salary active from', 'pay-check-mate')}</th>
-                                        <th>{__('Remarks', 'pay-check-mate')}</th>
-                                        {salaryHeads.map((head) => (
-                                            <th>{head.head_name + (head.head_type_text ? ` (${head.head_type_text})` : '')}</th>
-                                        ))}
+                                        {headers.map((header) => <th key={header}>{header}</th>)}
                                     </tr>
                                 </thead>
                                 <tbody>
