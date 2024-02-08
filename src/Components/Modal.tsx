@@ -34,7 +34,7 @@ export const Modal = ({setShowModal, children, header, description = '', width =
                     </Transition.Child>
 
                     <div className={"fixed inset-0 overflow-y-auto " + props.zIndex}>
-                        <div className="flex mt-2 items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <div className="flex mt-2 items-end justify-center p-4 text-center sm:items-center sm:p-0 ml-64">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
