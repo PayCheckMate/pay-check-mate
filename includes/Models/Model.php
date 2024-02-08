@@ -133,10 +133,6 @@ class Model implements ModelInterface {
         $where .= $this->get_where_between( $args );
         $where .= $this->get_status( $args );
 
-        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
-            $where .= $wpdb->prepare( " AND %i.status = %d", $this->get_table(), $args['status'] );
-        }
-
         if ( ! empty( $args['search'] ) ) {
             $where .= $this->get_search_query( $args['search'] );
         }
@@ -234,7 +230,7 @@ class Model implements ModelInterface {
     private function get_status( $args ): string {
         global $wpdb;
         $where = '';
-        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
             $where .= $wpdb->prepare( " AND {$this->get_table()}.status = %d", $args['status'] );
         }
 
@@ -352,7 +348,7 @@ class Model implements ModelInterface {
         );
 
         $where = 'WHERE 1=1';
-        if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+        if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
             $where .= $wpdb->prepare( ' AND status = %d', $args['status'] );
         }
 
