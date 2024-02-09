@@ -6,8 +6,9 @@ import {Card} from "./Card";
 type HOCProps = {
     role: UserCapNames;
     children: React.ReactNode;
+    title?: string;
 }
-export const HOC = ({role, children}: HOCProps) => {
+export const HOC = ({role, children, title}: HOCProps) => {
     if (!userCan(role)) {
         return (
             <Card className="overflow-hidden bg-white shadow sm:rounded-lg py-8 px-8 w-full mt-2">
@@ -16,7 +17,18 @@ export const HOC = ({role, children}: HOCProps) => {
         );
     }
 
-    return <>{children}</>;
+    return <>
+        {title && (
+            <div className="sm:flex sm:items-center mb-6">
+                <div className="sm:flex-auto">
+                    <h1 className="heading text-base font-semibold leading-6 text-gray-900">
+                        {title}
+                    </h1>
+                </div>
+            </div>
+        )}
+        {children}
+    </>;
 }
 
 // @ts-ignore

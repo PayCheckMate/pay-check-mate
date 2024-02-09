@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "wp-coding-standards/wpcs": "dev-develop",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "tareq1988/wp-php-cs-fixer": "dev-master",
         "phpcompatibility/phpcompatibility-wp": "dev-master",
         "phpstan/phpstan": "1.11.x-dev",
