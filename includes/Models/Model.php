@@ -125,7 +125,7 @@ class Model implements ModelInterface {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
-            $where             = $relational->where;
+            $where             .= $relational->where;
             $relational_fields = $relational->fields;
         }
 
@@ -250,7 +250,7 @@ class Model implements ModelInterface {
     public function get_relational( array $args = [] ): object {
         global $wpdb;
 
-        $where             = 'WHERE 1=1';
+        $where             = '';
         $relations         = '';
         $relational_fields = [];
 
@@ -431,7 +431,7 @@ class Model implements ModelInterface {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
-            $where             = $relational->where;
+            $where             .= $relational->where;
             $relational_fields = $relational->fields;
         }
         $relational_fields = array_merge( ...$relational_fields );
@@ -502,7 +502,7 @@ class Model implements ModelInterface {
             // Get relational and where clause from get_relations() method.
             $relational        = $this->get_relational( $args );
             $relations         = $relational->relations;
-            $where             = $relational->where;
+            $where             .= $relational->where;
             $relational_fields = $relational->fields;
         }
 

@@ -113,7 +113,7 @@ class PayrollModel extends Model {
     /**
      * Get crated user id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int $user_id
      *
@@ -131,18 +131,22 @@ class PayrollModel extends Model {
     /**
      * Get approved user id.
      *
-     * @since PAY_CHECK_MATE_SINCE
+     * @since 1.0.0
      *
      * @param int|null $user_id
      *
-     * @return array|void
+     * @return array<string, mixed>
      */
-    public function get_approved_user_id( ?int $user_id ) {
+    public function get_approved_user_id( ?int $user_id ): array {
         if ( ! empty( $user_id ) ) {
             return [
                 'approved_user_id' => $user_id,
                 'approved_user'    => get_user_by( 'ID', $user_id )->display_name,
             ];
         }
+
+        return [
+            'approved_user_id' => $user_id,
+        ];
     }
 }
