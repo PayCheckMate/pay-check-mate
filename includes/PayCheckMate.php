@@ -154,9 +154,13 @@ final class PayCheckMate {
 
         update_option( 'pay_check_mate_version', PAY_CHECK_MATE_PLUGIN_VERSION );
         set_transient( 'pay_check_mate_redirect_after_activation', true, 30 );
+
+        // Check if onboarding is already done or not.
         $onboarding = get_option( 'pay_check_mate_onboarding' );
         if ( empty( $onboarding ) ) {
             update_option( 'pay_check_mate_onboarding', true );
+        } else {
+            update_option( 'pay_check_mate_onboarding', false );
         }
 
         new Installer();
